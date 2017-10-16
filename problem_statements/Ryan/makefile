@@ -1,4 +1,4 @@
-#Shawn Cross and Ryan Crane
+
 LATEX	= latex -shell-escape
 #BIBTEX	= bibtex
 DVIPS	= dvips
