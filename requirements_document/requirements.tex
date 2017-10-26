@@ -119,12 +119,53 @@ The Axolotl Software will be installed on the Axolotl Head Unit’s TX2 unit and
 The main functions of the Axolotl are:
 \begin{itemize}
 	\item	The Axolotl will allow users to play media from multiple sources including: USB, Bluetooth, Auxiliary, and FM.
-
 	\item	It will also offer navigation with destination entry, mapping, and offline capabilities. 
 	\item	The black box portion of the Axolotl logs output from a dashcam and all sensors tied into a car’s OBD-II port. Users are able to download the black box data to a storage device or clear all black box data. 
 	\item	The Axolotl display will also switch to the backup camera whenever user is reversing the car.
 	
 \end{itemize}
+\subsection{User Interfaces}
+The Axolotl Software will be interacted via a touchscreen using an iOS-inspired graphical user interface divided into the content window and the dock. The dock offers touch zones that will change the content window to either the media, navigation, or system menu. Each content window will have a submenu that displays contextual options and a content box encapsulating the main interactive content that changes based on the option selected in the submenu.\par
+\subsection{Hardware Interfaces}
+The hardware components of the system will include: the use of OBII which will receive information from multiple onboard car sensors, all related audio connection capabilities (which includes radio, bluetooth, auxiliary, and USB), the storing of data for navigation, and logging of all sensor data from the car in hard drives. The NVIDIA TX2 has native support for all hardware that is being used. \par
+\subsection{User Characteristics}
+The Axolotl will be used by ourselves, our client, and the general public, specifically car owners with any level of technological experience.\par
+\subsection{Constraints}
+\begin{itemize}
+	\item Hardware limitations including input, memory space, and form factor
+	\item Entertainment to be limited as to not cause distraction
+\end{itemize}
+\subsection{Assumptions}
+\begin{itemize}
+	\item This SRS assumes the availability of an accessible WiFi network with internet connectivity.
+	\item This SRS assumes the availability of GPS signal.
+	\item This SRS assumes the TX2 runs Linux.
+\end{itemize}
+\section{Specific Requirements}
+\subsection{External Interfaces}
+Axlotl Software/par
+\begin{itemize}
+	\item The Axolotl Software is a Linux program that is installed on the NVIDIA Jetson TX2.
+	\item Users interact with the Axolotl via a graphic user interface displayed on a touchscreen.
+	\begin{itemize}
+		\item Users are able to select three options via the dock that will change the content window: Media, Navigation, and System. Users may select any dock item at any time.
+	\end{itemize}
+	\item Users may elect to control the media system by selecting Media on the dock. This will alter the content window’s submenu to display media options of FM, Aux, USB, and Bluetooth. Selecting any option will change the current media source to the selected media source.
+	\begin{itemize}
+		\item Both USB and Bluetooth media sources feature a set of touchscreen buttons that allow for pause/play/previous track/next track functionality.
+		\item The content box of any selected option will have a volume slider to adjust global audio output volume.
+	\end{itemize}
+	\item Users may elect to manage navigation by selecting Navigation on the dock. This will alter the content window’s submenu to display the options of map, destination entry, and route.
+	\begin{itemize}
+		\item Users may input an address to set the destination of the routing system. The address will be entered as a string in one line, including house number, street name, city, state, and zip code.
+	\end{itemize}
+	\item Users may elect to manage system settings by selecting System on the dock. This will alter the content window’s submenu to display the options of General and Black Box.
+	\begin{itemize}
+		\item Users may turn off the system’s wifi connectivity by a toggle switch under General settings.
+		\item Users may download or wipe black box data by selecting the Black Box option.
+	\end{itemize}
+\end{itemize}
+
 \section{Appendix... maybe}
 \includegraphics{universe}
 
