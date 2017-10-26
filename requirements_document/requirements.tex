@@ -91,19 +91,41 @@ Our project entails the development of an infotainment system and black box that
 
 
 \section{Definitions}
+\begin{itemize}
+	\item NVIDIA Jetson TX2: A versatile, efficient, and high-performance computer made by NVIDIA to be used in robots, drones, and smart cameras.
 
+	\item OBD-II: OBD-II refers to On-Board Diagnostics II, a standardized connector installed in all automobiles sold in the United States since January 1st, 1996. Devices connected via a car’s OBD-II port can read the vehicle’s sensor data on the fly.
 
-\section{Performance Metrics}
-We will evaluate our performance on this project by examining whether or not we have fulfilled a variety of requirements that will be divided into "necessities" and "superlatives".\par
-"Necessities" outline the minimum functionality that is expected of our infotainment system and black box requested by our client; not fulfilling these will amount to failure of the project; completion of all necessities amounts to the completion of the project. "Necessities" will be considered our base requirements in software development. An example of a ?necessity? requirement would be: implementation of FM (frequency modulation) radio with functional tuning, audio playback, and display of RDS (radio data system) data onto the touchscreen for the current radio channel.\par
-"Superlatives" will outline additional features that are not explicitly required to fulfill the requested functionality of the project, but are desirable (or nice-to-have) and will make our system more capable and versatile.\par
+	\item LIDAR: LIDAR refers to Light Detection and Ranging, a method of using laser pulses to determine the 3D properties of a faraway object.
 
-\subsection{Fulfillment}
-Successful implementation of necessities and superlatives can be evaluated based on the presence or absence of the feature with regard to the requirements specified. This is because there is little to no middle ground with much of the functionality; for example, data logging cannot "somewhat work": it either functions or it doesn't. This makes it easier to write requirements, test the implementation of said requirements, and then subsequently gauge the completeness of the implementation.
+	\item AHRS: AHRS refers to Attitude, Heading, and Reference System, a system used in modern aircraft to determine and display roll, pitch, and yaw.
 
+	\item Infotainment: A portmanteau of “information” and “entertainment”. When we use the term “infotainment”, we are referring to the center console touchscreen that gives drivers access to information and media in modern cars.
+
+	\item RDS: RDS refers to Radio Data System, a method of transmitting the current track information of an FM radio broadcast.
+
+	\item UPS: UPS refers to Uninterruptible Power Supply, an auxiliary power source that enables a device to function for a limited time if its main power source is unavailable.
+
+\end{itemize}
+
+\section{Overall Description}
+\subsection{Product Perspective}
+The Axolotl Infotainment System is comprised of the Axolotl Head Unit and the Axolotl Software.
+The Axolotl Head Unit consists of all of the necessary sensors, receivers, and controller hardware connected physically and wirelessly with the NVIDIA Jetson TX2 system. The Axolotl is designed to be integrated into a car to either provide or replace an in-car infotainment system. Users will not interact directly with the sensors, receivers, or controllers.\par
+
+The Axolotl Software will be installed on the Axolotl Head Unit’s TX2 unit and directly interface with the user. The software will operate on Linux, as it is the base operating system installed on the TX2. The Axolotl Software will interact with the hardware and provide users with the ability to control media playback, conduct mapping and routing with navigation, and also exert limited control over system settings.\par
+
+\subsection{Product Functions}
+The main functions of the Axolotl are:
+\begin{itemize}
+	\item	The Axolotl will allow users to play media from multiple sources including: USB, Bluetooth, Auxiliary, and FM.
+
+	\item	It will also offer navigation with destination entry, mapping, and offline capabilities. 
+	\item	The black box portion of the Axolotl logs output from a dashcam and all sensors tied into a car’s OBD-II port. Users are able to download the black box data to a storage device or clear all black box data. 
+	\item	The Axolotl display will also switch to the backup camera whenever user is reversing the car.
+	
+\end{itemize}
 \section{Appendix... maybe}
-\includegraphics{gantt}
-\includegraphics{tablegantt}
-
+\includegraphics{universe}
 
 \end{document}
