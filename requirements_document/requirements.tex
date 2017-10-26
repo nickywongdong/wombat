@@ -94,7 +94,7 @@ Our project entails the development of an infotainment system and black box that
 \begin{itemize}
 	\item NVIDIA Jetson TX2: A versatile, efficient, and high-performance computer made by NVIDIA to be used in robots, drones, and smart cameras.
 
-	\item OBD-II: OBD-II refers to On-Board Diagnostics II, a standardized connector installed in all automobiles sold in the United States since January 1st, 1996. Devices connected via a car’s OBD-II port can read the vehicle’s sensor data on the fly.
+	\item OBD-II: OBD-II refers to On-Board Diagnostics II, a standardized connector installed in all automobiles sold in the United States since January 1st, 1996. Devices connected via a car's OBD-II port can read the vehicle's sensor data on the fly.
 
 	\item LIDAR: LIDAR refers to Light Detection and Ranging, a method of using laser pulses to determine the 3D properties of a faraway object.
 
@@ -113,14 +113,14 @@ Our project entails the development of an infotainment system and black box that
 The Axolotl Infotainment System is comprised of the Axolotl Head Unit and the Axolotl Software.
 The Axolotl Head Unit consists of all of the necessary sensors, receivers, and controller hardware connected physically and wirelessly with the NVIDIA Jetson TX2 system. The Axolotl is designed to be integrated into a car to either provide or replace an in-car infotainment system. Users will not interact directly with the sensors, receivers, or controllers.\par
 
-The Axolotl Software will be installed on the Axolotl Head Unit’s TX2 unit and directly interface with the user. The software will operate on Linux, as it is the base operating system installed on the TX2. The Axolotl Software will interact with the hardware and provide users with the ability to control media playback, conduct mapping and routing with navigation, and also exert limited control over system settings.\par
+The Axolotl Software will be installed on the Axolotl Head Unit's TX2 unit and directly interface with the user. The software will operate on Linux, as it is the base operating system installed on the TX2. The Axolotl Software will interact with the hardware and provide users with the ability to control media playback, conduct mapping and routing with navigation, and also exert limited control over system settings.\par
 
 \subsection{Product Functions}
 The main functions of the Axolotl are:
 \begin{itemize}
 	\item	The Axolotl will allow users to play media from multiple sources including: USB, Bluetooth, Auxiliary, and FM.
 	\item	It will also offer navigation with destination entry, mapping, and offline capabilities. 
-	\item	The black box portion of the Axolotl logs output from a dashcam and all sensors tied into a car’s OBD-II port. Users are able to download the black box data to a storage device or clear all black box data. 
+	\item	The black box portion of the Axolotl logs output from a dashcam and all sensors tied into a car's OBD-II port. Users are able to download the black box data to a storage device or clear all black box data. 
 	\item	The Axolotl display will also switch to the backup camera whenever user is reversing the car.
 	
 \end{itemize}
@@ -148,40 +148,39 @@ Axlotl Software
 	\item The Axolotl Software is a Linux program that is installed on the NVIDIA Jetson TX2.
 	\item Users interact with the Axolotl via a graphic user interface displayed on a touchscreen.
 	\begin{itemize}
-		\item Users are able to select three options via the dock that will change the content window: Media, Navigation, and System. Users may select any dock item at any time.
+		\item Users are able to operate three critical subsystems: Media, Navigation, and System, and may switch between them at any time.
 	\end{itemize}
-	\item Users may elect to control the media system by selecting Media on the dock. This will alter the content window’s submenu to display media options of FM, Aux, USB, and Bluetooth. Selecting any option will change the current media source to the selected media source.
+	\item Users may set FM, Aux, USB, or Bluetooth as the audio source and manage each audio source independently.
 	\begin{itemize}
-		\item Both USB and Bluetooth media sources feature a set of touchscreen buttons that allow for pause/play/previous track/next track functionality.
-		\item The content box of any selected option will have a volume slider to adjust global audio output volume.
+		\item FM will allow users to change the current FM radio frequency.
+		\item Users may control pause/play/previous track/next track functionality with USB and Bluetooth media sources via the touchscreen.
+		\item All media options will offer a volume slider for users to adjust global audio output volume.
 	\end{itemize}
-	\item Users may elect to manage navigation by selecting Navigation on the dock. This will alter the content window’s submenu to display the options of map, destination entry, and route.
+	\item Users may utilize map, destination entry, and view route Navigation functions.
 	\begin{itemize}
-		\item Users may input an address to set the destination of the routing system. The address will be entered as a string in one line, including house number, street name, city, state, and zip code.
+		\item Users may input an address to set the destination of the routing system.
 	\end{itemize}
-	\item Users may elect to manage system settings by selecting System on the dock. This will alter the content window’s submenu to display the options of General and Black Box.
-	\begin{itemize}
-		\item Users may turn off the system’s wifi connectivity by a toggle switch under General settings.
-		\item Users may download or wipe black box data by selecting the Black Box option.
-	\end{itemize}
+	\item Users may turn off the system's WiFi connectivity by a toggle switch.
+	\item Users may download or wipe black box data by selecting the Black Box option.
 \end{itemize}
 \section{Functions}
 \subsection{Axolotl Software}
 \begin{itemize}
-	\item The FM option in the media menu will display RDS data and enable tuning of the FM radio frequency.
-	\item The Aux option in the media menu will indicate that media playback is controlled by the connected aux device.
-	\item The content box for the USB media option will allow for full exploration of the connected USB drive’s file structure.
+	\item The FM media option will display RDS data.
+	\item The Aux media option will indicate that media playback is controlled by the connected aux device.
+	\item The USB media option will allow for full exploration of the connected USB drive's file structure.
 	\begin{itemize}
 		\item Playback of following file formats is supported: mp3, flac, m4a, wav, and aac.
 	\end{itemize}
 	\item The system shall record vehicle data from an OBD-II port, connected dashcam, and AHRS onto a SATA hard disk drive.
 	\item Navigation will be capable of routing and mapping even if a mobile data signal is not available. Navigation will also parse address strings entered for destination input into a valid destination address for routing. The system will alert the user if the address entered is invalid.
 	\item Navigation will utilize a single GPS receiver unit to determine location.
+	\item The Navigation system will be limited to addresses within the United States.
 	\item Users must enter a password in order to interact with the Black Box option within the System menu.
 	\item The display will automatically switch to the backup camera feed when the vehicle is reversing. 
 	\item The Axolotl implementation will offer a minimum of three of any of the following optional functions:
 	\begin{itemize}
-		\item Display of current driving statistics to improve driver’s habits.
+		\item Display of current driving statistics to improve driver's habits.
 		\item Use of multiple GPS receivers throughout the vehicle to improve accuracy of GPS location.
 		\item Display of live AHRS data in a System submenu.
 		\item Control over supplemental turn signals and backup lights managed by a wireless controller in order to better signal other drivers.
