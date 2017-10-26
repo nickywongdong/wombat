@@ -1,4 +1,4 @@
-TEXFN=problemstatement
+TEXFN=requirements
 
 all: pdf
 
