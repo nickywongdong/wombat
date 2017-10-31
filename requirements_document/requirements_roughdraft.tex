@@ -128,13 +128,13 @@ The main functions of the Axolotl are:
 \subsection{User Interfaces}
 The Axolotl Software will be interacted via a touchscreen using an iOS-inspired graphical user interface divided into the content window and the dock. The dock offers touch zones that will change the content window to either the media, navigation, or system menu. Each content window will have a submenu that displays contextual options and a content box encapsulating the main interactive content that changes based on the option selected in the submenu.\par
 \subsection{Hardware Interfaces}
-The hardware components of the system will include: the use of OBDII which will receive information from multiple onboard car sensors, all related audio connection capabilities (which includes FM radio, bluetooth, auxiliary, and USB), the storing of data for navigation, and logging of all sensor data from the car in hard drives. The NVIDIA TX2 has native support for all hardware that is being used. \par
+The hardware components of the system will include: the use of OBII which will receive information from multiple onboard car sensors, all related audio connection capabilities (which includes radio, bluetooth, auxiliary, and USB), the storing of data for navigation, and logging of all sensor data from the car in hard drives. The NVIDIA TX2 has native support for all hardware that is being used. \par
 \subsection{User Characteristics}
 The Axolotl will be used by ourselves, our client, and the general public, specifically car owners with any level of technological experience.\par
 \subsection{Constraints}
 \begin{itemize}
-	\item We are limited to using the NVIDIA Jetson TX2 as the computing hardware.
-	\item The backup camera must linger on the screen for 4-8 seconds after shifting out of reverse, in accordance to federal motor vehicle safety standards.
+	\item Hardware limitations including input, memory space, and form factor
+	\item Entertainment to be limited as to not cause distraction
 \end{itemize}
 \subsection{Assumptions}
 \begin{itemize}
@@ -144,6 +144,7 @@ The Axolotl will be used by ourselves, our client, and the general public, speci
 \end{itemize}
 \section{Specific Requirements}
 \subsection{External Interfaces}
+Axlotl Software
 \begin{itemize}
 	\item The Axolotl Software is a Linux program that is installed on the NVIDIA Jetson TX2.
 	\item Users interact with the Axolotl via a graphic user interface displayed on a touchscreen.
@@ -164,6 +165,7 @@ The Axolotl will be used by ourselves, our client, and the general public, speci
 	\item Users may download or wipe black box data by selecting the Black Box option.
 \end{itemize}
 \subsection{Functions}
+\subsection{Axolotl Software}
 \begin{itemize}
 	\item Users will be able to see radio broadcast information within the FM media option will display RDS data.
 	\item The Aux media option will indicate that media playback is controlled by the connected aux device.
@@ -191,7 +193,6 @@ The Axolotl will be used by ourselves, our client, and the general public, speci
 		\item Use of LIDAR to assist parking.
 		\end{itemize}
 \end{itemize}
-
 \includegraphics[width=\textwidth ]{gantt.eps}
 \includegraphics[width=\textwidth]{tablegantt.eps}
 \end{document}
