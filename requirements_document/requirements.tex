@@ -67,10 +67,10 @@
             }
             \vspace{20pt}
         }
-        %\begin{abstract}
-        % 6. Fill in your abstract    
-   % Our project requires the development of software to run a car infotainment system alongside a black box data log. Our software will run on an Nvidia Jetson TX2 and should be able to execute basic media and navigation tasks while also logging data from a variety of sensors. The goal is to allow people to modernize older cars with an array of fresh sensors and an interactive software interface. To accomplish this goal, we will pull vehicle data from a car?s OBDII (On Board Diagnostics II) port as well as our own sensors wired into the TX2, and feed that data to software that aggregate that data into a log. 
-      %  \end{abstract}     
+        \begin{abstract}
+        %6. Fill in your abstract    
+		   This document is a SRS or software requirements specification...
+      	\end{abstract}     
     \end{singlespace}
 \end{titlepage}
 \newpage
@@ -106,6 +106,10 @@ Our project entails the development of an infotainment system and black box that
 	\item RDS: Radio Data System, a method of transmitting the current track information of an FM radio broadcast.
 
 	\item UPS: Uninterruptible Power Supply, an auxiliary power source that enables a device to function for a limited time if its main power source is unavailable.
+	
+	\item SATA: Serial AT Attachment, an interface standard that connects computers to mass storage devices.
+	
+	\item MP3: A common digital audio coding format that uses lossy compression. MP3 files are given the .mp3 file extension.
 \end{itemize}
 
 \subsection{References}
@@ -153,41 +157,60 @@ The Axolotl will be used by ourselves, our client, and the general public, speci
 \begin{itemize}
 	\item The Axolotl Software is a Linux program that is installed on the NVIDIA Jetson TX2.
 	\item Users interact with the Axolotl Infotainment System via a graphic user interface displayed on a touchscreen.
-	\item Users are able to control media, navigation, and system settings at any time.
+	\item Users are able to control media, navigation, and data settings at any time.
+
 	\begin{itemize}
-		\item Users may set either FM, Aux, USB, or Bluetooth as the audio source. Users will also be able to turn the audio system off.
-		\item Users may change the current FM radio station.
-		\item Users may pause/play as well as select previous track/next track with USB and Bluetooth media sources.
-		\item Users may use a volume slider to adjust master audio output volume.
-		\item Users may view the map, input an address and navigate the destination, or view their current route itinerary.
+		\item In the media menu:
+	\begin{itemize}
+\item Users may select either FM, Aux, USB, or Bluetooth as the audio source. Users will also be able to turn the audio system off.
+	\item Users may change the current FM radio station.
+	\item Users may pause/play as well as select previous track/next track with USB and Bluetooth media sources.
+	\item Users may use a volume slider to adjust master audio output volume.
+\end{itemize}
+
+		\item In the navigation menu:
+\begin{itemize}
+\item Users may view the map, input an address and navigate the destination, or view their current route itinerary.
+\begin{itemize}
+	\item Users may enter the address as house number, street, city, state, and zip code.
+\end{itemize}
 		\item Users may stop navigation and cancel their route at any time.
 	\end{itemize}
-	\item Users may turn off the system's WiFi connectivity using a toggle switch.
+		
+		\item In the data menu:
+		\begin{itemize}
+	\item Users may use a toggle switch to turn off the system's WiFi connectivity.
 	\item Users may download or wipe the data stored in the black box. These interfaces are only available after entering a password.
+\end{itemize}
+\end{itemize}
+
 	\item Users will also be able to interact with the system in a minimum of two of any of the following ways:
 	\begin{itemize}
- 		\item Users may choose between 2D flat and 2D topographical maps for mapping.
-		\item Users can wirelessly download media from a home computer to a connected USB drive.
-		\item Users may view their fuel economy statistics and also get tips on how to improve their fuel efficiency.
-		\item Users may change the volume and tune radio stations using physical knobs.
-		\item Users may use a connected Bluetooth device to make or receive phone calls.
-		\item Users may view their AHRS data as it is recorded.
+ 		\item Navigation: Users may choose between 2D flat and 2D topographical maps for mapping.
+		\item Media: Users can wirelessly download media from a home computer to a connected USB drive.
+		\item Data: Users may view their fuel economy statistics and also get tips on how to improve their fuel efficiency.
+		\item Media: Users may change the volume and tune radio stations using physical knobs.
+		\item MIscellaneous: Users may use a connected Bluetooth device receive phone calls.
+		\item Data: Users may view their AHRS data as it is recorded.
 	\end{itemize}
+
+	\item The system receives input from sensors and stores it in a log.
 \end{itemize}
+
 
 \subsection{Functions}
 \begin{itemize}
-	\item The system will display station information regarding the current FM radio station using data from the radio data system when FM media is playing.
-	\item The system will search the connected USB media drive and display a list of playable tracks to the user ordered by filename. The user may select one of these tracks to play. Playback of .mp3 files is supported. 
-	\item The system will format data from an OBD-II port, a connected dashcam, and AHRS sensors and log it to a SATA storage drive.
-	\item The system will utilize a single GPS receiver unit to determine the vehicle?s current location for routing.
+	\item The system will parse incoming RDS data from the current FM radio station to generate FM station information displayed to the user.
+	\item The system will search the connected USB media drive and display a list of playable tracks to the user ordered by filename for playback selection. Playback of .mp3 files is supported. 
+	\item The system will format data from an OBDII port, a connected dashcam, and AHRS sensors for logging.
+	\item The system will utilize a single GPS receiver unit to determine the vehicle's current location for routing.
 	\item The system will compensate for the loss of mobile data signal and allow for offline routing and mapping.
 	\item The navigation system will be limited to addresses within the United States.
 	\item The system will automatically switch to the backup camera feed when the vehicle is reversing. 
 	\item The system will also offer a minimum of one of any of the following optional functions:
         \begin{itemize}
+        	\item The system will exert control over microcontrollers to manage supplemental turn signals and backup lights.
         	\item The system will use multiple GPS receivers throughout the vehicle to improve GPS location accuracy.
-        	\item The system can exert control over microcontrollers to manage supplemental turn signals and backup lights.
         	\item The system will utilize the dashcam to detect lane lines and provide lane departure warning.
         	\item The system will utilize a connected LIDAR system to provide passive parallel parking assist.
 	\end{itemize}
