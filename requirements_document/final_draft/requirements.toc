@@ -9,7 +9,7 @@
 \contentsline {subsection}{\numberline {3.2}Product Functions}{3}
 \contentsline {subsection}{\numberline {3.3}User Interfaces}{3}
 \contentsline {subsection}{\numberline {3.4}Hardware Interfaces}{3}
-\contentsline {subsection}{\numberline {3.5}User Characteristics}{3}
+\contentsline {subsection}{\numberline {3.5}User Characteristics}{4}
 \contentsline {subsection}{\numberline {3.6}Constraints}{4}
 \contentsline {subsection}{\numberline {3.7}Assumptions}{4}
 \contentsline {section}{\numberline {4}Specific Requirements}{4}
