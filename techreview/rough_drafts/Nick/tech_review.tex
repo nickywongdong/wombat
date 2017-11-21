@@ -58,8 +58,6 @@
             \CapstoneTeamName\par 
             \vspace{5pt}
             {\Large
-                \NameSigPair{\GroupMemberOne}\par
-                \NameSigPair{\GroupMemberTwo}\par
                 \NameSigPair{\GroupMemberThree}\par
             }
             \vspace{20pt}
@@ -78,19 +76,18 @@
 
 \section{Media Player Software}
 \subsection{Overview}
-In the product Axolotl, there is a need for software that allows for the playing of media files. This software should be portable and compatible for the Axolotl OS.
+In the product Axolotl, there is a need for software that allows for the playing of media files. The software chosen will be integrated within the Axolotl OS's media interface. This software should be portable and compatible for the Axolotl OS.
 
 \subsection{Criteria}
 Things that should be considered when choosing an open source media player:
 \begin{itemize}
     \item should support at least .mp3 files
-    \item should have the ability to automatically play the next song within a folder
     \item can be implemented into the Axolotl interface directly
     \item should have an interface that matches the rest of Axolotl OS
 \end{itemize}
 
 \subsection{Kodi Software}
-Kodi is an open source media player application that has support for most devices and operating systems. Kodi also allows for their users to develop add-ons that may allow for different web services to be used. There is a large library of skins that may be applied to the software itself to match the interface of the Axolotl OS. The supported audio formats include almost all common types including mp3, flac, wav, and wma. Kodi also has support for the playing of media files from local and network storage mediums. The Kodi software has already been used as the media software in a car infotainment system known as CarPC. 
+Kodi is an open source media player application that has support for most devices and operating systems. Kodi also allows for their users to develop add-ons that may allow for different web services to be used. There is a large library of skins that may be applied to the software itself to match the interface of the Axolotl OS. The supported audio formats include almost all common types including mp3, flac, wav, and wma. Kodi also has support for the playing of media files from local and network storage mediums. The Kodi software has already been used as the media software in a car infotainment system known as CarPC. ~\cite{kodi:features}
 
 Pros:
 \begin{itemize}
@@ -101,11 +98,11 @@ Pros:
 
 Cons:
 \begin{itemize}
-    \item none yet
+    \item non yet
 \end{itemize}
 
 \subsection{Clementine}
-Clementine is a cross platform music player. It features a queue manager which allows temporary playlists. Clementine also has built in support for songs uploaded to certain web services including: Box, Dropbox, Google Drive, and OneDrive. It features a music visualizer with support for unix systems. The media files that are supported depend on the codecs that are on the system at the time. 
+Clementine is a cross platform music player. It features a queue manager which allows temporary playlists. Clementine also has built in support for songs uploaded to certain web services including: Box, Dropbox, Google Drive, and OneDrive. It features a music visualizer with support for unix systems. The media files that are supported depend on the codecs that are on the system at the time. ~\cite{clementine}
 
 Pros:
 \begin{itemize}
@@ -126,7 +123,7 @@ VLC media player is the most well known media player for all platforms. It has a
 large library of documentation and supported features. It has support for almost
 all media formats. The source code is readily available on Git. VLC has a media
 framework which is ready to be embedded into any application to add multimedia
-capabilities.  
+capabilities. ~\cite{vlc:features}
 
 Pros:
 \begin{itemize}
@@ -157,11 +154,12 @@ match. In contrast, VLC doesn't seem to have much support for interfaces however
 in this case we may be able to take more time to create its own interface.
 
 \subsection{Conclusion}
-We choose the Kodi software because it has support for all the features that we will most likely need.
+We choose the Kodi software because it has support for all the features that we will most likely need. All three options have support for many different audio file formats, however the fact that Kodi already has documentation on how it has been implemented in an infotainment system similar to the Axolotl, it will more beneficial to have a source to refer to when integrating a media player into the Axolotl OS. 
 
 \section{Main Storage Medium}
 \subsection{Overview}
 In building the Axolotl, there is a need to have enough storage for any data that will be stored. Depending on the data stored from sensors, the largest constraint for this section would be disk space. When building the Axolotl unit itself, there may be a need to consider the physical size of the storage mediums when choosing one. The retrieval and writing of data will be run in the background especially for logging, so speeds of the storage medium is a constraint, but the lowest priority.
+
 
 \subsection{Criteria}
 Things that should be considered when choosing a Storage Medium:
@@ -174,7 +172,7 @@ Things that should be considered when choosing a Storage Medium:
 
 \subsection{Hard Drives}
 The most common method of storage which has superior disk space with respect to price. The speed of an HDD depends on the rate at which the drive spins. Speeds vary from 5400, to 15,000 RPM. The physical size of a hard drive can either be 2.5 inches, or 3.5 inches. 
-
+~\cite{storage:information}
 
 Pros:
 \begin{itemize}
@@ -189,6 +187,7 @@ Cons:
 
 \subsection{Solid State Drives}
 The much faster type of storage medium with lower disk space with respect to price. The speed of an SSD far surpasses HDD's. SSD's come in many physical form factors: 5.25 inch, 3.5 inch, 2.5 inch, and 1.8 inch.
+~\cite{storage:information}
 
 Pros:
 \begin{itemize}
@@ -202,11 +201,14 @@ Cons:
 \end{itemize}
 
 \subsection{M.2 SSD Drives}
-A new type of SSD which is internally mounted. It has similar read/write speeds with the SSD. 
+A new type of SSD which is internally mounted. It has similar read/write speeds with the SSD. The benefit of having the drive mounted directly is so that it doesn't have to deal with overhead within the bus that SSD's are connected to. 
+~\cite{m.2:information}
+~\cite{m.2:information2}
 
 Pros:
 \begin{itemize}
     \item allows for direct attachment to main module
+    \item exceeds speeds of the 6Gbps SATA
 \end{itemize}
 
 Cons:
@@ -219,11 +221,12 @@ Each option has no constraint with data space, but if price becomes a factor, th
 In terms of physical constraint, both HDD and SSD come in similar form factors.
 In terms of speed, both types of the SSD are much faster in comparison to the HDD. 
 However, the benefit of choosing the M.2 SSD drive is being able to mount the drive to the head unit itself in contrast to using SATA. This is only possible if the head module we choose has support for this method of connection.
+
 \subsection{Conclusion}
-The most likely option would be the HDD. Although price may not be a constraint, the product does not strictly require read/write speeds to be much faster than what an HDD offers. 
+The most likely option would be the HDD. Although price may not be a constraint, the product does not strictly require read/write speeds to be much faster than what an HDD offers. However as described later in this document, since the Jetson TX2 has support for all three options, it would not be impossible to choose all three options for the project.
 
 \section{Head Unit Module}
-The Axolotl head unit must be built on a module which has compatibility for all the requirements mentioned.
+The Axolotl head unit must be built on a module which has compatibility for all the requirements specified within the requirements document. In summary, the chosen head unit must support the media interface of an infotainment system, the ability to retrieve and log data from multiple sensors throughout the car it is placed in, and function as a GPS. 
 
 \subsection{Overview}
 What should be considered when choosing the main module:
@@ -241,10 +244,11 @@ The Jetson TX2 features:
     \item Bluetooth compatible
     \item I/O with HDMI, PCI-E x4, M.2 Key E
 \end{itemize}
-This is the newer version of the Jetson TX1, with faster speeds. 
+This is the newer version of the Jetson TX1, with faster speeds. This module was designed for computational tasks for intelligent devices. With multiple CPU's, it couples raw computing power with power efficiency. 
+~\cite{tx2:specs}
 
 \subsection{Nvidia Jetson TX1}
-The Jetson TX1 geatures:
+The Jetson TX1 features:
 \begin{itemize}
     \item NVidia Maxwell GPU
     \item ARM Cortex A57
@@ -252,7 +256,8 @@ The Jetson TX1 geatures:
     \item Bluetooth compatible
     \item I/O with HDMI, PCI-E x 4, M.2 Key E
 \end{itemize}
-This module has similar features to the TX2.
+This module has similar features to the TX2, but with lower technical specifications. Almost all features supported in the TX2 are also supported in the TX1.
+~\cite{tx1:specs}
 
 \subsection{Rasberry Pi}
 The newest Rasberry Pi 3 features:
@@ -262,28 +267,20 @@ The newest Rasberry Pi 3 features:
     \item Bluetooth compatible
     \item I/O with HDMI, microSD, 3.5mm analogue audio-video jack
 \end{itemize}
+~\cite{rasberry:specs}
+
 \subsection{Discussion}
 There has already been an infotainment system that has been developed on the Rasberry Pi similar to the Axolotl. In comparison, the Jetson TX2 and TX1 will have no documentation in creating a infotainment system. 
 The Rasberry Pi only has support for microSD card storage without its adapter board in contast to full support on the TX1 and TX2. 
 The TX2 is vastly superior to the TX1 and the Rasberry Pi in terms of computing power. 
 
 \subsection{Conclusion}
-the Nvidia Jetson TX2 will most likely be chosen mainly because it is already available. However, the RasberryPi should be sufficient for developing something like an infotainment system.
+The Nvidia Jetson TX2 will most likely be chosen mainly because it is already available. The Rasberry Pi should be sufficient for developing something like an infotainment system, however in Axolotl, there needs to be a considerable amount of computing power in order to process and format the amount of logs within the Black Box Portion. In addition to the logs, it must be able to work simultaneously with all of the additional sensors that will be included, and this is where the Rasberry Pi falls short. The Axolotl also needs to be able to save and process GPS data. Because of this, in comparison to the Rasberry Pi and the TX1, the TX2 and its low powered CPU's will be necessary to finish the project.
 
+\clearpage
 \subsection{References}
-\begin{itemize}
-    \item http://engineering-diy.blogspot.ro/search/label/kodi
+\bibliography{tech_review}
+\bibliographystyle{IEEEtran}
 
-    \item https://www.clementine-player.org/
-    \item https://kodi.tv/
-    \item https://www.videolan.org/vlc/index.html
-
-    \item https://www.seagate.com/tech-insights/choosing-high-performance-storage-is-not-about-rpm-anymore-master-ti/
-    \item https://www.pcworld.com/article/2977024/storage/m2-ssd-roundup-tiny-drives-deliver-huge-performance.html
-
-    \item https://developer.nvidia.com/embedded/buy/jetson-tx2-devkit
-    \item https://developer.nvidia.com/embedded/buy/jetson-tx1-devkit
-    \item https://www.raspberrypi.org/magpi/raspberry-pi-3-specs-benchmarks/
-\end{itemize}
 
 \end{document}
