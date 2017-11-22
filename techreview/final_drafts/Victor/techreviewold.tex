@@ -1,0 +1,230 @@
+
+\documentclass[onecolumn, draftclsnofoot,10pt, compsoc]{IEEEtran}
+\usepackage{graphicx}
+\usepackage{url}
+\usepackage{setspace}
+\usepackage{tipa}
+
+\usepackage{geometry}
+\geometry{textheight=9.5in, textwidth=7in}
+
+\usepackage{graphicx}
+\graphicspath{{images/}}
+
+% 1. Fill in these details
+\def \CapstoneTeamName{		Team Wombat}
+\def \CapstoneTeamNumber{		15}
+\def \GroupMemberOne{			Victor Li}
+\def \GroupMemberTwo{			Ryan Crane}
+\def \GroupMemberThree{			Nicholas Wong}
+\def \CapstoneProjectName{		Axolotl}
+\def \CapstoneSponsorCompany{	}
+\def \CapstoneSponsorPerson{		Kevin McGrath}
+
+% 2. Uncomment the appropriate line below so that the document type works
+\def \DocType{		%Problem Statement
+				%Requirements Document
+				Technology Review
+				%Design Document
+				%Progress Report
+				}
+			
+\newcommand{\NameSigPair}[1]{\par
+\makebox[2.75in][r]{#1} \hfil 	\makebox[3.25in]{\makebox[2.25in]{\hrulefill} \hfill		\makebox[.75in]{\hrulefill}}
+\par\vspace{-12pt} \textit{\tiny\noindent
+\makebox[2.75in]{} \hfil		\makebox[3.25in]{\makebox[2.25in][r]{Signature} \hfill	\makebox[.75in][r]{Date}}}}
+% 3. If the document is not to be signed, uncomment the RENEWcommand below
+%\renewcommand{\NameSigPair}[1]{#1}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}
+\begin{titlepage}
+    \pagenumbering{gobble}
+    \begin{singlespace}
+    	\includegraphics[height=4cm]{coe_v_spot1}
+        \hfill 
+        % 4. If you have a logo, use this includegraphics command to put it on the coversheet.
+        %\includegraphics[height=4cm]{CompanyLogo}   
+        \par\vspace{.2in}
+        \centering
+        \scshape{
+            \huge CS Capstone \DocType \par
+            {\large\today}\par
+            \vspace{.5in}
+            \textbf{\Huge\CapstoneProjectName}\par
+            \vfill
+            {\large Prepared for}\par
+            \Huge \CapstoneSponsorCompany\par
+            \vspace{5pt}
+            {\Large\NameSigPair{\CapstoneSponsorPerson}\par}
+            {\large Prepared by }\par
+            Group\CapstoneTeamNumber\par
+            % 5. comment out the line below this one if you do not wish to name your team
+            \CapstoneTeamName\par 
+            \vspace{5pt}
+            {\Large
+                \NameSigPair{\GroupMemberOne}\par
+                \NameSigPair{\GroupMemberTwo}\par
+                \NameSigPair{\GroupMemberThree}\par
+            }
+            \vspace{20pt}
+        }
+        \begin{abstract}
+        %6. Fill in your abstract    
+		   This document is a technology review that will describe a subset of project components and look into the technologies that can be used to implement them. Three technologies will be identified for each component described. Each identified technology will be examined individually before the three technologies are discussed in comparison to one another. Conclusions will be drawn from the merit of each technology and the most ideal technology will be chosen as the technology used for implementation. The components examined in this technology review include: navigation software, vehicle data connectors, vehicle data connector software, and FM receivers.
+      	\end{abstract}     
+    \end{singlespace}
+\end{titlepage}
+\newpage
+\pagenumbering{arabic}
+\tableofcontents
+% 7. uncomment this (if applicable). Consider adding a page break.
+%\listoffigures
+%\listoftables
+\clearpage
+
+% 8. now you write!
+\section{Navigation Software}
+One of the necessities or required components of our Axolotl infotainment project is the implementation of a navigation suite capable of routing and mapping with full offline capability. An open-source navigation system solution will be needed to accomplish this goal in a reasonable timeframe, eliminating the need to develop an entire navigation suite from scratch.
+
+\subsection{Open Source Routing Machine}
+The Open Source Routing Machine, or OSRM, is an open-source routing system developed by Dennis Luxen for Mapbox, a provider of commercial navigation routing systems. The software is written in written in C++ and supports Linux, macOS, and FreeBSD operating systems. The Open Source Routing Machine uses map data from the OpenStreetMap project to provide automotive or on-foot navigation; featuring fastest/shortest-distance routing, turn-by-turn instructions, understanding of turn lanes and turn restrictions, as well a simple map data format that allows for the use of other street map data sets other than that provided by the OpenStreetMap project \cite{osrm1}. The source code for the OSRM can be obtained from the OSRM's github repository \cite{osrm1} and is licensed under a 2-clause open-source BSD license \cite{osrm2}. The 2-clause BSD license is a very permissive license that enables the software to be freely redistributed and modified on the condition that any and all redistributions/modifications credit the original developers of the OSRM software \cite{2bsdlicense}. Additionally, the OSRM offers a comprehensive set of documentation on its website for developers \cite{osrm3}.
+
+\subsection{NavIt}
+NavIt is an open-source navigation system and routing engine project \cite{navi1}. The software is written in C and C++ \cite{navi2} and supports Windows, Linux, Android, iOS, and many more operating systems \cite{navi1}. The NavIt system features turn-by-turn navigation that supports offline vector maps and map data from different sources, including but not limited to the OpenStreetMap project, though it uses its own map data by default \cite{navi1}. The system is features the ability to provide voice turn-by-turn directions in 49 different languages as of its current release \cite{navi3}, as well as an angled 2.5D map view, customizable routing patterns, as well as address and point of interest search \cite{navi1}. NavIt is also designed for GPS sensors, supporting vehicle position reading from GPS event data or reading from GPS receivers themselves \cite{navi4}. The source code for the NavIt navigation system is available from the project's github repository and is licensed under the GPLv2 license \cite{navi2}, which states that the software can be used free-of-charge on the condition that the source code of any redistributions or modifications be available for others to utilize, redistribute, and modify as well \cite{gplv2license}. The NavIt project provides documentation for developers via its wiki \cite{navi1}.
+
+\subsection{libosmscout}
+libosmscout is an offline mapping and routing library developed by Tim Teulings for the Ubuntu Touch operating system \cite{lib1}, with the goal of implementing all of the important features of a navigation application in a package that can be run by low-end hardware such as handheld devices \cite{lib2}. The libosmscout library is written in C++ \cite{lib1} and is designed to utilize map data from the OpenStreetMap project in order to provide offline mapping, routing, and destination lookup through location or point-of-interest search \cite{lib2}. libsmscout offers a variety of APIs or access point interfaces for developers to interact with the software, including high-level ones for greater abstraction of the inner workings of the libsmscout library and lower-level ones for greater control over the the library itself. libsmscout is designed to minimize its use of disk storage space for its maps, allowing even continental map data to be stored on the storage medium it utilizes \cite{lib2}. libsmscout is available from the libosmscout SourceForge page and utilizes the LGPL license \cite{lib2}, meaning that licensees are obligated to share the source code of any redistributions/modifications they make to the libosmscout library, but any software that utilizes the library need not also be made available in this manner \cite{lgpl}. Simplified documentation for the libosmscout library is available on its sourceforge page \cite{lib2}.
+
+\subsection{Discussion}
+In terms of map data support, all three software systems are quite similar to each other. Whilst OSRM and libosmscout utilize the OpenStreetMap data set by default, the NavIt system utilizes its own map data set with support for OpenStreetMap map data, however OSRM can also be adapted to use other map data sets. With respect to offline capability, NavIt and libosmscout are superior options to OSRM. Both NavIt and libosmscout support offline mapping; the former utilizing the offline capability as a backup whilst the latter uses offline capability by default. OSRM does not directly support offline mapping, however this can technically be implemented by utilizing the system running the OSRM as the map server instead of attempting to connect to OpenStreetMap servers via a network connection. In comparison to libosmscout and NavIt, OSRM's documentation is superior. The OSRM documentation provides examples for a multitude of programming languages including Java, Swift, and Python. Additionally, the OSRM is licensed with a BSD license, which is less restrictive than the GPL and LGPL licenses used by NavIt and libosmscout. However, OSRM is a routing engine and libosmscout is a navigation library, whereas NavIt is a full-fledged turn-by-turn navigation application with routing capabilities.
+
+\subsection{Conclusion}
+We chose NavIt as our navigation software solution as it is the most comprehensive solution due to the fact that it offers native offline capability, the ability to use a variety of map data sets, and native navigate to point capability (turn by turn directions) that the other options do not offer. The system also offers voice guidance that eliminates the need to develop a voice system  from scratch to relay directions from the route produced by a routing engine or routing library. The added support of GPS sensors is a significant boon as it enables us to easily wire in GPS receivers (and even multiple GPS receivers, as per our optional features). This would require additional software layers or wrappers with the other solutions. 
+
+\section{Vehicle Data Connectors}
+A critical requirement of the Axolotl infotainment system is the ability to read vehicle data, format it, and save it to a black box log as a sort of event data recorder. The NVIDIA Jetson TX2 we are using does not have a dedicated method of connecting to automotive computers; thus, some kind of data connector is required in order to gain access to the data.
+
+\subsection{BAFX OBDII Diagnostic Interface}
+The BAFX OBDII Diagnostic Interface is a wireless vehicle diagnostic scanner tool developed and manufactured by BAFX Products. The device costs \$21.99 USD retail and can be ordered from BAFX Products?s website at bafxpro.com. The OBDII Diagnostic Interface is designed to read near real-time vehicle data from an automotive OBDII port and make that data readily available over a Bluetooth connection. Statistics that the BAFX system can read include (but are not limited to) engine RPM, vehicle speed, air temperature, fuel metrics, and any OBDII diagnostic trouble codes in order to provide supplementary gauges or display vehicle diagnostic trouble codes that can be used to determine the source of vehicle problems. The BAFX system also supports a variety of CAN bus protocols \cite{BAFX}.
+
+\subsection{OBDLink MX Wi-Fi}
+The OBDLink MX Wi-Fi is a wireless diagnostic scanner tool similar to the BAFX OBDII Diagnostic Interface \cite{OBDL}. The OBDLink MX Wi-Fi is designed and marketed by OBD Solutions, and can be purchased from ScanTool.net for \$129.95 USD \cite{ST}. Like the BAFX OBDII Diagnostic Interface, the OBDLink MX Wi-Fi supports reading vehicle data through a car's OBDII port to access a wealth of vehicle data as well as troubleshoot vehicle problems via diagnostic trouble codes. The OBDLink device utilizes a Wi-Fi network in order to communicate vehicle data to other devices, and comes with free OBDLink software in order to operate and read data from the device \cite{OBDL}.
+
+\subsection{GridConnect CAN USB Adapter}
+The GridConnect CAN USB Adapter is a wired vehicle data connector that is developed, manufactured, and sold by Grid Connect Incorporated, available for \$225.00 USD retail from their website at gridconnect.com. The GridConnect system is designed to monitor a CAN or Controller Area Network \cite{gridconn}, a vehicular network standard developed in the late 1980s and standardized in the 1990s in order to connect electronic systems in passenger vehicles \cite{canhist}. The CAN connection offered by the GridConnect adapter is also capable of directly interfacing with a vehicle's CAN, allowing programs to be written on a Windows or Linux machine in order to directly communicate and influence the CAN \cite{gridconn}. 
+
+\subsection{Discussion}
+The BAFX diagnostic interfaces is well-matched in terms of flexibility in comparison to the OBDLink MX Wi-Fi connector. Both devices support OBDII protocols and both communicate the vehicle data they read wirelessly, though by different means: Bluetooth versus Wi-Fi. The OBDLink's use of Wi-Fi is a problem as the NVIDIA Jetson TX2 can only connect to one Wi-Fi host at any time and must also use the Wi-Fi network for internet connected services, making the Wi-Fi connection method moot. The BAFX's use of Bluetooth connectivity does not encounter this issue as the TX2's Bluetooth 4.0 can handle multiple slave devices \cite{btb}. Additionally, the OBDLink's provided software is incompatible with the operating system of our NVIDIA Jetson TX2 computer module, which runs Linux, not Android or Windows.\par
+The GridConnect tool is considerably limited in comparison to the BAFX or OBDLink devices. The GridConnect exclusively connects to a CAN, which limits the data it can collect. Unlike the OBDLink or BAFX OBDII scan tools, the GridConnect uses a physical wire adapter to bridge a vehicle's CAN bus port with a USB port on a computer or tablet. This will require modifications to a vehicle's wiring based on the location of the CAN bus port, which will increase the difficulty of installation beyond simply plugging the system components in. This may in turn make our system less reliable, more intrusive, and possibly unsafe, if wiring has to be done around other important vehicle wiring. Even though it offers the ability to write programs to interact with a vehicle's CAN, our main purpose is reading and not writing vehicle data, thus this capability is unnecessary.\par
+These devices are very different in terms of price. The BAFX retails for \$21.99 USD, whilst the OBDLink MX Wi-FI retails for nearly six times more at \$129.95 USD. The GridConnect CAN USB adapter retails for even more at \$225.00 USD.\par
+
+\subsection{Conclusion}
+We chose the BAFX OBDII Diagnostic Interface technology for our project because it is the most optimal in terms of flexibility, form factor, and price. The BAFX OBDII interface supports a wide range of protocols comparable to that of the OBDLink connector and superior to the CAN-only nature of the GridConnect adapter, even though the GridConnect can interact instead with instead of merely read from the CAN. The wireless nature of the BAFX system is ideal for packaging as it eliminates the need for additional wiring, also true regarding the OBDLink connector but not the GridConnect adapter. Though the OBDLink device seems equally ideal, its usage of Wi-Fi is unacceptable as the Axolotl will need to use Wi-Fi functionality for other purposes and cannot connect to more than one Wi-Fi network at once. Finally, the BAFX device is much less expensive than the other offerings examined. Overall, the BAFX OBDII Diagnostic Reader is the most comprehensive choice considering all of these aspects.\par
+Even so, the BAFX system is not flawless. As the BAFX does not come with software, we must find third-party software or write our own software in order to read the vehicle data from the OBDII device. There are many open-source solutions that can be used to provide this capability.\par
+
+\section{Vehicle Connector Software}
+Both a physical vehicle data connector and data connector software is required to read vehicle data. Adapters only provide the physical data link; supplemental software is necessary in order to interpret the data signals from the data connector and parse it into readable and usable data. Considering that we have selected a BAFX OBDII diagnostic interface, we will look into OBDII diagnostic software.
+
+\subsection{Perl OBD-II Logger}
+The Perl OBD-II Logger project is an open-source OBDII data reader tool developed to be a versatile and efficient software solution to capture and log OBDII data from OBDII automotive scan tools. As the name suggests, the Perl OBD-II Logger is written in the Perl programming language and can operate on any system that has a Perl interpreter installed. Users of the software can specify a sampling rate that the logger will adhere to, for example, taking one reading every two seconds. The Perl OBD-II Logger supports two standards of automotive scan tool implementations; the ELM327 provided by ELM Electronics or the STN1110 standard provided by OBD Solutions. The software does not provide any support for managing vehicle diagnostic trouble codes. Extensive testing has been done with the Perl OBD-II Logger utilizing a variety of OBDII scan tools, including USB interfaces and Bluetooth interfaces. The source code for the Perl OBD-II Logger can be found on the Perl OBD-II Logger SourceForge page, and the software is licensed using the Artistic License 2.0 \cite{perlobd}. The Artistic License 2.0 provides freedom of use and modification of the software, allowing for redistribution of the software on the condition that the original copyrights are indicated and any modifications of the software is indicated \cite{al2}.
+
+\subsection{OBD GPS Logger}
+The OBD GPS Logger is an open-source toolkit that is comprised of a collection of small Unix programs designed to each provide simple OBDII functionality. The software supports macOS and Linux operating systems natively. The OBD GPS Logger software is designed to log data from a OBDII port and as well as a GPS receiver; any logged data can then be written out as an output that can be easily read or forwarded as useful input to another subsystem. The OBD GPS Logger only supports ELM327-compatible OBDII devices and requires any connected GPS receivers to be compatible with gpsd \cite{obdgps}, a GPS service daemon that makes GPS receiver data available via a TCP connection \cite{gpsd}. The source code for the OBD GPS Logger is available via downloadable packages on its website and is licensed with the GPLv2 license \cite{obdgps}.
+
+\subsection{pyOBD}
+pyOBD is an open-source OBDII car diagnostic tool that is designed to interface with low-cost OBDII diagnostic interfaces, most prominently the ELM-compatible diagnostic connectors. The software is written entirely in Python and was developed by Donour Sizemore, compatible with Windows, Linux, and macOS operating systems. pyOBD can read diagnostic trouble codes, read measured vehicle metrics, as well as read vehicle status tests. On top of that, a python module called obd\_io is provided for developers to interact with sensor data and diagnostic trouble codes, enabling this information to be used by another subsystem for logging or management. pyOBD source code is available for download from its supporting website in the form of debian or tar archives; the source is licensed using the GPL license \cite{pyobd}.
+
+\subsection{Discussion}
+The three options researched here are quite varied in their capabilities. Both the Perl OBD-II Logger and the OBD GPS Logger support native logging functionality; comparatively, pyOBD does not. pyOBD provides an interface that allows users to access the OBDII data, subsequently requiring users to develop their own logging solution if they want to use the OBD-II data in that manner. The OBD GPS Logger has superior versatility in comparison to the Perl OBD-II Logger and pyOBD as it is capable of managing OBDII and GPS data, whilst the Perl OBD-II Logger and pyOBD are limited to only OBD-II. However, a key advantage that pyOBD has over the OBD GPS Logger and Perl OBD-II Logger is the ability to read and manage vehicle diagnostic trouble codes, which stands as an optional feature in our project requirements.
+
+\subsection{Conclusion}
+We chose pyOBD as the OBDII software to be used in our project based on its close adherence to our project requirements. An optional feature that would be very desirable for implementation is the ability to read and manage a vehicle's diagnostic trouble codes in order to provide insight on vehicle breakdowns. This requires our OBD software suite to be able to interact and read vehicle diagnostic trouble codes, thus making pyOBD ideal for that reason alone. The lack of logging capabilities with the pyOBD software means we must utilize its provided functionality to write our own data logging software on top of the pyOBD software, and its lack of GPS support limits the data that can be collected. For that reason, OBD GPS Logger will stand as a secondary choice should troubles arise during development.
+
+%\section{FM Receivers}
+
+%\subsection{Thing1}
+
+%\subsection{Thing2}
+
+%\subsection{Thing3}
+
+%\subsection{Discussion}
+
+%\subsection{Conclusion}
+
+\newpage
+
+\begin{thebibliography}{50}
+
+\bibitem{osrm1}
+	?Open Source Routing Machine", Open Source Routing Machine - OpenStreetMap Wiki. [Online]. Available: http://wiki.openstreetmap.org/wiki/Open\_Source\_Routing\_Machine. [Accessed: 14-Nov-2017].
+
+\bibitem{osrm2}
+	"Project OSRM", Project-osrm.org, 2017. [Online]. Available: http://project-osrm.org/. [Accessed: 14-Nov-2017].
+	
+\bibitem{osrm3}
+	"OSRM API Documentation", Project-osrm.org, 2017. [Online]. Available: http://project-osrm.org/docs/v5.10.0/api/\#general-options. [Accessed: 14-Nov-2017].
+	
+\bibitem{navi1}
+	"Navit's Wiki", Wiki.navit-project.org, 2017. [Online]. Available: https://wiki.navit-project.org/index.php/Main\_Page. [Accessed: 14-Nov-2017].	
+	
+\bibitem{navi2}
+	"Navit - OpenStreetMap Wiki", Wiki.openstreetmap.org, 2017. [Online]. Available: http://wiki.openstreetmap.org/wiki/Navit. [Accessed: 14-Nov-2017].
+
+\bibitem{navi3}
+	"Navit - Car navigation system", Navit-project.org, 2017. [Online]. Available: http://www.navit-project.org/. [Accessed: 14-Nov-2017].
+	
+\bibitem{navi4}
+	"navit-gps/navit", GitHub, 2017. [Online]. Available: https://github.com/navit-gps/navit. [Accessed: 14-Nov-2017].
+	
+\bibitem{lib1}
+	"libosmscout - OpenStreetMap Wiki", Wiki.openstreetmap.org, 2017. [Online]. Available: http://wiki.openstreetmap.org/wiki/Libosmscout. [Accessed: 14-Nov-2017].
+
+\bibitem{lib2}
+	T. Teulings, "libosmscout", Libosmscout.sourceforge.net, 2017. [Online]. Available: http://libosmscout.sourceforge.net/. [Accessed: 14-Nov-2017].
+	
+\bibitem{2bsdlicense}
+	"The 2-Clause BSD License | Open Source Initiative", Opensource.org, 2017. [Online]. Available: https://opensource.org/licenses/BSD-2-Clause. [Accessed: 14-Nov-2017].
+	
+\bibitem{gplv2license}
+	"GNU General Public License v2.0 - GNU Project - Free Software Foundation", Gnu.org, 2017. [Online]. Available: https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html. [Accessed: 14-Nov-2017].
+	
+\bibitem{lgpl}
+	"GNU Lesser General Public License v3.0- GNU Project - Free Software Foundation", Gnu.org, 2017. [Online]. Available: https://www.gnu.org/licenses/lgpl-3.0.en.html. [Accessed: 14-Nov-2017].
+
+\bibitem{BAFX}
+	 "Android Bluetooth Wireless OBDII Reader \& Scan Tool - For Android Devices Only", BAFX Products, 2017. [Online]. Available: https://bafxpro.com/products/obdreader. [Accessed: 13-Nov-2017].
+
+\bibitem{OBDL}
+	"OBDLink MX Wi-Fi", OBDLink® | OBD Solutions, 2017. [Online]. Available: http://www.obdlink.com/mxwf/. [Accessed: 13-Nov-2017].
+	
+\bibitem{gridconn}
+	"CAN USB - PCAN-USB Adapter | Grid Connect", Gridconnect.com, 2017. [Online]. Available: https://gridconnect.com/can-usb.html?gdffi=3e9c4a34f3574e0abee6fe90e994ce82\&gdfms=34328446D0314FA9A21A0742DDFDD1B4\&utm\_source=google\&utm\_medium=CPC\&utm\_term=\&utm\_campaign=Shopping\%20-\%20peak-system\%20technik\%20\&mm\_campaign=477cea803cb14c83d8a99b6c7d0cd349\&keyword=\&mkwid=scfxzGGTm\_dc|pcrid|177099146842\&gclid=EAIaIQobChMI3fX55aC61wIVh0NpCh3B4wQYEAYYASABEgI4LvD\_BwE. [Accessed: 13-Nov-2017].
+	
+\bibitem{canhist}
+	"CAN in Automation (CiA): History of the CAN technology", Can-cia.org, 2017. [Online]. Available: https://www.can-cia.org/can-knowledge/can/can-history/. [Accessed: 13-Nov-2017].
+
+\bibitem{cani}	
+	"Using LED with a CAN Bus System", JDM ASTAR Blog, 2017. [Online]. Available: https://jdmastarblog.com/2017/05/25/using-led-with-a-can-bus-system/. [Accessed: 13-Nov-2017].
+
+\bibitem{btb}
+	"Bluetooth Basics - learn.sparkfun.com", Learn.sparkfun.com, 2017. [Online]. Available: https://learn.sparkfun.com/tutorials/bluetooth-basics/how-bluetooth-works. [Accessed: 13-Nov-2017].
+
+\bibitem{perlobd}
+	"Perl OBD-II Logger", SourceForge, 2017. [Online]. Available: https://sourceforge.net/projects/pobd-logger/. [Accessed: 14-Nov-2017].
+	
+\bibitem{obdgps}
+	"OBD GPS Logger for Linux and OSX", Icculus.org, 2017. [Online]. Available: http://icculus.org/obdgpslogger/. [Accessed: 14-Nov-2017].
+	
+\bibitem{pyobd}
+	"pyOBD - Open-source OBD-II diagnostics", Obdtester.com, 2017. [Online]. Available: http://www.obdtester.com/pyobd. [Accessed: 14-Nov-2017].
+	
+\bibitem{al2}
+	"Artistic License 2.0 | Open Source Initiative", Opensource.org, 2017. [Online]. Available: https://opensource.org/licenses/Artistic-2.0. [Accessed: 14-Nov-2017].
+
+\bibitem{gpsd}
+	"GPSd ? Put your GPS on the net!", Catb.org, 2017. [Online]. Available: http://www.catb.org/gpsd/. [Accessed: 14-Nov-2017].
+
+\end{thebibliography}
+\end{document}
