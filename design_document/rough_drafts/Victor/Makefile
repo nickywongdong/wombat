@@ -1,4 +1,4 @@
-TEXFN=techreview
+TEXFN=design_document_victor
 
 all: pdf
 
