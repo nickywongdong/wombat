@@ -1,0 +1,194 @@
+
+\documentclass[onecolumn, draftclsnofoot,10pt, compsoc]{IEEEtran}
+\usepackage{graphicx}
+\usepackage{url}
+\usepackage{setspace}
+\usepackage{tipa}
+
+\usepackage{geometry}
+\geometry{textheight=9.5in, textwidth=7in}
+
+\usepackage{graphicx}
+\graphicspath{{images/}}
+
+% 1. Fill in these details
+\def \CapstoneTeamName{		Team Wombat}
+\def \CapstoneTeamNumber{		15}
+\def \GroupMemberOne{			Victor Li}
+\def \GroupMemberTwo{			Ryan Crane}
+\def \GroupMemberThree{			Nicholas Wong}
+\def \CapstoneProjectName{		Axolotl}
+\def \CapstoneSponsorCompany{	}
+\def \CapstoneSponsorPerson{		Kevin McGrath}
+
+% 2. Uncomment the appropriate line below so that the document type works
+\def \DocType{		%Problem Statement
+				%Requirements Document
+				Design Document
+				%Progress Report
+				}
+			
+\newcommand{\NameSigPair}[1]{\par
+\makebox[2.75in][r]{#1} \hfil 	\makebox[3.25in]{\makebox[2.25in]{\hrulefill} \hfill		\makebox[.75in]{\hrulefill}}
+\par\vspace{-12pt} \textit{\tiny\noindent
+\makebox[2.75in]{} \hfil		\makebox[3.25in]{\makebox[2.25in][r]{Signature} \hfill	\makebox[.75in][r]{Date}}}}
+% 3. If the document is not to be signed, uncomment the RENEWcommand below
+%\renewcommand{\NameSigPair}[1]{#1}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}
+\begin{titlepage}
+    \pagenumbering{gobble}
+    \begin{singlespace}
+    	\includegraphics[height=4cm]{coe_v_spot1}
+        \hfill 
+        % 4. If you have a logo, use this includegraphics command to put it on the coversheet.
+        %\includegraphics[height=4cm]{CompanyLogo}   
+        \par\vspace{.2in}
+        \centering
+        \scshape{
+            \huge CS Capstone \DocType \par
+            {\large\today}\par
+            \vspace{.5in}
+            \textbf{\Huge\CapstoneProjectName}\par
+            \vfill
+            {\large Prepared for}\par
+            \Huge \CapstoneSponsorCompany\par
+            \vspace{5pt}
+            {\Large\NameSigPair{\CapstoneSponsorPerson}\par}
+            {\large Prepared by }\par
+            Group\CapstoneTeamNumber\par
+            % 5. comment out the line below this one if you do not wish to name your team
+            \CapstoneTeamName\par 
+            \vspace{5pt}
+            {\Large
+                \NameSigPair{\GroupMemberOne}\par
+                %\NameSigPair{\GroupMemberTwo}\par
+                %\NameSigPair{\GroupMemberThree}\par
+            }
+            \vspace{20pt}
+        }
+        \begin{abstract}
+        %6. Fill in your abstract   
+       		ASDF
+      	\end{abstract}     
+    \end{singlespace}
+\end{titlepage}
+\newpage
+\pagenumbering{arabic}
+\tableofcontents
+% 7. uncomment this (if applicable). Consider adding a page break.
+%\listoffigures
+%\listoftables
+\clearpage
+
+% 8. now you write!
+\section{Navigation System}
+
+\subsection{Resources}
+
+\subsection{Implementation}
+
+\subsection{Testing}
+
+\section{Data Logging}
+
+\subsection{Resources}
+
+\subsection{Implementation}
+
+\subsection{Testing}
+There are two primary methods of testing the implementation of the OBDII logging system: OBDII simulation and real-life shakedown testing. OBDII simulation involves using a computer program to simulate an OBDII dongle's data stream using pre-generated OBDII data. OBDII logging functionality will be considered "functional" and meet requirements if the results of the logging system match the pre-generated data.\par
+
+Real-life shakedown testing involves connecting the Axolotl and a secondary logging system to a vehicle and then driving the vehicle on a predetermined course. Both systems will record OBDII data during this time. After the course has been completed, logging will be stopped and the logs will be compared against each other. A set of critical data fields will be selected; the value within the specified data field will be examined 
+
+
+at a specific point in time will be compared against the same field on the opposite log. 
+
+OBDII logging functionality will be considered 
+
+ will pass this test if the recorded OBDII data fields are within a 10\% margin of error of each other at the same point in time.
+
+\section{FM Radio Integration}
+
+\subsection{Resources}
+
+\subsection{Implementation}
+
+\subsection{Testing}
+
+\newpage
+
+\begin{thebibliography}{50}
+
+\bibitem{osrm1}
+	?Open Source Routing Machine", Open Source Routing Machine - OpenStreetMap Wiki. [Online]. Available: http://wiki.openstreetmap.org/wiki/Open\_Source\_Routing\_Machine. [Accessed: 14-Nov-2017].
+
+\bibitem{osrm2}
+	"Project OSRM", Project-osrm.org, 2017. [Online]. Available: http://project-osrm.org/. [Accessed: 14-Nov-2017].
+	
+\bibitem{osrm3}
+	"OSRM API Documentation", Project-osrm.org, 2017. [Online]. Available: http://project-osrm.org/docs/v5.10.0/api/\#general-options. [Accessed: 14-Nov-2017].
+	
+\bibitem{navi1}
+	"Navit's Wiki", Wiki.navit-project.org, 2017. [Online]. Available: https://wiki.navit-project.org/index.php/Main\_Page. [Accessed: 14-Nov-2017].	
+	
+\bibitem{navi2}
+	"Navit - OpenStreetMap Wiki", Wiki.openstreetmap.org, 2017. [Online]. Available: http://wiki.openstreetmap.org/wiki/Navit. [Accessed: 14-Nov-2017].
+
+\bibitem{navi3}
+	"Navit - Car navigation system", Navit-project.org, 2017. [Online]. Available: http://www.navit-project.org/. [Accessed: 14-Nov-2017].
+	
+\bibitem{navi4}
+	"navit-gps/navit", GitHub, 2017. [Online]. Available: https://github.com/navit-gps/navit. [Accessed: 14-Nov-2017].
+	
+\bibitem{lib1}
+	"libosmscout - OpenStreetMap Wiki", Wiki.openstreetmap.org, 2017. [Online]. Available: http://wiki.openstreetmap.org/wiki/Libosmscout. [Accessed: 14-Nov-2017].
+
+\bibitem{lib2}
+	T. Teulings, "libosmscout", Libosmscout.sourceforge.net, 2017. [Online]. Available: http://libosmscout.sourceforge.net/. [Accessed: 14-Nov-2017].
+	
+\bibitem{2bsdlicense}
+	"The 2-Clause BSD License | Open Source Initiative", Opensource.org, 2017. [Online]. Available: https://opensource.org/licenses/BSD-2-Clause. [Accessed: 14-Nov-2017].
+	
+\bibitem{gplv2license}
+	"GNU General Public License v2.0 - GNU Project - Free Software Foundation", Gnu.org, 2017. [Online]. Available: https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html. [Accessed: 14-Nov-2017].
+	
+\bibitem{lgpl}
+	"GNU Lesser General Public License v3.0- GNU Project - Free Software Foundation", Gnu.org, 2017. [Online]. Available: https://www.gnu.org/licenses/lgpl-3.0.en.html. [Accessed: 14-Nov-2017].
+
+\bibitem{BAFX}
+	 "Android Bluetooth Wireless OBDII Reader \& Scan Tool - For Android Devices Only", BAFX Products, 2017. [Online]. Available: https://bafxpro.com/products/obdreader. [Accessed: 13-Nov-2017].
+
+\bibitem{OBDL}
+	"OBDLink MX Wi-Fi", OBDLink® | OBD Solutions, 2017. [Online]. Available: http://www.obdlink.com/mxwf/. [Accessed: 13-Nov-2017].
+	
+\bibitem{gridconn}
+	"CAN USB - PCAN-USB Adapter | Grid Connect", Gridconnect.com, 2017. [Online]. Available: https://gridconnect.com/can-usb.html?gdffi=3e9c4a34f3574e0abee6fe90e994ce82\&gdfms=34328446D0314FA9A21A0742DDFDD1B4\&utm\_source=google\&utm\_medium=CPC\&utm\_term=\&utm\_campaign=Shopping\%20-\%20peak-system\%20technik\%20\&mm\_campaign=477cea803cb14c83d8a99b6c7d0cd349\&keyword=\&mkwid=scfxzGGTm\_dc|pcrid|177099146842\&gclid=EAIaIQobChMI3fX55aC61wIVh0NpCh3B4wQYEAYYASABEgI4LvD\_BwE. [Accessed: 13-Nov-2017].
+	
+\bibitem{canhist}
+	"CAN in Automation (CiA): History of the CAN technology", Can-cia.org, 2017. [Online]. Available: https://www.can-cia.org/can-knowledge/can/can-history/. [Accessed: 13-Nov-2017].
+
+\bibitem{cani}	
+	"Using LED with a CAN Bus System", JDM ASTAR Blog, 2017. [Online]. Available: https://jdmastarblog.com/2017/05/25/using-led-with-a-can-bus-system/. [Accessed: 13-Nov-2017].
+
+\bibitem{btb}
+	"Bluetooth Basics - learn.sparkfun.com", Learn.sparkfun.com, 2017. [Online]. Available: https://learn.sparkfun.com/tutorials/bluetooth-basics/how-bluetooth-works. [Accessed: 13-Nov-2017].
+
+\bibitem{perlobd}
+	"Perl OBD-II Logger", SourceForge, 2017. [Online]. Available: https://sourceforge.net/projects/pobd-logger/. [Accessed: 14-Nov-2017].
+	
+\bibitem{obdgps}
+	"OBD GPS Logger for Linux and OSX", Icculus.org, 2017. [Online]. Available: http://icculus.org/obdgpslogger/. [Accessed: 14-Nov-2017].
+	
+\bibitem{pyobd}
+	"pyOBD - Open-source OBD-II diagnostics", Obdtester.com, 2017. [Online]. Available: http://www.obdtester.com/pyobd. [Accessed: 14-Nov-2017].
+	
+\bibitem{al2}
+	"Artistic License 2.0 | Open Source Initiative", Opensource.org, 2017. [Online]. Available: https://opensource.org/licenses/Artistic-2.0. [Accessed: 14-Nov-2017].
+
+\bibitem{gpsd}
+	"GPSd ? Put your GPS on the net!", Catb.org, 2017. [Online]. Available: http://www.catb.org/gpsd/. [Accessed: 14-Nov-2017].
+
+\end{thebibliography}
+\end{document}
