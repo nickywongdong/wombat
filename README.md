@@ -3,4 +3,4 @@ This repository contains the source and documentation for the NVIDIA Jetson TX2 
 
 **Group 15 aka Team Wombat**: Nick Wong, Ryan Crane, Victor Li
 
-**Axolotl Software License**: GPLv2. Click [here](https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html) for explicit terms. License may be updated at any time.
+**Axolotl Software License**: GPLv2. Click [here](https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html) for explicit license terms. License may be updated at any time.
