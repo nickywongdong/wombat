@@ -1,4 +1,4 @@
-TEXFN=design_document_victor
+TEXFN=design_doc
 
 all: pdf
 
