@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.17 (TeX Live 2016) (preloaded format=pdflatex 2016.5.22)  3 NOV 2017 16:21
+This is pdfTeX, Version 3.14159265-2.6-1.40.17 (TeX Live 2016) (preloaded format=pdflatex 2016.5.22)  1 DEC 2017 15:24
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -291,10 +291,10 @@ e
 * (1in=72.27pt=25.4mm, 1cm=28.453pt)
 
 Package epstopdf Info: Source file: <coe_v_spot1.eps>
-(epstopdf)                    date: 2017-10-26 11:26:55
+(epstopdf)                    date: 2017-11-04 00:35:03
 (epstopdf)                    size: 631574 bytes
 (epstopdf)             Output file: <coe_v_spot1-eps-converted-to.pdf>
-(epstopdf)                    date: 2017-10-26 11:26:55
+(epstopdf)                    date: 2017-11-04 00:35:03
 (epstopdf)                    size: 31204 bytes
 (epstopdf)             Command: <repstopdf --outfile=coe_v_spot1-eps-converted-
 to.pdf coe_v_spot1.eps>
@@ -350,14 +350,14 @@ Missing character: There is no ù in font pplr7t!
 
 ] [3] [4] [5]
 Package epstopdf Info: Source file: <images/gantt.eps>
-(epstopdf)                    date: 2017-10-26 11:26:55
+(epstopdf)                    date: 2017-11-04 00:35:03
 (epstopdf)                    size: 12340900 bytes
 (epstopdf)             Output file: <images/gantt-eps-converted-to.pdf>
-(epstopdf)                    date: 2017-10-30 22:02:58
+(epstopdf)                    date: 2017-11-04 00:35:03
 (epstopdf)                    size: 73196 bytes
 (epstopdf)             Command: <repstopdf --outfile=images/gantt-eps-converted
 -to.pdf images/gantt.eps>
-(epstopdf)             \includegraphics on input line 228.
+(epstopdf)             \includegraphics on input line 229.
 Package epstopdf Info: Output file is already uptodate.
 
 <images/gantt-eps-converted-to.pdf, id=39, 750.805pt x 627.34375pt>
@@ -365,17 +365,17 @@ File: images/gantt-eps-converted-to.pdf Graphic file (type pdf)
 
 <use images/gantt-eps-converted-to.pdf>
 Package pdftex.def Info: images/gantt-eps-converted-to.pdf used on input line 2
-28.
+29.
 (pdftex.def)             Requested size: 505.89pt x 422.71124pt.
 Package epstopdf Info: Source file: <images/tablegantt.eps>
-(epstopdf)                    date: 2017-10-26 11:26:55
+(epstopdf)                    date: 2017-11-04 00:35:03
 (epstopdf)                    size: 4064757 bytes
 (epstopdf)             Output file: <images/tablegantt-eps-converted-to.pdf>
-(epstopdf)                    date: 2017-10-30 22:02:58
+(epstopdf)                    date: 2017-11-04 00:35:03
 (epstopdf)                    size: 101933 bytes
 (epstopdf)             Command: <repstopdf --outfile=images/tablegantt-eps-conv
 erted-to.pdf images/tablegantt.eps>
-(epstopdf)             \includegraphics on input line 229.
+(epstopdf)             \includegraphics on input line 230.
 Package epstopdf Info: Output file is already uptodate.
 
 <images/tablegantt-eps-converted-to.pdf, id=40, 761.84625pt x 220.825pt>
@@ -383,7 +383,7 @@ File: images/tablegantt-eps-converted-to.pdf Graphic file (type pdf)
 
 <use images/tablegantt-eps-converted-to.pdf>
 Package pdftex.def Info: images/tablegantt-eps-converted-to.pdf used on input l
-ine 229.
+ine 230.
 (pdftex.def)             Requested size: 505.89pt x 146.63449pt.
  [6 <./images/gantt-eps-converted-to.pdf> <./images/tablegantt-eps-converted-to
 .pdf>] (./requirements.aux) ) 
@@ -403,7 +403,7 @@ pfb></usr/local/texlive/2016/texmf-dist/fonts/type1/urw/helvetic/uhvr8a.pfb></u
 sr/local/texlive/2016/texmf-dist/fonts/type1/urw/palatino/uplb8a.pfb></usr/loca
 l/texlive/2016/texmf-dist/fonts/type1/urw/palatino/uplr8a.pfb></usr/local/texli
 ve/2016/texmf-dist/fonts/type1/urw/palatino/uplri8a.pfb>
-Output written on requirements.pdf (7 pages, 291191 bytes).
+Output written on requirements.pdf (7 pages, 291200 bytes).
 PDF statistics:
  76 PDF objects out of 1000 (max. 8388607)
  51 compressed objects within 1 object stream
