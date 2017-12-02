@@ -1,0 +1,27 @@
+
+\documentclass{article}
+
+\title{Nvidia Jetson TX2 Car Infotainment System Problem Statement}
+
+\author{
+Nick Wong\\CS461
+}
+\date{Fall 2017}
+
+\begin{document}
+  \maketitle
+
+  \section{Abstract}
+There is no real market for infotainment systems in modern cars. A car owner cannot go to any car accessories store to purchase a new infotainment system to install. Our project is to use an Nvidia Jetson TX2 module to create a fully functional car infotainment system and black box. Our challenge is to allow anyone who owns a car to buy and install a infotainment system other than the default from the car manufacturer. This infotainment system will have a cleaner, more intuitive UI, with more functionality than a normal infotainment system would have.
+The challenge of this project can be overcome by working on each unique function separately with embedded programming. The functions of this infotainment system will include any on board sensors with OBII, sound system through FM radio or Auxiliary or Bluetooth. Any settings that can be changed in the car will also be available to the user. The black box portion of the project will include logging of all system sensors into a file which can be displayed by the user. 
+
+\newpage
+\section{Project Definition}
+In this project, the goal is to create a fully functional car infotainment system that also doubles as a black box. The infotainment system functionality will include at least: FM Radio, phone Aux support, Bluetooth support, AHRS, GPS functionality, all capabilities a normal infotainment system will have. It will also have the ability to save and access navigation routes. Although this kind of data can be upwards of terabytes, the hard drive space is no issue as the TX2 allows for many hard drives to be attached. The radio and sound output function must also be displayed with RDS. The information of the song including the title, and time, etc. should also be displayed to the user. The system will also have access to parts of the vehicle such as light signals, reverse lights, brake lights, etc. The black box aspect of the system is to log all system sensors on-board using OBII and place them into a log where the user may then inspect. Another goal is to allow the infotainment system be navigated intuitively either through touch screen, or physical nobs. This project is to be developed using open source software, as the creators retain the IP, and client reserves the right to freely use/modify the product.  
+
+\section{Proposed Solution}
+The first step in this project will be to design the UI that the infotainment system will run on. This can be accomplished through User Stories, and Story Maps. The next step is to compile a list of functions that may be required, and optional. This list will be the guide that shows the progress of the overall project. After completing an item on the list, a method will be constructed to isolate and test that completed functionality. Most of the sensors can be connected with the TX2 directly and tested individually with software signals. For testing the FM radio, there may be a radio which is able to receive signals and output audio correctly, that we test against the one with the Nvidia Jetson TX2. The GPS integration may be implemented through open source street maps. A steering wheel, pedals, and a virtual driving simulator will be supplied to test the functionality of the system. The GPS functionality may also be tested through the driving simulator as the GPS can be spoofed with software. The Black Box Portion can be tested by allowing the system to hypothetically receive logs from multiple sensors, and then the logs can be tested against knowledge. Once the list has been completed, optional functionality may then be included. This can include fuel driving statistics, integration of climate control, accident detection, etc. 
+
+\section{Performance Metrics}
+Once the UI design and Story Maps are completed, the backbone of the project is then reviewed with the client. If the design meets expectations, then the implementation of  the list will begin. After each item in the list is completed, it can be tested for correctness. Once this list has been completed, and the testing process has been completed, we can then begin the showcase of functionality with the client to see whether all items meet expectations. After these steps have been completed, the project has been completed. 
+\end{document}
