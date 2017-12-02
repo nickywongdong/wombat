@@ -1,0 +1,436 @@
+
+\documentclass[onecolumn, draftclsnofoot,10pt, compsoc]{IEEEtran}
+\usepackage{graphicx}
+\usepackage{url}
+\usepackage{setspace}
+\usepackage{tipa}
+
+\usepackage{geometry}
+\geometry{textheight=9.5in, textwidth=7in}
+
+\usepackage{graphicx}
+\graphicspath{{images/}}
+
+% 1. Fill in these details
+\def \CapstoneTeamName{		Team Wombat}
+\def \CapstoneTeamNumber{		15}
+\def \GroupMemberOne{			Victor Li}
+\def \GroupMemberTwo{			Ryan Crane}
+\def \GroupMemberThree{			Nicholas Wong}
+\def \CapstoneProjectName{		Axolotl}
+\def \CapstoneSponsorCompany{	}
+\def \CapstoneSponsorPerson{		Kevin McGrath}
+
+% 2. Uncomment the appropriate line below so that the document type works
+\def \DocType{		%Problem Statement
+				%Requirements Document
+				Design Document
+				%Progress Report
+				}
+			
+\newcommand{\NameSigPair}[1]{\par
+\makebox[2.75in][r]{#1} \hfil 	\makebox[3.25in]{\makebox[2.25in]{\hrulefill} \hfill		\makebox[.75in]{\hrulefill}}
+\par\vspace{-12pt} \textit{\tiny\noindent
+\makebox[2.75in]{} \hfil		\makebox[3.25in]{\makebox[2.25in][r]{Signature} \hfill	\makebox[.75in][r]{Date}}}}
+% 3. If the document is not to be signed, uncomment the RENEWcommand below
+%\renewcommand{\NameSigPair}[1]{#1}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}
+\begin{titlepage}
+    \pagenumbering{gobble}
+    \begin{singlespace}
+    	\includegraphics[height=4cm]{coe_v_spot1}
+        \hfill 
+        % 4. If you have a logo, use this includegraphics command to put it on the coversheet.
+        %\includegraphics[height=4cm]{CompanyLogo}   
+        \par\vspace{.2in}
+        \centering
+        \scshape{
+            \huge CS Capstone \DocType \par
+            {\large\today}\par
+            \vspace{.5in}
+            \textbf{\Huge\CapstoneProjectName}\par
+            \vfill
+            {\large Prepared for}\par
+            \Huge \CapstoneSponsorCompany\par
+            \vspace{5pt}
+            {\Large\NameSigPair{\CapstoneSponsorPerson}\par}
+            {\large Prepared by }\par
+            Group\CapstoneTeamNumber\par
+            % 5. comment out the line below this one if you do not wish to name your team
+            \CapstoneTeamName\par 
+            \vspace{5pt}
+            {\Large
+                \NameSigPair{\GroupMemberOne}\par
+                \NameSigPair{\GroupMemberTwo}\par
+                \NameSigPair{\GroupMemberThree}\par
+            }
+            \vspace{20pt}
+        }
+        \begin{abstract}
+        %6. Fill in your abstract   
+       		This document is a software design description (SDD) that discusses the design of the Axolotl system with respect to navigation, media, cameras, and data logging functions as well as user interface and background operations. The document will cover our project stakeholder's design concerns and requested functionality, the viewpoints associated with these concerns and requests, and the design views and testing methods developed from and governed by those viewpoints. Rationale will be offered to explain the choices made in design views.\end{abstract}     
+    \end{singlespace}
+\end{titlepage}
+\newpage
+\pagenumbering{arabic}
+\tableofcontents
+% 7. uncomment this (if applicable). Consider adding a page break.
+%\listoffigures
+%\listoftables
+\clearpage
+
+% 8. now you write!
+\section{Introduction}
+This software design description concerns the Axolotl system, an infotainment and black box data logging system that is based on the NVIDIA Jetson TX2 hardware. Our stakeholder is Instructor Kevin McGrath of Oregon State University, who is our project client. The Axolotl system can be divided into individual components, including: navigation, media, data logging, camera, user interface, and supplemental functionality. This SDD will first list all stakeholder concerns with respect to each component. We will then associate viewpoints to the concerns listed; afterwards, we will develop design views that are governed by these viewpoints. An individual viewpoint may address one or more concerns; viewpoints will be directly used to form a design view. Design rationale will be given stating the rationale behind the design view of each component, and testing solutions will be offered in design overlays.
+
+\section{Design Stakeholders and Their Concerns}
+\subsection{Navigation}
+\subsubsection{}
+Routing and mapping functionalities of the navigation system must be able to work without an internet connection.
+\subsubsection{}
+Users must be able to enter a street address as a destination and navigate to destination.
+\subsubsection{}
+Users must be able to cancel their route if one is active.
+\subsubsection{}
+Navigation must utilize a GPS to determine vehicle location.
+
+\subsection{Media}
+\subsubsection{}
+FM radio playback will be supported and must also display RDS information to the screen.
+\subsubsection{}
+The Axolotl Media menu will allow for the playing of music through USB devices.
+\subsubsection{}
+The Media menu will allow the connection to a network drive to download media online.
+\subsubsection{}
+Users will be able to play music on the Axolotl through handheld devices via Bluetooth or Auxiliary connections.
+\subsubsection{}
+Users will be able to select media from an onboard storage medium. 
+ 
+\subsection{Data Logging}
+\subsubsection{}
+The user interface will allow users to reset the black box and delete all of the data logged.
+\subsubsection{}
+Any data logged must be transferable to a removable storage medium. 
+\subsubsection{}
+The system must require user authentication in order to gain access to the specified download and reset functionality.
+\subsubsection{}
+Users should be able to change their authentication credentials for the black box system..
+\subsubsection{}
+The data logging system must log vehicle data.
+\subsubsection{}
+The data logging system will only log data that is relevant to the act of driving and driver well-being.
+
+\subsection{Cameras}
+\subsubsection{}
+The Axolotl will support viewing and logging for both dashboard mounted cameras and a backup camera.
+\subsubsection{}
+Backup cameras will connect to the main Axolotl system wirelessly.
+
+\subsection{User Interface}
+\subsubsection{}
+The user interface will utilize a touchscreen to receive input from the user.
+\subsubsection{}
+The user interface will automatically display the backup camera feed when the car is in reverse.
+
+\subsection{Supplemental and Background Functionality}
+\subsubsection{}
+The Axolotl should boot up using power from a UPS and switch over to vehicle power when the vehicle is running.
+\subsubsection{}
+The Axolotl should go into a low power state when the vehicle is turned off. After 48 hours, the system must power itself down.
+\subsubsection{}
+The Axolotl will allow the user to include supplemental turn signals throughout the vehicle.
+
+\newpage
+\section{Design Viewpoints}
+\subsection{Navigation}
+\subsubsection{Interface}
+\textbf{Concerns:} 2.1.2, 2.1.3 \newline
+\textbf{Elements:} Open Source Qt, NavIt \newline
+\textbf{Analytical Methods:} The navigation system must be able to display routing-critical information to the screen and allow for touch-based address/destination entry, route cancellation, and interaction with the map. \newline
+\textbf{Viewpoint Source:} Victor Li
+
+\subsubsection{Routing and Mapping}
+\textbf{Concerns:} 2.1.2 \newline
+\textbf{Elements:} NavIt \newline
+\textbf{Analytical Methods:} The navigation system must be able to accept a U.S. address as the destination and successfully guide the user to that destination with turn-by-turn instructions. \newline
+\textbf{Viewpoint Source:} Victor Li
+
+\subsubsection{Offline Data Storage}
+\textbf{Concerns:} 2.1.1 \newline
+\textbf{Elements:} NavIt, OpenStreetMaps \newline
+\textbf{Analytical Methods:} The navigation system must store offline map data for all 50 U.S. states and use this data for routing and mapping. \newline
+\textbf{Viewpoint Source:} Victor Li
+
+\subsubsection{GPS}
+\textbf{Concerns:} 2.1.4 \newline
+\textbf{Elements:} NavIt, GPSD, NEO M8U \newline
+\textbf{Analytical Methods:} GPS should be used to determine vehicle location for navigation. The navigation system should be able to compensate for the loss of GPS signal. \newline
+\textbf{Viewpoint Source:} Victor Li
+
+\subsection{Media}
+\subsubsection{Interface}
+\textbf{Concerns:} 2.2.1, 2.2.2, 2.2.3, 2.2.4, 2.2.5 \newline
+\textbf{Elements:} Kodi \newline
+\textbf{Analytical Methods:} The media menu of the Axolotl should allow the user to select a medium to play media from. Each selection should introduce similar menus which display the information of the current media selection.  \newline
+\textbf{Viewpoint Source:} Nick Wong
+
+\subsubsection{Remote Access}
+\textbf{Concerns:} 2.2.3, 2.2.5 \newline
+\textbf{Elements:} TCP/IP \newline
+\textbf{Analytical Methods:} The media menu should allow for the downloading of media from network drives. This media can then be selected from the onboard storage option.  \newline
+\textbf{Viewpoint Source:} Nick Wong
+
+\subsection{Data Logging}
+\subsubsection{Graphical User Interface}
+\textbf{Concerns:} 2.3.1, 2.3.2, 2.3.3, 2.3.4 \newline
+\textbf{Elements:} Open Source Qt \newline
+\textbf{Analytical Methods:} The data logging system should offer a menu for users to manage the system and its data. \newline
+\textbf{Viewpoint Source:} Victor Li
+
+\subsubsection{Physical Interface}
+\textbf{Concerns:} 2.3.5, 2.3.6 \newline
+\textbf{Elements:} OBDII, OBDLink MX Bluetooth \newline
+\textbf{Analytical Methods:} The data logging system should interface with vehicle computers and collect vehicle data. \newline
+\textbf{Viewpoint Source:} Victor Li
+
+\subsection{Cameras}
+\subsubsection{Interaction}
+\textbf{Concerns:} 2.4.1 \newline
+\textbf{Elements:} Open Source Qt \newline
+\textbf{Analytical Methods:} Cameras will be viewable on the touchscreen, and conditionally recorded to the data log. \newline
+\textbf{Viewpoint Source:} Ryan Crane
+
+\subsubsection{Dependency}
+\textbf{Concerns:} 2.4.2 \newline
+\textbf{Elements:} Raspberry Pi \newline
+\textbf{Analytical Methods:} Backup camera must communicate with main Axolotl unit wirelessly. \newline
+\textbf{Viewpoint Source:} Ryan Crane
+
+\subsection{User Interface}
+\subsubsection{Interface}
+\textbf{Concerns:} 2.5.1 \newline
+\textbf{Elements:} Open Source Qt \newline
+\textbf{Analytical Methods:} The user interface must allow the user to access the media, navigation, and logging features provided by the Axolotl. \newline
+\textbf{Viewpoint Source:} Ryan Crane
+
+\subsubsection{Information}
+\textbf{Concerns:} 2.5.2 \newline
+\textbf{Elements:} Open Source Qt \newline
+\textbf{Analytical Methods:} The screen must automatically display the backup camera feed when the car is shifted to reverse and return to normal display when the car shifts out of reverse.  \newline
+\textbf{Viewpoint Source:} Ryan Crane
+
+\subsection{Supplemental and Background Functionality}
+\subsubsection{UPS Power}
+\textbf{Concerns:} 2.6.1 \newline
+\textbf{Elements:} PowerStream UPS \newline
+\textbf{Analytical Methods:} A power source independent from vehicle power must be used to supply the Axolotl with power during bootup and standby/shutdown sequences. The system must be able to remain active in a low power state for 48 hours after the ignition is returned to the off position. \newline
+\textbf{Viewpoint Source:} Victor Li
+
+\subsubsection{Turn Signals}
+\textbf{Concerns:} 2.6.2 \newline
+\textbf{Elements:} Raspberry Pi, Bluetooth \newline
+\textbf{Analytical Methods:} There should be additional turn signals which are connected to the Axolotl wirelessly. These turn signals should light up when the user decides to signal to turn in a direction.  \newline
+\textbf{Viewpoint Source:} Nick Wong
+
+\newpage
+\section{Design Views}
+\subsection{Navigation}
+
+\subsubsection{Routing, Mapping, Turn-by-Turn Directions}
+The Axolotl must be able to navigate drivers to a specific destination in the United States. To do this, the system will need to offer mapping, routing, and navigate-to-destination functionality with turn-by-turn directions. These features will be provided by the open-source NavIt navigation software, which offers all of these capabilities in a ready-to-install package for Linux. The NavIt software will be encapsulated within a graphical wrapper within our Axolotl system in order to integrate it with our system.
+
+\subsubsection{Offline Map Data}
+The Axolotl must be able to navigate without using online sources for map and street data. To implement this, we will download OpenStreetMap data for the United States in the .osm file format and store it locally on internal storage. The NavIt navigation software we are using will then be pointed to this offline data store and utilize it to provide routing, mapping, and turn-by-turn directions; the system will not attempt to query an online map database for the same data.
+
+\subsubsection{Location Accuracy}
+Navigation requires a near-to exact understanding of vehicle location in order to provide proper route guidance and turn-by-turn instructions by voice. The primary location method we will use is GPS by way of a GPS receiver connected to the Axolotl, supplemented by a dead reckoning system built into the GPS unit. Navigation will rely on the GPS receiver to supply true GPS data so long as GPS signal is available; the system will automatically resort to dead reckoning of the GPS signal is lost.
+
+\subsection{Data Logging}
+\subsubsection{Vehicle Connection Method}
+The data logging functionality of the Axolotl requires intimate knowledge of vehicle data from the wide array of sensors installed in a modern vehicle. Modern vehicles sold in the United States collect this data and make it available via an OBDII port for reading. We will use a Bluetooth OBDII connector to interface with the OBDII port and then have the Axolotl connect to the OBDII connector via a Bluetooth connection, using OBDII software to sample the OBDII vehicle data.
+
+\subsubsection{Data Formatting}
+OBDII and AHRS will need to be formatted in a readable manner for the black box portion of the Axolotl. All data will be formatted in the .csv file format. Each column of the .csv file represents a data field; each data snapshot will add one new entry for each data field and thus will add one row to the .csv file. The OBDII data fields selected for data logging include: calculated engine load, engine coolant temperature, engine speed, vehicle speed, throttle position, relative throttle position, run time since engine start, fuel tank level, ambient air temperature, and absolute barometric pressure. The AHRS data fields selected for data logging include vehicle roll, pitch, and yaw. The units utilized for each OBDII data field will be defined by the SAE J1979 standard for OBDII PIDs; the AHRS data fields will be measured in degrees.
+
+\subsubsection{Data Storage}
+Logged data will need to be stored on some sort of internal storage medium on the Axolotl itself. A 1TB hard disk drive connected to the Axolotl via a USB port will be used to provide data storage. This hard disk drive will be formatted with an ext4 file system and will have one directory labeled \textit{black\_box} that will hold the .csv data log and the .mp4 files from the dashcam system.
+
+\subsubsection{User Interface}
+Users must be able to manage the data logging system. Specifically, users must be able to wipe all of the data logged or download the black box data to a removable storage medium, and must only be able to access these functions with authentication. A graphical user interface will be supplied in order to allow for this functionality. The interface will prompt the user for a password, entered with a touch-based QWERTY keyboard. Passwords cannot be entered while the vehicle is in motion. The default password used for the Axolotl system is \textit{ltoloxa}. Successful authentication will grant access to two options: change black box password and wipe all data. Leaving this interface and returning will require users to enter their password again.
+
+\subsection{Media}
+\subsubsection{Media Player}
+Upon selection of the media menu, a new interface will be brought up to allow users to select mediums through which to play their media. The selections include USB through a flash drive or phone, Auxiliary, Bluetooth, FM, or onboard HDD media. The media player will be integrated using Kodi software. The Kodi software will allow the users to browse media as well as play from multiple media formats. 
+
+\subsubsection{Network Media Download}
+Users will also have the option to download media from a network drive directly onto the onboard HDD when there is an internet connection available. This will be set up through a TCP/IP P2P network connection. This requires the user to go through an initial setup to connect to their desired computer. Upon selecting this option first, the user will have a choice to setup a new computer to connect with. A menu will then be brought up, guiding the user through connecting to their computer over a network. Once the initial setup is complete, a new computer will be added to a list of existing devices that the user can then choose from. 
+
+\subsection{Cameras}
+\subsubsection{Camera Feed}
+The Axolotl will be able to integrate footage from a dashcam into its black box log, as well as utilize a backup camera as a standard infotainment system would. The backup camera feed will be displayed automatically when needed and hidden otherwise. Footage from dashboard mounted cameras will be recorded and archived in the black box data log. 
+
+\subsection{User Interface}
+\subsubsection{Touchscreen}
+The Axolotl will need to display information to its user and be able to receive input so that they can utilize the functions it offers. The Axolotl will use a ten inch touchscreen for this purpose. The screen will be used to display maps and routing information as well as track information from the various music sources it will support. The touchscreen will also allow the user to navigate between menus. To build our user interface we will use a tool called Open Source Qt. Open Source Qt is an open source toolkit for making graphical user interfaces that we can use to design a fast familiar interfaces that users can learn to use quickly.
+\subsubsection{Camera integration}
+The user interface will be superseded by the backup camera feed when the car is shifted to reverse. In general Infotainment systems like the Axolotl automatically display backup camera feeds while the car is in reverse, and return to the normal menus when the car leaves reverse. 
+
+\subsection{Supplemental and Background Functionality}
+\subsubsection{UPS Power}
+The Axolotl requires power for booting up on vehicle startup and remaining in standby mode for 48 hours after the vehicle has been turned off. 
+
+\subsubsection{Supplementary Turn Signals}
+The Axolotl will include additional turn signals which will attach onto the outside of a vehicle. These turn signals will be controlled by a Raspberry Pi which will communicate with the Axolotl wirelessly via bluetooth. Once the Axolotl receives information on the turn signals, it will send a signal to the respective turn signal allowing it to flash. 
+
+\newpage
+\section{Design Elements}
+\subsection{All}
+\subsubsection{NVIDIA Jetson TX2}
+\textbf{Type:} System  \newline
+\textbf{Purpose:} The NVIDIA Jetson TX2 will be used as the computing system hardware that will run all of the software developed for all Axolotl subsystems.
+
+\subsection{Navigation}
+\subsubsection{NEO M8U}
+\textbf{Type:} System \newline
+\textbf{Purpose:} This is the GPS module that the Axolotl will utilize to drive the navigation system. 
+
+\subsubsection{NavIt}
+\textbf{Type:} Subprogram \newline
+\textbf{Purpose:} NavIt will be used to provide all navigation functionality including offline routing, offline mapping, navigate-to-destination, and turn-by-turn directions. The subprogram will also handle user input for address entry and route cancellation.
+
+\subsubsection{OpenStreetMaps}
+\textbf{Type:} System \newline
+\textbf{Purpose:} OpenStreetMaps will be used to provide the street and map data used for routing and mapping.
+
+\subsubsection{Open Source Qt}
+\textbf{Type:} Framework \newline
+\textbf{Purpose:} Open Source Qt will be used to create the Axolotl user interface in addition to the Axolotl graphical wrapper for the NavIt system.
+
+\subsection{Data Logging}
+\subsubsection{OBDII}
+\textbf{Type:} Port \newline
+\textbf{Purpose:} OBDII will be used to read data from an automotive OBDII port for data logging.
+
+\subsubsection{OBDLink MX Bluetooth}
+\textbf{Type:} Connector \newline
+\textbf{Purpose:} The OBDLink MX Bluetooth will collect and aggregate OBDII data, making that data available to the Axolotl via a Bluetooth connection.
+
+\subsubsection{pyOBD}
+\textbf{Type:} Subprogram \newline
+\textbf{Purpose:} pyOBD will be used to interpret vehicle data from an OBDII connector and translate it into readable text that can then be formatted and logged.
+
+\subsubsection{OBDSim}
+\textbf{Type:} Subprogram \newline
+\textbf{Purpose:} OBDSim will be used to simulate OBDII data in order to test the data logging system for correct functionality.
+
+\subsubsection{Open Source Qt}
+\textbf{Type:} Framework \newline
+\textbf{Purpose:} Open Source Qt will be used to create a graphical user interface that allows for user interaction with the black box system.
+
+\subsection{Media}
+\subsubsection{Grove I2C FM Receiver}
+\textbf{Type:} Component \newline
+\textbf{Purpose:} This will be used to receive FM radio signals, including Radio Data System data.
+
+\subsubsection{Kodi Media Player}
+\textbf{Type:} System \newline
+\textbf{Purpose:} This media player will be used to allow for the playing of multiple file formats. 
+
+\subsubsection{I2C}
+\textbf{Type:} Port/Interface \newline
+\textbf{Purpose:} This serial computer bus standard will be used to connect the Grove I2C FM receiver with the Jetson TX2 computer module.
+
+\subsubsection{TCP}
+\textbf{Type:} System \newline
+\textbf{Purpose:} TCP will be used to download music files from a host computer over a network connection in order to implement networked music library functionality.
+
+\subsection{Cameras}
+\subsubsection{Raspberry Pi}
+\textbf{Type:} System \newline
+\textbf{Purpose:} A Raspberry Pi will be used to control the backup camera and wirelessly stream its video feed to the Axolotl.
+
+\subsection{User Interface}
+\subsubsection{Open Source Qt}
+\textbf{Type:} Framework \newline
+\textbf{Purpose:} Open Source Qt is an open source toolkit for creating graphical user interfaces. Open Source Qt will be used to create the Axolotl user interface.
+
+\subsection{Supplemental and Background Functionality}
+\subsubsection{Raspberry Pi}
+\textbf{Type:} System \newline
+\textbf{Purpose:} A Raspberry Pi will be used to communicate with the Axolotl, and control light signals outside of the car.
+
+\subsubsection{PowerStream UPS}
+\textbf{Type:} Component \newline
+\textbf{Purpose:} The PowerStream PST-DCUPS-12A-N13.1-P10 is a UPS that will be used to supply power to the Axolotl during vehicle startup or vehicle shutdown.
+
+\subsubsection{Bluetooth}
+\textbf{Type:} System \newline
+\textbf{Purpose:} The Raspberry Pi will communicate wirelessly with the Axolotl using Bluetooth.
+
+\newpage
+\section{Design Rationale}
+\subsection{Navigation}
+OpenStreetMap data in the .osm file format was chosen for offline street and map data as the OpenStreetMap project is the most extensive open-source database for street and map data. The NEO M8U was chosen as the best GPS module because it provides built in support for dead reckoning and logging applications without sacrificing anything in precision or speed. The use of the dead reckoning system on the chosen GPS receiver supplements the offline map database with the ability to compensate for the loss of GPS signal, therefore giving our system the additional ability to calculate vehicle location offline.
+The NavIt software was chosen for navigation based on its proven use in a variety of applications ranging from portable handheld navigation devices to Linux-based car computers. The NavIt system was built with offline capability as one of its core features and provides the functionality of a full navigation suite comparable to that offered by a car manufacturer.
+
+\subsection{Media}
+The decision to use Kodi software is because of the supported media formats it plays. It is an open source software that has a large library of documentation for the process of integrating the media player into a system. 
+The decision to allow the downloading of media through a network connection was derived from the possibility of a user wanting to be able to access a library they have already compiled. The user simply needs an internet connection, and any libraries on connected devices will be available.
+
+\subsection{Data Logging}
+The decision to utilize OBDII for reading most vehicle data is due to the prevalence of the port in vehicles sold in the United States, thus using the OBDII port will maximize the compatibility. A password was chosen as the authentication solution as it is one of the most secure solutions and would only require a text entry field and QWERTY touch keyboard to implement.\par
+The range of data fields selected for data logging were chosen based on their relevance to driving and driver well-being. The OBDII port defines a variety of vehicle data parameters; most of this data is not useful for driver information nor accident investigation. Some of these irrelevant data fields include: fuel rail pressure, mass air flow sensor flow rate, and time since trouble codes cleared. Irrelevant fields will be excluded from the .csv black box log. The same approach is taken with the data from the AHRS system.\par
+The decision to use a hard disk drive as the storage medium for data logging functionality stems from its favorable form factor, relatively low price, and its proven reliability. The USB connection method also makes the hard drive easily removable, enabling users to connect their drive to a computer and gain access to their black box data log.\par
+
+\subsection{Cameras}
+Design decisions surrounding camera integration is driven by the need for wireless communication and flexibility for the system to log footage captured by the cameras. External tools will need to be used in order to manage wireless video streaming which will influence project design.
+
+\subsection{User Interface}
+User interface design is driven by the importance of usability and aesthetics in the project. Open Source Qt is a popular tool for developing graphical user interfaces for Linux applications. Our application will run on Linux since it is distributed with the Jetson TX2. Open Source Qt is a toolkit with excellent support for automotive user interfaces.
+
+\subsection{Supplemental and Background Functionality}
+The decision to include supplemental turn signals is to ensure safety in situations where vehicle lights are obscured and difficult to see by other drivers. This may arise if the vehicle running the Axolotl system is towing a trailer or is very long. A Raspberry Pi was chosen to manage these lights as it is an inexpensive and compact solution.
+The decision to use the PowerStream UPS was made based on its ability to detect vehicle alternator status and then switch to vehicle power when the alternator is on or switch to internal power if the alternator is shut off.
+
+\newpage
+\section{Design Overlays}
+\subsection{Navigation}
+Our navigation system will be tested using functional testing. With the Axolotl system installed in a vehicle, the navigation system will be set to navigate to a predetermined destination. The driver will attempt to drive to the destination, obeying any and all traffic laws. This will be tested against a smartphone running Google Maps with a destination set to the same street address as the predetermined destination entered into the Axolotl. Implementation of navigation will be judged as successful if both systems end at the correct address.
+
+\subsection{Data Logging}
+Data logging will be tested using functional testing. The testing method is a simulation test; OBDSim will be used to generate a set of fake OBDII data that will be logged by the Axolotl. Both data sets will be compared; if data fields that share the same timestamp are equal, then the data logging functionality has been correctly implemented. The same method will be done using a custom-built program for the AHRS system.
+
+\section{Appendices}
+\subsection{Appendix I: Glossary of Terms}
+\begin{itemize}
+	\item NVIDIA Jetson TX2: A versatile, efficient, and high-performance computer made by NVIDIA to be used in robots, drones, and smart cameras.
+
+	\item OBDII: On-Board Diagnostics II, a standardized connector installed in all automobiles sold in the United States since January 1st, 1996. Devices connected via an automotive OBDII port can read vehicle sensor data on the fly.
+
+	\item LIDAR: Light Detection and Ranging, a method of using laser pulses to determine the 3D properties of a faraway object.
+
+	\item AHRS: Attitude, Heading, and Reference System, a system used in modern aircraft to determine and display roll, pitch, and yaw.
+
+	\item Dead Reckoning: A method of calculating the current location of a person or an object by using a previously known location and then using known or estimated speed, directional heading, and elapsed time.
+
+	\item Infotainment: A portmanteau of "information" and "entertainment". When we use the term "infotainment", we are referring to the center console touchscreen that gives drivers access to information and media in modern cars.
+
+	\item RDS: Radio Data System, a method of transmitting the current track information of an FM radio broadcast.
+
+	\item UPS: Uninterruptible Power Supply, an auxiliary power source that enables a device to function for a limited time if its main power source is unavailable.
+	
+	\item USB: Universal Serial Bus, a commonplace connection method for a multitude of computer peripherals.
+	
+	\item MP3: A common digital audio coding format that uses lossy compression. MP3 files are given the .mp3 file extension.
+
+	\item MP4: A common digital video container format. MP4 files are given the .mp4 extension. 
+
+	\item .csv: Comma-Separated Values, a file format to store tabular data in plain text.
+
+	\item TCP: Transmission Control Protocol is a method of establishing a method of communicating with devices through a network. 
+
+\end{itemize}
+
+\end{document}
