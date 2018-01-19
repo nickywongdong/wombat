@@ -1,0 +1,1 @@
+/usr/bin/cc  -fPIC  -Wall -Wundef -Wcast-align -Wpointer-arith -Wno-unused-parameter -Wno-sign-compare -Wno-missing-field-initializers  -Wextra  -Wmissing-prototypes  -Wstrict-prototypes  -Wformat-security  -O2 -g -DNDEBUG  -shared  -o .libs/libosd_core.so CMakeFiles/osd_core.dir/osd_core.c.o 

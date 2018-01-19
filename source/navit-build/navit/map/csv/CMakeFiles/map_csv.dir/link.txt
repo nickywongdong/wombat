@@ -1,0 +1,1 @@
+/usr/bin/cc  -fPIC  -Wall -Wundef -Wcast-align -Wpointer-arith -Wno-unused-parameter -Wno-sign-compare -Wno-missing-field-initializers  -Wextra  -Wmissing-prototypes  -Wstrict-prototypes  -Wformat-security  -O2 -g -DNDEBUG  -shared  -o .libs/libmap_csv.so CMakeFiles/map_csv.dir/csv.c.o CMakeFiles/map_csv.dir/quadtree.c.o 
