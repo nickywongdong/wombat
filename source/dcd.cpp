@@ -1,4 +1,7 @@
 // Axolotl Dashcam Daemon
+// Dependencies:
+// - videosoftware
+
 
 #include "dcomh.h"
 
