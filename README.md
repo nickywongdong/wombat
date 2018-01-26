@@ -1,5 +1,6 @@
 # Axolotl - Victor's Branch
-*Current Version:* 0.1.6 pre-alpha
+_Current Version:_ 0.1.6 pre-alpha
+
 Dependencies:
 - Navit PACKAGE_VERSION 0.5.1
 - pyOBD PACKAGE_VERSION 0.9.3
