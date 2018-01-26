@@ -1,9 +1,10 @@
 // Axolotl Dashcam Daemon
 // Dependencies:
-// - videosoftware
-
+// - gstreamer
 
 #include "dcomh.h"
+
+using namespace std;
 
 int dcdTermSigHandler(int sig) {
   // catch termination signals by testing apparatus/Axolotl
@@ -15,21 +16,26 @@ void recordLooper() {
   double memAvailable;
   while(1) {
     // do memory check, store in memAvailable
+    memAvailable =
     if (memAvailable > 2.0) {
-
+      continue;
     }
     else {
-      wait(5);
+      sleep(5);
       continue;
     }
   }
 }
 
 int record() {
-
+  // record at 1080p30 for 300s
+  return 0;
 }
 
 int main() {
-
+    while(1) {
+      sleep(1);
+      printf("Hi?\n");
+    }
     return 0;
 }
