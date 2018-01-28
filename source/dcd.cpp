@@ -3,8 +3,10 @@
 // - gstreamer
 
 #include "dcomh.h"
+#include <boost/filesystem.hpp>
 
 using namespace std;
+using namespace boost::filesystem;
 
 int dcdTermSigHandler(int sig) {
   // catch termination signals by testing apparatus/Axolotl
@@ -13,10 +15,12 @@ int dcdTermSigHandler(int sig) {
 }
 
 void recordLooper() {
-  double memAvailable;
+  float memAvailable;
+  space_info memCheck;
+
   while(1) {
-    // do memory check, store in memAvailable
-    memAvailable =
+    memCheck = space("/Volumes/SD Transfer");
+    memAvailable = (float)memCheck.available/1073741824;
     if (memAvailable > 2.0) {
       continue;
     }
