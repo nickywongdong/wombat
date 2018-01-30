@@ -2,11 +2,9 @@
 // Dependencies:
 // - gstreamer
 
-#include "dcomh.h"
-#include <boost/filesystem.hpp>
+#include "dcomh.hpp"
 
 using namespace std;
-using namespace boost::filesystem;
 
 int dcdTermSigHandler(int sig) {
   // catch termination signals by testing apparatus/Axolotl
@@ -14,32 +12,28 @@ int dcdTermSigHandler(int sig) {
   exit(0); // exit status 0 if successful dump
 }
 
-void recordLooper() {
-  float memAvailable;
-  space_info memCheck;
+// This is where video recording happens.
+void record() {
+  printf("Recording...\n");
+  sleep(10);
+  printf("Recording complete. Saving to file.\n");
+}
 
+void recordLooper() {
   while(1) {
-    memCheck = space("/Volumes/SD Transfer");
-    memAvailable = (float)memCheck.available/1073741824;
-    if (memAvailable > 2.0) {
-      continue;
+    if (getAvailableMemory("/Volumes/SD Transfer") > 2048) {
+      record();
     }
     else {
+      printf("Not enough free space. Waiting...");
+      // Write error to debug.txt log for the day!
       sleep(5);
-      continue;
     }
   }
 }
 
-int record() {
-  // record at 1080p30 for 300s
-  return 0;
-}
-
-int main() {
-    while(1) {
-      sleep(1);
-      printf("Hi?\n");
-    }
+int main(int argc, char *argv[]) {
+    printf("Logging Directory: %s\n",argv[argc-1]);
+    recordLooper();
     return 0;
 }

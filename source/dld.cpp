@@ -2,7 +2,8 @@
 // Dependencies
 // - pyOBD
 
-#include "dcomh.h"
+#include "dcomh.hpp"
+#include <python2.7/Python.h>   // for interfacing with python logging script
 
 using namespace std;
 
