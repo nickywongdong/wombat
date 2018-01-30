@@ -69,7 +69,7 @@ int main() {
   string loggingDirectory = buildSaveDirectory();
   if(loggingDirectory == "__fail_dir_build") {
     perror("Cannot build data logging directory");
-    printf("~/axolotl/data may not exist.\n");
+    printf("~/axolotl/data may not exist.\n");    // not needed for *final* version, which will hardcode a storage volume.
     exit(1);
   }
 

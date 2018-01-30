@@ -1,5 +1,6 @@
-testapp: dcd dld dcdltestapparatus.cpp
-	g++ dcdltestapparatus.cpp -o testapp.axolotl -lpthread -lboost_system -lboost_filesystem
+testapp: dcd dld dcdl_tester.cpp
+	g++ dcdl_tester.cpp -o testapp.axolotl -lpthread -lboost_system -lboost_filesystem
+	mv *.axolotl runnable
 
 dcd: dcd.cpp
 	g++ dcd.cpp -o dcd.axolotl -lpthread -lboost_system -lboost_filesystem
