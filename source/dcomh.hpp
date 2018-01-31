@@ -1,4 +1,11 @@
-// Axolotl Daemon Common Header
+/* ------------------------------------
+   Axolotl Daemon Common Header
+   ------------------------------------
+   Header that specifies common methods for multiple Axolotl programs.
+
+   Dependencies:
+   - boost 1.66.0
+*/
 
 #include <cstdlib>
 #include <cstdio>
@@ -6,6 +13,7 @@
 #include <clocale>
 #include <iostream>
 #include <sstream>
+#include <fstream>
 #include <string>
 #include <ctime>
 
@@ -17,8 +25,19 @@
 
 #include <boost/filesystem.hpp>
 
-// Gets and returns free memory of specified volume in MiB
-double getAvailableMemory(std::string volume) {
-  boost::filesystem::space_info volStats = boost::filesystem::space(volume);
+/*
+  Gets and returns the non-privileged free memory of a specified volume in MiB.
+  Parameter volumePath must be the path to said volume (i.e. /dev/disk0).
+*/
+double getAvailableMemory(std::string volumePath) {
+  boost::filesystem::space_info volStats = boost::filesystem::space(volumePath);
   return (double)volStats.available/1048576;
+}
+
+/*
+  Gets and returns the user's home directory as a string.
+*/
+std::string getHomeDir() {
+  struct passwd *userPath = getpwuid(getuid());
+  return userPath->pw_dir;
 }

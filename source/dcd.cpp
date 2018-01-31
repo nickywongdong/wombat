@@ -1,6 +1,12 @@
-// Axolotl Dashcam Daemon
-// Dependencies:
-// - gstreamer
+/* ------------------------------------
+   Axolotl Dashcam Daemon
+   ------------------------------------
+   Background process managed by Axolotl;
+   logs camera data from dashcam and backup camera.
+
+   Dependencies:
+   - Gstreamer
+*/
 
 #include "dcomh.hpp"
 
@@ -12,7 +18,6 @@ int dcdTermSigHandler(int sig) {
   exit(0); // exit status 0 if successful dump
 }
 
-// This is where video recording happens.
 void record() {
   printf("Recording...\n");
   sleep(10);
@@ -33,7 +38,7 @@ void recordLooper() {
 }
 
 int main(int argc, char *argv[]) {
-    printf("Logging Directory: %s\n",argv[argc-1]);
+    printf("Logging Directory: %i %s\n",argc-1,argv[argc-1]);
     recordLooper();
     return 0;
 }
