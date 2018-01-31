@@ -20,7 +20,7 @@ ofstream logfile;
   Closes logfile.
 */
 void dldSigTermHandler(int signumber, siginfo_t *siginfo, void *pointer) {
-  logfile.close();  // prematurely close the logfile
+  logfile.close();  // close the logfile to stop logging data to it
   exit(0);
 }
 
@@ -32,7 +32,6 @@ void registerSigTermHandler() {
   memset(&dld_sa,0,sizeof(dld_sa));
   dld_sa.sa_sigaction = dldSigTermHandler;
   dld_sa.sa_flags = SA_SIGINFO;
-
   sigaction(SIGTERM, &dld_sa, NULL);
 }
 
