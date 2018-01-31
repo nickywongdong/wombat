@@ -13,8 +13,8 @@ Dependencies:
 - pyOBD PACKAGE_VERSION 0.9.3
 - boost PACKAGE_VERSION 1.66.0 (Unix)
 - Python 2.7.3
-- pySerial for Python 2.7
-- wxPython for Python 2.7
+- pySerial 3.4
+- wxPython 4.0.0b2
 
 
 \*Navit dependencies not included in this listing. 
