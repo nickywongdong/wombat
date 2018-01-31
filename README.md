@@ -1,7 +1,11 @@
 # Axolotl - Victor's Branch
-__Current Version:__ 0.1.8 pre-alpha
+__Current Version:__ 0.1.9 pre-alpha
 
-Version Changes:
+Version 0.1.9:
+- Changed navigation GUI to simplified mobile version supplied by Navit devs
+- Switched GUI rendering engine from GTK to Qt for later integration
+
+Version 0.1.8:
 - Added signal handler to data logging daemon
 - Added code comments
 - Partial implementation of data deletion function
