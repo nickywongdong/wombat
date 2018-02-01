@@ -39,12 +39,12 @@
 		     On windows systems, use win32 -->
     <!-- <graphics type="gtk_drawing_area"/> -->
 
-    <graphics type="gtk_drawing_area"/>
+    <graphics type="qt_qpainter"/>
 		<!-- The following line let you select which graphical user interface you'd like to use.
 		Options include internal (optimized for touch screen devices), gtk (useful for desktop computers).
 		If you don't like the internal gui, set enabled=yes for the following tag and enabled=no for the gui internal tag -->
 		<gui type="gtk" enabled="no" menubar="1" toolbar="1" statusbar="1"/>
-    
+
   <!--
 
 			In case of the internal GUI, you can even influence the size of the text and of the icons in the toolbar and the viewport.
