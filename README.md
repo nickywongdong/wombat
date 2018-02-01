@@ -19,6 +19,6 @@ Dependencies:
 - Python 2.7.3
 - pySerial 3.4
 - wxPython 4.0.0b2
+- Qt 5.10\*
 
-
-\*Navit dependencies not included in this listing. 
+\*Sub-dependencies not included in this listing. 
