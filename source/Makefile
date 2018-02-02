@@ -5,7 +5,7 @@ dcd: dcd.cpp
 	g++ dcd.cpp -o dcd.axolotl -lpthread -lboost_system -lboost_filesystem
 
 dld: dld.cpp
-	g++ dld.cpp -o dld.axolotl -lpthread -lboost_system -lboost_filesystem
+	g++ dld.cpp -o dld.axolotl -lpthread -lboost_system -lboost_filesystem -lpython
 
 fstest: test.cpp
 	g++ test.cpp -o test.prog -lboost_system -lboost_filesystem

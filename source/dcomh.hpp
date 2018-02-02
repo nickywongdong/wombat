@@ -41,3 +41,12 @@ std::string getHomeDir() {
   struct passwd *userPath = getpwuid(getuid());
   return userPath->pw_dir;
 }
+
+/*
+  Gets and returns the present working directory.
+*/
+std::string getPWD() {
+  char pwd[2048];
+  getcwd(pwd,sizeof(pwd));
+  return (std::string)pwd;
+}

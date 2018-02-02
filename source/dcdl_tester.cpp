@@ -11,6 +11,7 @@
 #include "dcomh.hpp"
 
 #define PST -8
+#define LOG_VOLUME "/media/nvidia/AXOLOTLDCV"
 
 using namespace std;
 
@@ -39,6 +40,7 @@ string buildSaveDirectory() {
   // Getting info to build data storage directory
   int buildStatus = 2;
   string dirName = getHomeDir() + "/axolotl/data/axolotl_log_";
+  // replace getHomeDir with LOG_VOLUME when on Axolotl
 
   // Fetch and proces datetime data
   time_t startTime = time(NULL);
@@ -46,6 +48,12 @@ string buildSaveDirectory() {
   string startYear = to_string(startTimeAsUTC->tm_year+1900);
   string startMonth = to_string(startTimeAsUTC->tm_mon+1);
   string startDay = to_string(startTimeAsUTC->tm_mday);
+
+  int startSecProcessed = startTimeAsUTC->tm_sec;
+  string startSec = to_string(startSecProcessed);
+  if(startSecProcessed < 10) {
+    startSec = "0" + startSec;    // ensures that seconds are always 2 digits
+  }
 
   int startMinProcessed = startTimeAsUTC->tm_min;
   string startMin = to_string(startMinProcessed);
@@ -63,7 +71,7 @@ string buildSaveDirectory() {
   }
 
   // Assemble path
-  dirName = dirName + startYear + "_" + startMonth + "_" + startDay + "_" + startHour + startMin;
+  dirName = dirName + startYear + "_" + startMonth + "_" + startDay + "_" + startHour + startMin + startSec;
 
   // Build the directory from path
   buildStatus = mkdir((const char *)dirName.c_str(), S_IRWXU | S_IRWXG | S_IRWXO);
@@ -80,11 +88,12 @@ string buildSaveDirectory() {
   Will not destroy data as part of THIS boot cycle.
   Will only destroy data if password matches.
 */
-void deleteData(string password) {
+void deleteData(string password, string sourceDir) {
   // Get true passkey hash from file
   ifstream hashfile;
   string truekeyHash = NULL, passkeyHash = NULL;
-  hashfile.open("hashkey.txt");
+  string hashfilePath = sourceDir + "/hashkey.txt";
+  hashfile.open(hashfilePath);
   if (hashfile.is_open()) {
     getline(hashfile,truekeyHash);
     hashfile.close();
@@ -100,9 +109,37 @@ void deleteData(string password) {
   printf("Data deleted.\n");
 }
 
+/*
+  Hashes a new password and changes old password hash with the new hash.
+*/
+void changePassword(string password, string sourceDir) {
+  ofstream hashfile;
+  string newhash = password;
+  string hashfilePath = sourceDir + "/hashkey.txt";
+  hashfile.open(hashfilePath, std::ofstream::trunc);
+  if(hashfile.is_open()) {
+    hashfile.write((const char *)newhash.c_str(),(long)newhash.length());
+  }
+  hashfile.close();
+}
+
+/*
+  Resets password back to the original.
+*/
+void resetPassword(string sourceDir) {
+  ofstream hashfile;
+  string newhash = "orangemonkeyeagle";
+  string hashfilePath = sourceDir + "/hashkey.txt";
+  hashfile.open(hashfilePath, std::ofstream::trunc);
+  if(hashfile.is_open()) {
+    hashfile.write((const char *)newhash.c_str(),(long)newhash.length());
+  }
+  hashfile.close();
+}
+
 int main() {
   string inputStr;
-
+  string homeDir = getPWD();
   // Create logging directory
   string loggingDirectory = buildSaveDirectory();
   if(loggingDirectory == "__fail_dir_build") {

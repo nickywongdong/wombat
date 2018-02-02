@@ -16,7 +16,7 @@ import datetime
 import time
 
 def obdSnapshot():
-    print ""
+    print "Pow"
 
 def fetchDTC():
     print ""
