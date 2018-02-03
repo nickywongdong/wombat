@@ -6,6 +6,7 @@
 
    Dependencies:
    - Python 2.7
+   - pip 9.0.1
 */
 
 #include "dcomh.hpp"
@@ -41,21 +42,25 @@ void registerSigTermHandler() {
   in order to achieve ~10 samples per second.
 */
 void loggingLooper(string loggingDirectory) {
+  string builtCommand;
   clock_t timer1;
   chdir((const char *)loggingDirectory.c_str());
   logfile.open("obd_log.csv");
   while(1) {
     if(getAvailableMemory(loggingDirectory) > 200) {
-        // call python script here
         timer1 = clock();
+        Py_SetProgramName((char *)loggingDirectory.c_str());
         Py_Initialize();
-        PyRun_SimpleString("from pyobds import dld_pyobd_adapter; dld_pyobd_adapter.obdSnapshot()");
-        //PyRun_SimpleString("obdSnapshot()");
+        PyRun_SimpleString("import sys;");
+        builtCommand = "sys.path.append('" + getHomeDir() + "/Gitdir/wombat/source/pyobds')";
+        PyRun_SimpleString((const char *)builtCommand.c_str());
+        PyRun_SimpleString("import dld_pyobd_adapter");
         Py_Finalize();
         printf("Logged?\n");
         printf("%f\n",(clock()-timer1)/(double)CLOCKS_PER_SEC);
+        printf("Sample Rate: %f\n",1/((clock()-timer1)/(double)CLOCKS_PER_SEC));
     }
-    usleep(100);    // wait 100ms, this is for 10Hz sample rate
+    usleep(100);    // wait 100ms, this is for 10Hz sample rate. adjust as needed.
   }
   logfile.close();
 }

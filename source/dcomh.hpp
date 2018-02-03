@@ -5,6 +5,7 @@
 
    Dependencies:
    - boost 1.66.0
+   - CryptoPP 6.0.0
 */
 
 #include <cstdlib>
@@ -12,6 +13,7 @@
 #include <csignal>
 #include <clocale>
 #include <iostream>
+#include <iomanip>
 #include <sstream>
 #include <fstream>
 #include <string>
@@ -24,6 +26,8 @@
 #include <pwd.h>
 
 #include <boost/filesystem.hpp>
+#include <cryptopp/sha.h>
+#include <cryptopp/hex.h>
 
 /*
   Gets and returns the non-privileged free memory of a specified volume in MiB.
@@ -49,4 +53,27 @@ std::string getPWD() {
   char pwd[2048];
   getcwd(pwd,sizeof(pwd));
   return (std::string)pwd;
+}
+
+/*
+  Applies a SHA256 hash to a string and returns the hash'd string.
+  Used to check password entry for data deletion...
+  ...as well as writing new hashes to file.
+*/
+std::string sha256hash(std::string s) {
+  // Salt and hash
+  std::string hashedPass, passSalt = "thequickbrownfoxjumpsoverthelazydog";
+  CryptoPP::SHA256 passwordHash;
+  CryptoPP::byte passwordDigest[CryptoPP::SHA256::DIGESTSIZE];
+  passwordHash.CalculateDigest(passwordDigest,(const CryptoPP::byte *)passSalt.c_str(),passSalt.size());
+
+  // Encode into human-readable string via hex
+  CryptoPP::HexEncoder hashEncoder;
+  CryptoPP::StringSink *hashStringSink = new CryptoPP::StringSink(hashedPass);
+  hashEncoder.Attach(hashStringSink);
+  hashEncoder.Put(passwordDigest,sizeof(passwordDigest));
+  hashEncoder.MessageEnd();
+
+  // Return the string hash
+  return hashedPass;
 }

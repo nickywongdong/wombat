@@ -3,15 +3,15 @@
    ------------------------------------
    Process that sets up the environment for data logging and spawns
    the OBDII data logging and dashcam logging processes.
-
-   Dependencies:
-   - OpenSSL
 */
 
 #include "dcomh.hpp"
 
 #define PST -8
 #define LOG_VOLUME "/media/nvidia/AXOLOTLDCV"
+
+//#define KEYTEST
+#define LOGTEST
 
 using namespace std;
 
@@ -100,7 +100,7 @@ void deleteData(string password, string sourceDir) {
   }
 
   // Hash the provided password
-  passkeyHash = password;
+  passkeyHash = sha256hash(password);
 
   // Delete the data only if password hashes match
   if(passkeyHash == truekeyHash) {
@@ -114,7 +114,7 @@ void deleteData(string password, string sourceDir) {
 */
 void changePassword(string password, string sourceDir) {
   ofstream hashfile;
-  string newhash = password;
+  string newhash = sha256hash(password);
   string hashfilePath = sourceDir + "/hashkey.txt";
   hashfile.open(hashfilePath, std::ofstream::trunc);
   if(hashfile.is_open()) {
@@ -128,7 +128,7 @@ void changePassword(string password, string sourceDir) {
 */
 void resetPassword(string sourceDir) {
   ofstream hashfile;
-  string newhash = "orangemonkeyeagle";
+  string newhash = sha256hash("orangemonkeyeagle");
   string hashfilePath = sourceDir + "/hashkey.txt";
   hashfile.open(hashfilePath, std::ofstream::trunc);
   if(hashfile.is_open()) {
@@ -140,35 +140,53 @@ void resetPassword(string sourceDir) {
 int main() {
   string inputStr;
   string homeDir = getPWD();
+
+  #ifdef KEYTEST
+  // Testing password check and hashing
+  string readKey = "", toHashKey = "orangemonkeyeagle";
+  ifstream checktruekey;
+  checktruekey.open("hashkey.txt");
+  if(checktruekey.is_open()) {
+    getline(checktruekey,readKey);
+    printf("True key is: '%s'\n",readKey.c_str());
+    printf("Comparable key is: '%s'\n",sha256hash(toHashKey).c_str());
+  }
+  checktruekey.close();
+  printf("Status: %d\n",(readKey == "3453A0A7F1E111FC6E9E0E8071193DEA04EAF96CBFE4318539859876AA85FB15"));
+  #endif
+
+  #ifdef LOGTEST
+  // Data Logging Daemon Test
+
   // Create logging directory
   string loggingDirectory = buildSaveDirectory();
   if(loggingDirectory == "__fail_dir_build") {
     perror("Cannot build data logging directory");
-    exit(1);
-  }
-
-  // Forking Data Logging Daemon
-  char *args[] = {(char *)loggingDirectory.c_str(), NULL};
-  dcdpid = fork();
-  if (dcdpid == -1) {
-    printf("Error spawning dashcam daemon... \n");
-    exit(1);
-  }
-  else if (dcdpid == 0){
-    execv("dld.axolotl", args);
   }
   else {
-    while(1) {
-      getline(cin,inputStr);
-      if(inputStr == "q" | inputStr == "Q") {
-        kill(dcdpid,SIGTERM);
-        break;
-      }
-      else {
-        inputStr = "";
+    char *args[] = {(char *)loggingDirectory.c_str(), NULL};
+    dcdpid = fork();
+    if (dcdpid == -1) {
+      printf("Error spawning dashcam daemon... \n");
+      exit(1);
+    }
+    else if (dcdpid == 0){
+      execv("dld.axolotl", args);
+    }
+    else {
+      while(1) {
+        getline(cin,inputStr);
+        if(inputStr == "q" | inputStr == "Q") {
+          kill(dcdpid,SIGTERM);
+          break;
+        }
+        else {
+          inputStr = "";
+        }
       }
     }
   }
+  #endif
 
   return 0;
 }

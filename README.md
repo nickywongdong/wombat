@@ -1,5 +1,12 @@
 # Axolotl - Victor's Branch
-__Current Version:__ 0.1.9 pre-alpha
+__Current Version:__ 0.1.10 pre-alpha
+
+Version 0.1.10:
+- Added SHA256 hashing function to complete implementation of password check for black box data deletion
+- Completed integration of python script into data logging daemon
+- Added new tests to testing apparatus
+- Initialized pyOBD as a module
+- Added salted SHA256 hash of default data deletion key
 
 Version 0.1.9:
 - Changed navigation GUI to simplified mobile version supplied by Navit devs
@@ -20,5 +27,7 @@ Dependencies:
 - pySerial 3.4
 - wxPython 4.0.0b2
 - Qt 5.10\*
+- CryptoPP 6.0.0
+- pip 9.0.1
 
 \*Sub-dependencies not included in this listing. 
