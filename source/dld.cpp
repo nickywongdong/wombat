@@ -45,24 +45,17 @@ void loggingLooper(string loggingDirectory) {
   string builtCommand;
   clock_t timer1;
   chdir((const char *)loggingDirectory.c_str());
-  logfile.open("obd_log.csv");
   while(1) {
     if(getAvailableMemory(loggingDirectory) > 200) {
         timer1 = clock();
-        Py_SetProgramName((char *)loggingDirectory.c_str());
-        Py_Initialize();
-        PyRun_SimpleString("import sys;");
-        builtCommand = "sys.path.append('" + getHomeDir() + "/Gitdir/wombat/source/pyobds')";
-        PyRun_SimpleString((const char *)builtCommand.c_str());
-        PyRun_SimpleString("import dld_pyobd_adapter");
-        Py_Finalize();
+        builtCommand = "python " + getHomeDir() + "/Gitdir/wombat/source/pyobds/dld_pyobd_adapter.py snapshot " + loggingDirectory;
+        system(builtCommand.c_str());
         printf("Logged?\n");
         printf("%f\n",(clock()-timer1)/(double)CLOCKS_PER_SEC);
         printf("Sample Rate: %f\n",1/((clock()-timer1)/(double)CLOCKS_PER_SEC));
     }
-    usleep(100);    // wait 100ms, this is for 10Hz sample rate. adjust as needed.
+    sleep(1);
   }
-  logfile.close();
 }
 
 void createLogfile(string loggingDirectory) {

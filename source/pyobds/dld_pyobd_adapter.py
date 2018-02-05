@@ -11,19 +11,25 @@
 
 import sys
 
-#import obd_io
+import obd_io
 import obd_sensors
-#import serial
+import serial
 import datetime
 import time
 
 def obdSnapshot():
-    print "Pow"
+    print "Snapshotted OBDII status to file."
 
 def fetchDTC():
-    print ""
+    print "Fetched DTC codes to file."
 
 def clearDTC():
-    print ""
+    print "Cleared DTC codes!"
 
-obdSnapshot()
+if __name__ == '__main__':
+    if(sys.argv[1] == "snapshot"):
+        obdSnapshot()
+    elif(sys.argv[1] == "fetch"):
+        fetchDTC()
+    elif(sys.argv[1] == "clear"):
+        clearDTC()

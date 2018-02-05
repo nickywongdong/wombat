@@ -17,7 +17,7 @@ Version 0.1.8:
 - Added code comments
 - Partial implementation of data deletion function
 - Fixed bug with directory creation where singular minutes would be recorded as only one digit
-- Added get user home directory function to common header file 
+- Added get user home directory function to common header file
 
 Dependencies:
 - Navit PACKAGE_VERSION 0.5.1\*
@@ -25,9 +25,9 @@ Dependencies:
 - boost PACKAGE_VERSION 1.66.0 (Unix)
 - Python 2.7.3
 - pySerial 3.4
-- wxPython 4.0.0b2
+- wxPython 4.0.0b2+
 - Qt 5.10\*
 - CryptoPP 6.0.0
 - pip 9.0.1
 
-\*Sub-dependencies not included in this listing. 
+\*Sub-dependencies not included in this listing.
