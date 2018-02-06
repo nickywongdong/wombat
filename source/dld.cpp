@@ -7,6 +7,8 @@
 
 #include "dcomh.hpp"
 
+#define DEBUG
+
 using namespace std;
 
 /*
@@ -23,9 +25,12 @@ void loggingLooper(string loggingDirectory) {
         timer1 = clock();
         builtCommand = "python " + getHomeDir() + "/Gitdir/wombat/source/pyobds/dld_pyobd_adapter.py snapshot " + loggingDirectory;
         system(builtCommand.c_str());
+
+        #ifdef DEBUG
         printf("Logged?\n");
         printf("%f\n",(clock()-timer1)/(double)CLOCKS_PER_SEC);
         printf("Sample Rate: %f\n",1/((clock()-timer1)/(double)CLOCKS_PER_SEC));
+        #endif
     }
     sleep(1);
   }
@@ -33,19 +38,29 @@ void loggingLooper(string loggingDirectory) {
 
 void createLogfile(string loggingDirectory) {
   if (getAvailableMemory(loggingDirectory) > 200) {
-    printf("We done got enough memory.\n");
     chdir((const char *)loggingDirectory.c_str());
     system("touch obd_log.csv");
+
+    #ifdef DEBUG
+    printf("We done got enough memory.\n");
     printf("Logfile created.\n");
+    #endif
   }
   else {
+    #ifdef DEBUG
     printf("Not enough free space. Waiting...");
+    #endif
+
     while(getAvailableMemory(loggingDirectory) < 200) {
       sleep(5);
     }
+
     chdir((const char *)loggingDirectory.c_str());
     system("touch obd_log.csv");
+
+    #ifdef DEBUG
     printf("Logfile created after waiting.\n");
+    #endif
   }
   chdir((const char *)getPWD().c_str());
 }
@@ -60,7 +75,6 @@ int main(int argc, char *argv[]) {
 
   // Create the .csv where data will be logged
   createLogfile(loggingDirectory);
-  printf("OBDII logging ready!");
 
   // Start Data Logging
   loggingLooper(loggingDirectory);

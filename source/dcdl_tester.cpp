@@ -10,6 +10,8 @@
 #define PST -8
 #define LOG_VOLUME "/media/nvidia/AXOLOTLDCV"
 
+#define DEBUG
+
 //#define KEYTEST
 #define LOGTEST
 
@@ -106,7 +108,9 @@ void deleteData(string password, string sourceDir) {
   if(passkeyHash == truekeyHash) {
 
   }
+  #ifdef DEBUG
   printf("Data deleted.\n");
+  #endif
 }
 
 /*
@@ -141,8 +145,8 @@ int main() {
   string inputStr;
   string homeDir = getPWD();
 
-  #ifdef KEYTEST
   // Testing password check and hashing
+  #ifdef KEYTEST
   string readKey = "", toHashKey = "orangemonkeyeagle";
   ifstream checktruekey;
   checktruekey.open("hashkey.txt");
@@ -155,9 +159,8 @@ int main() {
   printf("Status: %d\n",(readKey == "3453A0A7F1E111FC6E9E0E8071193DEA04EAF96CBFE4318539859876AA85FB15"));
   #endif
 
-  #ifdef LOGTEST
   // Data Logging Daemon Test
-  // Create logging directory
+  #ifdef LOGTEST
   string loggingDirectory = buildSaveDirectory();
   if(loggingDirectory == "__fail_dir_build") {
     perror("Cannot build data logging directory");
