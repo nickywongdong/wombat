@@ -28,62 +28,49 @@ def obdSnapshot(obdconnection):
 
     # - calculated engine load
     command = (obd.commands.ENGINE_LOAD)
-    r = obdconnection.query(command)
-    csvline += str(r.value) + ","
+    csvline += str(obdconnection.query(command).value) + ","
 
     # - engine speed
     command = (obd.commands.RPM)
-    r = obdconnection.query(command)
-    csvline += str(r.value) + ","
+    csvline += str(obdconnection.query(command).value) + ","
 
     # - vehicle speed
     command = (obd.commands.SPEED)
-    r = obdconnection.query(command)
-    csvline += str(r.value.to("mph")) + ","
+    csvline += str(obdconnection.query(command).value) + ","
 
     # - throttle position
     command = (obd.commands.THROTTLE_POS)
-    r = obdconnection.query(command)
-    csvline += str(r.value) + ","
+    csvline += str(obdconnection.query(command).value) + ","
 
     # - relative throttle position
     command = (obd.commands.RELATIVE_THROTTLE_POS)
-    r = obdconnection.query(command)
-    csvline += str(r.value) + ","
+    csvline += str(obdconnection.query(command).value) + ","
 
     # - runtime since engine start
     command = (obd.commands.RUN_TIME)
-    r = obdconnection.query(command)
-    csvline += str(r.value) + ","
+    csvline += str(obdconnection.query(command).value) + ","
 
     # - fuel tank level
     command = (obd.commands.FUEL_LEVEL)
-    r = obdconnection.query(command)
-    csvline += str(r.value) + ","
+    csvline += str(obdconnection.query(command).value) + ","
 
     # - coolant temp
     command = (obd.commands.COOLANT_TEMP)
-    r = obdconnection.query(command)
-    csvline += str(r.value) + ","
+    csvline += str(obdconnection.query(command).value) + ","
 
     # - oil temp
     command = (obd.commands.OIL_TEMP)
-    r = obdconnection.query(command)
-    csvline += str(r.value) + ","
+    csvline += str(obdconnection.query(command).value) + ","
 
     # - ambient air temp
     command = (obd.commands.AMBIANT_AIR_TEMP)
-    r = obdconnection.query(command)
-    csvline += str(r.value) + ","
+    csvline += str(obdconnection.query(command).value) + ","
 
     # - absolute barometric pressure
     command = (obd.commands.BAROMETRIC_PRESSURE)
-    r = obdconnection.query(command)
-    csvline += str(r.value.to("mmHg")) + ","
+    csvline += str(obdconnection.query(command).value) + "\n"
 
-    # print csvline
-
-    csvfh = openstr(sys.argv[2] + "obd_log.csv","w")
+    csvfh = open(sys.argv[2] + "obd_log.csv",'a')
     csvfh.write(csvline)
     csvfh.close()
 

@@ -9,8 +9,6 @@
 
 using namespace std;
 
-ofstream logfile;
-
 /*
   A loops that conducts all of the data logging.
   Makes calls to the python adapter and then waits 100ms
