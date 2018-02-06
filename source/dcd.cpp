@@ -12,11 +12,21 @@
 
 using namespace std;
 
-int dcdTermSigHandler(int sig) {
-  // catch termination signals by testing apparatus/Axolotl
-  // term signal causes record to dump prematurely
-  exit(0); // exit status 0 if successful dump
+void dcdSigTermHandler(int signumber, siginfo_t *siginfo, void *pointer) {
+  exit(0);
 }
+
+/*
+  Registers the dldSigTermHandler with SIGTERM.
+*/
+void registerSigTermHandler() {
+  static struct sigaction dcd_sa;
+  memset(&dcd_sa, 0, sizeof(dcd_sa));
+  dcd_sa.sa_sigaction = dcdSigTermHandler;
+  dcd_sa.sa_flags = SA_SIGINFO;
+  sigaction(SIGTERM, &dcd_sa, NULL);
+}
+
 
 void record() {
   printf("Recording...\n");

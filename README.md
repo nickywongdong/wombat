@@ -1,5 +1,11 @@
 # Axolotl - Victor's Branch
-__Current Version:__ 0.1.10 pre-alpha
+__Current Version:__ 0.1.11 pre-alpha
+
+Version 0.1.11:
+- Initial implementation of python OBD adapter
+- Changed dependencies, using python-OBD for OBDII data
+- Removed data logging daemon's signal handlers as C++ program no longer handles the OBDII data
+- Added extra field to OBDII data: oil temp
 
 Version 0.1.10:
 - Added SHA256 hashing function to complete implementation of password check for black box data deletion
@@ -20,14 +26,15 @@ Version 0.1.8:
 - Added get user home directory function to common header file
 
 Dependencies:
-- Navit PACKAGE_VERSION 0.5.1\*
-- pyOBD PACKAGE_VERSION 0.9.3
-- boost PACKAGE_VERSION 1.66.0 (Unix)
+- Navit 0.5.1\*
+- pyOBD 0.9.3
+- boost 1.66.0 (Unix)
 - Python 2.7.3
 - pySerial 3.4
-- wxPython 4.0.0b2+
+- wxPython 4.0.1
 - Qt 5.10\*
 - CryptoPP 6.0.0
 - pip 9.0.1
+- python-OBD 0.6.1
 
 \*Sub-dependencies not included in this listing.

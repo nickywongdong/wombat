@@ -157,7 +157,6 @@ int main() {
 
   #ifdef LOGTEST
   // Data Logging Daemon Test
-
   // Create logging directory
   string loggingDirectory = buildSaveDirectory();
   if(loggingDirectory == "__fail_dir_build") {

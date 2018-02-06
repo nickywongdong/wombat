@@ -3,38 +3,13 @@
    ------------------------------------
    Background process managed by Axolotl;
    logs all OBDII data with the help of a Python adapter for pyOBD.
-
-   Dependencies:
-   - Python 2.7
-   - pip 9.0.1
 */
 
 #include "dcomh.hpp"
-#include <python2.7/Python.h>   // for interfacing with python adapter
 
 using namespace std;
 
 ofstream logfile;
-
-/*
-  Handles SIGTERM to ensure safe exit.
-  Closes logfile.
-*/
-void dldSigTermHandler(int signumber, siginfo_t *siginfo, void *pointer) {
-  logfile.close();  // close the logfile to stop logging data to it
-  exit(0);
-}
-
-/*
-  Registers the dldSigTermHandler with SIGTERM.
-*/
-void registerSigTermHandler() {
-  static struct sigaction dld_sa;
-  memset(&dld_sa,0,sizeof(dld_sa));
-  dld_sa.sa_sigaction = dldSigTermHandler;
-  dld_sa.sa_flags = SA_SIGINFO;
-  sigaction(SIGTERM, &dld_sa, NULL);
-}
 
 /*
   A loops that conducts all of the data logging.
