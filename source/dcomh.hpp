@@ -48,6 +48,7 @@ std::string getHomeDir() {
 
 /*
   Gets and returns the present working directory.
+  Used to determine current path of source for running executables.
 */
 std::string getPWD() {
   char pwd[2048];

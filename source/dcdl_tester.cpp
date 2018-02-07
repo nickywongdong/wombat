@@ -94,7 +94,7 @@ void deleteData(string password, string sourceDir) {
   // Get true passkey hash from file
   ifstream hashfile;
   string truekeyHash = NULL, passkeyHash = NULL;
-  string hashfilePath = sourceDir + "/hashkey.txt";
+  string hashfilePath = sourceDir + "/hashkey";
   hashfile.open(hashfilePath);
   if (hashfile.is_open()) {
     getline(hashfile,truekeyHash);
@@ -119,7 +119,7 @@ void deleteData(string password, string sourceDir) {
 void changePassword(string password, string sourceDir) {
   ofstream hashfile;
   string newhash = sha256hash(password);
-  string hashfilePath = sourceDir + "/hashkey.txt";
+  string hashfilePath = sourceDir + "/hashkey";
   hashfile.open(hashfilePath, std::ofstream::trunc);
   if(hashfile.is_open()) {
     hashfile.write((const char *)newhash.c_str(),(long)newhash.length());
@@ -133,7 +133,7 @@ void changePassword(string password, string sourceDir) {
 void resetPassword(string sourceDir) {
   ofstream hashfile;
   string newhash = sha256hash("orangemonkeyeagle");
-  string hashfilePath = sourceDir + "/hashkey.txt";
+  string hashfilePath = sourceDir + "/hashkey";
   hashfile.open(hashfilePath, std::ofstream::trunc);
   if(hashfile.is_open()) {
     hashfile.write((const char *)newhash.c_str(),(long)newhash.length());
@@ -149,7 +149,7 @@ int main() {
   #ifdef KEYTEST
   string readKey = "", toHashKey = "orangemonkeyeagle";
   ifstream checktruekey;
-  checktruekey.open("hashkey.txt");
+  checktruekey.open("hashkey");
   if(checktruekey.is_open()) {
     getline(checktruekey,readKey);
     printf("True key is: '%s'\n",readKey.c_str());
