@@ -2,7 +2,7 @@
    Axolotl Data Logging Daemon
    ------------------------------------
    Background process managed by Axolotl;
-   logs all OBDII data with the help of a Python adapter for pyOBD.
+   logs all OBDII data with the help of a Python adapter.
 */
 
 #include "dcomh.hpp"
@@ -33,7 +33,8 @@ void loggingLooper(string loggingDirectory) {
         printf("Sample Rate: %f\n",1/((clock()-timer1)/(double)CLOCKS_PER_SEC));
         #endif
     }
-    sleep(1);
+    usleep(1500000);
+    //sleep(2);
   }
 }
 

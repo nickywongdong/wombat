@@ -64,7 +64,7 @@ def obdSnapshot(obdconnection):
     csvLine += str(obdconnection.query(obd.commands.BAROMETRIC_PRESSURE).value) + "\n"
 
     # write entire line to file in one file operation
-    csvFileHandle = open(sys.argv[2] + "obd_log.csv",'a')
+    csvFileHandle = open(sys.argv[2] + "/obd_log.csv",'a')
     csvFileHandle.write(csvLine)
     csvFileHandle.close()
 
