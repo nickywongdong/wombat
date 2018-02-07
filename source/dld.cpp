@@ -66,6 +66,7 @@ void createLogfile(string loggingDirectory) {
 }
 
 int main(int argc, char *argv[]) {
+  
   // Ensure that a logging directory has been provided and bind it
   string loggingDirectory;
   if (argc != 1) {
