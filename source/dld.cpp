@@ -8,6 +8,7 @@
 #include "dcomh.hpp"
 
 #define DEBUG
+#define OBD_ADAPTER_PATH "/Gitdir/wombat/source/pyobds/dld_obd_adapter.py"
 
 using namespace std;
 
@@ -23,7 +24,7 @@ void loggingLooper(string loggingDirectory) {
   while(1) {
     if(getAvailableMemory(loggingDirectory) > 200) {
         timer1 = clock();
-        builtCommand = "python " + getHomeDir() + "/Gitdir/wombat/source/pyobds/dld_pyobd_adapter.py snapshot " + loggingDirectory;
+        builtCommand = "python " + getHomeDir() + OBD_ADAPTER_PATH + " snapshot " + loggingDirectory;
         system(builtCommand.c_str());
 
         #ifdef DEBUG
@@ -66,7 +67,7 @@ void createLogfile(string loggingDirectory) {
 }
 
 int main(int argc, char *argv[]) {
-  
+
   // Ensure that a logging directory has been provided and bind it
   string loggingDirectory;
   if (argc != 1) {

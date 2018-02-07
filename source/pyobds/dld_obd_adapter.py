@@ -25,63 +25,55 @@ import obd_sensors
 import serial
 
 def obdSnapshot(obdconnection):
-    command = ""
     logTime = time.time()
 
     # snapshot time start (grabs computer time)
     csvLine = "@" + str(time.ctime()) + ","
 
     # - calculated engine load
-    command = (obd.commands.ENGINE_LOAD)
-    csvLine += str(obdconnection.query(command).value) + ","
+    csvLine += str(obdconnection.query(obd.commands.ENGINE_LOAD).value) + ","
 
     # - engine speed
-    command = (obd.commands.RPM)
-    csvLine += str(obdconnection.query(command).value) + ","
+    csvLine += str(obdconnection.query(obd.commands.RPM).value) + ","
 
     # - vehicle speed
-    command = (obd.commands.SPEED)
-    csvLine += str(obdconnection.query(command).value) + ","
+    csvLine += str(obdconnection.query(obd.commands.SPEED).value) + ","
 
     # - throttle position
-    command = (obd.commands.THROTTLE_POS)
-    csvLine += str(obdconnection.query(command).value) + ","
+    csvLine += str(obdconnection.query(obd.commands.THROTTLE_POS).value) + ","
 
     # - relative throttle position
-    command = (obd.commands.RELATIVE_THROTTLE_POS)
-    csvLine += str(obdconnection.query(command).value) + ","
+    csvLine += str(obdconnection.query(obd.commands.RELATIVE_THROTTLE_POS).value) + ","
 
     # - runtime since engine start
-    command = (obd.commands.RUN_TIME)
-    csvLine += str(obdconnection.query(command).value) + ","
+    csvLine += str(obdconnection.query(obd.commands.RUN_TIME).value) + ","
 
     # - fuel tank level
-    command = (obd.commands.FUEL_LEVEL)
-    csvLine += str(obdconnection.query(command).value) + ","
+    csvLine += str(obdconnection.query(obd.commands.FUEL_LEVEL).value) + ","
 
     # - coolant temp
-    command = (obd.commands.COOLANT_TEMP)
-    csvLine += str(obdconnection.query(command).value) + ","
+    csvLine += str(obdconnection.query(obd.commands.COOLANT_TEMP).value) + ","
 
     # - oil temp
-    command = (obd.commands.OIL_TEMP)
-    csvLine += str(obdconnection.query(command).value) + ","
+    csvLine += str(obdconnection.query(obd.commands.OIL_TEMP).value) + ","
 
     # - ambient air temp
-    command = (obd.commands.AMBIANT_AIR_TEMP)
-    csvLine += str(obdconnection.query(command).value) + ","
+    csvLine += str(obdconnection.query(obd.commands.AMBIANT_AIR_TEMP).value) + ","
 
     # - absolute barometric pressure
-    command = (obd.commands.BAROMETRIC_PRESSURE)
-    csvLine += str(obdconnection.query(command).value) + "\n"
+    csvLine += str(obdconnection.query(obd.commands.BAROMETRIC_PRESSURE).value) + "\n"
 
+    # write entire line to file in one file operation
     csvFileHandle = open(sys.argv[2] + "obd_log.csv",'a')
     csvFileHandle.write(csvLine)
     csvFileHandle.close()
 
     print str(time.time()-logTime)
 
-def fetchDTC():
+def fetchDTC(obdconnection):
+    dtcResult = obdconnection.query(obd.commands.GET_DTC)
+    dtcErrorFile = open("dtcErrors.csv","a")
+    dtcErrorFile.close()
     print "Fetched DTC codes to file."
 
 def clearDTC():
