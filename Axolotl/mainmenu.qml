@@ -1,7 +1,7 @@
 import QtQuick 2.9
 import QtQuick.Controls 2.2
 import QtGraphicalEffects 1.0
-
+import forker.us 1.0
 Item {
     id: mainmenupage
     Rectangle{
@@ -43,9 +43,14 @@ Item {
                 radius: 10
                 border.color: "black"
                 color: "#ffb347"
+                Test{
+                    id: processor
+
+                }
+
                 MouseArea{
                     anchors.fill: parent
-                    onClicked: console.log("navigation")
+                    onClicked: console.log(processor.start_a_thing())
 
                 }
                 Image {
