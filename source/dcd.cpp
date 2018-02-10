@@ -38,7 +38,7 @@ void record() {
 
 void recordLooper() {
   while(1) {
-    if (getAvailableMemory("/Volumes/SD Transfer") > 2048) {
+    if (axolotlFileSystem::getAvailableMemory("/Volumes/SD Transfer") > 2048) {
       record();
     }
     else {

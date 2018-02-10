@@ -9,9 +9,7 @@
 
 #define PST -8
 #define LOG_VOLUME "/media/nvidia/AXOLOTLDCV"
-
 #define DEBUG
-
 //#define KEYTEST
 #define LOGTEST
 
@@ -19,6 +17,8 @@ using namespace std;
 
 pid_t dcdpid = -1;
 pid_t dldpid = -1;
+
+bool setdcd = false, setdld = false;
 
 string loggingDirectory;
 
@@ -37,8 +37,8 @@ void raiseShutdown() {
   printf("%d\n",dldpid);
   if(!(dldpid > -1)) {
     result = kill(dldpid,SIGTERM);
-    ex = "kill " + to_string(dldpid);
-    system(ex.c_str());
+    //ex = "kill " + to_string(dldpid);
+    //system(ex.c_str());
     if(result != 0) {
       printf("Error: Failed to kill data logging daemon.\n");
     }
@@ -158,6 +158,7 @@ void resetPassword(string sourceDir) {
 int main() {
   string inputStr;
   string homeDir = axolotlFileSystem::getPWD();
+  bool logCont = true;
 
   // Testing password check and hashing
   #ifdef KEYTEST
@@ -201,8 +202,13 @@ int main() {
     while(1) {
       getline(cin,inputStr);
       if(inputStr == "q" | inputStr == "Q") {
-        raiseShutdown();
+        kill(dldpid,SIGTERM);
+        wait(NULL);
         break;
+      }
+      else if (inputStr == "s" | inputStr == "S") {
+        inputStr = "";
+        kill(dldpid,SIGUSR1);
       }
       else {
         inputStr = "";
