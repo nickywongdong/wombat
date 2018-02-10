@@ -1,5 +1,5 @@
-rundaemons: dcd dld dcdl_tester.cpp
-	g++ dcdl_tester.cpp -o rundaemons.axolotl -lpthread -lboost_system -lboost_filesystem -lcryptopp
+rundaemons: dcd dld dcdl_manager.cpp
+	g++ dcdl_manager.cpp -o rundaemons.axolotl -lpthread -lboost_system -lboost_filesystem -lcryptopp
 
 dcd: dcd.cpp
 	g++ dcd.cpp -o dcd.axolotl -lpthread -lboost_system -lboost_filesystem -lcryptopp

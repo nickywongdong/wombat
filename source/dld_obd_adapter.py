@@ -6,10 +6,6 @@
 ##
 ## Dependencies:
 ## - python-OBD
-## - pyOBD
-##      - pySerial 3.4
-##      - wxPython 4.0.0b2
-##      - pip 9.0.1
 ## - Python 2.7
 
 import sys
@@ -19,49 +15,29 @@ import time
 # python OBD (from pyOBD-pi fork)
 import obd
 
-# pyOBD
-from pyobds import obd_io
-from pyobds import obd_sensors
-import serial
-
 def obdSnapshot(obdConnection):
+    commands = []
     logTime = time.time()
 
     # snapshot time start (grabs computer time)
-    csvLine = "@" + str(time.ctime()) + ","
+    csvLine = "@@" + str(time.ctime()) + ","
 
-    # - calculated engine load
-    csvLine += str(obdConnection.query(obd.commands.ENGINE_LOAD).value) + ","
+    commands.append(obd.commands.ENGINE_LOAD)
+    commands.append(obd.commands.RPM)
+    commands.append(obd.commands.SPEED)
+    commands.append(obd.commands.THROTTLE_POS)
+    commands.append(obd.commands.RELATIVE_THROTTLE_POS)
+    commands.append(obd.commands.RUN_TIME)
+    commands.append(obd.commands.FUEL_LEVEL)
+    commands.append(obd.commands.COOLANT_TEMP)
+    commands.append(obd.commands.OIL_TEMP)
+    commands.append(obd.commands.AMBIANT_AIR_TEMP)
+    commands.append(obd.commands.BAROMETRIC_PRESSURE)
 
-    # - engine speed
-    csvLine += str(obdConnection.query(obd.commands.RPM).value) + ","
+    for i in xrange(0,len(commands)-1):
+        csvLine += str(obdConnection.query(commands[i]).value) + ","
 
-    # - vehicle speed
-    csvLine += str(obdConnection.query(obd.commands.SPEED).value) + ","
-
-    # - throttle position
-    csvLine += str(obdConnection.query(obd.commands.THROTTLE_POS).value) + ","
-
-    # - relative throttle position
-    csvLine += str(obdConnection.query(obd.commands.RELATIVE_THROTTLE_POS).value) + ","
-
-    # - runtime since engine start
-    csvLine += str(obdConnection.query(obd.commands.RUN_TIME).value) + ","
-
-    # - fuel tank level
-    csvLine += str(obdConnection.query(obd.commands.FUEL_LEVEL).value) + ","
-
-    # - coolant temp
-    csvLine += str(obdConnection.query(obd.commands.COOLANT_TEMP).value) + ","
-
-    # - oil temp
-    csvLine += str(obdConnection.query(obd.commands.OIL_TEMP).value) + ","
-
-    # - ambient air temp
-    csvLine += str(obdConnection.query(obd.commands.AMBIANT_AIR_TEMP).value) + ","
-
-    # - absolute barometric pressure
-    csvLine += str(obdConnection.query(obd.commands.BAROMETRIC_PRESSURE).value) + "\n"
+    csvLine += str(obdConnection.query(commands[len(commands)-1]).value) + "\n"
 
     # write entire line to file in one file operation
     csvFileHandle = open(sys.argv[2] + "/obd_log.csv",'a')
