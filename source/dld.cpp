@@ -31,13 +31,14 @@ void loggingLooper() {
       string builtCommand = "python " + axolotlFileSystem::getHomeDir() + OBD_ADAPTER_PATH + " snapshot " + loggingDirectory;
       system(builtCommand.c_str());
     }
-    usleep(100);
 
     #ifdef DEBUG
     printf("Logged?\n");
     printf("%f\n",(clock()-timer1)/(double)CLOCKS_PER_SEC);
     printf("Sample Rate: %f\n",1/((clock()-timer1)/(double)CLOCKS_PER_SEC));
     #endif
+
+    usleep(1000);
   }
 
 }

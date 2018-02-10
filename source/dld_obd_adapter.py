@@ -61,7 +61,7 @@ def clearDTC(obdConnection):
 
 if __name__ == '__main__':
     ## Set up connection to the OBDLink MX
-    obdBluetoothConnection = obd.OBD()
+    obdBluetoothConnection = obd.OBD(fast=True)
 
     ## Logic based on command line call
     if(sys.argv[1] == "snapshot"):
