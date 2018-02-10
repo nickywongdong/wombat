@@ -48,9 +48,9 @@ void loggingLooper(string loggingDirectory) {
   Py_Finalize();*/
 
   while(1) {
-    if(getAvailableMemory(loggingDirectory) > 200) {
+    if(axolotlFileSystem::getAvailableMemory(loggingDirectory) > 200) {
         timer1 = clock();
-        builtCommand = "python " + getHomeDir() + OBD_ADAPTER_PATH + " snapshot " + loggingDirectory;
+        builtCommand = "python " + axolotlFileSystem::getHomeDir() + OBD_ADAPTER_PATH + " snapshot " + loggingDirectory;
         system(builtCommand.c_str());
         //setenv("PYTHONPATH",".",1);
 
@@ -65,7 +65,7 @@ void loggingLooper(string loggingDirectory) {
 }
 
 void createLogfile(string loggingDirectory) {
-  if (getAvailableMemory(loggingDirectory) > 200) {
+  if (axolotlFileSystem::getAvailableMemory(loggingDirectory) > 200) {
     chdir((const char *)loggingDirectory.c_str());
     system("touch obd_log.csv");
 
@@ -79,7 +79,7 @@ void createLogfile(string loggingDirectory) {
     printf("Not enough free space. Waiting...");
     #endif
 
-    while(getAvailableMemory(loggingDirectory) < 200) {
+    while(axolotlFileSystem::getAvailableMemory(loggingDirectory) < 200) {
       sleep(5);
     }
 
@@ -90,7 +90,7 @@ void createLogfile(string loggingDirectory) {
     printf("Logfile created after waiting.\n");
     #endif
   }
-  chdir((const char *)getPWD().c_str());
+  chdir((const char *)axolotlFileSystem::getPWD().c_str());
 }
 
 int main(int argc, char *argv[]) {

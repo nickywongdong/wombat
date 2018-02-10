@@ -22,6 +22,7 @@ def obdSnapshot(obdConnection):
     # snapshot time start (grabs computer time)
     csvLine = "@@" + str(time.ctime()) + ","
 
+    # setting up the command array
     commands.append(obd.commands.ENGINE_LOAD)
     commands.append(obd.commands.RPM)
     commands.append(obd.commands.SPEED)
@@ -34,16 +35,18 @@ def obdSnapshot(obdConnection):
     commands.append(obd.commands.AMBIANT_AIR_TEMP)
     commands.append(obd.commands.BAROMETRIC_PRESSURE)
 
+    # execute the command array, saving results to csvLine with "," delimitation
     for i in xrange(0,len(commands)-1):
         csvLine += str(obdConnection.query(commands[i]).value) + ","
 
     csvLine += str(obdConnection.query(commands[len(commands)-1]).value) + "\n"
 
-    # write entire line to file in one file operation
+    # write entire csvLine to file in one file operation
     csvFileHandle = open(sys.argv[2] + "/obd_log.csv",'a')
     csvFileHandle.write(csvLine)
     csvFileHandle.close()
 
+    # debug statement; outputs the time taken to complete the query
     print str(time.time()-logTime)
 
 def fetchDTC(obdConnection):
@@ -57,10 +60,10 @@ def clearDTC(obdConnection):
     print "Cleared DTC codes!"
 
 if __name__ == '__main__':
-    ## Set up connection
+    ## Set up connection to the OBDLink MX
     obdBluetoothConnection = obd.OBD()
 
-    ## Logic
+    ## Logic based on command line call
     if(sys.argv[1] == "snapshot"):
         obdSnapshot(obdBluetoothConnection)
     elif(sys.argv[1] == "fetch"):
