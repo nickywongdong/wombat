@@ -27,7 +27,9 @@ void registerSigTermHandler() {
   sigaction(SIGTERM, &dcd_sa, NULL);
 }
 
-
+// spec:
+// - record for 1 minute and then send, transfer delay of ~1 second
+// - record for 2 minutes and then send, transfer delay of ~2 seconds
 void record() {
   printf("Recording...\n");
   sleep(10);
