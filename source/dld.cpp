@@ -31,7 +31,7 @@ void loggingLooper() {
       string builtCommand = "python " + axolotlFileSystem::getHomeDir() + OBD_ADAPTER_PATH + " snapshot " + loggingDirectory;
       system(builtCommand.c_str());
     }
-    usleep(1500000);
+    usleep(100);
 
     #ifdef DEBUG
     printf("Logged?\n");
