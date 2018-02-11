@@ -18,8 +18,9 @@ sudo apt-get install python
 sudo easy_install pip
 pip install obd
 
-sudo apt-get install boost
-sudo apt-get install cryptopp
+sudo apt-get install libboost-all-dev
+sudo apt-get install libcrypto++
+sudo apt-get install libcryptopp
 
 sudo apt-get install libbluetooth-dev
 
