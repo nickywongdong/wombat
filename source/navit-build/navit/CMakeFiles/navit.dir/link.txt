@@ -1,0 +1,1 @@
+/usr/bin/cc   -Wall -Wundef -Wcast-align -Wpointer-arith -Wno-unused-parameter -Wno-sign-compare -Wno-missing-field-initializers  -Wextra  -Wmissing-prototypes  -Wstrict-prototypes  -Wformat-security  -O2 -g -DNDEBUG   CMakeFiles/navit.dir/start.c.o  -o navit -rdynamic libnavit_core.a fib-1.1/libfib.a -lpthread -lglib-2.0 -lgmodule-2.0 -lz -lpng -lz -lpng -ldl -lm 
