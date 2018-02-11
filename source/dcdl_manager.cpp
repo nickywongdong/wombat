@@ -155,10 +155,29 @@ void resetPassword(string sourceDir) {
   hashfile.close();
 }
 
+void managerSigintHandler(int signumber, siginfo_t *siginfo, void *pointer) {
+  kill(dldpid,SIGTERM);
+  wait(NULL);
+  exit(0);
+}
+
+/*
+  Registers the dldSigTermHandler with SIGTERM.
+*/
+void registerSigHandler() {
+  static struct sigaction dsa;
+  memset(&dsa, 0, sizeof(dsa));
+  dsa.sa_sigaction = managerSigintHandler;
+  dsa.sa_flags = SA_SIGINFO;
+  sigaction(SIGINT, &dsa, NULL);
+}
+
 int main() {
   string inputStr;
   string homeDir = axolotlFileSystem::getPWD();
-  bool logCont = true;
+
+  // Registering signal handler
+  registerSigHandler();
 
   // Testing password check and hashing
   #ifdef KEYTEST
