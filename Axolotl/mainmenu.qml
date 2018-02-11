@@ -50,8 +50,7 @@ Item {
 
                 MouseArea{
                     anchors.fill: parent
-                    onClicked: console.log(processor.start_a_thing())
-
+                    onClicked: console.log(processor.start_navit())
                 }
                 Image {
                     source: "icons8-america-50.png"

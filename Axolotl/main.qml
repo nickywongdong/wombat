@@ -15,7 +15,9 @@ ApplicationWindow {
         id: stack
         initialItem: startup
     }
-
+Test{
+ id: bootdm
+}
     Rectangle{
         id: startup
         width: 1280
@@ -31,7 +33,10 @@ ApplicationWindow {
 
         Timer{
             interval: 3000; running: true;
-            onTriggered: stack.push("mainmenu.qml")
+            onTriggered: {
+                stack.push("mainmenu.qml")
+                console.log(bootdm.start_dm())
+            }
         }
     }
 }
