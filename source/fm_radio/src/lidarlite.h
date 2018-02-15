@@ -31,10 +31,15 @@
 #include <cstdlib>
 #include <cstdio>
 #include <stdint.h>
-#include <stdbool.h>
+//#include <stdbool.h>
 #include <fcntl.h>
 #include <unistd.h>
 #include <errno.h>
+
+
+typedef int boolean;
+#define true 1
+#define false 0
 
 
 
