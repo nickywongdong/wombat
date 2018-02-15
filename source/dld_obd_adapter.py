@@ -17,6 +17,7 @@ import obd
 
 # establish a global command array
 commands = []
+fuelcommands = []
 
 # setting up the command array
 commands.append(obd.commands.ENGINE_LOAD)
@@ -30,6 +31,9 @@ commands.append(obd.commands.COOLANT_TEMP)
 commands.append(obd.commands.OIL_TEMP)
 commands.append(obd.commands.AMBIANT_AIR_TEMP)
 commands.append(obd.commands.BAROMETRIC_PRESSURE)
+
+fuelcommands.append(obd.commands.FUEL_RATE)
+fuelcommands.append(obd.commands.FUEL_RATE)
 
 # run in async mode?
 runAsync = True
@@ -70,6 +74,10 @@ def clearDTC(obdConnection):
 def obdAsync(obdConnection):
     for i in xrange(0, len(commands)):
         obdConnection.watch(commands[i])
+
+# get the file path to the dtc log
+def getDTCFilePath():
+    return sys.argv[2] + "/dtcErrors"
 
 if __name__ == '__main__':
     ## Set up connection to the OBDLink MX

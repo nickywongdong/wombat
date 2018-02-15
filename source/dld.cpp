@@ -23,7 +23,6 @@ string loggingDirectory;
 void loggingLooper() {
   string builtCommand;
   clock_t timer1;
-
   while(1) {
     timer1 = clock();
 
@@ -40,7 +39,6 @@ void loggingLooper() {
 
     usleep(1000);
   }
-
 }
 
 void createLogfile() {
