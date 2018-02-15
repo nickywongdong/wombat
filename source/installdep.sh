@@ -1,27 +1,28 @@
 #!/bin/bash
 
-sudo apt-get install cmake
-sudo apt-get install zlib1g-dev
-sudo apt-get install libpng12-dev
-sudo apt-get install libgtk2.0-dev
-sudo apt-get install librsvg2-bin
-sudo apt-get install g++
-sudo apt-get install gpsd
-sudo apt-get install gpsd-clients
-sudo apt-get install libgps-dev
-sudo apt-get install libdbus-glib-1-dev
-sudo apt-get install libimlib2-dev
-sudo apt-get install espeak
+sudo apt-get update
 
-sudo apt-get install python
+sudo apt-get install build-essential cmake
+sudo apt-get install build-essential zlib1g-dev
+sudo apt-get install build-essential libpng12-dev
+sudo apt-get install build-essential libgtk2.0-dev
+sudo apt-get install build-essential librsvg2-bin
+sudo apt-get install build-essential g++
+sudo apt-get install build-essential build-essential gpsd
+sudo apt-get install build-essential gpsd-clients
+sudo apt-get install build-essential libgps-dev
+sudo apt-get install build-essential libdbus-glib-1-dev
+sudo apt-get install build-essential libimlib2-dev
+sudo apt-get install build-essential espeak
+
+sudo apt-get install build-essential python
 
 sudo easy_install pip
 pip install obd
 
-sudo apt-get install libboost-all-dev
-sudo apt-get install libcrypto++
-sudo apt-get install libcryptopp
+sudo apt-get install build-essential libboost-all-dev
+sudo apt-get install build-essential libcrypto++
 
-sudo apt-get install libbluetooth-dev
+sudo apt-get install build-essential libbluetooth-dev
 
-sudo apt-get install qt5
+sudo apt-get install build-essential qt5
