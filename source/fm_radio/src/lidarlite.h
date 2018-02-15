@@ -30,6 +30,7 @@
 #include <sys/ioctl.h>
 #include <cstdlib>
 #include <cstdio>
+#include <stdint.h>
 #include <fcntl.h>
 #include <unistd.h>
 #include <errno.h>
