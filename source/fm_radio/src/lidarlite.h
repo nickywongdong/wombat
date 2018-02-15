@@ -26,7 +26,7 @@
 #define LIDARLITE_H
 
 #include <cstddef>
-#include <i2c.h>
+//#include <i2c.h>
 #include <sys/ioctl.h>
 #include <cstdlib>
 #include <cstdio>
