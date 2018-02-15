@@ -65,7 +65,7 @@ int LidarLite::writeLidarLite(int writeRegister, int writeValue)
 {
     int toReturn = i2c_smbus_write_byte_data(kI2CFileDescriptor, writeRegister, writeValue);
     // Wait a little bit to make sure it settles
-    usleep(10000);
+    //usleep(10000);
     if (toReturn < 0) {
         error = errno ;
         toReturn = -1 ;
@@ -77,7 +77,7 @@ int LidarLite::writeLidarLite(int writeRegister, int writeValue)
 void LidarLite::showSignalStrength(){
     uint8_t signalStrength = RDA5807P_GetSigLvl(freq);// max is 63...as noted
     printf("Signal Strength: ");
-    printf("%u\n"signalStrength);
+    printf("%u\n", signalStrength);
 }
 
 

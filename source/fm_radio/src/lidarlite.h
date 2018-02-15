@@ -28,13 +28,19 @@
 #include <cstddef>
 //#include <i2c.h>
 #include <sys/ioctl.h>
+#include <sys/stat.h>
 #include <cstdlib>
 #include <cstdio>
 #include <stdint.h>
-//#include <stdbool.h>
+#include <stdio.h>
 #include <fcntl.h>
 #include <unistd.h>
 #include <errno.h>
+#include <chrono>
+#include <thread>
+
+
+//#include <bits/stdc++.h>
 
 
 typedef int boolean;
@@ -129,6 +135,8 @@ boolean hasVolumePot = false;// flag if you have a POT attached or not
 
 
 
+void delay(int milliseconds);
+
 /*// I2C Slave Address
 #define kLidarLiteI2CAddress                    0x62
 
@@ -153,6 +161,43 @@ boolean hasVolumePot = false;// flag if you have a POT attached or not
 */
 
 
+//===========================================================
+// FM functions
+//===========================================================
+unsigned char OperationRDAFM_2w(unsigned char operation, unsigned char *data, int numBytes)
+{
+  if(operation == READ)
+  {
+    Wire.requestFrom(kLidarLiteI2CAddress, numBytes);
+    for(int i=0;i<numBytes;i++)
+    {
+      *data++ = Wire.read();
+    }
+  }
+  else
+  {
+    Wire.beginTransmission(kLidarLiteI2CAddress);
+    for(int i=0;i<numBytes;i++)
+    {
+      Wire.write(*data++);
+    }
+    Wire.endTransmission();
+  }
+  return 0;
+}
+
+
+void delay(int milliseconds)
+{
+    long pause;
+    clock_t now,then;
+
+    pause = milliseconds*(CLOCKS_PER_SEC/1000);
+    now = then = clock();
+    while( (now-then) < pause )
+        now = clock();
+}
+
 /**
  * @brief Get the signal level(RSSI) of the current frequency
  * @author RDA Ri'an Zeng
@@ -166,35 +211,9 @@ uint8_t RDA5807P_GetSigLvl( int16_t curf )
   uint8_t RDA5807P_reg_data[4]={
     0                                                  };
   OperationRDAFM_2w(READ,&(RDA5807P_reg_data[0]), 4);
-  delay(50);    //Delay 50 ms
+  //delay(50);    //Delay 50 ms
   return  (RDA5807P_reg_data[2]>>1);  /*??rssi*/
 }
-
-//===========================================================
-// FM functions
-//===========================================================
-unsigned char OperationRDAFM_2w(unsigned char operation, unsigned char *data, int numBytes)
-{
-  if(operation == READ)
-  {
-    Wire.requestFrom(I2C_ADDR, numBytes);
-    for(int i=0;i<numBytes;i++)
-    {
-      *data++ = Wire.read();
-    }
-  }
-  else
-  {
-    Wire.beginTransmission(I2C_ADDR);
-    for(int i=0;i<numBytes;i++)
-    {
-      Wire.write(*data++);
-    }
-    Wire.endTransmission();
-  }
-  return 0;
-}
-
 
 
 class LidarLite
