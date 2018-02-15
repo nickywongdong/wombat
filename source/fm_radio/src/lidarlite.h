@@ -26,7 +26,7 @@
 #define LIDARLITE_H
 
 #include <cstddef>
-#include <linux/i2c-dev.h>
+#include <i2c-dev.h>
 #include <sys/ioctl.h>
 #include <cstdlib>
 #include <cstdio>
@@ -35,14 +35,95 @@
 #include <errno.h>
 
 
-// Information taken from PulsedLight knowledge base 5-4-15
-// Internal Control Registers
-// http://kb.pulsedlight3d.com/support/solutions/articles/5000549552-detailed-register-descriptions-internal
-// External Control Registers
-// http://kb.pulsedlight3d.com/support/solutions/articles/5000549565-detailed-register-descriptions-external
 
-// I2C Slave Address
-#define kLidarLiteI2CAddress                    0x60
+#define BTNUP          2// used for seeking UP (normally CLOSED push button)
+#define VOL_POT        A0// volume POT LOG taper 10K
+#define BTNDN          3// used for seeking DOWN (normally CLOSED push button)
+
+uint16_t gChipID = 0;
+uint8_t RDA5807P_REGW[10];
+
+#define kLidarLiteI2CAddress       0x60
+
+#define READ            1
+#define WRITE           0
+
+#define ADRW            0x20
+#define ADRR            0x21
+//
+
+//#define                 _SHARE_CRYSTAL_24MHz_
+//#define                 _SHARE_CRYSTAL_12MHz_
+#define                 _SHARE_CRYSTAL_32KHz_
+//#define                 _FM_STEP_50K_
+
+//5807M,5807FP,5807NN,5807NP
+uint8_t RDA5807N_initialization_reg[]={
+#if defined(_SHARE_CRYSTAL_24MHz_)
+  0xC4, 0x51, //02H:
+#elif defined(_SHARE_CRYSTAL_12MHz_)
+  0xC4, 0x11, //02H:
+#elif defined(_SHARE_CRYSTAL_32KHz_)
+  0xC4, 0x01,//change 01 to 05 enables the RDS/RBDS
+#else
+  0xC0, 0x01,
+#endif
+  0x00, 0x00,
+  0x04, 0x00,
+  0xC3, 0xad,  //05h
+  0x60, 0x00,
+  0x42, 0x12,
+  0x00, 0x00,
+  0x00, 0x00,
+  0x00, 0x00,  //0x0ah
+  0x00, 0x00,
+  0x00, 0x00,
+  0x00, 0x00,
+  0x00, 0x00,
+  0x00, 0x00,
+  0x00, 0x00,  //0x10h
+  0x00, 0x19,
+  0x2a, 0x11,
+  0xB0, 0x42,
+  0x2A, 0x11,  //
+  0xb8, 0x31,  //0x15h
+  0xc0, 0x00,
+  0x2a, 0x91,
+  0x94, 0x00,
+  0x00, 0xa8,
+  0xc4, 0x00,  //0x1ah
+  0xF7, 0xcF,
+  0x12, 0x14,  //0x1ch
+  0x80, 0x6F,
+  0x46, 0x08,
+  0x00, 0x86,  //10000110
+  0x06, 0x61,  //0x20H
+  0x00, 0x00,
+  0x10, 0x9E,
+  0x23, 0xC8,
+  0x04, 0x06,
+  0x0E, 0x1C,  //0x25H     //0x04 0x08
+};
+
+int16_t freq = 10110;
+uint16_t vol = 1;
+//
+// added items - Mel
+boolean bassBit = true;// bass boost
+boolean monoBit = false;// force MONO not stereo
+const boolean seekUP = true;
+const boolean seekDN = false;
+uint8_t minSignalStrength = 36;// anything below this probably set a MONO flag for better reception
+uint8_t signalStrength;
+long previousMillis = 0;// last time the function was called
+long interval = 2000;// interval for the signal level function (2 seconds)
+int8_t stationStep = 10;// kHz steps bewteen the stations (North America = 10)
+boolean hasVolumePot = false;// flag if you have a POT attached or not
+
+
+
+/*// I2C Slave Address
+#define kLidarLiteI2CAddress                    0x62
 
 // Internal Control Registers 
 #define kLidarLiteCommandControlRegister        0x00    // Command Control Register
@@ -62,6 +143,52 @@
 
 // Register Command
 #define kLidarLiteMeasure                       0x04    // Take acquisition & correlation processing with DC correction
+*/
+
+
+/**
+ * @brief Get the signal level(RSSI) of the current frequency
+ * @author RDA Ri'an Zeng
+ * @date 2008-11-05
+ * @param int16_t curf:frequency value
+ * @return uint8_t: the signal level(RSSI)
+ * @retval
+ */
+uint8_t RDA5807P_GetSigLvl( int16_t curf )
+{
+  uint8_t RDA5807P_reg_data[4]={
+    0                                                  };
+  OperationRDAFM_2w(READ,&(RDA5807P_reg_data[0]), 4);
+  delay(50);    //Delay 50 ms
+  return  (RDA5807P_reg_data[2]>>1);  /*??rssi*/
+}
+
+//===========================================================
+// FM functions
+//===========================================================
+unsigned char OperationRDAFM_2w(unsigned char operation, unsigned char *data, int numBytes)
+{
+  if(operation == READ)
+  {
+    Wire.requestFrom(I2C_ADDR, numBytes);
+    for(int i=0;i<numBytes;i++)
+    {
+      *data++ = Wire.read();
+    }
+  }
+  else
+  {
+    Wire.beginTransmission(I2C_ADDR);
+    for(int i=0;i<numBytes;i++)
+    {
+      Wire.write(*data++);
+    }
+    Wire.endTransmission();
+  }
+  return 0;
+}
+
+
 
 class LidarLite
 {
@@ -75,6 +202,8 @@ public:
     void closeLidarLite();                   // Close the I2C bus to the Lidar-Lite
     int writeLidarLite(int writeRegister,int writeValue) ;
     int readLidarLite(int readRegister) ;
+    //taken from arduino sketch:
+    void showSignalStrength();
     //int getDistance() ;
     //int getPreviousDistance() ;
     //int getVelocity() ;
