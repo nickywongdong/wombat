@@ -220,6 +220,7 @@ DIST          = ../../Qt/5.10.0/gcc_64/mkspecs/features/spec_pre.prf \
 		../../Qt/5.10.0/gcc_64/mkspecs/features/qt_config.prf \
 		../../Qt/5.10.0/gcc_64/mkspecs/linux-g++/qmake.conf \
 		../../Qt/5.10.0/gcc_64/mkspecs/features/spec_post.prf \
+		../Axolotl/.qmake.stash \
 		../../Qt/5.10.0/gcc_64/mkspecs/features/exclusive_builds.prf \
 		../../Qt/5.10.0/gcc_64/mkspecs/features/toolchain.prf \
 		../../Qt/5.10.0/gcc_64/mkspecs/features/default_pre.prf \
@@ -414,6 +415,7 @@ Makefile: ../Axolotl/Axolotl.pro ../../Qt/5.10.0/gcc_64/mkspecs/linux-g++/qmake.
 		../../Qt/5.10.0/gcc_64/mkspecs/features/qt_config.prf \
 		../../Qt/5.10.0/gcc_64/mkspecs/linux-g++/qmake.conf \
 		../../Qt/5.10.0/gcc_64/mkspecs/features/spec_post.prf \
+		.qmake.stash \
 		../../Qt/5.10.0/gcc_64/mkspecs/features/exclusive_builds.prf \
 		../../Qt/5.10.0/gcc_64/mkspecs/features/toolchain.prf \
 		../../Qt/5.10.0/gcc_64/mkspecs/features/default_pre.prf \
@@ -603,6 +605,7 @@ Makefile: ../Axolotl/Axolotl.pro ../../Qt/5.10.0/gcc_64/mkspecs/linux-g++/qmake.
 ../../Qt/5.10.0/gcc_64/mkspecs/features/qt_config.prf:
 ../../Qt/5.10.0/gcc_64/mkspecs/linux-g++/qmake.conf:
 ../../Qt/5.10.0/gcc_64/mkspecs/features/spec_post.prf:
+.qmake.stash:
 ../../Qt/5.10.0/gcc_64/mkspecs/features/exclusive_builds.prf:
 ../../Qt/5.10.0/gcc_64/mkspecs/features/toolchain.prf:
 ../../Qt/5.10.0/gcc_64/mkspecs/features/default_pre.prf:
@@ -858,7 +861,199 @@ main.o: ../Axolotl/main.cpp ../../Qt/5.10.0/gcc_64/include/QtGui/QGuiApplication
 		../../Qt/5.10.0/gcc_64/include/QtQml/qqmlerror.h \
 		../../Qt/5.10.0/gcc_64/include/QtQml/qqmldebug.h \
 		../Axolotl/forkbomb.h \
-		../../Qt/5.10.0/gcc_64/include/QtCore/QObject
+		../../Qt/5.10.0/gcc_64/include/QtCore/QObject \
+		../../Qt/5.10.0/gcc_64/include/QtQml/QQmlEngine \
+		../../Qt/5.10.0/gcc_64/include/QtQml/QtQml \
+		../../Qt/5.10.0/gcc_64/include/QtQml/QtQmlDepends \
+		../../Qt/5.10.0/gcc_64/include/QtCore/QtCore \
+		../../Qt/5.10.0/gcc_64/include/QtCore/QtCoreDepends \
+		../../Qt/5.10.0/gcc_64/include/QtCore/qabstractanimation.h \
+		../../Qt/5.10.0/gcc_64/include/QtCore/qabstracteventdispatcher.h \
+		../../Qt/5.10.0/gcc_64/include/QtCore/qabstractitemmodel.h \
+		../../Qt/5.10.0/gcc_64/include/QtCore/qabstractnativeeventfilter.h \
+		../../Qt/5.10.0/gcc_64/include/QtCore/qabstractproxymodel.h \
+		../../Qt/5.10.0/gcc_64/include/QtCore/qabstractstate.h \
+		../../Qt/5.10.0/gcc_64/include/QtCore/qabstracttransition.h \
+		../../Qt/5.10.0/gcc_64/include/QtCore/qanimationgroup.h \
+		../../Qt/5.10.0/gcc_64/include/QtCore/qarraydataops.h \
+		../../Qt/5.10.0/gcc_64/include/QtCore/qarraydatapointer.h \
+		../../Qt/5.10.0/gcc_64/include/QtCore/qbasictimer.h \
+		../../Qt/5.10.0/gcc_64/include/QtCore/qbitarray.h \
+		../../Qt/5.10.0/gcc_64/include/QtCore/qbuffer.h \
+		../../Qt/5.10.0/gcc_64/include/QtCore/qbytearraymatcher.h \
+		../../Qt/5.10.0/gcc_64/include/QtCore/qcache.h \
+		../../Qt/5.10.0/gcc_64/include/QtCore/qcollator.h \
+		../../Qt/5.10.0/gcc_64/include/QtCore/qcommandlineoption.h \
+		../../Qt/5.10.0/gcc_64/include/QtCore/qcommandlineparser.h \
+		../../Qt/5.10.0/gcc_64/include/QtCore/qcryptographichash.h \
+		../../Qt/5.10.0/gcc_64/include/QtCore/qdatastream.h \
+		../../Qt/5.10.0/gcc_64/include/QtCore/qdatetime.h \
+		../../Qt/5.10.0/gcc_64/include/QtCore/qdeadlinetimer.h \
+		../../Qt/5.10.0/gcc_64/include/QtCore/qelapsedtimer.h \
+		../../Qt/5.10.0/gcc_64/include/QtCore/qdir.h \
+		../../Qt/5.10.0/gcc_64/include/QtCore/qfileinfo.h \
+		../../Qt/5.10.0/gcc_64/include/QtCore/qfile.h \
+		../../Qt/5.10.0/gcc_64/include/QtCore/qfiledevice.h \
+		../../Qt/5.10.0/gcc_64/include/QtCore/qdiriterator.h \
+		../../Qt/5.10.0/gcc_64/include/QtCore/qeasingcurve.h \
+		../../Qt/5.10.0/gcc_64/include/QtCore/qendian.h \
+		../../Qt/5.10.0/gcc_64/include/QtCore/qeventtransition.h \
+		../../Qt/5.10.0/gcc_64/include/QtCore/qexception.h \
+		../../Qt/5.10.0/gcc_64/include/QtCore/qfactoryinterface.h \
+		../../Qt/5.10.0/gcc_64/include/QtCore/qfileselector.h \
+		../../Qt/5.10.0/gcc_64/include/QtCore/QStringList \
+		../../Qt/5.10.0/gcc_64/include/QtCore/qfilesystemwatcher.h \
+		../../Qt/5.10.0/gcc_64/include/QtCore/qfinalstate.h \
+		../../Qt/5.10.0/gcc_64/include/QtCore/qfuture.h \
+		../../Qt/5.10.0/gcc_64/include/QtCore/qfutureinterface.h \
+		../../Qt/5.10.0/gcc_64/include/QtCore/qrunnable.h \
+		../../Qt/5.10.0/gcc_64/include/QtCore/qresultstore.h \
+		../../Qt/5.10.0/gcc_64/include/QtCore/qfuturesynchronizer.h \
+		../../Qt/5.10.0/gcc_64/include/QtCore/qfuturewatcher.h \
+		../../Qt/5.10.0/gcc_64/include/QtCore/qhistorystate.h \
+		../../Qt/5.10.0/gcc_64/include/QtCore/qidentityproxymodel.h \
+		../../Qt/5.10.0/gcc_64/include/QtCore/qisenum.h \
+		../../Qt/5.10.0/gcc_64/include/QtCore/qitemselectionmodel.h \
+		../../Qt/5.10.0/gcc_64/include/QtCore/qjsonarray.h \
+		../../Qt/5.10.0/gcc_64/include/QtCore/qjsonvalue.h \
+		../../Qt/5.10.0/gcc_64/include/QtCore/qjsondocument.h \
+		../../Qt/5.10.0/gcc_64/include/QtCore/qjsonobject.h \
+		../../Qt/5.10.0/gcc_64/include/QtCore/qlibrary.h \
+		../../Qt/5.10.0/gcc_64/include/QtCore/qlibraryinfo.h \
+		../../Qt/5.10.0/gcc_64/include/QtCore/qversionnumber.h \
+		../../Qt/5.10.0/gcc_64/include/QtCore/qline.h \
+		../../Qt/5.10.0/gcc_64/include/QtCore/qlinkedlist.h \
+		../../Qt/5.10.0/gcc_64/include/QtCore/qlockfile.h \
+		../../Qt/5.10.0/gcc_64/include/QtCore/qloggingcategory.h \
+		../../Qt/5.10.0/gcc_64/include/QtCore/qmargins.h \
+		../../Qt/5.10.0/gcc_64/include/QtCore/qmath.h \
+		../../Qt/5.10.0/gcc_64/include/QtCore/qmessageauthenticationcode.h \
+		../../Qt/5.10.0/gcc_64/include/QtCore/qmimedata.h \
+		../../Qt/5.10.0/gcc_64/include/QtCore/qmimedatabase.h \
+		../../Qt/5.10.0/gcc_64/include/QtCore/qmimetype.h \
+		../../Qt/5.10.0/gcc_64/include/QtCore/qobjectcleanuphandler.h \
+		../../Qt/5.10.0/gcc_64/include/QtCore/qoperatingsystemversion.h \
+		../../Qt/5.10.0/gcc_64/include/QtCore/qparallelanimationgroup.h \
+		../../Qt/5.10.0/gcc_64/include/QtCore/qpauseanimation.h \
+		../../Qt/5.10.0/gcc_64/include/QtCore/qplugin.h \
+		../../Qt/5.10.0/gcc_64/include/QtCore/qpointer.h \
+		../../Qt/5.10.0/gcc_64/include/QtCore/qpluginloader.h \
+		../../Qt/5.10.0/gcc_64/include/QtCore/qprocess.h \
+		../../Qt/5.10.0/gcc_64/include/QtCore/qpropertyanimation.h \
+		../../Qt/5.10.0/gcc_64/include/QtCore/qvariantanimation.h \
+		../../Qt/5.10.0/gcc_64/include/QtCore/qqueue.h \
+		../../Qt/5.10.0/gcc_64/include/QtCore/qrandom.h \
+		../../Qt/5.10.0/gcc_64/include/QtCore/qreadwritelock.h \
+		../../Qt/5.10.0/gcc_64/include/QtCore/qrect.h \
+		../../Qt/5.10.0/gcc_64/include/QtCore/qregularexpression.h \
+		../../Qt/5.10.0/gcc_64/include/QtCore/qresource.h \
+		../../Qt/5.10.0/gcc_64/include/QtCore/qsavefile.h \
+		../../Qt/5.10.0/gcc_64/include/QtCore/qscopedvaluerollback.h \
+		../../Qt/5.10.0/gcc_64/include/QtCore/qsemaphore.h \
+		../../Qt/5.10.0/gcc_64/include/QtCore/qsequentialanimationgroup.h \
+		../../Qt/5.10.0/gcc_64/include/QtCore/qsettings.h \
+		../../Qt/5.10.0/gcc_64/include/QtCore/qsharedmemory.h \
+		../../Qt/5.10.0/gcc_64/include/QtCore/qsignalmapper.h \
+		../../Qt/5.10.0/gcc_64/include/QtCore/qsignaltransition.h \
+		../../Qt/5.10.0/gcc_64/include/QtCore/qsocketnotifier.h \
+		../../Qt/5.10.0/gcc_64/include/QtCore/qsortfilterproxymodel.h \
+		../../Qt/5.10.0/gcc_64/include/QtCore/qstack.h \
+		../../Qt/5.10.0/gcc_64/include/QtCore/qstandardpaths.h \
+		../../Qt/5.10.0/gcc_64/include/QtCore/qstate.h \
+		../../Qt/5.10.0/gcc_64/include/QtCore/qstatemachine.h \
+		../../Qt/5.10.0/gcc_64/include/QtCore/qstorageinfo.h \
+		../../Qt/5.10.0/gcc_64/include/QtCore/qstringlistmodel.h \
+		../../Qt/5.10.0/gcc_64/include/QtCore/qsystemsemaphore.h \
+		../../Qt/5.10.0/gcc_64/include/QtCore/qtemporarydir.h \
+		../../Qt/5.10.0/gcc_64/include/QtCore/QScopedPointer \
+		../../Qt/5.10.0/gcc_64/include/QtCore/qtemporaryfile.h \
+		../../Qt/5.10.0/gcc_64/include/QtCore/qtextboundaryfinder.h \
+		../../Qt/5.10.0/gcc_64/include/QtCore/qtextcodec.h \
+		../../Qt/5.10.0/gcc_64/include/QtCore/qthread.h \
+		../../Qt/5.10.0/gcc_64/include/QtCore/qthreadpool.h \
+		../../Qt/5.10.0/gcc_64/include/QtCore/qthreadstorage.h \
+		../../Qt/5.10.0/gcc_64/include/QtCore/qtimeline.h \
+		../../Qt/5.10.0/gcc_64/include/QtCore/qtimer.h \
+		../../Qt/5.10.0/gcc_64/include/QtCore/qtimezone.h \
+		../../Qt/5.10.0/gcc_64/include/QtCore/qtranslator.h \
+		../../Qt/5.10.0/gcc_64/include/QtCore/qtypetraits.h \
+		../../Qt/5.10.0/gcc_64/include/QtCore/quuid.h \
+		../../Qt/5.10.0/gcc_64/include/QtCore/qwaitcondition.h \
+		../../Qt/5.10.0/gcc_64/include/QtCore/qwineventnotifier.h \
+		../../Qt/5.10.0/gcc_64/include/QtCore/qxmlstream.h \
+		../../Qt/5.10.0/gcc_64/include/QtCore/qtcoreversion.h \
+		../../Qt/5.10.0/gcc_64/include/QtNetwork/QtNetwork \
+		../../Qt/5.10.0/gcc_64/include/QtNetwork/QtNetworkDepends \
+		../../Qt/5.10.0/gcc_64/include/QtNetwork/qabstractnetworkcache.h \
+		../../Qt/5.10.0/gcc_64/include/QtNetwork/qnetworkrequest.h \
+		../../Qt/5.10.0/gcc_64/include/QtCore/QSharedDataPointer \
+		../../Qt/5.10.0/gcc_64/include/QtCore/QString \
+		../../Qt/5.10.0/gcc_64/include/QtCore/QUrl \
+		../../Qt/5.10.0/gcc_64/include/QtCore/QVariant \
+		../../Qt/5.10.0/gcc_64/include/QtNetwork/qabstractsocket.h \
+		../../Qt/5.10.0/gcc_64/include/QtNetwork/qauthenticator.h \
+		../../Qt/5.10.0/gcc_64/include/QtNetwork/qdnslookup.h \
+		../../Qt/5.10.0/gcc_64/include/QtNetwork/qhostaddress.h \
+		../../Qt/5.10.0/gcc_64/include/QtNetwork/qhostinfo.h \
+		../../Qt/5.10.0/gcc_64/include/QtNetwork/qhstspolicy.h \
+		../../Qt/5.10.0/gcc_64/include/QtNetwork/qhttpmultipart.h \
+		../../Qt/5.10.0/gcc_64/include/QtCore/QByteArray \
+		../../Qt/5.10.0/gcc_64/include/QtCore/QIODevice \
+		../../Qt/5.10.0/gcc_64/include/QtNetwork/QNetworkRequest \
+		../../Qt/5.10.0/gcc_64/include/QtNetwork/qlocalserver.h \
+		../../Qt/5.10.0/gcc_64/include/QtNetwork/qlocalsocket.h \
+		../../Qt/5.10.0/gcc_64/include/QtNetwork/qnetworkaccessmanager.h \
+		../../Qt/5.10.0/gcc_64/include/QtCore/QVector \
+		../../Qt/5.10.0/gcc_64/include/QtNetwork/QSslConfiguration \
+		../../Qt/5.10.0/gcc_64/include/QtNetwork/qsslconfiguration.h \
+		../../Qt/5.10.0/gcc_64/include/QtNetwork/qsslsocket.h \
+		../../Qt/5.10.0/gcc_64/include/QtNetwork/qtcpsocket.h \
+		../../Qt/5.10.0/gcc_64/include/QtNetwork/qsslerror.h \
+		../../Qt/5.10.0/gcc_64/include/QtNetwork/qsslcertificate.h \
+		../../Qt/5.10.0/gcc_64/include/QtNetwork/qssl.h \
+		../../Qt/5.10.0/gcc_64/include/QtCore/QFlags \
+		../../Qt/5.10.0/gcc_64/include/QtNetwork/QSslPreSharedKeyAuthenticator \
+		../../Qt/5.10.0/gcc_64/include/QtNetwork/qsslpresharedkeyauthenticator.h \
+		../../Qt/5.10.0/gcc_64/include/QtCore/QMetaType \
+		../../Qt/5.10.0/gcc_64/include/QtNetwork/qnetworkconfigmanager.h \
+		../../Qt/5.10.0/gcc_64/include/QtNetwork/qnetworkconfiguration.h \
+		../../Qt/5.10.0/gcc_64/include/QtNetwork/qnetworkcookie.h \
+		../../Qt/5.10.0/gcc_64/include/QtCore/QList \
+		../../Qt/5.10.0/gcc_64/include/QtNetwork/qnetworkcookiejar.h \
+		../../Qt/5.10.0/gcc_64/include/QtNetwork/qnetworkdatagram.h \
+		../../Qt/5.10.0/gcc_64/include/QtNetwork/qnetworkdiskcache.h \
+		../../Qt/5.10.0/gcc_64/include/QtNetwork/qnetworkinterface.h \
+		../../Qt/5.10.0/gcc_64/include/QtNetwork/qnetworkproxy.h \
+		../../Qt/5.10.0/gcc_64/include/QtNetwork/qnetworkreply.h \
+		../../Qt/5.10.0/gcc_64/include/QtNetwork/QNetworkAccessManager \
+		../../Qt/5.10.0/gcc_64/include/QtNetwork/qnetworksession.h \
+		../../Qt/5.10.0/gcc_64/include/QtNetwork/qsctpserver.h \
+		../../Qt/5.10.0/gcc_64/include/QtNetwork/qtcpserver.h \
+		../../Qt/5.10.0/gcc_64/include/QtNetwork/qsctpsocket.h \
+		../../Qt/5.10.0/gcc_64/include/QtNetwork/qsslcertificateextension.h \
+		../../Qt/5.10.0/gcc_64/include/QtNetwork/qsslcipher.h \
+		../../Qt/5.10.0/gcc_64/include/QtNetwork/qssldiffiehellmanparameters.h \
+		../../Qt/5.10.0/gcc_64/include/QtNetwork/qsslellipticcurve.h \
+		../../Qt/5.10.0/gcc_64/include/QtCore/QHash \
+		../../Qt/5.10.0/gcc_64/include/QtNetwork/qsslkey.h \
+		../../Qt/5.10.0/gcc_64/include/QtNetwork/qudpsocket.h \
+		../../Qt/5.10.0/gcc_64/include/QtNetwork/qtnetworkversion.h \
+		../../Qt/5.10.0/gcc_64/include/QtQml/qjsvalueiterator.h \
+		../../Qt/5.10.0/gcc_64/include/QtQml/qqmlabstracturlinterceptor.h \
+		../../Qt/5.10.0/gcc_64/include/QtQml/qqmlcomponent.h \
+		../../Qt/5.10.0/gcc_64/include/QtQml/qqmlcontext.h \
+		../../Qt/5.10.0/gcc_64/include/QtQml/qqmlexpression.h \
+		../../Qt/5.10.0/gcc_64/include/QtQml/qqmlscriptstring.h \
+		../../Qt/5.10.0/gcc_64/include/QtQml/qqmlextensioninterface.h \
+		../../Qt/5.10.0/gcc_64/include/QtQml/qqmlextensionplugin.h \
+		../../Qt/5.10.0/gcc_64/include/QtQml/qqmlfile.h \
+		../../Qt/5.10.0/gcc_64/include/QtQml/qqmlfileselector.h \
+		../../Qt/5.10.0/gcc_64/include/QtQml/qqmlincubator.h \
+		../../Qt/5.10.0/gcc_64/include/QtQml/qqmlinfo.h \
+		../../Qt/5.10.0/gcc_64/include/QtQml/qqmlnetworkaccessmanagerfactory.h \
+		../../Qt/5.10.0/gcc_64/include/QtQml/qqmlproperty.h \
+		../../Qt/5.10.0/gcc_64/include/QtQml/qqmlpropertymap.h \
+		../../Qt/5.10.0/gcc_64/include/QtQml/qtqmlversion.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o ../Axolotl/main.cpp
 
 forkbomb.o: ../Axolotl/forkbomb.cpp ../Axolotl/forkbomb.h \

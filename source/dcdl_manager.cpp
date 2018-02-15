@@ -6,6 +6,7 @@
 */
 
 #include "dcomh.hpp"
+#include <sys/wait.h>
 
 #define PST -8
 #define LOG_VOLUME "/media/nvidia/AXOLOTLDCV"
@@ -193,17 +194,18 @@ int main() {
       execv("dld", args);
     }
     else {
-        printf("");
+        printf("\n");
     }
 
     // forking dashcam daemon
 
     // manager waits on quit
+int status;
     while(1) {
       getline(cin,inputStr);
       if(inputStr == "q" | inputStr == "Q") {
         kill(dldpid,SIGTERM);
-        wait(NULL);
+        wait(&status);
         break;
       }
       else if (inputStr == "s" | inputStr == "S") {

@@ -1,15 +1,12 @@
 <RCC>
     <qresource prefix="/">
-        <file>main.qml</file>
-        <file>HomeForm.ui.qml</file>
-        <file>Page1Form.ui.qml</file>
-        <file>Page2Form.ui.qml</file>
         <file>qtquickcontrols2.conf</file>
+        <file>main.qml</file>
+        <file>MainMenu.qml</file>
+        <file>MusicPage.qml</file>
         <file>icons8-america-50.png</file>
         <file>icons8-go-back-50.png</file>
         <file>icons8-line-chart-50.png</file>
         <file>icons8-musical-notes-50.png</file>
-        <file>mainmenu.qml</file>
-        <file>musicpage.qml</file>
     </qresource>
 </RCC>

@@ -29,6 +29,9 @@
 #include <cryptopp/sha.h>
 #include <cryptopp/hex.h>
 
+#include <cryptopp/cryptlib.h>
+#include <cryptopp/config.h>
+
 class axolotlFileSystem {
   public:
     /*
@@ -67,8 +70,8 @@ class axolotlFileSystem {
       // Salt and hash
       std::string hashedPass, passSalt = "thequickbrownfoxjumpsoverthelazydog";
       CryptoPP::SHA256 passwordHash;
-      CryptoPP::byte passwordDigest[CryptoPP::SHA256::DIGESTSIZE];
-      passwordHash.CalculateDigest(passwordDigest,(const CryptoPP::byte *)passSalt.c_str(),passSalt.size());
+      byte passwordDigest[CryptoPP::SHA256::DIGESTSIZE];
+      passwordHash.CalculateDigest(passwordDigest,(const byte *)passSalt.c_str(),passSalt.size());
 
       // Encode into human-readable string via hex
       CryptoPP::HexEncoder hashEncoder;

@@ -1,6 +1,5 @@
-import QtQuick 2.9
-import QtQuick.Controls 2.2
-import QtGraphicalEffects 1.0
+import QtQuick 2.0
+import QtQuick.Controls 1.4
 import forker.us 1.0
 
 ApplicationWindow {
@@ -11,32 +10,36 @@ ApplicationWindow {
     //flags: Qt.FramelessWindowHint
     visible: true
     title: "Qt UI Shell"
+            MainMenu { id: pagetwo }
+            MusicPage { id: pagethree }
     StackView {
         id: stack
         initialItem: startup
+
     }
 Test{
  id: bootdm
 }
-    Rectangle{
+    Item {
         id: startup
+        Rectangle{
         width: 1280
         height: 800
         color: "#0892D0"
 
         Text {
             id: words
-            anchors.centerIn: startup
+            anchors.centerIn: parent
             font.pointSize: 44
             text: qsTr("Hello World!")
         }
-
         Timer{
             interval: 3000; running: true;
             onTriggered: {
-                stack.push("mainmenu.qml")
+                console.log(stack.push(pagetwo))
                 console.log(bootdm.start_dm())
             }
         }
     }
+}
 }

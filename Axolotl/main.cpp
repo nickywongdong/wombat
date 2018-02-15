@@ -1,6 +1,9 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
 #include"forkbomb.h"
+#include <QQmlEngine>
+#include <QtQml>
+
 
 int main(int argc, char *argv[])
 {
