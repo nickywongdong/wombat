@@ -77,7 +77,7 @@ int LidarLite::writeLidarLite(int writeRegister, int writeValue)
 void LidarLite::showSignalStrength(){
     uint8_t signalStrength = RDA5807P_GetSigLvl(freq);// max is 63...as noted
     printf("Signal Strength: ");
-    cout << signalStrength << endl;
+    printf("%u\n"signalStrength);
 }
 
 
