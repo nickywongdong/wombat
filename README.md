@@ -41,6 +41,7 @@ Version 0.1.8:
 
 Dependencies:
 - Navit 0.5.1\*
+  - North American mapset binary hosted [here](https://drive.google.com/open?id=1UpHisYQQdKC_r3oSZfjjtk_R77760Z-u). Mapset courtesy of the OpenStreetMap project and Navit, no ownership claimed.
 - boost 1.66.0 (Unix)
 - Python 2.7.3
 - Qt 5.10\*
