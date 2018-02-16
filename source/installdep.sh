@@ -16,8 +16,8 @@ sudo apt-get install build-essential libimlib2-dev
 sudo apt-get install build-essential espeak
 
 sudo apt-get install build-essential python
-
-sudo easy_install pip
+sudo apt-get install build-essential python-pip
+pip install --upgrade pip
 pip install obd
 
 sudo apt-get install build-essential libboost-all-dev

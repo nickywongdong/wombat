@@ -212,7 +212,7 @@ int main() {
       execv("dld", args);
     }
     else {
-        printf("");
+        printf(" ");
     }
 
     // forking dashcam daemon
