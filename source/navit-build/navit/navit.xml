@@ -226,8 +226,8 @@ Waypoint</text></img>
 		<!-- osd items allow to position display and control items directly on top of the map.
 		You can find a list of all the available OSDs items here:
 		http://wiki.navit-project.org/index.php/OSD -->
-		<osd enabled="no" type="compass"/>
-		<osd enabled="no" type="navigation_next_turn"/>
+		<osd enabled="yes" type="compass"/>
+		<osd enabled="yes" type="navigation_next_turn"/>
 
 		<!-- Commands include gui_internal_menu, gui_internal_fullscreen, zoom_in and zoom_out.
 			Usage of negative values change the button origins. x="0" y="0" specifies the top left, x="-0" y="-0" the bottom right corner.
@@ -434,7 +434,7 @@ Waypoint</text></img>
 		<!-- Navit provides speech output in text format.
 			If you have a speech synthesizer like festival lite installed, you can get turn by turn directions out of navit. Please set the "cps"-value to how many characters your tts engine approximately speaks per second.
 			The default is text output to the shell -->
-		<speech type="cmdline" data="echo 'Fix the speech tag in navit.xml to let navit say:' '%s'" cps="15"/>
+		<speech type="espeak" data="echo 'Fix the speech tag in navit.xml to let navit say:' '%s'" cps="15" path="/home/nvidia/axolotl/navit/navit/support/espeak"/>
 		<!--
 		Instead of using a speech synthesizer, navit can also play pre-recorded samples for each word.
 		See http://wiki.navit-project.org/index.php/Configuration for details.
