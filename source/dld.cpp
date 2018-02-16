@@ -14,6 +14,25 @@
 using namespace std;
 
 string loggingDirectory;
+bool loggingActive = true;
+
+/*
+  Toggles the data logging system off.
+*/
+void toggleHandler(int signumber, siginfo_t *siginfo, void *pointer) {
+  loggingActive = !loggingActive;
+}
+
+/*
+  Registers the toggle handler with SIGUSR1.
+*/
+void registerToggleHandler() {
+  static struct sigaction dsa;
+  memset(&dsa, 0, sizeof(dsa));
+  dsa.sa_sigaction = toggleHandler;
+  dsa.sa_flags = SA_SIGINFO;
+  sigaction(SIGUSR1, &dsa, NULL);
+}
 
 /*
   A loops that conducts all of the data logging.
@@ -25,18 +44,18 @@ void loggingLooper() {
   clock_t timer1;
   while(1) {
     timer1 = clock();
+    if (loggingActive) {
+      if(axolotlFileSystem::getAvailableMemory(loggingDirectory) > 200) {
+        string builtCommand = "python " + axolotlFileSystem::getHomeDir() + OBD_ADAPTER_PATH + " snapshot " + loggingDirectory;
+        system(builtCommand.c_str());
+      }
 
-    if(axolotlFileSystem::getAvailableMemory(loggingDirectory) > 200) {
-      string builtCommand = "python " + axolotlFileSystem::getHomeDir() + OBD_ADAPTER_PATH + " snapshot " + loggingDirectory;
-      system(builtCommand.c_str());
+      #ifdef DEBUG
+      printf("Logged?\n");
+      printf("%f\n",(clock()-timer1)/(double)CLOCKS_PER_SEC);
+      printf("Sample Rate: %f\n",1/((clock()-timer1)/(double)CLOCKS_PER_SEC));
+      #endif
     }
-
-    #ifdef DEBUG
-    printf("Logged?\n");
-    printf("%f\n",(clock()-timer1)/(double)CLOCKS_PER_SEC);
-    printf("Sample Rate: %f\n",1/((clock()-timer1)/(double)CLOCKS_PER_SEC));
-    #endif
-
     usleep(1000);
   }
 }

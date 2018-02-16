@@ -22,29 +22,6 @@ bool setdcd = false, setdld = false;
 
 string loggingDirectory;
 
-void raiseShutdown() {
-  int result;
-  string ex;
-  // kill dashcam daemon if we have a pid
-  /*if(!(dcdpid > -1)) {
-    result = kill(dcdpid,SIGTERM);
-    if(result != 0) {
-      printf("Error: Failed to kill dashcam daemon.\n");
-    }
-  }*/
-
-  // kill data logging daemon if we have a pid
-  printf("%d\n",dldpid);
-  if(!(dldpid > -1)) {
-    result = kill(dldpid,SIGTERM);
-    //ex = "kill " + to_string(dldpid);
-    //system(ex.c_str());
-    if(result != 0) {
-      printf("Error: Failed to kill data logging daemon.\n");
-    }
-  }
-}
-
 /*
   Builds the save directory for both daemons.
   Returns the path to the directory that was created.
@@ -156,8 +133,17 @@ void resetPassword(string sourceDir) {
 }
 
 void managerSigintHandler(int signumber, siginfo_t *siginfo, void *pointer) {
-  kill(dldpid,SIGTERM);
-  wait(NULL);
+  int status = 0;
+  if(!(dcdpid < 0)) {
+    kill(dcdpid,SIGTERM);
+  }
+  //kill(dcdpid,SIGTERM);
+  waitpid(dcdpid, &status, 0);
+  if(!(dldpid < 0)) {
+    kill(dldpid,SIGTERM);
+  }
+  //kill(dldpid,SIGTERM);
+  waitpid(dldpid, &status, 0);
   exit(0);
 }
 
@@ -205,8 +191,7 @@ int main() {
     // forking data logging daemon
     dldpid = fork();
     if (dldpid == -1) {
-      printf("Error spawning dashcam daemon... \n");
-      exit(1);
+      printf("Error spawning data logging daemon... \n");
     }
     else if (dldpid == 0){
       execv("dld", args);
@@ -216,18 +201,22 @@ int main() {
     }
 
     // forking dashcam daemon
+    dcdpid = fork();
+    if (dcdpid == -1) {
+      printf("Error spawning dashcam daemon... \n");
+    }
+    else if (dldpid == 0){
+      execv("dcd", args);
+    }
+    else {
+        printf(" ");
+    }
 
     // manager waits on quit
     while(1) {
       getline(cin,inputStr);
       if(inputStr == "q" | inputStr == "Q") {
-        kill(dldpid,SIGTERM);
-        wait(NULL);
         break;
-      }
-      else if (inputStr == "s" | inputStr == "S") {
-        inputStr = "";
-        kill(dldpid,SIGUSR1);
       }
       else {
         inputStr = "";

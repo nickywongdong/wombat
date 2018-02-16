@@ -30,9 +30,11 @@
 #include <cryptopp/sha.h>
 #include <cryptopp/hex.h>
 
-// different byte defines based on compilation platform
-#define BYTE CryptoPP::byte
-//#define BYTE byte
+/*
+  Defines for byte, based on compilation environment.
+*/
+#define BYTE CryptoPP::byte   // for macOS compilation
+//#define BYTE byte   // for Linux compilation
 
 class axolotlFileSystem {
   public:

@@ -3,54 +3,70 @@
    ------------------------------------
    Background process managed by Axolotl;
    logs camera data from dashcam and backup camera.
-
-   Dependencies:
-   - Gstreamer
 */
 
 #include "dcomh.hpp"
 
+#define DEBUG
+
 using namespace std;
 
-void dcdSigTermHandler(int signumber, siginfo_t *siginfo, void *pointer) {
-  exit(0);
+string loggingDirectory;
+bool loggingActive = true;
+
+/*
+  Toggles the data logging system off.
+*/
+void toggleHandler(int signumber, siginfo_t *siginfo, void *pointer) {
+  loggingActive = !loggingActive;
 }
 
 /*
-  Registers the dldSigTermHandler with SIGTERM.
+  Registers the toggle handler with SIGUSR1.
 */
-void registerSigTermHandler() {
-  static struct sigaction dcd_sa;
-  memset(&dcd_sa, 0, sizeof(dcd_sa));
-  dcd_sa.sa_sigaction = dcdSigTermHandler;
-  dcd_sa.sa_flags = SA_SIGINFO;
-  sigaction(SIGTERM, &dcd_sa, NULL);
+void registerToggleHandler() {
+  static struct sigaction dsa;
+  memset(&dsa, 0, sizeof(dsa));
+  dsa.sa_sigaction = toggleHandler;
+  dsa.sa_flags = SA_SIGINFO;
+  sigaction(SIGUSR1, &dsa, NULL);
 }
 
-// spec:
-// - record for 1 minute and then send, transfer delay of ~1 second
-// - record for 2 minutes and then send, transfer delay of ~2 seconds
+// record function that will record a 5-minute chunk of video from a stream over the wlan
 void record() {
   printf("Recording...\n");
   sleep(10);
   printf("Recording complete. Saving to file.\n");
 }
 
-void recordLooper() {
+// loops the recording function
+void cameraLooper() {
+  clock_t timer1;
   while(1) {
-    if (axolotlFileSystem::getAvailableMemory("/Volumes/SD Transfer") > 2048) {
-      record();
-    }
-    else {
-      printf("Not enough free space. Waiting...");
-      // Write error to debug.txt log for the day!
-      sleep(5);
+    if(loggingActive) {
+      timer1 = clock();
+      if (axolotlFileSystem::getAvailableMemory("/Volumes/SD Transfer") > 2048) {
+        record();
+      }
+
+      #ifdef DEBUG
+      printf("Logged?\n");
+      printf("%f\n",(clock()-timer1)/(double)CLOCKS_PER_SEC);
+      printf("Sample Rate: %f\n",1/((clock()-timer1)/(double)CLOCKS_PER_SEC));
+      #endif
     }
   }
 }
 
 int main(int argc, char *argv[]) {
-    printf("Logging Directory: %i %s\n",argc-1,argv[argc-1]);
-    recordLooper();
-    return 0;
+  // Ensure that a logging directory has been provided and bind it
+  if (argc != 1) {
+    exit(1);
+  }
+  loggingDirectory = argv[0];
+
+  registerToggleHandler();
+  cameraLooper();
+
+  return 0;
 }
