@@ -36,7 +36,7 @@ fuelcommands.append(obd.commands.FUEL_RATE)
 fuelcommands.append(obd.commands.FUEL_RATE)
 
 # run in async mode?
-runAsync = True
+runAsync = False
 
 def obdSnapshot(obdConnection):
     logTime = time.time()
@@ -84,7 +84,7 @@ if __name__ == '__main__':
     if runAsync:
         obdBluetoothConnection = obd.Async(baudrate=115200,fast=True)
     else:
-        obdBluetoothConnection = obd.OBD(baudrate=115200,fast=True)
+        obdBluetoothConnection = obd.OBD()
 
     ## Logic based on command line call
     if(sys.argv[1] == "snapshot"):
