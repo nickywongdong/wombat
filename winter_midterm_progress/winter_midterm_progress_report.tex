@@ -1,0 +1,461 @@
+\documentclass[onecolumn, draftclsnofoot,10pt, compsoc]{IEEEtran}
+\usepackage{graphicx}
+\usepackage{url}
+\usepackage{setspace}
+
+\usepackage{geometry}
+\geometry{textheight=9.5in, textwidth=7in}
+
+\usepackage{graphicx}
+\graphicspath{{images/}}
+
+% 1. Fill in these details
+\def \CapstoneTeamName{		Team Wombat}
+\def \CapstoneTeamNumber{		15}
+\def \GroupMemberOne{			Victor Li}
+\def \GroupMemberTwo{			Ryan Crane}
+\def \GroupMemberThree{			Nicholas Wong}
+\def \CapstoneProjectName{		Axolotl}
+\def \CapstoneSponsorCompany{	}
+\def \CapstoneSponsorPerson{		Kevin McGrath}
+
+% 2. Uncomment the appropriate line below so that the document type works
+\def \DocType{		%Problem Statement
+				%Requirements Document
+				%Technology Review
+				%Design Document
+				Progress Report
+				}
+			
+\newcommand{\NameSigPair}[1]{\par
+\makebox[2.75in][r]{#1} \hfil 	\makebox[3.25in]{\makebox[2.25in]{\hrulefill} \hfill		\makebox[.75in]{\hrulefill}}
+\par\vspace{-12pt} \textit{\tiny\noindent
+\makebox[2.75in]{} \hfil		\makebox[3.25in]{\makebox[2.25in][r]{Signature} \hfill	\makebox[.75in][r]{Date}}}}
+% 3. If the document is not to be signed, uncomment the RENEWcommand below
+%\renewcommand{\NameSigPair}[1]{#1}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}
+\begin{titlepage}
+    \pagenumbering{gobble}
+    \begin{singlespace}
+    	\includegraphics[height=4cm]{coe_v_spot1}
+        \hfill 
+        % 4. If you have a logo, use this includegraphics command to put it on the coversheet.
+        %\includegraphics[height=4cm]{CompanyLogo}   
+        \par\vspace{.2in}
+        \centering
+        \scshape{
+            \huge CS Capstone \DocType \par
+            {\large\today}\par
+            \vspace{.5in}
+            \textbf{\Huge\CapstoneProjectName}\par
+            \vfill
+            {\large Prepared for}\par
+            \Huge \CapstoneSponsorCompany\par
+            \vspace{5pt}
+            {\Large\NameSigPair{\CapstoneSponsorPerson}\par}
+            {\large Prepared by }\par
+            Group\CapstoneTeamNumber\par
+            % 5. comment out the line below this one if you do not wish to name your team
+            \CapstoneTeamName\par 
+            \vspace{5pt}
+            {\Large
+                \NameSigPair{\GroupMemberOne}\par
+                \NameSigPair{\GroupMemberTwo}\par
+                \NameSigPair{\GroupMemberThree}\par
+            }
+            \vspace{20pt}
+        }
+        \begin{abstract}
+        %6. Fill in your abstract   
+       		This document is a term progress report that examines the progress of the Axolotl infotainment project through Week 6 of the Winter 2018 term. The progress report will review the Axolotl project and its goals, offer a detailed account of our current progress in accomplishing project goals and implementing project components, as well as provide an overview of any challenges or problems we faced, in addition to our solutions to these problems. We will also examine the work that is left to do before the project can be considered complete.
+	\end{abstract}
+\end{singlespace}
+\end{titlepage}
+\newpage
+\pagenumbering{arabic}
+\tableofcontents
+% 7. uncomment this (if applicable). Consider adding a page break.
+%\listoffigures
+%\listoftables
+\clearpage
+
+% 8. now you write!
+\section{Group Intro}
+The Axolotl project has not changed from its initial vision. Our goal is still to develop an infotainment and black box system on an NVIDIA Jetson TX2 computer module. The end system still aims to combine the infotainment features expected in modern vehicles with a highly capable data logging system that is nearly non-existent in modern cars. The requirements of our project have not changed; however, some of the tools, resources, and parts utilized in the implementation of our project have deviated from those we initially specified. In this document, we will provide a recap of our project's intentions in detail whilst also discussing our own individual work with regards to our responsibilities. Each of us will offer a progress update on the work we have done, aided by code and visuals. We will also describe the work that remains to be done as well as explain some of the problems we have experienced during this period of development. Any problems we have described will be accompanied by an explanation of how we overcame those problems and/or an outline of how we plan to solve them in the future.
+
+\section{Project Overview}
+At its core, the Axolotl is a car infotainment system with a built in black box that logs data from various sensors in a car. The system should support the standard media playback and navigation functionalities of infotainment systems. The black box will log data captured from vehicle sensors over OBDll, footage from a connected dashcam, and data from a connected attitude heading and reference system.
+
+\subsection{Navigation}
+The purpose of the Axolotl navigation system is to provide users a level of navigation functionality similar to that offered by factory navigation systems installed in modern automobiles. The system should allow users to interact with a map, plan a route, as well as enter an address and navigate to the destination aided by turn-by-turn directions. The navigation system should be able to function without data service and without a GPS signal, allowing it to operate in remote locations where access to mobile data service and GPS may be disrupted.
+The navigation system is not designed to operate on a global scale. Instead, the system is intended to only support U.S. addresses. The navigation system should function as a subprogram of the Axolotl graphical user interface, and continue to issue route commands even if a different task is being conducted on the Axolotl system, such as management of media playback.
+
+\subsection{Media}
+The purpose of the media system is to give users the ability to manage and play media over their car's audio system. The Axolotl will allow users to play media from many different sources; sources that users may select from include a smartphone or media device connected through USB, Bluetooth, or Auxiliary, FM radio, media from an external USB drive, and/or internal storage. The Axolotl also allows users to set up an network connection with a remote computer and download media from that computer directly into internal storage.
+The media system is not intended to support all media sources; rather, it is designed to accept widespread modern media sources, inline with that offered in modern vehicles. For example, the system is not intended to support compact disc, AM radio, or tape media sources.
+
+\subsection{Data Logging}
+The purpose of the data logging system is to provide a level of user-friendly data logging functionality similar to that of a black box or event data recorder. The system is intended to take snapshots of vehicle information as well as video from any connected dashcams and collect that data in an easy-to-understand data log that can be easily read and interpreted from a computer. The data logging system is not intended to log the value of every variable associated with the running of a vehicle. The data fields chosen for logging are pertinent to the act of driving as well as driver well-being, however technical data fields such as those intended for mechanics are considered irrelevant and are omitted from the data log.
+
+\subsection{Video Streaming}
+The purpose of the video streaming or camera system is to give users the ability to utilize a dashcam in order to log vehicle data as well as provide access to live footage from a backup camera in order to improve user safety while reversing a vehicle. Thus, the video streaming system will support one dashboard camera and one backup camera. The feed from a backup camera will be streamed wirelessly to the main unit for display on the screen; this will be done so that installation will not require running long wires through the car. The backup camera will be connected to a secondary controller which will activate the camera and transmit data when the time is appropriate.
+
+\subsection{UI}
+The Axolotl will be connected to a touchscreen and must have a graphical user interface. The reason why Axolotl must offer a user interface is because the system needs a way to encapsulate each of its functions and allow users to manage subsystems. The user interface will enable users to interact with the system to control media playback, navigation, and access to the data log. We will be using open source Qt to develop our user interface. 
+
+\newpage
+\section{Progress Summary by Group Member}
+\subsection{Nick}
+The main goals that I had from Fall consisted of: Media, Storage Medium, and Head Unit Module. The later two were goals that were in the research documents, but once we chose one solution, there wasn't much need for development. So two more goals were added to my portion: supplemental turn signals, and networked media. The media portion was broken down into 4 smaller sections: The player software itself, bluetooth device streaming, auxiliary connectivity, and FM radio.\par
+
+\subsubsection{Work Completed}
+When researching a media player in the design document, it was decided that Kodi media player would be the final player, but once I started developing, I encountered a few errors with installing Kodi media player with dependencies. The specific errors that occurred during the installation are:\par
+
+\begin{verbatim}
+The following packages have unmet dependencies:
+ kodi : Depends: kodi-bin (>= 2:17.6+git20171114.2125-final-0xenial) but 15.2+dfsg1-3ubuntu1.1 is to be installed
+        Depends: libshairplay0 but it is not installable
+        Depends: libcec4 but it is not installable
+        Recommends: libvdpau1 but it is not going to be installed
+        Recommends: i965-va-driver but it is not installable or
+                    libva-intel-vaapi-driver but it is not installable
+E: Unable to correct problems, you have held broken packages.
+\end{verbatim}
+
+Thus, I decided to install VLC media player as a backup until a solution was made. Initial progress for receiving data from an FM antenna through I2C has been made. This code supplied by the manufacturer however only works with a specific Arduino board where specific hardware layout is defined. In order to allow the code from the Arduino sketch to function properly, it needs to be refactored to fit the Jetson TX2's hardware layout. The current problem that is impeding this goal is that when compiling the current code to establish a connection with the antenna, the built in functions from the  linux library i2c-dev.h present an error:
+\begin{verbatim}
+error: use of undeclared identifier 'i2c_smbus_read_byte'
+\end{verbatim}
+Another problem that will have to be addressed in the future is that once the data from the antenna is received, the Jetson must know how to handle it. A solution for this problem has not yet be devised but is currently being researched.\par
+
+Auxiliary connectivity has not yet been implemented yet, as the hardware still needs to be ordered. Network media also has not been implemented yet, however research has been done into the the connection methodology. A connection through TCP/IP will be used to link the Axolotl to a home music library over the internet, and a program will transfer any music files present on the home music library to the Jetson.\par
+
+With regards to supplemental turn signals: this goal included connecting turn signals to the Jetson wirelessly. A solution was made for the Jetson TX2 to be connected to a RaspberryPi through bluetooth and send it signals for turning on an LED. The first step of this goal was to setup the RaspberryPi as a receiver, and then the Jetson TX2 as the sender. This was done through a C program found in "An Introduction to Bluetooth Programming" book. Ultimately, the RaspberryPi was successfully paired with the Jetson and can receive signals from the Jetson wirelessly. The hardware for the turn signals have yet to be picked up, but the RaspberryPi should be able to simply turn on the LEDs upon receiving a specific signal. A problem with this goal was that Bluetooth only allows for 1 connection for transmitting/receiving. This means that if the media player is streaming music through bluetooth, and the user wishes to send a signal to change music while sending a turn signal to the supplemental turn signals, there will be an error. A solution to this is it will be defined that the user can only send one bluetooth signal at a time in the final product specifications.
+
+\subsubsection{Planned Work}
+In order to allow the code from the Arduino sketch to function properly, it needs to be refactored to fit the Jetson TX2's hardware layout. Another problem that will have to be addressed in the future is that once the data from the antenna is received, the Jetson must know how to handle it. A solution for this problem has not yet be devised but is currently being researched.\par
+
+For bluetooth streaming to work, the command pacmd, and the loading of a module need to be executed in the background. Thus for this goal, a script still needs to be written to automate the process of pairing a phone with the Jetson TX2.\par
+
+
+\subsubsection{Problems Encountered \& Solutions}
+A major error that occurred while developing most of the goals was with the \begin{verbatim}sudo apt-get install\end{verbatim} command. When running this command, the Jetson would output an error:\par
+
+\begin{verbatim}
+E: Could not get lock /var/lib/dpkg/lock/ - open (11: Resource temporarily unavailable).
+\end{verbatim}
+
+In order to work around this error, the specific lock folder was deleted with the \begin{verbatim}rm -rf\end{verbatim} command. The implications behind this removal are still unknown, but there are still no known errors after the removal.  
+
+With regards to Bluetooth Streaming: an iPhone was successfully paired with the Jetson TX2 through bluetooth, and was able to output audio through the speakers connected to the Jetson (Hdmi). This was done by following the source: https://blog.stevenocchipinti.com/2012/10/bluetooth-audio-streaming-from-phone-to.html/. However a few changes were necessary as some commands were outdated. First, the following line was added to /etc/bluetooth/main.conf (instead of audio.conf):\par
+\begin{verbatim}
+Enable=Gateway,Source,Socket
+\end{verbatim}
+Then instead of using d-feet to connect to a device, bluetoothctl was used. Then the following line was added to /etc/pulse/daemon.conf, after the line "resample-method = speex-float-1":\par
+\begin{verbatim}
+"resample-method=trivial"
+\end{verbatim}
+There was a problem that occurred when trying to connect a device to the Jetson where attempting to connect would result in the error: 
+\begin{verbatim}
+Failed to connect: org.bluez.Error.Failed.
+\end{verbatim} This error was fixed by running the command:
+\begin{verbatim}
+pactl load-module module-bluetooth-discover
+\end{verbatim} and then running the command:
+\begin{verbatim}
+sudo service bluetooth restart
+\end{verbatim}
+After making sure that bluetooth was once again enabled, running the connect command with the desired device in bluetoothctl ended in a success. The rest of the source worked perfectly for outputting audio from device to the Jetson.\par
+
+\subsubsection{Code}
+\paragraph{server.c}
+\begin{verbatim}
+int main(int argc, char **argv)
+{
+    struct sockaddr_rc loc_addr = { 0 }, rem_addr = { 0 };
+    char buf[1024] = { 0 };
+    int s, client, bytes_read;
+    socklen_t opt = sizeof(rem_addr);
+
+    // allocate socket
+    s = socket(AF_BLUETOOTH, SOCK_STREAM, BTPROTO_RFCOMM);
+
+    // bind socket to port 1 of the first available 
+    // local bluetooth adapter
+    loc_addr.rc_family = AF_BLUETOOTH;
+    loc_addr.rc_bdaddr = *BDADDR_ANY;
+    loc_addr.rc_channel = (uint8_t) 1;
+    bind(s, (struct sockaddr *)&loc_addr, sizeof(loc_addr));
+
+    // put socket into listening mode
+    listen(s, 1);
+
+    // accept one connection
+    client = accept(s, (struct sockaddr *)&rem_addr, &opt);
+
+    ba2str( &rem_addr.rc_bdaddr, buf );
+    fprintf(stderr, "accepted connection from %s\n", buf);
+    memset(buf, 0, sizeof(buf));
+
+    // read data from the client
+    while(true){    //continue running until error
+        bytes_read = read(client, buf, sizeof(buf));
+        if( bytes_read > 0 ) {
+            printf("received [%s]\n", buf);
+
+            //determine whether it was left or right turn
+            if(buf[0] == 'l'){
+                printf("LEFT SIGNAL...\n");
+            }
+            else if(buf[0] == 'r'){
+                printf("RIGHT SIGNAL...\n");
+            }
+            //otherwise throw error
+        }
+    }
+    
+    // close connection
+    close(client);
+    close(s);
+    return 0;
+}
+\end{verbatim}
+The above code runs a server process on the Raspberry Pi, allowing it to accept commands from the Jetson.
+
+\paragraph{client.c}
+\begin{verbatim}
+int main(int argc, char **argv)
+{
+    struct sockaddr_rc addr = { 0 };
+    int s, status;
+    char dest[18] = "B8:27:EB:D8:59:7D";    //Bluetooth Address of device to connect to
+    char input; //reading input from keyboard
+    char buf[64];
+
+    // allocate a socket
+    s = socket(AF_BLUETOOTH, SOCK_STREAM, BTPROTO_RFCOMM);
+
+    // set the connection parameters (who to connect to)
+    addr.rc_family = AF_BLUETOOTH;
+    addr.rc_channel = (uint8_t) 1;
+    str2ba( dest, &addr.rc_bdaddr );
+
+    // connect to server
+    status = connect(s, (struct sockaddr *)&addr, sizeof(addr));
+
+    // send a message
+    if( status == 0 ) {
+        while(true){        //persistent data transfer
+            do{
+                scanf("%c", &input);        //read from keyboard input
+            } while(input != 'l' | input != 'r');
+            buf[0] = input;
+            status = write(s, buf, 1);    //send 1 char to server
+        }
+    }
+
+    if( status < 0 ) perror("error in sending data");
+
+    close(s);
+    return 0;
+}
+\end{verbatim}
+The above code runs a client process on the Jetson, allowing commands to be sent to the Raspberry Pi controlling the turn signals.
+
+\subsubsection{Visuals}
+\includegraphics[width=\textwidth]{examplevlc.eps}
+Fig 1.1: VLC media player working on the Jetson.
+
+\newpage
+\subsection{Ryan}
+The goal for the project is broadly to develop an infotainment system which integrates data logging and wireless backup camera streaming. My individual development goals for this term are the user interface and the wireless video stream. Thus far I have mostly been focused on making the interface, and more recently integrating some of my partners' work into it.\par
+
+\subsubsection{Work Completed}
+\paragraph{User Interface}
+We decided to use Open Source Qt as a framework to develop the user interface, which is a huge set of tools that I had no useful experience experience with prior to this project. Much of the first two weeks of work was focused on trying to set up Qt's IDE and frustrated searching for learning resources online. Eventually I was able to put together a startup screen, main menu page and a music page. The main menu has three buttons corresponding to music, navigation, and the black box and data portions of the project. The music page has functionless buttons for the various sources we will be supporting and a back button to return to the main menu. I have also written a class in C++ and registered it as a QML type in order to fork and exec Victor's data logging processes to run in the background. This runs from the startup screen as it transitions to the main menu. Integrating the navigation application will be a little more complicated since we need to be able to move between navigation and other pages, rather than simply launching it in the background forever.\par
+
+\paragraph{Video Streaming}
+We decided to use a Raspberry Pi with a Raspberry Pi Camera module as the backup camera. I have setup the operating system, configured the camera and installed some important software packages. Generally the interface development has been a higher priority so far.\par
+
+\subsubsection{Planned Work}
+\paragraph{User Interface}
+At this point we have a usable base interface to for integration with the backend features that are in development. Another QML page will probably need to made to access the data log for download and deletion. Most of the required work ahead for the interface is just connecting it to the implementations of its features. If time allows I would like to try and make the user interface prettier, since it is quite bland at the moment. Integrating the navigation application is the most immediate task. Integrating the data logging programs allowed for a simple solution to fork a child process and exec the program since it runs in the background unseen. Navit would have to be closed and executed again to transition pages under this solution which wouldn't feel much like it was part of the project, so a more intricate solution will be required.\par
+
+\paragraph{Video Streaming}
+I have focused most of my efforts on the interface at present. There is an open source tool called mjpg-streamer that I believe will work for our purposes. Once streaming the video from the Raspberry Pi to the Jetson is set up we want to wire the Jetson to the car's reverse lights to detect when the car is in reverse and switch the video on the monitor over to the camera, and back when the car leaves reverse. All of this still needs to be done.\par
+
+\subsubsection{Problems Encountered \& Solutions}
+The largest impediment to my progress has been the learning curve for qtcreator and the various tools accessible through Qt. It took me about a week to get compilers configured in qtcreator just to run the sample projects that it came with. Since I've found my way around the IDE and learned enough basic QML to make our interface pages everything has progressed about as smoothly as it can have gone on that front. Curiously when I was setting up the Raspberry Pi and installing packages it started looping the login screen indefinitely after a reboot. I had no idea what caused that and just pushed a fresh os install to make it stop. That wasn't a terrible inconvenience but it was quite bizarre.\par
+
+\subsubsection{Code}
+\paragraph{QObject}
+\begin{verbatim}
+Class test : public QObject{
+		Q_OBJECT
+	Public:
+		Explicit test (QObject* parent = 0) : QObject(parent){}
+		Q_INVOKABLE int start_navit();
+		Q_INVOKABLE int start_dm();
+};
+\end{verbatim}
+
+This is the header for a class I wrote to launch the other processes we will need to fulfill the requirements of our project. Most of it is simple C++ and the rest is some wizard magic that helps Qt work with it. There is another line of code shown below which creates a QML type out of it and allows us to use it's functions in the interface:\par
+
+\begin{verbatim}
+qmlRegisterType<test>("forker.us",1,0,"Test");
+\end{verbatim}
+
+The string arguments to this call are the names of the package that must be imported to us my type and the name of the type in QML. The numeric arguments make the version number of the package, in this case 1.0.
+
+\begin{verbatim}
+MainMenu { id: pagetwo }
+MusicPage { id: pagethree }
+StackView {
+	Id: stack
+	initialItem: startup
+}...
+stack.push(pagetwo)
+\end{verbatim}
+This code transitions pages in the user interface. The first two lines assign names to qml types that I defined in other files and then a stackview object is declared which provides a stack-like interface for performing screen changes. In addition to push and pop stackview also has a replace function tah can replace the item currently at the top of the stack with another page. This could be used for lateral transitions between pages at lower depths without being forced to return to the menu first.
+
+\newpage
+\subsection{Victor}
+My responsibilities this term were to implement the navigation and data logging system for our project, as well as implement low-level functionality such as the Axolotl's wake and sleep logic based on vehicle start and vehicle shutoff.\par
+
+\subsubsection{Work Completed}
+	Navigation has been implemented using Navit navigation software, as specified in our design document. Navit has been installed and fully configured. The NEO M8U GPS chip has been integrated into the navigation system with some modifications to the original USB 1.0 connection method, aided with the addition of a supplementary device driver. As of this point in time, the navigation system's core functionality is present. The system is able to fully function as a navigation system without the need of an internet connection. This offline capability includes the ability to determine the user's current location, the ability for users to enter their desired destination, and the ability for the system to calculate a route from the user's current location to their destination, producing both a route itinerary as well as navigation instructions. The system can also recognize changes in the user's position and update the route and navigation instructions accordingly, whether through the GPS chip or dead reckoning system, and can also handle route cancellation. Minor UI modifications were made in order to make the map view of the navigation system easier to understand and use.\par
+	The data logging system has been implemented in C++, utilizing multiprocessing. The system is subdivided into three subsystems: the OBDII logging system, the AHRS logging system, and the dashcam logging system. One daemon to handles OBDII and AHRS logging and the other handles dashcam logging. A daemon manager controls and manages these daemons, and Python adapter script supports all interactions with the OBDII port. All supporting file system functions have also been implemented in a .hpp header file that is imported by the daemon manager and the two daemons.\par
+All of the aforementioned components work as intended. The daemon manager works sets up the logging environment and then spawns two daemons. The data logging daemon contains an interface to log the AHRS data and loops the execution of the Python adapter script to record OBDII data. The dashcam daemon is effectively a clone of the data logging daemon, with an interface prepared to access dashcam footage. The Python adapter script implementation also has functions to handle functionality to handle fetching and clearing DTC codes from the OBDII port, which only need to be called from the UI. Additionally, all helper functions for passworded access to the data logging system's delete functionality have been implemented.\par
+With respect to individual data logging subsystems, OBDII logging is functionally complete. AHRS and dashcam logging is not currently functional, however interfaces for these features are present to allow for rapid integration of those features at a later date.\par
+The OBDII data logging system has been functionally tested in real driving environments with good results. Functional testing has revealed that the system logs data competently once every 19 to 21 seconds. Performance was very stable from the test, with the system only failing to retrieve OBDII data during engine start and stop, understandable due to the power flux of the OBDII port during that time. All of these test results were obtained from a 50-minute driving loop around Corvallis at mostly city speeds of 0 to 50 kph (35 mph).\par
+	
+\subsubsection{Planned Work}
+The navigation system is functional at this point in time, however additional modifications are needed. An address entry option needs to be added to the destination entry menu as the system is currently unable to accept a US address and translate it into a destination, a key requirement outlined in last term's software requirements specification. Additionally, UI improvements need to be made to the navigation GUI as the system's default UI is unintuitive, hard to interpret, and somewhat dangerous to utilize on the road. Both tasks can easily be accomplished by rewriting Navit's XML configuration file.\par
+The OBDII data logging system is fully functional at this point in time, though efficiency enhancements are need to be made. Currently, the system requires 19 to 21 seconds to log 11 fields of data to the .csv log file. This is far too slow to support our fuel efficiency monitor stretch goal, which requires near real-time data to be streamed from the OBDII port. The python adapter script for OBDII needs to be rewritten to use non-blocking OBDII queries to reduce the time cost of each call to the OBDII port. A custom query to fetch all 11 fields in one bytestream may also need to be written if the non-blocking queries do not achieve the performance desired.
+AHRS integration also needs to occur as the data logging daemon in its current form does not log AHRS data. The data logging daemon already has an interface ready to accept the additional logic necessary to log AHRS data to the .csv log file, thus the only task left is to acquire the AHRS chip and integrate it into the system. Once AHRS integration is complete, additional software can be written to achieve our live AHRS data stretch goal.
+Finally, the recording functionality of the dashcam daemon needs to be implemented. Our video streaming pipeline is incomplete, thus the dashcam daemon's record() function does not yet do anything. Once a video pipeline is established to the Raspberry Pi cameras, a small addition to the dashcam daemon's record() function is all that is needed to complete the dashcam logging system's implementation.\par
+Custom wake and sleep logic needs to be implemented in order for our system to meet spec. Specifically, the Axolotl must turn on when the vehicle is turned on, and enter a low power mode for 48 hours when the vehicle turns off. This will need to operate independently from the TX2's power button. 
+A switch will thus wired into a GPIO pin to assert system on and system off. A program will then be written to monitor the GPIO pin's value and execute the appropriate sleep or wake functionality on state change. Research into wake-enabled pins as well as the process of entering low power mode on the TX2 has been completed.\par
+
+\subsubsection{Problems Encountered \& Solutions}
+The main issue that impeded my progress involved hooking up the NEO M8U GPS receiver to the navigation system. Originally, a step down from USB 3.0 to USB 1.0 was required, necessitating the use of a GE USB adapter. However, this adapter significantly reduced the reliability of the GPS chip; a light bump would be enough to unseat the adapter's power pins and cut power to the chip. The Jetson was also unable to recognize the GPS chip when the adapter was connected through a USB 3.0 hub (necessary for implementation and testing). To bypass this, I connected the GPS chip directly to the USB hub, allowing the Jetson to recognize the GPS chip as a serial device. I then installed an additional driver called cdc\_acm which allowed the GPS receiver to be enumerated and be used by Linux's gpsd (GPS daemon) without the need to step down to USB 1.0.\par
+Another problem that impeded my progress was the fact that our original python-based OBDII logging library failed to support a number of the PIDs (data fields) that we wanted to log. I hoped to compensate for the unsupported PIDs by selecting different PIDs that were supported. Our client wanted to stick as close to the previously approved spec as possible, so we elected to use a different OBDII logging library that supported all of the functionality we needed.\par
+In terms of pressing problems, there are few. The most significant is the OBDII data logging system's low sample rate. Functional testing has revealed that the OBDII logging script takes 19-21 seconds to sample the OBDII port and log 11 fields. This is much slower than our desired sampling speed of 1 sample per second, thus making it far too slow to support our fuel economy stretch goal. As explained in the work remaining section, a rewrite of the python-OBD adapter script to use asynchronous non-blocking OBDII queries and/or a custom OBDII query to fetch the desired OBDII data in a single bytestream should net the performance improvements needed in order to reduce the time cost of each set of OBDII queries.\par
+
+\subsubsection{Code}
+\paragraph{Data Logging Directory Builder}
+\begin{verbatim}
+string buildSaveDirectory() {
+  int buildStatus = 2;
+  string dirName = axolotlFileSystem::getHomeDir() + "/axolotl/data/axolotl_log_";
+
+  time_t startTime = time(NULL);
+  struct tm *startTimeAsUTC = gmtime(&startTime);
+  string startYear = to_string(startTimeAsUTC->tm_year+1900);
+  string startMonth = to_string(startTimeAsUTC->tm_mon+1);
+  string startDay = to_string(startTimeAsUTC->tm_mday);
+
+  int startSecProcessed = startTimeAsUTC->tm_sec;
+  string startSec = to_string(startSecProcessed);
+  if(startSecProcessed < 10) {
+    startSec = "0" + startSec;    // ensures that seconds are always 2 digits
+  }
+
+  int startMinProcessed = startTimeAsUTC->tm_min;
+  string startMin = to_string(startMinProcessed);
+  if(startMinProcessed < 10) {
+    startMin = "0" + startMin;    // ensures that minutes are always 2 digits
+  }
+
+  long startHourProcessed = startTimeAsUTC->tm_hour+PST;
+  if(startHourProcessed < 0) {
+    startHourProcessed += 24;   // adjusts if UTC-8 is earlier than UTC midnight
+  }
+  string startHour = "" + to_string(startHourProcessed);
+  if(startHourProcessed < 10) {
+    startHour = "0" + startHour;    // ensures that hours are always 2 digits
+  }
+  dirName = dirName + startYear + "_" + startMonth + "_" + startDay + "_" + startHour + startMin + startSec;
+  buildStatus = mkdir((const char *)dirName.c_str(), S_IRWXU | S_IRWXG | S_IRWXO);
+
+  if(buildStatus != 0) {
+    dirName = "__fail_dir_build";
+  }
+  return dirName;
+}
+\end{verbatim}
+\par The above code exists in my daemon manager, which manages the data logging and dashcam logging daemons. This code is run before either daemon is executed and is used to build the directory used to hold the data logged during the current boot cycle. Every boot cycle produces a new logging directory; every logging directory is named based on the date and time of when it was created.
+
+\paragraph{axolotlFileSystem class}
+\begin{verbatim}
+class axolotlFileSystem {
+  public:
+    static double getAvailableMemory(std::string volumePath) {
+      boost::filesystem::space_info volStats = boost::filesystem::space(volumePath);
+      return (double)volStats.available/1048576;
+    }
+
+    static std::string getHomeDir() {
+      struct passwd *userPath = getpwuid(getuid());
+      return userPath->pw_dir;
+    }
+
+    static std::string getPWD() {
+      char pwd[2048];
+      getcwd(pwd,sizeof(pwd));
+      return (std::string)pwd;
+    }
+
+    static std::string hash(std::string s) {
+      // Salt and hash
+      std::string hashedPass, passSalt = "thequickbrownfoxjumpsoverthelazydog";
+      CryptoPP::SHA256 passwordHash;
+      BYTE passwordDigest[CryptoPP::SHA256::DIGESTSIZE];
+      passwordHash.CalculateDigest(passwordDigest,(const BYTE *)passSalt.c_str(),passSalt.size());
+
+      // Encode into human-readable string via hex
+      CryptoPP::HexEncoder hashEncoder;
+      CryptoPP::StringSink *hashStringSink = new CryptoPP::StringSink(hashedPass);
+      hashEncoder.Attach(hashStringSink);
+      hashEncoder.Put(passwordDigest,sizeof(passwordDigest));
+      hashEncoder.MessageEnd();
+
+      // Return the string hash
+      return hashedPass;
+    }
+};
+\end{verbatim}
+\par The above code defines a class with static functions accessible by prepending the function name with "axolotlFileSystem::". These functions are accessible by the daemon manager as well as the data logging and dashcam managers, and are used to handle the data logging system's numerous interactions with the TX2's file system.
+
+\subsubsection{Visuals}
+\includegraphics[width=\textwidth]{exampledatalog.eps}
+Fig 1.2: A 10 minute snippet of the test data log produced from 50 minutes of driving. Sampled data logs all 10 PIDs in the spec, as well as 1 additional field (additional field was oil temperature, which was unsupported by the vehicle I was using to test).
+
+\newpage
+\section{Group Conclusion}
+Overall, we are on-track with project development, despite several setbacks that have significantly hampered the integration of all of our individually-developed systems into one program. Most of the individual components that comprise project Axolotl have been implemented, either in terms of complete functionality or in terms of an interface that will allow for much easier implementation of functionality at a later date. A significant amount of trial and error was experienced during development, not unexpected in such early stages of development. Approximately one-third to one-half of the requirements outlined in our software requirements specification have been fulfilled at this point in time. A large portion of our outstanding requirements can be fulfilled with relatively minor additions to our current codebase.
+
+\newpage
+\section{Group Activities by Week}
+
+\subsection{Week 1}
+Completed navigation install; navigation system ready for testing. Work on media system started.
+
+\subsection{Week 2}
+Parts ordered. Work started on data logging system. Work started on UI started.
+
+\subsection{Week 3}
+Acquired parts from client. Navigation system and music player deployed on Jetson and demonstrated to TA. UI deployed on development computer and demonstrated to TA.
+
+\subsection{Week 4}
+Data logging, media system, and UI work continues. Acquired second set of parts from client.
+
+\subsection{Week 5}
+OBDII portion of data logging system completed. Data logging system tested and produces OBDII logs in the correct manner. Attempted initial integration, partial integration success. Data logging system is successfully executed from main GUI. 
+
+\subsection{Week 6}
+Second attempt at integration; deployment on Jetson TX2 failed due as over-arching UI could not be installed due to incompatible Qt versions. Discovered that open-source Qt does not currently support Qt 5.10 on ARM platforms; UI written in Qt 5.10. Group elected to proceed into Alpha with individually-functioning components; plan to fully complete integration Week 7.
+
+\end{document}
