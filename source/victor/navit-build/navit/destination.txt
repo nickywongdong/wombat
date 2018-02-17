@@ -1,4 +1,0 @@
-type=former_destination label="43.8041N 120.5542W"
-mg:-0xcc8b56 0x52d765
-type=former_destination label="Map Point"
-mg:-0x1311a60 0x3454d9

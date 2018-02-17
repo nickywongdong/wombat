@@ -1,1 +1,0 @@
-navit.layout=navit.layout[@name=="Car-dark"];
