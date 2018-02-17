@@ -82,7 +82,7 @@ def getDTCFilePath():
 if __name__ == '__main__':
     ## Set up connection to the OBDLink MX
     if runAsync:
-        obdBluetoothConnection = obd.Async(baudrate=115200,fast=True)
+        obdBluetoothConnection = obd.Async()
     else:
         obdBluetoothConnection = obd.OBD()
 
