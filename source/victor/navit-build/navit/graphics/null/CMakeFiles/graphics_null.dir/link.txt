@@ -1,0 +1,1 @@
+/usr/bin/cc  -fPIC  -Wall -Wundef -Wcast-align -Wpointer-arith -Wno-unused-parameter -Wno-sign-compare -Wno-missing-field-initializers  -Wextra  -Wmissing-prototypes  -Wstrict-prototypes  -Wformat-security  -O2 -g -DNDEBUG  -shared  -o .libs/libgraphics_null.so CMakeFiles/graphics_null.dir/graphics_null.c.o 
