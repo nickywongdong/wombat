@@ -1,8 +1,18 @@
 # Axolotl - Victor's Branch
-__Current Version:__ 0.2.1 pre-alpha
+__Current Version:__ 0.3.0 alpha
+
+Version 0.3.0 alpha:
+- Fully working offline navigation with NEO M8U GPS chip integration
+- Fully working OBDII data logging, mostly fixed bugs
+- Dashcam daemon doesn't currently record as video pipeline is incomplete
+- Updated daemon manager to support x64 compilation
+- Updated dependency install script with extra dependencies
+- Updated Navit UI with compass, next turn direction, and distance to destination UI elements
+- Updated Navit config to use espeak TTS for turn instructions
+- Added stop signal handlers to daemons for quick sleep-wake logging restart
 
 Version 0.2.1:
-- Fully working data logging, with a few bugs
+- Fully working OBDII data logging, with a few bugs
 - Switched to python-OBD library for all OBD functions, so removed pyOBD source and updated dependency list
 
 Version 0.1.11:
@@ -31,6 +41,7 @@ Version 0.1.8:
 
 Dependencies:
 - Navit 0.5.1\*
+  - North American mapset binary hosted [here](https://drive.google.com/open?id=1UpHisYQQdKC_r3oSZfjjtk_R77760Z-u). Mapset courtesy of the OpenStreetMap project and Navit, no ownership claimed.
 - boost 1.66.0 (Unix)
 - Python 2.7.3
 - Qt 5.10\*
