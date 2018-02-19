@@ -13,15 +13,12 @@
 //#define KEYTEST
 #define LOGTEST
 
-#define DCDARG1 "dashcamd"
-#define DLDARG1 "datad"
+#define DCDARG1 "./dashcamd"
+#define DLDARG1 "./datad"
 
 using namespace std;
 
-pid_t dcdpid = -1;
-pid_t dldpid = -1;
-
-bool setdcd = false, setdld = false;
+pid_t dcdpid = -1, dldpid = -1;
 
 string loggingDirectory;
 
