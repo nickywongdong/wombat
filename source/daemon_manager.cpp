@@ -13,12 +13,12 @@
 //#define KEYTEST
 #define LOGTEST
 
+#define DCDARG1 "./dashcamd"
+#define DLDARG1 "./datad"
+
 using namespace std;
 
-pid_t dcdpid = -1;
-pid_t dldpid = -1;
-
-bool setdcd = false, setdld = false;
+pid_t dcdpid = -1, dldpid = -1;
 
 string loggingDirectory;
 
@@ -34,6 +34,9 @@ string buildSaveDirectory() {
   int buildStatus = 2;
   string dirName = axolotlFileSystem::getHomeDir() + "/axolotl/data/axolotl_log_";
   // replace axolotlFileSystem::getHomeDir with LOG_VOLUME when on Axolotl
+
+  // create the base axolotl data directory if it doesn't exist
+  system("mkdir -p ~/axolotl/data");
 
   // Fetch and proces datetime data
   time_t startTime = time(NULL);
@@ -187,7 +190,7 @@ int main() {
     perror("Cannot build data logging directory");
   }
   else {
-    char *args[] = {(char *)loggingDirectory.c_str(), NULL};
+    char *args[] = {(char *)DLDARG1, (char *)loggingDirectory.c_str(), NULL};
 
     // forking data logging daemon
     dldpid = fork();
@@ -195,23 +198,25 @@ int main() {
       printf("Error spawning data logging daemon... \n");
     }
     else if (dldpid == 0){
-      execv("dld", args);
+      execv("datad", args);
     }
     else {
+      printf(" ");
+      char *args2[] = {(char *)DCDARG1, (char *)loggingDirectory.c_str(), NULL};
+
+      // forking dashcam daemon
+      dcdpid = fork();
+      if (dcdpid == -1) {
+        printf("Error spawning dashcam daemon... \n");
+      }
+      else if (dcdpid == 0){
+        execv("dashcamd", args2);
+      }
+      else {
         printf(" ");
+      }
     }
 
-    // forking dashcam daemon
-    dcdpid = fork();
-    if (dcdpid == -1) {
-      printf("Error spawning dashcam daemon... \n");
-    }
-    else if (dldpid == 0){
-      execv("dcd", args);
-    }
-    else {
-        printf(" ");
-    }
 
     // manager waits on quit
     while(1) {

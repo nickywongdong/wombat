@@ -45,7 +45,7 @@ void cameraLooper() {
   while(1) {
     if(loggingActive) {
       timer1 = clock();
-      if (axolotlFileSystem::getAvailableMemory("/Volumes/SD Transfer") > 2048) {
+      if (axolotlFileSystem::getAvailableMemory(loggingDirectory) > 2048) {
         record();
       }
 
@@ -60,10 +60,8 @@ void cameraLooper() {
 
 int main(int argc, char *argv[]) {
   // Ensure that a logging directory has been provided and bind it
-  if (argc != 1) {
-    exit(1);
-  }
-  loggingDirectory = argv[0];
+
+  loggingDirectory = argv[1];
 
   registerToggleHandler();
   cameraLooper();

@@ -9,7 +9,7 @@
 #include <python2.7/Python.h>
 
 #define DEBUG
-#define OBD_ADAPTER_PATH "/Gitdir/wombat/source/dld_obd_adapter.py"
+#define OBD_ADAPTER_PATH "/Gitdir/wombat/source/data_obd_adapter.py"
 
 using namespace std;
 
@@ -92,10 +92,10 @@ void createLogfile() {
 int main(int argc, char *argv[]) {
 
   // Ensure that a logging directory has been provided and bind it
-  if (argc != 1) {
+  if (argc != 2) {
     exit(1);
   }
-  loggingDirectory = argv[0];
+  loggingDirectory = argv[1];
 
   // Create the .csv where data will be logged
   createLogfile();
