@@ -33,8 +33,11 @@
 /*
   Defines for byte, based on compilation environment.
 */
-#define BYTE CryptoPP::byte   // for macOS compilation
-//#define BYTE byte   // for Linux compilation
+#ifdef __linux__
+#define BYTE byte   // for Linux compilation
+#else
+#define BYTE CryptoPP::byte   // compiling on Windows and macOS
+#endif
 
 class axolotlFileSystem {
   public:
