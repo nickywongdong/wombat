@@ -6,7 +6,6 @@
 */
 
 #include "dcomh.hpp"
-#include <sys/wait.h>
 
 #define PST -8
 #define LOG_VOLUME "/media/nvidia/AXOLOTLDCV"
@@ -14,37 +13,14 @@
 //#define KEYTEST
 #define LOGTEST
 
+#define DCDARG1 "./dashcamd"
+#define DLDARG1 "./datad"
+
 using namespace std;
 
-pid_t dcdpid = -1;
-pid_t dldpid = -1;
-
-bool setdcd = false, setdld = false;
+pid_t dcdpid = -1, dldpid = -1;
 
 string loggingDirectory;
-
-void raiseShutdown() {
-  int result;
-  string ex;
-  // kill dashcam daemon if we have a pid
-  /*if(!(dcdpid > -1)) {
-    result = kill(dcdpid,SIGTERM);
-    if(result != 0) {
-      printf("Error: Failed to kill dashcam daemon.\n");
-    }
-  }*/
-
-  // kill data logging daemon if we have a pid
-  printf("%d\n",dldpid);
-  if(!(dldpid > -1)) {
-    result = kill(dldpid,SIGTERM);
-    //ex = "kill " + to_string(dldpid);
-    //system(ex.c_str());
-    if(result != 0) {
-      printf("Error: Failed to kill data logging daemon.\n");
-    }
-  }
-}
 
 /*
   Builds the save directory for both daemons.
@@ -58,6 +34,9 @@ string buildSaveDirectory() {
   int buildStatus = 2;
   string dirName = axolotlFileSystem::getHomeDir() + "/axolotl/data/axolotl_log_";
   // replace axolotlFileSystem::getHomeDir with LOG_VOLUME when on Axolotl
+
+  // create the base axolotl data directory if it doesn't exist
+  system("mkdir -p ~/axolotl/data");
 
   // Fetch and proces datetime data
   time_t startTime = time(NULL);
@@ -156,10 +135,38 @@ void resetPassword(string sourceDir) {
   hashfile.close();
 }
 
+void managerSigintHandler(int signumber, siginfo_t *siginfo, void *pointer) {
+  int status = 0;
+  if(!(dcdpid < 0)) {
+    kill(dcdpid,SIGTERM);
+  }
+  //kill(dcdpid,SIGTERM);
+  waitpid(dcdpid, &status, 0);
+  if(!(dldpid < 0)) {
+    kill(dldpid,SIGTERM);
+  }
+  //kill(dldpid,SIGTERM);
+  waitpid(dldpid, &status, 0);
+  exit(0);
+}
+
+/*
+  Registers the dldSigTermHandler with SIGTERM.
+*/
+void registerSigHandler() {
+  static struct sigaction dsa;
+  memset(&dsa, 0, sizeof(dsa));
+  dsa.sa_sigaction = managerSigintHandler;
+  dsa.sa_flags = SA_SIGINFO;
+  sigaction(SIGINT, &dsa, NULL);
+}
+
 int main() {
   string inputStr;
   string homeDir = axolotlFileSystem::getPWD();
-  bool logCont = true;
+
+  // Registering signal handler
+  registerSigHandler();
 
   // Testing password check and hashing
   #ifdef KEYTEST
@@ -182,35 +189,39 @@ int main() {
     perror("Cannot build data logging directory");
   }
   else {
-    char *args[] = {(char *)loggingDirectory.c_str(), NULL};
+    char *args[] = {(char *)DLDARG1, (char *)loggingDirectory.c_str(), NULL};
 
     // forking data logging daemon
     dldpid = fork();
     if (dldpid == -1) {
-      printf("Error spawning dashcam daemon... \n");
-      exit(1);
+      printf("Error spawning data logging daemon... \n");
     }
     else if (dldpid == 0){
-      execv("dld", args);
+      execv("datad", args);
     }
     else {
-        printf("\n");
+      printf(" ");
+      char *args2[] = {(char *)DCDARG1, (char *)loggingDirectory.c_str(), NULL};
+
+      // forking dashcam daemon
+      dcdpid = fork();
+      if (dcdpid == -1) {
+        printf("Error spawning dashcam daemon... \n");
+      }
+      else if (dcdpid == 0){
+        execv("dashcamd", args2);
+      }
+      else {
+        printf(" ");
+      }
     }
 
-    // forking dashcam daemon
 
     // manager waits on quit
-int status;
     while(1) {
       getline(cin,inputStr);
       if(inputStr == "q" | inputStr == "Q") {
-        kill(dldpid,SIGTERM);
-        wait(&status);
         break;
-      }
-      else if (inputStr == "s" | inputStr == "S") {
-        inputStr = "";
-        kill(dldpid,SIGUSR1);
       }
       else {
         inputStr = "";

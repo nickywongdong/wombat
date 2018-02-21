@@ -23,14 +23,18 @@
 #include <unistd.h>
 #include <sys/types.h>
 #include <sys/stat.h>
+#include <sys/wait.h>
 #include <pwd.h>
 
 #include <boost/filesystem.hpp>
 #include <cryptopp/sha.h>
 #include <cryptopp/hex.h>
 
-#include <cryptopp/cryptlib.h>
-#include <cryptopp/config.h>
+/*
+  Defines for byte, based on compilation environment.
+*/
+#define BYTE CryptoPP::byte   // for macOS compilation
+//#define BYTE byte   // for Linux compilation
 
 class axolotlFileSystem {
   public:
@@ -70,8 +74,8 @@ class axolotlFileSystem {
       // Salt and hash
       std::string hashedPass, passSalt = "thequickbrownfoxjumpsoverthelazydog";
       CryptoPP::SHA256 passwordHash;
-      byte passwordDigest[CryptoPP::SHA256::DIGESTSIZE];
-      passwordHash.CalculateDigest(passwordDigest,(const byte *)passSalt.c_str(),passSalt.size());
+      BYTE passwordDigest[CryptoPP::SHA256::DIGESTSIZE];
+      passwordHash.CalculateDigest(passwordDigest,(const BYTE *)passSalt.c_str(),passSalt.size());
 
       // Encode into human-readable string via hex
       CryptoPP::HexEncoder hashEncoder;
