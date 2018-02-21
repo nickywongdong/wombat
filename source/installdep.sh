@@ -24,5 +24,3 @@ sudo apt-get install build-essential libboost-all-dev
 sudo apt-get install build-essential libcrypto++
 
 sudo apt-get install build-essential libbluetooth-dev
-
-sudo apt-get install build-essential qt5
