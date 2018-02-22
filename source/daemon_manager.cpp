@@ -7,7 +7,9 @@
 
 #include "dcomh.hpp"
 
-#ifdef __linux__
+//#define LOG_VOLUME_INSTALLED	// uncomment if logging to external storage
+
+#if defined(__linux__) && defined(LOG_VOLUME_INSTALLED)
 #define LOG_VOLUME "/media/nvidia/AXOLOTLDCV"   // external HDD must be named "AXOLOTLDCV"
 #else
 #define LOG_VOLUME axolotlFileSystem::getHomeDir()
@@ -37,10 +39,11 @@ string loggingDirectory;
 string buildSaveDirectory() {
   // Getting info to build data storage directory
   int buildStatus = 2;
-  string dirPrefix = "/axolotl/data/axolotl_log_", dirName = axolotlFileSystem::getHomeDir() + dirPrefix;
+  string dirPrefix = "/axolotl/data/axolotl_log_", dirBase = LOG_VOLUME, dirName = dirBase + dirPrefix;
 
   // create the base axolotl data directory if it doesn't exist
-  system("mkdir -p ~/axolotl/data");
+  string createDataDir = "mkdir -p " + dirBase + "/axolotl/data";  
+  system(createDataDir.c_str());
 
   // Fetch and proces datetime data
   time_t startTime = time(NULL);
