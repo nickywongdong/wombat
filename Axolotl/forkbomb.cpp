@@ -18,13 +18,15 @@ int test::start_navit(){
 
 int test::start_dm(){
     dmid = fork();
-
+    int cd = 0;
+    cd = chdir("/home/nvidia/wombat/source/");
     if(dmid==0){
         execl("../source/daemon_launcher", "daemon_manager", NULL);
         return 0;
     }
     else{
-        return 1;
+        cd = chdir("/home/nvidia/wombat/build-Axolotl-JetsonTX2-Debug");
+        return cd;
     }
 }
 
