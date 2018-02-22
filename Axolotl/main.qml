@@ -20,6 +20,9 @@ ApplicationWindow {
 Test{
  id: bootdm
 }
+onClosing: {
+    bootdm.kill_dm()
+}
     Item {
         id: startup
         Rectangle{
@@ -36,7 +39,7 @@ Test{
         Timer{
             interval: 3000; running: true;
             onTriggered: {
-                console.log(stack.push(pagetwo))
+                stack.push(pagetwo)
                 console.log(bootdm.start_dm())
             }
         }

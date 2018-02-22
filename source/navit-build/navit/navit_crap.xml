@@ -33,7 +33,7 @@
 		Center coordinates format: "Long Lat" in decimal degrees (WGS 84).
 		For other formats see http://wiki.navit-project.org/index.php/Coordinate_format.
 		-->
-	<navit center="44.5646 123.2620" zoom="256" tracking="1" orientation="-1" imperial="1" recent_dest="250" drag_bitmap="0" autozoom_active="1" follow="1" follow_cursor="1">
+	<navit center="44.5646 123.2620" zoom="256" tracking="1" orientation="-1" recent_dest="250" drag_bitmap="0">
 		<!-- edited center to: Corvallis, OR -->
 		<!-- Use one of gtk_drawing_area, qt_qpainter or sdl.
 		     On windows systems, use win32 -->
@@ -43,7 +43,7 @@
 		<!-- The following line let you select which graphical user interface you'd like to use.
 		Options include internal (optimized for touch screen devices), gtk (useful for desktop computers).
 		If you don't like the internal gui, set enabled=yes for the following tag and enabled=no for the gui internal tag -->
-		<gui type="gtk" enabled="no" menubar="0" toolbar="0" statusbar="0"/>
+		<gui type="gtk" enabled="no" menubar="1" toolbar="1" statusbar="1"/>
     <gui type="mobile" enabled="no">
     <![CDATA[
     	<html>
@@ -105,24 +105,28 @@
 		     To get the prvious behaviour of showing the map point menu use on_map_click='menu("#Map Point")'
 	        -->
     <!-- turned off internal GUI for simplified interface for testing -->
-		<gui type="internal" enabled="yes" statusbar="0"><![CDATA[
+		<gui type="internal" enabled="yes"><![CDATA[
 			<html>
-				<a name='Main Menu'><text>Main Menu</text>
-					<a href='#Actions'><img src='cursor'>Go To</img></a>
-					<img src='gui_map' onclick='back_to_map()'><text>Map</text></img>
-					<img cond='navit.route.route_status&amp;1' src='gui_actions' onclick='route_description()'><text>Route Info</text></img>
+				<a name='Main Menu'><text>Main menu</text>
+					<a href='#Actions'><img src='gui_actions'>Actions</img></a>
+					<img cond='flags&amp;2' src='gui_map' onclick='back_to_map()'><text>Show
+Map</text></img>
 					<a href='#Settings'><img src='gui_settings'><text>Settings</text></img></a>
-						<!-- <a href='#Tools'><img src='gui_tools'><text>Tools</text></img></a> -->
-						<!-- <a href='#Route'><img src='gui_settings'><text>Route</text></img></a> -->
+				<a href='#Tools'><img src='gui_tools'><text>Tools</text></img></a>
+				<a href='#Route'><img src='gui_settings'><text>Route</text></img></a>
+				<img src='gui_about' onclick='about()'><text>About</text></img>
+				<img src='gui_quit' onclick='quit()'><text>Quit</text></img>
 				</a>
 			<a name='Actions'><text>Actions</text>
 				<img src='gui_bookmark' onclick='bookmarks()'><text>Bookmarks</text></img>
-				<img src='gui_formerdests' onclick='formerdests()'><text>Previous</text></img>
-				<!-- <img cond='click_coord_geo' src='gui_map' onclick='position(click_coord_geo,_("Map Point"),8|16|32|64|256)'><script>write(click_coord_geo)</script></img> -->
+				<img src='gui_formerdests' onclick='formerdests()'><text>Former
+Destinations</text></img>
+				<img cond='click_coord_geo' src='gui_map' onclick='position(click_coord_geo,_("Map Point"),8|16|32|64|256)'><script>write(click_coord_geo)</script></img>
 				<img cond='position_coord_geo' src='gui_vehicle' onclick='position(position_coord_geo,_("Vehicle Position"),8|32|64|128|256)'><script>write(position_coord_geo)</script></img>
 				<img src='gui_town' onclick='town()'><text>Town</text></img>
 				<img src='gui_map' onclick='enter_coord()'><text>Coordinates</text></img>
-				<img cond='navit.route.route_status&amp;1' src='gui_stop' onclick='abort_navigation();refresh()'><text>Stop Nav</text></img>
+				<img cond='navit.route.route_status&amp;1' src='gui_stop' onclick='abort_navigation();refresh()'><text>Stop
+Navigation</text></img>
 			</a>
 			<a name='Settings'><text>Settings</text>
 				<a href='#Settings Display'><img src='gui_display'><text>Display</text></img></a>
@@ -149,7 +153,7 @@
 			</a>
 			<a name='Route'><text>Route</text>
 				<img cond='navit.route.route_status&amp;1' src='gui_zoom_route' onclick='navit.zoom_to_route();redraw_map();back_to_map()'><text>Zoom to route</text></img>
-				<img cond='navit.route.route_status&amp;1' src='gui_actions' onclick='route_description()'><text>Description</text></img>
+				<img src='gui_actions' onclick='route_description()'><text>Description</text></img>
 				<img src='gui_heightprofile' onclick='route_height_profile()'><text>Height Profile</text></img>
 				<img cond='navit.waypoints_flag &amp;&amp; (navit.route.route_status&amp;1)' src='cursor_still' onclick='waypoints()'><text>Waypoints</text></img>
 				<img cond='navit.waypoints_flag &amp;&amp; (navit.route.route_status&amp;1)' src='gui_stop' onclick='navit.route_remove_last_waypoint()'><text>Drop last
@@ -222,28 +226,19 @@ Waypoint</text></img>
 		<!-- osd items allow to position display and control items directly on top of the map.
 		You can find a list of all the available OSDs items here:
 		http://wiki.navit-project.org/index.php/OSD -->
-		<osd enabled="yes" type="compass" background_color="#000000c8"/>
-		
+		<osd enabled="yes" type="compass"/>
+		<osd enabled="yes" type="navigation_next_turn"/>
 
 		<!-- Commands include gui_internal_menu, gui_internal_fullscreen, zoom_in and zoom_out.
 			Usage of negative values change the button origins. x="0" y="0" specifies the top left, x="-0" y="-0" the bottom right corner.
 			It's always the top left corner of the icon, so you need to consider the icon's size when you enter the values. -->
 		<osd enabled="no" type="button" x="0" y="0" command="gui.fullscreen=!gui.fullscreen" src="toggle_fullscreen.png"/>
-		<osd enabled="no" type="button" x="-30" y="0" command="gui.menu(1)" src="menu.png"/>
-
-		<osd enabled="yes" type="text" w="300" h="40" x="-320" y="20" label="GPS Signal Strength: ${vehicle.position_sats_signal}/${vehicle.position_qual}" background_color="#000000c8"/>
-
-		<osd enabled="yes" type="text" label="In ${navigation.item[1].length[named]} " x="0" y="-180" font_size="400" w="200" h="40" background_color="#000000c8"/>
-		<osd enabled="yes" type="navigation_next_turn" background_color="#000000c8" w="200" h="100" x="0" y="-140"/>
-		<osd enabled="yes" type="text" label="Onto\n${navigation.item[1].street_name}" x="0" y="-40" font_size="200" w="200" h="40" background_color="#000000c8"/>
-
-		<osd enabled="yes" type="text" label="ETA: ${navigation.item.destination_time[arrival]}" x="0" y="-230" font_size="400" w="200" h="40" background_color="#000000c8"/>
-	
-		<osd enabled="yes" type="button" x="-100" y="-200" command="zoom_in()"  h="80" w="80" src="zoom_in.png"/>
-		<osd enabled="yes" type="button" x="-100" y="-100" command="zoom_out()" h="80" w="80" src="zoom_out.png"/>
+		<osd enabled="no" type="button" x="-96" y="0" command="gui.menu(1)" src="menu.png"/>
+		<osd enabled="no" type="button" x="-96" y="-96" command="zoom_in()" src="zoom_in.png"/>
+		<osd enabled="no" type="button" x="0" y="-96" command="zoom_out()" src="zoom_out.png"/>
 
 		<!-- Vehicle with GPS enabled for gpsd on unix -->
-		<vehicle name="Local GPS" profilename="car" enabled="yes" active="1" source="file://dev/ttyACM0" gpsd_query="w+xj">
+		<vehicle name="Local GPS" profilename="car" enabled="yes" active="1" source="gpsd://localhost" gpsd_query="w+xj">
 		<!-- Vehicle with GPS enabled for direct communication on windows. Remove the line above if you use this. -->
 		<!-- <vehicle name="Local GPS" profilename="car" follow="1" enabled="yes" active="1"
 				source="serial:COM4 baudrate=4800 parity=N data=8 stop=1" > -->
@@ -439,7 +434,7 @@ Waypoint</text></img>
 		<!-- Navit provides speech output in text format.
 			If you have a speech synthesizer like festival lite installed, you can get turn by turn directions out of navit. Please set the "cps"-value to how many characters your tts engine approximately speaks per second.
 			The default is text output to the shell -->
-		<speech type="cmdline" data="espeak -s 150 -v english %s" cps="15" path=""/>
+		<speech type="cmdline" data="echo 'Fix the speech tag in navit.xml to let navit say:' '%s'" cps="15" path="/home/nvidia/axolotl/navit/navit/support/espeak"/>
 		<!--
 		Instead of using a speech synthesizer, navit can also play pre-recorded samples for each word.
 		See http://wiki.navit-project.org/index.php/Configuration for details.

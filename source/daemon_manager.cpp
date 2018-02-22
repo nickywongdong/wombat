@@ -7,18 +7,23 @@
 
 #include "dcomh.hpp"
 
-#define PST -8
-#define LOG_VOLUME "/media/nvidia/AXOLOTLDCV"
-#define DEBUG
-//#define KEYTEST
-#define LOGTEST
+#ifdef __linux__
+#define LOG_VOLUME "/media/nvidia/AXOLOTLDCV"   // external HDD must be named "AXOLOTLDCV"
+#else
+#define LOG_VOLUME axolotlFileSystem::getHomeDir()
+#endif
 
 #define DCDARG1 "./dashcamd"
 #define DLDARG1 "./datad"
+#define PST -8
+
+#define DEBUG
+#define KEYTEST
+#define LOGTEST
 
 using namespace std;
 
-pid_t dcdpid = -1, dldpid = -1;
+pid_t dcdpid = -5, dldpid = -5;
 
 string loggingDirectory;
 
@@ -32,8 +37,7 @@ string loggingDirectory;
 string buildSaveDirectory() {
   // Getting info to build data storage directory
   int buildStatus = 2;
-  string dirName = axolotlFileSystem::getHomeDir() + "/axolotl/data/axolotl_log_";
-  // replace axolotlFileSystem::getHomeDir with LOG_VOLUME when on Axolotl
+  string dirPrefix = "/axolotl/data/axolotl_log_", dirName = axolotlFileSystem::getHomeDir() + dirPrefix;
 
   // create the base axolotl data directory if it doesn't exist
   system("mkdir -p ~/axolotl/data");
@@ -60,6 +64,7 @@ string buildSaveDirectory() {
   long startHourProcessed = startTimeAsUTC->tm_hour+PST;
   if(startHourProcessed < 0) {
     startHourProcessed += 24;   // adjusts if UTC-8 is earlier than UTC midnight
+    startDay = to_string(startTimeAsUTC->tm_mday-1);    // day rollback if UTC is 1 day ahead of PST
   }
   string startHour = "" + to_string(startHourProcessed);
   if(startHourProcessed < 10) {
@@ -135,23 +140,46 @@ void resetPassword(string sourceDir) {
   hashfile.close();
 }
 
+/*
+  Checks the supplied password against the stored password.
+*/
+bool checkPasswordCorrect(string inPassword) {
+  string truekey;
+  ifstream truekeyf;
+  truekeyf.open("hashkey");
+  if(truekeyf.is_open()) {
+    getline(truekeyf,truekey);
+  }
+  truekeyf.close();
+  return (axolotlFileSystem::hash(inPassword) == truekey);
+}
+
+/*
+  Handles exit of daemon launcher; kills daemons and frees their resources.
+  UI: signal SIGINT to this process on system exit.
+*/
+
 void managerSigintHandler(int signumber, siginfo_t *siginfo, void *pointer) {
   int status = 0;
+
+  // kill and wait on termination of dashcam daemon
   if(!(dcdpid < 0)) {
     kill(dcdpid,SIGTERM);
   }
-  //kill(dcdpid,SIGTERM);
   waitpid(dcdpid, &status, 0);
+
+  // kill and wait on termination of data logging daemon
   if(!(dldpid < 0)) {
     kill(dldpid,SIGTERM);
   }
-  //kill(dldpid,SIGTERM);
   waitpid(dldpid, &status, 0);
+
+  // exit cleanly
   exit(0);
 }
 
 /*
-  Registers the dldSigTermHandler with SIGTERM.
+  Registers the signal handler with SIGINT.
 */
 void registerSigHandler() {
   static struct sigaction dsa;
@@ -170,16 +198,7 @@ int main() {
 
   // Testing password check and hashing
   #ifdef KEYTEST
-  string readKey = "", toHashKey = "orangemonkeyeagle";
-  ifstream checktruekey;
-  checktruekey.open("hashkey");
-  if(checktruekey.is_open()) {
-    getline(checktruekey,readKey);
-    printf("True key is: '%s'\n",readKey.c_str());
-    printf("Comparable key is: '%s'\n",axolotlFileSystem::hash(toHashKey).c_str());
-  }
-  checktruekey.close();
-  printf("Status: %d\n",(readKey == "3453A0A7F1E111FC6E9E0E8071193DEA04EAF96CBFE4318539859876AA85FB15"));
+  printf("Checking true key: %i",checkPasswordCorrect("orangemonkeyeagle"));
   #endif
 
   // Data Logging Daemon Test
@@ -197,7 +216,9 @@ int main() {
       printf("Error spawning data logging daemon... \n");
     }
     else if (dldpid == 0){
+      printf("Trying to exec datad...\n");
       execv("datad", args);
+      printf("After exec\n");
     }
     else {
       printf(" ");
@@ -209,14 +230,15 @@ int main() {
         printf("Error spawning dashcam daemon... \n");
       }
       else if (dcdpid == 0){
+	printf("Trying to exec dashcamd...\n");
         execv("dashcamd", args2);
+	printf("After exec...\n");
       }
       else {
         printf(" ");
       }
     }
-
-
+    
     // manager waits on quit
     while(1) {
       getline(cin,inputStr);

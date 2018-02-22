@@ -36,7 +36,7 @@ fuelcommands.append(obd.commands.FUEL_RATE)
 fuelcommands.append(obd.commands.FUEL_RATE)
 
 # run in async mode?
-runAsync = False
+runAsync = True
 
 def obdSnapshot(obdConnection):
     logTime = time.time()
@@ -79,10 +79,18 @@ def obdAsync(obdConnection):
 def getDTCFilePath():
     return sys.argv[2] + "/dtcErrors"
 
+# starts watching on the OBD connection
+def startAsyncWatch(obdConnection):
+    for i in xrange(0,len(commands)-1):
+        obdConnection.watch(commands[i])
+    obdConnection.start()
+
+
 if __name__ == '__main__':
     ## Set up connection to the OBDLink MX
     if runAsync:
         obdBluetoothConnection = obd.Async()
+        startAsyncWatch(obdBluetoothConnection)
     else:
         obdBluetoothConnection = obd.OBD()
 

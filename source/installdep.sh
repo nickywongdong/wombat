@@ -25,4 +25,6 @@ sudo apt-get install build-essential libcrypto++
 
 sudo apt-get install build-essential libbluetooth-dev
 
-sudo apt-get install build-essential qt5
+sudo apt-get install espeak
+
+sudo acm/installCDCACM.sh
