@@ -110,7 +110,7 @@
 				<a name='Main Menu'><text>Main Menu</text>
 					<a href='#Actions'><img src='cursor'>Go To</img></a>
 					<img src='gui_map' onclick='back_to_map()'><text>Map</text></img>
-					<img cond='navit.route.route_status&amp;1' src='gui_actions' onclick='route_description()'><text>Route List</text></img>
+					<img cond='navit.route.route_status&amp;1' src='gui_actions' onclick='route_description()'><text>Route Info</text></img>
 					<a href='#Settings'><img src='gui_settings'><text>Settings</text></img></a>
 						<!-- <a href='#Tools'><img src='gui_tools'><text>Tools</text></img></a> -->
 						<!-- <a href='#Route'><img src='gui_settings'><text>Route</text></img></a> -->
