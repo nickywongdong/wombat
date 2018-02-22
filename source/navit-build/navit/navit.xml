@@ -231,7 +231,7 @@ Waypoint</text></img>
 		<osd enabled="no" type="button" x="0" y="0" command="gui.fullscreen=!gui.fullscreen" src="toggle_fullscreen.png"/>
 		<osd enabled="no" type="button" x="-30" y="0" command="gui.menu(1)" src="menu.png"/>
 
-		<osd enabled="yes" type="text" w="200" x="-200" y="0" label="${vehicle.position_sats_signal/vehicle.position_qual}%"/>
+		<osd enabled="yes" type="text" w="300" h="40" x="-320" y="20" label="GPS Signal Strength: ${vehicle.position_sats_signal}/${vehicle.position_qual}" background_color="#000000c8"/>
 
 		<osd enabled="yes" type="text" label="In ${navigation.item[1].length[named]} " x="0" y="-180" font_size="400" w="200" h="40" background_color="#000000c8"/>
 		<osd enabled="yes" type="navigation_next_turn" background_color="#000000c8" w="200" h="100" x="0" y="-140"/>
