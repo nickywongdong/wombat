@@ -223,7 +223,7 @@ Waypoint</text></img>
 		You can find a list of all the available OSDs items here:
 		http://wiki.navit-project.org/index.php/OSD -->
 		<osd enabled="yes" type="compass" background_color="#000000c8"/>
-		
+
 
 		<!-- Commands include gui_internal_menu, gui_internal_fullscreen, zoom_in and zoom_out.
 			Usage of negative values change the button origins. x="0" y="0" specifies the top left, x="-0" y="-0" the bottom right corner.
@@ -239,7 +239,7 @@ Waypoint</text></img>
 
 		<osd enabled="yes" type="text" label="Distance Left:\nETA:" x="20" y="-250" font_size="200" w="100" h="40" align="4" background_color="#000000c8"/>
 		<osd enabled="yes" type="text" label="${navigation.item.destination_length[named]}\n${navigation.item.destination_time[arrival]}" x="120" y="-250" font_size="200" w="100" h="40" align="8" background_color="#000000c8"/>
-	
+
 		<osd enabled="yes" type="button" x="-100" y="-200" command="zoom_in()"  h="80" w="80" src="zoom_in.png"/>
 		<osd enabled="yes" type="button" x="-100" y="-100" command="zoom_out()" h="80" w="80" src="zoom_out.png"/>
 
@@ -470,7 +470,7 @@ Waypoint</text></img>
 		<!-- Mapset template for openstreetmaps -->
 		<mapset enabled="yes">
 			<!-- <map type="binfile" enabled="yes" data="/media/mmc2/MapsNavit/osm_europe.bin"/> -->
-			<map type="binfile" enabled="yes" data="~/Gitdir/wombat/source/navit-build/navit/maps/namaps.bin" />
+			<map type="binfile" enabled="yes" data="~/axolotl/maps/namaps.bin" />
 		</mapset>
 
 		<!-- Mapset template for garmin maps -->
