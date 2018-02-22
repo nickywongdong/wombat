@@ -37,7 +37,7 @@ string loggingDirectory;
 string buildSaveDirectory() {
   // Getting info to build data storage directory
   int buildStatus = 2;
-  string dirName = LOG_VOLUME + "/axolotl/data/axolotl_log_";
+  string dirPrefix = "/axolotl/data/axolotl_log_", dirName = axolotlFileSystem::getHomeDir() + dirPrefix;
 
   // create the base axolotl data directory if it doesn't exist
   system("mkdir -p ~/axolotl/data");
@@ -216,7 +216,9 @@ int main() {
       printf("Error spawning data logging daemon... \n");
     }
     else if (dldpid == 0){
+      printf("Trying to exec datad...\n");
       execv("datad", args);
+      printf("After exec\n");
     }
     else {
       printf(" ");
@@ -228,7 +230,9 @@ int main() {
         printf("Error spawning dashcam daemon... \n");
       }
       else if (dcdpid == 0){
+	printf("Trying to exec dashcamd...\n");
         execv("dashcamd", args2);
+	printf("After exec...\n");
       }
       else {
         printf(" ");
