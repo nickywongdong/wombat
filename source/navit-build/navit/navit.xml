@@ -233,11 +233,12 @@ Waypoint</text></img>
 
 		<osd enabled="yes" type="text" w="300" h="40" x="-320" y="20" label="GPS Signal Strength: ${vehicle.position_sats_signal}/${vehicle.position_qual}" background_color="#000000c8"/>
 
-		<osd enabled="yes" type="text" label="In ${navigation.item[1].length[named]} " x="0" y="-180" font_size="400" w="200" h="40" background_color="#000000c8"/>
-		<osd enabled="yes" type="navigation_next_turn" background_color="#000000c8" w="200" h="100" x="0" y="-140"/>
-		<osd enabled="yes" type="text" label="Onto\n${navigation.item[1].street_name}" x="0" y="-40" font_size="200" w="200" h="40" background_color="#000000c8"/>
+		<osd enabled="yes" type="text" label="In ${navigation.item[1].length[named]} " x="20" y="-200" font_size="400" w="200" h="40" background_color="#000000c8"/>
+		<osd enabled="yes" type="navigation_next_turn" background_color="#000000c8" w="200" h="100" x="20" y="-160"/>
+		<osd enabled="yes" type="text" label="Onto\n${navigation.item[1].street_name}" x="20" y="-60" font_size="200" w="200" h="40" background_color="#000000c8"/>
 
-		<osd enabled="yes" type="text" label="ETA: ${navigation.item.destination_time[arrival]}" x="0" y="-230" font_size="400" w="200" h="40" background_color="#000000c8"/>
+		<osd enabled="yes" type="text" label="Distance Left:\nETA:" x="20" y="-250" font_size="200" w="100" h="40" align="4" background_color="#000000c8"/>
+		<osd enabled="yes" type="text" label="${navigation.item.destination_length[named]}\n${navigation.item.destination_time[arrival]}" x="120" y="-250" font_size="200" w="100" h="40" align="8" background_color="#000000c8"/>
 	
 		<osd enabled="yes" type="button" x="-100" y="-200" command="zoom_in()"  h="80" w="80" src="zoom_in.png"/>
 		<osd enabled="yes" type="button" x="-100" y="-100" command="zoom_out()" h="80" w="80" src="zoom_out.png"/>
