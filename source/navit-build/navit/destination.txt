@@ -4,4 +4,13 @@ type=former_destination label="Map Point"
 mg:-0x1311a60 0x3454d9
 type=former_destination label="Map Point"
 mg:-0xd07791 0x53da76
-# navigation stopped
+type=former_destination label="Map Point"
+mg:-0xd10dd1 0x54aba7
+type=former_destination label="43.8041N 120.5542W"
+mg:-0xcc8b56 0x52d764
+type=former_destination label="Bookmark Seattle"
+mg:-0xcf8eb2 0x5c1405
+type=former_destination label="Beaverton"
+mg:-0xd05c75 0x56db09
+type=former_itinerary label="Beaverton"
+mg:-0xd05c75 0x56db09
