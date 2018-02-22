@@ -1,5 +1,14 @@
 # Axolotl - Victor's Branch
-__Current Version:__ 0.3.0 alpha
+__Current Version:__ 0.3.1 alpha
+
+Version 0.3.1 alpha:
+- Fixes to navigation to improve GPS fix reliability
+- UI changes to navigation system to improve usability
+    - Added ETA, expressed in 24-hour time
+    - Added distance to next navigation instruction
+    - Added next navigation instruction
+    - Added zoom in and out buttons
+- Added cdc_acm driver to repo and dependency install script
 
 Version 0.3.0 alpha:
 - Fully working offline navigation with NEO M8U GPS chip integration
