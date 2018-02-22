@@ -16,22 +16,43 @@ using namespace std;
 string loggingDirectory;
 bool loggingActive = true;
 
+void createLogfile();
+
 /*
-  Toggles the data logging system off.
+  Toggles logging off.
 */
-void toggleHandler(int signumber, siginfo_t *siginfo, void *pointer) {
-  loggingActive = !loggingActive;
+void toggleOffHandler(int signumber, siginfo_t *siginfo, void *pointer) {
+  loggingActive = false;
 }
 
 /*
-  Registers the toggle handler with SIGUSR1.
+  Registers the toggle off handler with SIGUSR1.
 */
-void registerToggleHandler() {
+void registerToggleOffHandler() {
   static struct sigaction dsa;
   memset(&dsa, 0, sizeof(dsa));
-  dsa.sa_sigaction = toggleHandler;
+  dsa.sa_sigaction = toggleOffHandler;
   dsa.sa_flags = SA_SIGINFO;
   sigaction(SIGUSR1, &dsa, NULL);
+}
+
+/*
+  Toggles logging on.
+*/
+void toggleOnHandler(int signumber, siginfo_t *siginfo, void *pointer) {
+  loggingActive = true;
+  createLogfile();
+}
+
+/*
+  Registers the toggle handler with SIGUSR2.
+*/
+void registerToggleOnHandler() {
+  static struct sigaction dsa;
+  memset(&dsa, 0, sizeof(dsa));
+  dsa.sa_sigaction = toggleOnHandler;
+  dsa.sa_flags = SA_SIGINFO;
+  sigaction(SIGUSR2, &dsa, NULL);
 }
 
 /*
@@ -96,6 +117,10 @@ int main(int argc, char *argv[]) {
     exit(1);
   }
   loggingDirectory = argv[1];
+
+  // Register signal handlers
+  registerToggleOffHandler();
+  registerToggleOnHandler();
 
   // Create the .csv where data will be logged
   createLogfile();

@@ -30,19 +30,34 @@ pid_t dcdpid = -5, dldpid = -5;
 string loggingDirectory;
 
 /*
+  Creates a logging directory from a path.
+*/
+bool buildSaveDirectoryFromPath(string path) {
+  string dirBase = LOG_VOLUME, createDataDir = "mkdir -p " + dirBase + "/axolotl/data";
+  system(createDataDir.c_str());
+  bool buildStatus;
+  do {
+    buildStatus = mkdir((const char *)path.c_str(), S_IRWXU | S_IRWXG | S_IRWXO);
+    sleep(1);
+  }
+  while (buildStatus == false);
+  return buildStatus;
+}
+
+/*
   Builds the save directory for both daemons.
   Returns the path to the directory that was created.
   /axolotl/data must exist in the user's home directory or this won't work.
 
   From here to final: instead of axolotlFileSystem::getHomeDir(), hardcode the mounted volume.
 */
-string buildSaveDirectory() {
+bool buildSaveDirectory() {
   // Getting info to build data storage directory
   int buildStatus = 2;
   string dirPrefix = "/axolotl/data/axolotl_log_", dirBase = LOG_VOLUME, dirName = dirBase + dirPrefix;
 
   // create the base axolotl data directory if it doesn't exist
-  string createDataDir = "mkdir -p " + dirBase + "/axolotl/data";  
+  string createDataDir = "mkdir -p " + dirBase + "/axolotl/data";
   system(createDataDir.c_str());
 
   // Fetch and proces datetime data
@@ -80,11 +95,14 @@ string buildSaveDirectory() {
   // Build the directory from path
   buildStatus = mkdir((const char *)dirName.c_str(), S_IRWXU | S_IRWXG | S_IRWXO);
 
-  // Return name if success or error if false
+  // Set global logging loggingDirectory
+  loggingDirectory = dirName;
+
+  // Return success or failure
   if(buildStatus != 0) {
-    dirName = "__fail_dir_build";
+    return false;
   }
-  return dirName;
+  return true;
 }
 
 /*
@@ -184,7 +202,7 @@ void managerSigintHandler(int signumber, siginfo_t *siginfo, void *pointer) {
 /*
   Registers the signal handler with SIGINT.
 */
-void registerSigHandler() {
+void registerSigintHandler() {
   static struct sigaction dsa;
   memset(&dsa, 0, sizeof(dsa));
   dsa.sa_sigaction = managerSigintHandler;
@@ -192,12 +210,56 @@ void registerSigHandler() {
   sigaction(SIGINT, &dsa, NULL);
 }
 
+/*
+  Handles all data deletion.
+*/
+void managerDeleteHandler(int signumber, siginfo_t *siginfo, void *pointer) {
+  int status = 0;
+
+  // pause both daemons
+  if(!(dcdpid < 0)) {
+    kill(dcdpid,SIGUSR1);
+  }
+  if(!(dldpid < 0)) {
+    kill(dldpid,SIGUSR1);
+  }
+
+  string dirBase = LOG_VOLUME, deleteDir = dirBase + "/axolotl/data", deleteCommand = "rm -rf " + deleteDir;
+  system(deleteCommand.c_str());
+
+  bool buildStatus = buildSaveDirectoryFromPath(loggingDirectory);
+  while(buildStatus == false) {
+    sleep(1);
+    buildStatus = buildSaveDirectoryFromPath(loggingDirectory);
+  }
+
+  // restart both daemons
+  if(!(dcdpid < 0)) {
+    kill(dcdpid,SIGUSR2);
+  }
+  if(!(dldpid < 0)) {
+    kill(dldpid,SIGUSR2);
+  }
+}
+
+/*
+  Registers the delete handler with SIGUSR1.
+*/
+void registerDeleteHandler() {
+  static struct sigaction dsa;
+  memset(&dsa, 0, sizeof(dsa));
+  dsa.sa_sigaction = managerDeleteHandler;
+  dsa.sa_flags = SA_SIGINFO;
+  sigaction(SIGUSR1, &dsa, NULL);
+}
+
 int main() {
   string inputStr;
   string homeDir = axolotlFileSystem::getPWD();
 
-  // Registering signal handler
-  registerSigHandler();
+  // Registering signal handlers
+  registerSigintHandler();
+  registerDeleteHandler();
 
   // Testing password check and hashing
   #ifdef KEYTEST
@@ -206,53 +268,52 @@ int main() {
 
   // Data Logging Daemon Test
   #ifdef LOGTEST
-  string loggingDirectory = buildSaveDirectory();
-  if(loggingDirectory == "__fail_dir_build") {
-    perror("Cannot build data logging directory");
+  bool dirStatus = buildSaveDirectory();
+  while(dirStatus == false) {
+    sleep(1);
+    dirStatus = buildSaveDirectory();
+  }
+
+  char *args[] = {(char *)DLDARG1, (char *)loggingDirectory.c_str(), NULL};
+
+  // forking data logging daemon
+  dldpid = fork();
+  if (dldpid == -1) {
+    printf("Error spawning data logging daemon... \n");
+  }
+  else if (dldpid == 0){
+    printf("Trying to exec datad...\n");
+    execv("datad", args);
+    printf("After exec\n");
   }
   else {
-    char *args[] = {(char *)DLDARG1, (char *)loggingDirectory.c_str(), NULL};
+    printf(" ");
+    char *args2[] = {(char *)DCDARG1, (char *)loggingDirectory.c_str(), NULL};
 
-    // forking data logging daemon
-    dldpid = fork();
-    if (dldpid == -1) {
-      printf("Error spawning data logging daemon... \n");
+    // forking dashcam daemon
+    dcdpid = fork();
+    if (dcdpid == -1) {
+      printf("Error spawning dashcam daemon... \n");
     }
-    else if (dldpid == 0){
-      printf("Trying to exec datad...\n");
-      execv("datad", args);
-      printf("After exec\n");
+    else if (dcdpid == 0){
+      printf("Trying to exec dashcamd...\n");
+      execv("dashcamd", args2);
+      printf("After exec...\n");
     }
     else {
       printf(" ");
-      char *args2[] = {(char *)DCDARG1, (char *)loggingDirectory.c_str(), NULL};
-
-      // forking dashcam daemon
-      dcdpid = fork();
-      if (dcdpid == -1) {
-        printf("Error spawning dashcam daemon... \n");
-      }
-      else if (dcdpid == 0){
-	printf("Trying to exec dashcamd...\n");
-        execv("dashcamd", args2);
-	printf("After exec...\n");
-      }
-      else {
-        printf(" ");
-      }
     }
-    
-    // manager waits on quit
-    while(1) {
-      getline(cin,inputStr);
-      if(inputStr == "q" | inputStr == "Q") {
-        break;
-      }
-      else {
-        inputStr = "";
-      }
-    }
+  }
 
+  // manager waits on quit
+  while(1) {
+    getline(cin,inputStr);
+    if(inputStr == "q" | inputStr == "Q") {
+      break;
+    }
+    else {
+      inputStr = "";
+    }
   }
   #endif
 
