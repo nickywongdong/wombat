@@ -49,12 +49,16 @@ OBJECTS_DIR   = ./
 ####### Files
 
 SOURCES       = ../Axolotl/main.cpp \
-		../Axolotl/forkbomb.cpp qrc_qml.cpp \
-		moc_forkbomb.cpp
+		../Axolotl/forkbomb.cpp \
+		../Axolotl/datastuff.cpp qrc_qml.cpp \
+		moc_forkbomb.cpp \
+		moc_datastuff.cpp
 OBJECTS       = main.o \
 		forkbomb.o \
+		datastuff.o \
 		qrc_qml.o \
-		moc_forkbomb.o
+		moc_forkbomb.o \
+		moc_datastuff.o
 DIST          = /usr/lib/aarch64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib/aarch64-linux-gnu/qt5/mkspecs/common/unix.conf \
 		/usr/lib/aarch64-linux-gnu/qt5/mkspecs/common/linux.conf \
@@ -117,8 +121,10 @@ DIST          = /usr/lib/aarch64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib/aarch64-linux-gnu/qt5/mkspecs/features/exceptions.prf \
 		/usr/lib/aarch64-linux-gnu/qt5/mkspecs/features/yacc.prf \
 		/usr/lib/aarch64-linux-gnu/qt5/mkspecs/features/lex.prf \
-		../Axolotl/Axolotl.pro ../Axolotl/forkbomb.h ../Axolotl/main.cpp \
-		../Axolotl/forkbomb.cpp
+		../Axolotl/Axolotl.pro ../Axolotl/forkbomb.h \
+		../Axolotl/datastuff.h ../Axolotl/main.cpp \
+		../Axolotl/forkbomb.cpp \
+		../Axolotl/datastuff.cpp
 QMAKE_TARGET  = Axolotl
 DESTDIR       = #avoid trailing-slash linebreak
 TARGET        = Axolotl
@@ -303,8 +309,8 @@ distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents ../Axolotl/qml.qrc $(DISTDIR)/
-	$(COPY_FILE) --parents ../Axolotl/forkbomb.h $(DISTDIR)/
-	$(COPY_FILE) --parents ../Axolotl/main.cpp ../Axolotl/forkbomb.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents ../Axolotl/forkbomb.h ../Axolotl/datastuff.h $(DISTDIR)/
+	$(COPY_FILE) --parents ../Axolotl/main.cpp ../Axolotl/forkbomb.cpp ../Axolotl/datastuff.cpp $(DISTDIR)/
 
 
 clean: compiler_clean 
@@ -333,17 +339,21 @@ qrc_qml.cpp: ../Axolotl/qml.qrc \
 		../Axolotl/MusicPage.qml \
 		../Axolotl/icons8-line-chart-50.png \
 		../Axolotl/icons8-go-back-50.png \
+		../Axolotl/DataPage.qml \
 		../Axolotl/icons8-musical-notes-50.png \
 		../Axolotl/qtquickcontrols2.conf \
 		../Axolotl/icons8-america-50.png \
 		../Axolotl/main.qml
 	/usr/lib/aarch64-linux-gnu/qt5/bin/rcc -name qml ../Axolotl/qml.qrc -o qrc_qml.cpp
 
-compiler_moc_header_make_all: moc_forkbomb.cpp
+compiler_moc_header_make_all: moc_forkbomb.cpp moc_datastuff.cpp
 compiler_moc_header_clean:
-	-$(DEL_FILE) moc_forkbomb.cpp
+	-$(DEL_FILE) moc_forkbomb.cpp moc_datastuff.cpp
 moc_forkbomb.cpp: ../Axolotl/forkbomb.h
 	/usr/lib/aarch64-linux-gnu/qt5/bin/moc $(DEFINES) -I/usr/lib/aarch64-linux-gnu/qt5/mkspecs/linux-g++ -I/home/nvidia/wombat/Axolotl -I/usr/include/aarch64-linux-gnu/qt5 -I/usr/include/aarch64-linux-gnu/qt5/QtQuick -I/usr/include/aarch64-linux-gnu/qt5/QtGui -I/usr/include/aarch64-linux-gnu/qt5/QtQml -I/usr/include/aarch64-linux-gnu/qt5/QtNetwork -I/usr/include/aarch64-linux-gnu/qt5/QtCore -I. -I/usr/include/c++/5 -I/usr/include/aarch64-linux-gnu/c++/5 -I/usr/include/c++/5/backward -I/usr/lib/gcc/aarch64-linux-gnu/5/include -I/usr/local/include -I/usr/lib/gcc/aarch64-linux-gnu/5/include-fixed -I/usr/include/aarch64-linux-gnu -I/usr/include ../Axolotl/forkbomb.h -o moc_forkbomb.cpp
+
+moc_datastuff.cpp: ../Axolotl/datastuff.h
+	/usr/lib/aarch64-linux-gnu/qt5/bin/moc $(DEFINES) -I/usr/lib/aarch64-linux-gnu/qt5/mkspecs/linux-g++ -I/home/nvidia/wombat/Axolotl -I/usr/include/aarch64-linux-gnu/qt5 -I/usr/include/aarch64-linux-gnu/qt5/QtQuick -I/usr/include/aarch64-linux-gnu/qt5/QtGui -I/usr/include/aarch64-linux-gnu/qt5/QtQml -I/usr/include/aarch64-linux-gnu/qt5/QtNetwork -I/usr/include/aarch64-linux-gnu/qt5/QtCore -I. -I/usr/include/c++/5 -I/usr/include/aarch64-linux-gnu/c++/5 -I/usr/include/c++/5/backward -I/usr/lib/gcc/aarch64-linux-gnu/5/include -I/usr/local/include -I/usr/lib/gcc/aarch64-linux-gnu/5/include-fixed -I/usr/include/aarch64-linux-gnu -I/usr/include ../Axolotl/datastuff.h -o moc_datastuff.cpp
 
 compiler_moc_source_make_all:
 compiler_moc_source_clean:
@@ -363,11 +373,17 @@ main.o: ../Axolotl/main.cpp ../Axolotl/forkbomb.h
 forkbomb.o: ../Axolotl/forkbomb.cpp ../Axolotl/forkbomb.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o forkbomb.o ../Axolotl/forkbomb.cpp
 
+datastuff.o: ../Axolotl/datastuff.cpp ../Axolotl/datastuff.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o datastuff.o ../Axolotl/datastuff.cpp
+
 qrc_qml.o: qrc_qml.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o qrc_qml.o qrc_qml.cpp
 
 moc_forkbomb.o: moc_forkbomb.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_forkbomb.o moc_forkbomb.cpp
+
+moc_datastuff.o: moc_datastuff.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_datastuff.o moc_datastuff.cpp
 
 ####### Install
 

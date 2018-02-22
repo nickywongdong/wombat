@@ -8,5 +8,6 @@
         <file>icons8-go-back-50.png</file>
         <file>icons8-line-chart-50.png</file>
         <file>icons8-musical-notes-50.png</file>
+        <file>DataPage.qml</file>
     </qresource>
 </RCC>

@@ -12,16 +12,17 @@ ApplicationWindow {
     title: "Qt UI Shell"
             MainMenu { id: pagetwo }
             MusicPage { id: pagethree }
+            DataPage { id: pagefour }
     StackView {
         id: stack
         initialItem: startup
 
     }
-Test{
- id: bootdm
-}
+    Test{
+        id: processor
+    }
 onClosing: {
-    bootdm.kill_dm()
+    processor.kill_dm()
 }
     Item {
         id: startup
@@ -40,9 +41,9 @@ onClosing: {
             interval: 3000; running: true;
             onTriggered: {
                 stack.push(pagetwo)
-                console.log(bootdm.start_dm())
+                console.log(processor.start_dm())
             }
         }
+        }
     }
-}
 }

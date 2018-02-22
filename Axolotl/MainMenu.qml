@@ -42,11 +42,6 @@ Item {
                 radius: 10
                 border.color: "black"
                 color: "#ffb347"
-                Test{
-                    id: processor
-
-                }
-
                 MouseArea{
                     anchors.fill: parent
                     onClicked: console.log(processor.start_navit())
@@ -64,7 +59,7 @@ Item {
                 color: "#ffb347"
                 MouseArea{
                     anchors.fill: parent
-                    onClicked: console.log("Data")
+                    onClicked: stack.push(pagefour)
 
                 }
                 Image {
