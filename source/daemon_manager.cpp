@@ -27,7 +27,7 @@ using namespace std;
 
 pid_t dcdpid = -5, dldpid = -5;
 
-string loggingDirectory;
+string loggingDirectory, runDirectory;
 
 /*
   Creates a logging directory from a path.
@@ -106,27 +106,58 @@ bool buildSaveDirectory() {
 }
 
 /*
+  Handles all data deletion.
+*/
+void dataDeletionHandler() {
+  int status = 0;
+
+  // pause both daemons
+  if(!(dcdpid < 0)) {
+    kill(dcdpid,SIGUSR1);
+  }
+  if(!(dldpid < 0)) {
+    kill(dldpid,SIGUSR1);
+  }
+
+  // delete the data directory
+  string dirBase = LOG_VOLUME, deleteDir = dirBase + "/axolotl/data", deleteCommand = "rm -rf " + deleteDir;
+  system(deleteCommand.c_str());
+
+  // rebuild the data directory using existing path so as to not break our daemons
+  bool buildStatus = buildSaveDirectoryFromPath(loggingDirectory);
+  while(buildStatus == false) {
+    sleep(1);
+    buildStatus = buildSaveDirectoryFromPath(loggingDirectory);
+  }
+
+  // restart both daemons
+  if(!(dcdpid < 0)) {
+    kill(dcdpid,SIGUSR2);
+  }
+  if(!(dldpid < 0)) {
+    kill(dldpid,SIGUSR2);
+  }
+}
+
+/*
   Wipes all data from the data logging system.
   Will not destroy data as part of THIS boot cycle.
   Will only destroy data if password matches.
 */
-void deleteData(string password, string sourceDir) {
+void deleteData(string password) {
   // Get true passkey hash from file
   ifstream hashfile;
-  string truekeyHash = NULL, passkeyHash = NULL;
-  string hashfilePath = sourceDir + "/hashkey";
+  string truekeyHash = NULL;
+  string hashfilePath = runDirectory + "/hashkey";
   hashfile.open(hashfilePath);
   if (hashfile.is_open()) {
     getline(hashfile,truekeyHash);
     hashfile.close();
   }
 
-  // Hash the provided password
-  passkeyHash = axolotlFileSystem::hash(password);
-
   // Delete the data only if password hashes match
-  if(passkeyHash == truekeyHash) {
-
+  if(axolotlFileSystem::hash(password) == truekeyHash) {
+    dataDeletionHandler();
   }
   #ifdef DEBUG
   printf("Data deleted.\n");
@@ -200,6 +231,15 @@ void managerSigintHandler(int signumber, siginfo_t *siginfo, void *pointer) {
 }
 
 /*
+  Handles SIGUSR1 and initiates data deletion.
+  FOR DEBUG ONLY: remove this and its signal registerer for final build.
+*/
+
+void managerDeleteHandler(int signumber, siginfo_t *siginfo, void *pointer) {
+  dataDeletionHandler();
+}
+
+/*
   Registers the signal handler with SIGINT.
 */
 void registerSigintHandler() {
@@ -211,39 +251,8 @@ void registerSigintHandler() {
 }
 
 /*
-  Handles all data deletion.
-*/
-void managerDeleteHandler(int signumber, siginfo_t *siginfo, void *pointer) {
-  int status = 0;
-
-  // pause both daemons
-  if(!(dcdpid < 0)) {
-    kill(dcdpid,SIGUSR1);
-  }
-  if(!(dldpid < 0)) {
-    kill(dldpid,SIGUSR1);
-  }
-
-  string dirBase = LOG_VOLUME, deleteDir = dirBase + "/axolotl/data", deleteCommand = "rm -rf " + deleteDir;
-  system(deleteCommand.c_str());
-
-  bool buildStatus = buildSaveDirectoryFromPath(loggingDirectory);
-  while(buildStatus == false) {
-    sleep(1);
-    buildStatus = buildSaveDirectoryFromPath(loggingDirectory);
-  }
-
-  // restart both daemons
-  if(!(dcdpid < 0)) {
-    kill(dcdpid,SIGUSR2);
-  }
-  if(!(dldpid < 0)) {
-    kill(dldpid,SIGUSR2);
-  }
-}
-
-/*
   Registers the delete handler with SIGUSR1.
+  FOR TESTING ONLY: remove this function on final build.
 */
 void registerDeleteHandler() {
   static struct sigaction dsa;
@@ -255,7 +264,7 @@ void registerDeleteHandler() {
 
 int main() {
   string inputStr;
-  string homeDir = axolotlFileSystem::getPWD();
+  runDirectory = axolotlFileSystem::getPWD();
 
   // Registering signal handlers
   registerSigintHandler();
