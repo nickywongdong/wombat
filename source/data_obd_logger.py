@@ -81,7 +81,6 @@ if __name__ == '__main__':
             try:
                 os.kill(int(sys.argv[3]),0);
             except OSError:
-                print "OBD logging stopped."
                 break;
             else:
                 obdSnapshot(obdBluetoothConnection)
