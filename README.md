@@ -1,5 +1,11 @@
 # Axolotl - Victor's Branch
-__Current Version:__ 0.3.1 alpha
+__Current Version:__ 0.3.2 alpha
+
+Version 0.3.2 alpha:
+- Split python adapter script into a data logging script and DTC script
+- Modified data logging script to utilize asynchronous queries
+- Added source for data logging helper, which manages OBD logging
+- Modified data logging daemon to fork and exec the logging helper
 
 Version 0.3.1 alpha:
 - Fixes to navigation to improve GPS fix reliability
