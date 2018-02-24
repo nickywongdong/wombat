@@ -9,12 +9,13 @@
 #include <python2.7/Python.h>
 
 #define DEBUG
-#define OBD_ADAPTER_PATH "/Gitdir/wombat/source/data_obd_adapter.py"
+#define OBD_ADAPTER_PATH "/Gitdir/wombat/source/data_obd_logger.py"
 
 using namespace std;
 
 string loggingDirectory;
 bool loggingActive = true;
+pid_t obdLoggingProcess = -5;
 
 /*
   A loops that conducts all of the data logging.
@@ -22,14 +23,16 @@ bool loggingActive = true;
   in order to achieve ~10 samples per second.
 */
 void loggingLooper() {
-  string builtCommand;
+  string builtCommand, currPid = to_string(getpid());
   clock_t timer1;
+  builtCommand = "python " + axolotlFileSystem::getHomeDir() + OBD_ADAPTER_PATH + " snapshot " + loggingDirectory + currPid;
+  system(builtCommand.c_str());
   while(1) {
     timer1 = clock();
     if (loggingActive) {
       if(axolotlFileSystem::getAvailableMemory(loggingDirectory) > 200) {
-        string builtCommand = "python " + axolotlFileSystem::getHomeDir() + OBD_ADAPTER_PATH + " snapshot " + loggingDirectory;
-        system(builtCommand.c_str());
+        builtCommand = "python " + axolotlFileSystem::getHomeDir() + OBD_ADAPTER_PATH + " snapshot " + loggingDirectory + currPid;
+        //system(builtCommand.c_str());
       }
 
       #ifdef DEBUG
