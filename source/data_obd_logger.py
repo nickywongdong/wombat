@@ -60,12 +60,14 @@ def obdAsync(obdConnection):
     for i in xrange(0, len(commands)):
         obdConnection.watch(commands[i])
 
-if __name__ == '__main__':
-    ## Write the this process's pid to file so we can kill it later
-    pidFileHandle = open("python_obd_pid",'w')
-    pidFileHandle.write(str(os.getpid()))
-    pidFileHandle.close()
+# starts watching on the OBD connection
+def startAsyncWatch(obdConnection):
+    for i in xrange(0,len(commands)-1):
+        obdConnection.watch(commands[i])
+    obdConnection.start()
 
+
+if __name__ == '__main__':
     ## Set up connection to the OBDLink MX
     if runAsync:
         obdBluetoothConnection = obd.Async()
@@ -79,13 +81,10 @@ if __name__ == '__main__':
             try:
                 os.kill(int(sys.argv[3]),0);
             except OSError:
-                exit()
+                print "OBD logging stopped."
+                break;
             else:
                 obdSnapshot(obdBluetoothConnection)
                 time.sleep(.2)
-    elif(sys.argv[1] == "fetch"):
-        fetchDTC(obdBluetoothConnection)
-    elif(sys.argv[1] == "clear"):
-        clearDTC(obdBluetoothConnection)
 
     obdBluetoothConnection.close()

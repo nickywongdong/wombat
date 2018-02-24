@@ -20,7 +20,6 @@
 #define PST -8
 
 #define DEBUG
-#define KEYTEST
 #define LOGTEST
 
 using namespace std;
@@ -119,6 +118,8 @@ void dataDeletionHandler() {
     kill(dldpid,SIGUSR1);
   }
 
+  sleep(2);
+
   // delete the data directory
   string dirBase = LOG_VOLUME, deleteDir = dirBase + "/axolotl/data", deleteCommand = "rm -rf " + deleteDir;
   system(deleteCommand.c_str());
@@ -141,7 +142,6 @@ void dataDeletionHandler() {
 
 /*
   Wipes all data from the data logging system.
-  Will not destroy data as part of THIS boot cycle.
   Will only destroy data if password matches.
 */
 void deleteData(string password) {
@@ -231,15 +231,6 @@ void managerSigintHandler(int signumber, siginfo_t *siginfo, void *pointer) {
 }
 
 /*
-  Handles SIGUSR1 and initiates data deletion.
-  FOR DEBUG ONLY: remove this and its signal registerer for final build.
-*/
-
-void managerDeleteHandler(int signumber, siginfo_t *siginfo, void *pointer) {
-  dataDeletionHandler();
-}
-
-/*
   Registers the signal handler with SIGINT.
 */
 void registerSigintHandler() {
@@ -248,6 +239,15 @@ void registerSigintHandler() {
   dsa.sa_sigaction = managerSigintHandler;
   dsa.sa_flags = SA_SIGINFO;
   sigaction(SIGINT, &dsa, NULL);
+}
+
+/*
+  Handles SIGUSR1 and initiates data deletion.
+  FOR DEBUG ONLY: remove this and its signal registerer for final build.
+*/
+
+void managerDeleteHandler(int signumber, siginfo_t *siginfo, void *pointer) {
+  dataDeletionHandler();
 }
 
 /*
@@ -293,7 +293,6 @@ int main() {
   else if (dldpid == 0){
     printf("Trying to exec datad...\n");
     execv("datad", args);
-    printf("After exec\n");
   }
   else {
     printf(" ");
@@ -307,7 +306,6 @@ int main() {
     else if (dcdpid == 0){
       printf("Trying to exec dashcamd...\n");
       execv("dashcamd", args2);
-      printf("After exec...\n");
     }
     else {
       printf(" ");

@@ -13,5 +13,8 @@ daemon_launcher: datad dashcamd daemon_manager.cpp
 dashcamd: dashcam_logger.cpp
 	g++ dashcam_logger.cpp -o dashcamd -lpthread -lboost_system -lboost_filesystem -lcryptopp -std=c++11
 
-datad: data_logger.cpp
+datad: data_logger.cpp datad_pyhelper
 	g++ data_logger.cpp -o datad -lpthread -lboost_system -lboost_filesystem -lcryptopp -std=c++11
+
+datad_pyhelper: data_logger_pyhelper.cpp
+	g++ data_logger_pyhelper.cpp -o datad_pyhelper -lpthread -lboost_system -lboost_filesystem -lcryptopp -std=c++11

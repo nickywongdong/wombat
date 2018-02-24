@@ -10,37 +10,36 @@
 
 #define DEBUG
 #define OBD_ADAPTER_PATH "/Gitdir/wombat/source/data_obd_logger.py"
+#define DATAHELPERARG0 "./datad_pyhelper"
 
 using namespace std;
 
 string loggingDirectory;
 bool loggingActive = true;
-pid_t obdLoggingProcess = -5;
+pid_t obdLoggerPid = -5;
+
+/*
+  Spawns the process managing OBD logging.
+*/
+void startOBDLogger() {
+  string builtCommand, currPid;
+  int s;
+  char *args[] = {(char *)DATAHELPERARG0, (char *)loggingDirectory.c_str(), NULL};
+  obdLoggerPid = fork();
+  if (obdLoggerPid == -1) {
+    printf("Failed to spawn logging process...\n");
+  }
+  else if (obdLoggerPid == 0) {
+    execv("datad_pyhelper",args);
+  }
+}
 
 /*
   A loops that conducts all of the data logging.
-  Makes calls to the python adapter and then waits 100ms
-  in order to achieve ~10 samples per second.
 */
 void loggingLooper() {
-  string builtCommand, currPid = to_string(getpid());
-  clock_t timer1;
-  builtCommand = "python " + axolotlFileSystem::getHomeDir() + OBD_ADAPTER_PATH + " snapshot " + loggingDirectory + currPid;
-  system(builtCommand.c_str());
+  startOBDLogger();
   while(1) {
-    timer1 = clock();
-    if (loggingActive) {
-      if(axolotlFileSystem::getAvailableMemory(loggingDirectory) > 200) {
-        builtCommand = "python " + axolotlFileSystem::getHomeDir() + OBD_ADAPTER_PATH + " snapshot " + loggingDirectory + currPid;
-        //system(builtCommand.c_str());
-      }
-
-      #ifdef DEBUG
-      printf("Logged?\n");
-      printf("%f\n",(clock()-timer1)/(double)CLOCKS_PER_SEC);
-      printf("Sample Rate: %f\n",1/((clock()-timer1)/(double)CLOCKS_PER_SEC));
-      #endif
-    }
     usleep(1000);
   }
 }
@@ -78,7 +77,13 @@ void createLogfile() {
   Toggles logging off.
 */
 void toggleOffHandler(int signumber, siginfo_t *siginfo, void *pointer) {
+  int status = 0;
+  if(!(obdLoggerPid < 0)) {
+    kill(obdLoggerPid, SIGTERM);
+  }
+  waitpid(obdLoggerPid, &status, 0);
   loggingActive = false;
+  obdLoggerPid = -5;
 }
 
 /*
@@ -98,6 +103,7 @@ void registerToggleOffHandler() {
 void toggleOnHandler(int signumber, siginfo_t *siginfo, void *pointer) {
   loggingActive = true;
   createLogfile();
+  startOBDLogger();
 }
 
 /*
@@ -111,6 +117,31 @@ void registerToggleOnHandler() {
   sigaction(SIGUSR2, &dsa, NULL);
 }
 
+/*
+  Kills the subservient logging process and ends this process safely.
+*/
+void datadSigtermHandler(int signumber, siginfo_t *siginfo, void *pointer) {
+  int status = 0;
+  if(!(obdLoggerPid < 0)) {
+    kill(obdLoggerPid, SIGKILL);
+  }
+  waitpid(obdLoggerPid, &status, 0);
+  loggingActive = false;
+  obdLoggerPid = -5;
+  exit(0);
+}
+
+/*
+  Registers the toggle off handler with SIGTERM.
+*/
+void registerSigtermHandler() {
+  static struct sigaction dsa;
+  memset(&dsa, 0, sizeof(dsa));
+  dsa.sa_sigaction = datadSigtermHandler;
+  dsa.sa_flags = SA_SIGINFO;
+  sigaction(SIGTERM, &dsa, NULL);
+}
+
 int main(int argc, char *argv[]) {
 
   // Ensure that a logging directory has been provided and bind it
@@ -122,6 +153,7 @@ int main(int argc, char *argv[]) {
   // Register signal handlers
   registerToggleOffHandler();
   registerToggleOnHandler();
+  registerSigtermHandler();
 
   // Create the .csv where data will be logged
   createLogfile();
