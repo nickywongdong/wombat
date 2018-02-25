@@ -12,13 +12,24 @@
 #include<fstream>
 #include<signal.h>
 #include<string>
+#include<QCloseEvent>
+
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    pid_t nvid;
+
+    dmid = fork();
+    chdir("/home/nvidia/wombat/source/");
+    if(dmid==0){
+        execl("../source/daemon_launcher", "daemon_manager", NULL);
+    }
+    else{
+        chdir("/home/nvidia/wombat/");
+    }
+
     nvid = fork();
     chdir("/home/nvidia/wombat/source/navit-build/navit/");
 
@@ -26,8 +37,9 @@ MainWindow::MainWindow(QWidget *parent) :
         execl("./navit", "navit", NULL);
     }
     else{
-        chdir("/home/nvidia/untitled/");
+        chdir("/home/nvidia/wombat/");
     }
+
     char c[256];
     std::string foo;
     std::ifstream f;
@@ -40,6 +52,8 @@ MainWindow::MainWindow(QWidget *parent) :
     f.close();
     unsigned long long int windid;
     windid = strtoull(foo.c_str(),NULL,16);
+
+
     QWindow *window = QWindow::fromWinId(windid);
     window->setFlags(Qt::FramelessWindowHint);
     QWidget *widget = QWidget::createWindowContainer(window);
@@ -48,6 +62,15 @@ MainWindow::MainWindow(QWidget *parent) :
     layout->addWidget(widget);
     this->setLayout(layout);
 }
+
+void MainWindow::closeEvent(QCloseEvent *event){
+
+    kill(dmid,SIGINT);
+    kill(nvid,SIGTERM);
+    event->accept();
+
+}
+
 
 MainWindow::~MainWindow()
 {

@@ -2,7 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-
+#include <sys/types.h>
 namespace Ui {
 class MainWindow;
 }
@@ -17,6 +17,9 @@ public:
 
 private:
     Ui::MainWindow *ui;
+    void closeEvent(QCloseEvent *);
+    pid_t dmid;
+    pid_t nvid;
 };
 
 #endif // MAINWINDOW_H
