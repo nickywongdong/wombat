@@ -13,8 +13,14 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp\
-        mainwindow.cpp
+        mainwindow.cpp \
+    musicpage.cpp \
+    data.cpp
 
-HEADERS  += mainwindow.h
+HEADERS  += mainwindow.h \
+    musicpage.h \
+    data.h
 
-FORMS    += mainwindow.ui
+FORMS    += mainwindow.ui \
+    musicpage.ui \
+    data.ui

@@ -49,10 +49,18 @@ OBJECTS_DIR   = ./
 ####### Files
 
 SOURCES       = ../Axolotl1.1/main.cpp \
-		../Axolotl1.1/mainwindow.cpp moc_mainwindow.cpp
+		../Axolotl1.1/mainwindow.cpp \
+		../Axolotl1.1/musicpage.cpp \
+		../Axolotl1.1/data.cpp moc_mainwindow.cpp \
+		moc_musicpage.cpp \
+		moc_data.cpp
 OBJECTS       = main.o \
 		mainwindow.o \
-		moc_mainwindow.o
+		musicpage.o \
+		data.o \
+		moc_mainwindow.o \
+		moc_musicpage.o \
+		moc_data.o
 DIST          = /usr/lib/aarch64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib/aarch64-linux-gnu/qt5/mkspecs/common/unix.conf \
 		/usr/lib/aarch64-linux-gnu/qt5/mkspecs/common/linux.conf \
@@ -113,8 +121,12 @@ DIST          = /usr/lib/aarch64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib/aarch64-linux-gnu/qt5/mkspecs/features/exceptions.prf \
 		/usr/lib/aarch64-linux-gnu/qt5/mkspecs/features/yacc.prf \
 		/usr/lib/aarch64-linux-gnu/qt5/mkspecs/features/lex.prf \
-		../Axolotl1.1/axolotl.pro ../Axolotl1.1/mainwindow.h ../Axolotl1.1/main.cpp \
-		../Axolotl1.1/mainwindow.cpp
+		../Axolotl1.1/axolotl.pro ../Axolotl1.1/mainwindow.h \
+		../Axolotl1.1/musicpage.h \
+		../Axolotl1.1/data.h ../Axolotl1.1/main.cpp \
+		../Axolotl1.1/mainwindow.cpp \
+		../Axolotl1.1/musicpage.cpp \
+		../Axolotl1.1/data.cpp
 QMAKE_TARGET  = untitled
 DESTDIR       = #avoid trailing-slash linebreak
 TARGET        = untitled
@@ -142,7 +154,7 @@ first: all
 
 ####### Build rules
 
-$(TARGET): ui_mainwindow.h $(OBJECTS)  
+$(TARGET): ui_mainwindow.h ui_musicpage.h ui_data.h $(OBJECTS)  
 	$(LINK) $(LFLAGS) -o $(TARGET) $(OBJECTS) $(OBJCOMP) $(LIBS)
 
 Makefile: ../Axolotl1.1/axolotl.pro /usr/lib/aarch64-linux-gnu/qt5/mkspecs/linux-g++/qmake.conf /usr/lib/aarch64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
@@ -288,9 +300,9 @@ dist: distdir FORCE
 distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
-	$(COPY_FILE) --parents ../Axolotl1.1/mainwindow.h $(DISTDIR)/
-	$(COPY_FILE) --parents ../Axolotl1.1/main.cpp ../Axolotl1.1/mainwindow.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents ../Axolotl1.1/mainwindow.ui $(DISTDIR)/
+	$(COPY_FILE) --parents ../Axolotl1.1/mainwindow.h ../Axolotl1.1/musicpage.h ../Axolotl1.1/data.h $(DISTDIR)/
+	$(COPY_FILE) --parents ../Axolotl1.1/main.cpp ../Axolotl1.1/mainwindow.cpp ../Axolotl1.1/musicpage.cpp ../Axolotl1.1/data.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents ../Axolotl1.1/mainwindow.ui ../Axolotl1.1/musicpage.ui ../Axolotl1.1/data.ui $(DISTDIR)/
 
 
 clean: compiler_clean 
@@ -313,19 +325,31 @@ check: first
 
 compiler_rcc_make_all:
 compiler_rcc_clean:
-compiler_moc_header_make_all: moc_mainwindow.cpp
+compiler_moc_header_make_all: moc_mainwindow.cpp moc_musicpage.cpp moc_data.cpp
 compiler_moc_header_clean:
-	-$(DEL_FILE) moc_mainwindow.cpp
+	-$(DEL_FILE) moc_mainwindow.cpp moc_musicpage.cpp moc_data.cpp
 moc_mainwindow.cpp: ../Axolotl1.1/mainwindow.h
 	/usr/lib/aarch64-linux-gnu/qt5/bin/moc $(DEFINES) -I/usr/lib/aarch64-linux-gnu/qt5/mkspecs/linux-g++ -I/home/nvidia/wombat/Axolotl1.1 -I/usr/include/aarch64-linux-gnu/qt5 -I/usr/include/aarch64-linux-gnu/qt5/QtWidgets -I/usr/include/aarch64-linux-gnu/qt5/QtGui -I/usr/include/aarch64-linux-gnu/qt5/QtCore -I. -I/usr/include/c++/5 -I/usr/include/aarch64-linux-gnu/c++/5 -I/usr/include/c++/5/backward -I/usr/lib/gcc/aarch64-linux-gnu/5/include -I/usr/local/include -I/usr/lib/gcc/aarch64-linux-gnu/5/include-fixed -I/usr/include/aarch64-linux-gnu -I/usr/include ../Axolotl1.1/mainwindow.h -o moc_mainwindow.cpp
 
+moc_musicpage.cpp: ../Axolotl1.1/musicpage.h
+	/usr/lib/aarch64-linux-gnu/qt5/bin/moc $(DEFINES) -I/usr/lib/aarch64-linux-gnu/qt5/mkspecs/linux-g++ -I/home/nvidia/wombat/Axolotl1.1 -I/usr/include/aarch64-linux-gnu/qt5 -I/usr/include/aarch64-linux-gnu/qt5/QtWidgets -I/usr/include/aarch64-linux-gnu/qt5/QtGui -I/usr/include/aarch64-linux-gnu/qt5/QtCore -I. -I/usr/include/c++/5 -I/usr/include/aarch64-linux-gnu/c++/5 -I/usr/include/c++/5/backward -I/usr/lib/gcc/aarch64-linux-gnu/5/include -I/usr/local/include -I/usr/lib/gcc/aarch64-linux-gnu/5/include-fixed -I/usr/include/aarch64-linux-gnu -I/usr/include ../Axolotl1.1/musicpage.h -o moc_musicpage.cpp
+
+moc_data.cpp: ../Axolotl1.1/data.h
+	/usr/lib/aarch64-linux-gnu/qt5/bin/moc $(DEFINES) -I/usr/lib/aarch64-linux-gnu/qt5/mkspecs/linux-g++ -I/home/nvidia/wombat/Axolotl1.1 -I/usr/include/aarch64-linux-gnu/qt5 -I/usr/include/aarch64-linux-gnu/qt5/QtWidgets -I/usr/include/aarch64-linux-gnu/qt5/QtGui -I/usr/include/aarch64-linux-gnu/qt5/QtCore -I. -I/usr/include/c++/5 -I/usr/include/aarch64-linux-gnu/c++/5 -I/usr/include/c++/5/backward -I/usr/lib/gcc/aarch64-linux-gnu/5/include -I/usr/local/include -I/usr/lib/gcc/aarch64-linux-gnu/5/include-fixed -I/usr/include/aarch64-linux-gnu -I/usr/include ../Axolotl1.1/data.h -o moc_data.cpp
+
 compiler_moc_source_make_all:
 compiler_moc_source_clean:
-compiler_uic_make_all: ui_mainwindow.h
+compiler_uic_make_all: ui_mainwindow.h ui_musicpage.h ui_data.h
 compiler_uic_clean:
-	-$(DEL_FILE) ui_mainwindow.h
+	-$(DEL_FILE) ui_mainwindow.h ui_musicpage.h ui_data.h
 ui_mainwindow.h: ../Axolotl1.1/mainwindow.ui
 	/usr/lib/aarch64-linux-gnu/qt5/bin/uic ../Axolotl1.1/mainwindow.ui -o ui_mainwindow.h
+
+ui_musicpage.h: ../Axolotl1.1/musicpage.ui
+	/usr/lib/aarch64-linux-gnu/qt5/bin/uic ../Axolotl1.1/musicpage.ui -o ui_musicpage.h
+
+ui_data.h: ../Axolotl1.1/data.ui
+	/usr/lib/aarch64-linux-gnu/qt5/bin/uic ../Axolotl1.1/data.ui -o ui_data.h
 
 compiler_yacc_decl_make_all:
 compiler_yacc_decl_clean:
@@ -341,11 +365,27 @@ main.o: ../Axolotl1.1/main.cpp ../Axolotl1.1/mainwindow.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o ../Axolotl1.1/main.cpp
 
 mainwindow.o: ../Axolotl1.1/mainwindow.cpp ../Axolotl1.1/mainwindow.h \
-		ui_mainwindow.h
+		ui_mainwindow.h \
+		../Axolotl1.1/musicpage.h \
+		../Axolotl1.1/data.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mainwindow.o ../Axolotl1.1/mainwindow.cpp
+
+musicpage.o: ../Axolotl1.1/musicpage.cpp ../Axolotl1.1/musicpage.h \
+		ui_musicpage.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o musicpage.o ../Axolotl1.1/musicpage.cpp
+
+data.o: ../Axolotl1.1/data.cpp ../Axolotl1.1/data.h \
+		ui_data.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o data.o ../Axolotl1.1/data.cpp
 
 moc_mainwindow.o: moc_mainwindow.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_mainwindow.o moc_mainwindow.cpp
+
+moc_musicpage.o: moc_musicpage.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_musicpage.o moc_musicpage.cpp
+
+moc_data.o: moc_data.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_data.o moc_data.cpp
 
 ####### Install
 

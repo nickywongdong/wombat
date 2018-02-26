@@ -3,6 +3,8 @@
 
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include "musicpage.h"
+#include "data.h"
 #include<stdio.h>
 #include<unistd.h>
 #include<sys/types.h>
@@ -13,6 +15,7 @@
 #include<signal.h>
 #include<string>
 #include<QCloseEvent>
+#include<QTabWidget>
 
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -20,7 +23,6 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-
     dmid = fork();
     chdir("/home/nvidia/wombat/source/");
     if(dmid==0){
@@ -61,6 +63,9 @@ MainWindow::MainWindow(QWidget *parent) :
     QVBoxLayout *layout = new QVBoxLayout();
     layout->addWidget(widget);
     this->setLayout(layout);
+    ui->tabWidget->addTab(widget,"Navigation");
+    ui->tabWidget->addTab(new MusicPage(),"Music");
+    ui->tabWidget->addTab(new Data(),"Data");
 }
 
 void MainWindow::closeEvent(QCloseEvent *event){
@@ -71,8 +76,9 @@ void MainWindow::closeEvent(QCloseEvent *event){
 
 }
 
-
 MainWindow::~MainWindow()
 {
     delete ui;
 }
+
+
