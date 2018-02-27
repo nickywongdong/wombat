@@ -57,7 +57,7 @@ def obdSnapshot(obdConnection):
 
 # set the command array to watch mode, allowing for async non-blocking updates
 def obdAsync(obdConnection):
-    for i in xrange(0, len(commands)):
+    for i in xrange(0, len(commands)-1):
         obdConnection.watch(commands[i])
 
 # starts watching on the OBD connection
