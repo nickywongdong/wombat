@@ -1,5 +1,9 @@
 # Axolotl - Victor's Branch
-__Current Version:__ 0.3.2 alpha
+__Current Version:__ 0.3.3 alpha
+
+Version 0.3.3 alpha:
+- Fully functional OBDII logging at 5Hz sample rate
+- Fixed bug where barometric pressure wasn't being watch()'d
 
 Version 0.3.2 alpha:
 - Split python adapter script into a data logging script and DTC script
