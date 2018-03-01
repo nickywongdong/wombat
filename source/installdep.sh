@@ -31,3 +31,5 @@ sudo acm/installCDCACM.sh
 
 sudo apt-get install build-essential hostapd
 sudo apt-get install build-essential dnsmasq
+
+sudo reboot

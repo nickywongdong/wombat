@@ -272,7 +272,7 @@ int main() {
 
   // Testing password check and hashing
   #ifdef KEYTEST
-  printf("Checking true key: %i",checkPasswordCorrect("orangemonkeyeagle"));
+  printf("Checking true key: %i\n",checkPasswordCorrect("orangemonkeyeagle"));
   #endif
 
   // Data Logging Daemon Test
