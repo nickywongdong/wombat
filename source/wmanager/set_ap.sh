@@ -1,5 +1,5 @@
 sudo killall hostapd
-sudo service wpa_supplicant stop
+sudo killall wpa_supplicant 
 
 sudo cp ap/bcmdhd.conf /etc/modprobe.d/bcmdhd.conf
 sudo cp ap/hostapd.conf /etc/hostapd/hostapd.conf
