@@ -28,3 +28,6 @@ sudo apt-get install build-essential libbluetooth-dev
 sudo apt-get install espeak
 
 sudo acm/installCDCACM.sh
+
+sudo apt-get install build-essential hostapd
+sudo apt-get install build-essential dnsmasq
