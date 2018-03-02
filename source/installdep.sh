@@ -17,8 +17,8 @@ sudo apt-get install build-essential espeak
 
 sudo apt-get install build-essential python
 sudo apt-get install build-essential python-pip
-pip install --upgrade pip
-pip install obd
+sudo pip install --upgrade pip
+sudo pip install obd
 
 sudo apt-get install build-essential libboost-all-dev
 sudo apt-get install build-essential libcrypto++
