@@ -1,3 +1,9 @@
+/* ------------------------------------
+   Axolotl Data Logger Python Helper
+   ------------------------------------
+   Helper process that runs the OBD logging script separately from the data logging daemon process.
+*/
+
 #include "dcomh.hpp"
 
 #ifdef __linux__

@@ -12,14 +12,19 @@ using namespace std;
 string loggingDirectory;
 bool loggingActive = true;
 
-// record function that will record a 5-minute chunk of video from a stream over the wlan
+/*
+  Records a chunk of video and saves to disk.
+  INTERFACE: unimplemented as of now.
+*/
 void record() {
   printf("Recording...\n");
   sleep(10);
   printf("Recording complete. Saving to file.\n");
 }
 
-// loops the recording function
+/*
+  Constantly loops, calling record().
+*/
 void cameraLooper() {
   clock_t timer1;
   while(1) {

@@ -1,8 +1,8 @@
 ## ------------------------------------
 ## Axolotl Data Logging Python Adapter
 ## ------------------------------------
-## Describes methods that interact with pyOBD's IO interface
-## to gather and log data on behalf of the data logging daemon.
+## Describes methods that interact with pyOBD's IO interface to gather and log data on behalf of the data logging helper.
+## This script will automatically quit if the parent datad_pyhelper process is killed.
 ##
 ## Dependencies:
 ## - python-OBD
