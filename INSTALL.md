@@ -1,6 +1,6 @@
 # Installing Navigation and Data logging
 
-1.  Run the install script with sudo privileges: `sudo ./installdep.sh`
+1.  Run the install script with sudo privileges: `sudo ./installdep.sh`\n
     The Jetson will now reboot.
 2.  In the `/acm` directory, run: `sudo ./installCDCACM.sh`
 3.  Open the README.md in this directory and download the maps binary at the link provided.
@@ -9,4 +9,3 @@
 6.  Done!
     - Data logging system can be run by executing `./daemon_launcher`.
     - Navigation system can be run by executing `./navit` in `navit_build/navit/`.
-    
