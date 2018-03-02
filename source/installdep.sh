@@ -24,7 +24,6 @@ sudo apt-get install build-essential libboost-all-dev -y
 sudo apt-get install build-essential libcrypto++ -y
 
 sudo apt-get install build-essential libbluetooth-dev -y
-sudo apt-get install espeak -y
 
 sudo acm/installCDCACM.sh
 
