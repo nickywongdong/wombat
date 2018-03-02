@@ -120,7 +120,7 @@
 				<img src='gui_formerdests' onclick='formerdests()'><text>Previous</text></img>
 				<!-- <img cond='click_coord_geo' src='gui_map' onclick='position(click_coord_geo,_("Map Point"),8|16|32|64|256)'><script>write(click_coord_geo)</script></img> -->
 				<img cond='position_coord_geo' src='gui_vehicle' onclick='position(position_coord_geo,_("Vehicle Position"),8|32|64|128|256)'><script>write(position_coord_geo)</script></img>
-				<img src='gui_town' onclick='town()'><text>Town</text></img>
+				<img src='gui_town' onclick='town()'><text>Address</text></img>
 				<img src='gui_map' onclick='enter_coord()'><text>Coordinates</text></img>
 				<img cond='navit.route.route_status&amp;1' src='gui_stop' onclick='abort_navigation();refresh()'><text>Stop Nav</text></img>
 			</a>
@@ -223,7 +223,7 @@ Waypoint</text></img>
 		You can find a list of all the available OSDs items here:
 		http://wiki.navit-project.org/index.php/OSD -->
 		<osd enabled="yes" type="compass" background_color="#000000c8"/>
-		
+
 
 		<!-- Commands include gui_internal_menu, gui_internal_fullscreen, zoom_in and zoom_out.
 			Usage of negative values change the button origins. x="0" y="0" specifies the top left, x="-0" y="-0" the bottom right corner.
@@ -233,12 +233,13 @@ Waypoint</text></img>
 
 		<osd enabled="yes" type="text" w="300" h="40" x="-320" y="20" label="GPS Signal Strength: ${vehicle.position_sats_signal}/${vehicle.position_qual}" background_color="#000000c8"/>
 
-		<osd enabled="yes" type="text" label="In ${navigation.item[1].length[named]} " x="0" y="-180" font_size="400" w="200" h="40" background_color="#000000c8"/>
-		<osd enabled="yes" type="navigation_next_turn" background_color="#000000c8" w="200" h="100" x="0" y="-140"/>
-		<osd enabled="yes" type="text" label="Onto\n${navigation.item[1].street_name}" x="0" y="-40" font_size="200" w="200" h="40" background_color="#000000c8"/>
+		<osd enabled="yes" type="text" label="In ${navigation.item[1].length[named]} " x="20" y="-200" font_size="400" w="200" h="40" background_color="#000000c8"/>
+		<osd enabled="yes" type="navigation_next_turn" background_color="#000000c8" w="200" h="100" x="20" y="-160"/>
+		<osd enabled="yes" type="text" label="Onto\n${navigation.item[1].street_name}" x="20" y="-60" font_size="200" w="200" h="40" background_color="#000000c8"/>
 
-		<osd enabled="yes" type="text" label="ETA: ${navigation.item.destination_time[arrival]}" x="0" y="-230" font_size="400" w="200" h="40" background_color="#000000c8"/>
-	
+		<osd enabled="yes" type="text" label="Distance Left:\nETA:" x="20" y="-250" font_size="200" w="100" h="40" align="4" background_color="#000000c8"/>
+		<osd enabled="yes" type="text" label="${navigation.item.destination_length[named]}\n${navigation.item.destination_time[arrival]}" x="120" y="-250" font_size="200" w="100" h="40" align="8" background_color="#000000c8"/>
+
 		<osd enabled="yes" type="button" x="-100" y="-200" command="zoom_in()"  h="80" w="80" src="zoom_in.png"/>
 		<osd enabled="yes" type="button" x="-100" y="-100" command="zoom_out()" h="80" w="80" src="zoom_out.png"/>
 
@@ -469,7 +470,7 @@ Waypoint</text></img>
 		<!-- Mapset template for openstreetmaps -->
 		<mapset enabled="yes">
 			<!-- <map type="binfile" enabled="yes" data="/media/mmc2/MapsNavit/osm_europe.bin"/> -->
-			<map type="binfile" enabled="yes" data="~/Gitdir/wombat/source/navit-build/navit/maps/namaps.bin" />
+			<map type="binfile" enabled="yes" data="~/axolotl/maps/namaps.bin" />
 		</mapset>
 
 		<!-- Mapset template for garmin maps -->

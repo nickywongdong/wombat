@@ -33,7 +33,7 @@ MainWindow::MainWindow(QWidget *parent) :
     }
 
     nvid = fork();
-    chdir("/home/nvidia/wombat/source/navit-build/navit/");
+    chdir("/home/nvidia/wombat/source/navit_build/navit/");
 
     if(nvid==0){
         execl("./navit", "navit", NULL);
@@ -45,7 +45,7 @@ MainWindow::MainWindow(QWidget *parent) :
     char c[256];
     std::string foo;
     std::ifstream f;
-    chdir("/home/nvidia/Downloads");
+    chdir("/home/nvidia/wombat");
     snprintf(c, 256,"%s %d","bash getwindidbypid",(int)nvid);
     sleep(1);   //necessary
     system(c);
