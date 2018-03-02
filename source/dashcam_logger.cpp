@@ -7,8 +7,6 @@
 
 #include "dcomh.hpp"
 
-#define DEBUG
-
 using namespace std;
 
 string loggingDirectory;

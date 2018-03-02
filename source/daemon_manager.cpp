@@ -167,10 +167,10 @@ void deleteData(string password) {
 /*
   Hashes a new password and changes old password hash with the new hash.
 */
-void changePassword(string password, string sourceDir) {
+void changePassword(string password) {
   ofstream hashfile;
   string newhash = axolotlFileSystem::hash(password);
-  string hashfilePath = sourceDir + "/hashkey";
+  string hashfilePath = runDirectory + "/hashkey";
   hashfile.open(hashfilePath, std::ofstream::trunc);
   if(hashfile.is_open()) {
     hashfile.write((const char *)newhash.c_str(),(long)newhash.length());
