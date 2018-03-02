@@ -1,16 +1,19 @@
 /* ------------------------------------
-   Axolotl Data Logging System Tester
+   Axolotl Daemon Manager
    ------------------------------------
-   Process that sets up the environment for data logging and spawns
-   the OBDII data logging and dashcam logging processes.
+   Process that sets up the environment for data logging and starts
+   all processes that execute data logging.
 */
 
 #include "dcomh.hpp"
 
-//#define LOG_VOLUME_INSTALLED	// uncomment if logging to external storage
+// uncomment if an external storage device is connected
+// external storage device MUST be named "AXOLOTLDCV"
+// Jetson MUST be logged into the "nvidia" profile
+//#define LOG_VOLUME_INSTALLED
 
 #if defined(__linux__) && defined(LOG_VOLUME_INSTALLED)
-#define LOG_VOLUME "/media/nvidia/AXOLOTLDCV"   // external HDD must be named "AXOLOTLDCV"
+#define LOG_VOLUME "/media/nvidia/AXOLOTLDCV"
 #else
 #define LOG_VOLUME axolotlFileSystem::getHomeDir()
 #endif
@@ -181,10 +184,10 @@ void changePassword(string password) {
 /*
   Resets password back to the original.
 */
-void resetPassword(string sourceDir) {
+void resetPassword() {
   ofstream hashfile;
   string newhash = axolotlFileSystem::hash("orangemonkeyeagle");
-  string hashfilePath = sourceDir + "/hashkey";
+  string hashfilePath = runDirectory + "/hashkey";
   hashfile.open(hashfilePath, std::ofstream::trunc);
   if(hashfile.is_open()) {
     hashfile.write((const char *)newhash.c_str(),(long)newhash.length());
@@ -195,15 +198,16 @@ void resetPassword(string sourceDir) {
 /*
   Checks the supplied password against the stored password.
 */
-bool checkPasswordCorrect(string inPassword) {
+bool checkPasswordCorrect(string password) {
   string truekey;
   ifstream truekeyf;
-  truekeyf.open("hashkey");
+  string hashfilePath = runDirectory + "/hashkey";
+  truekeyf.open(hashfilePath);
   if(truekeyf.is_open()) {
     getline(truekeyf,truekey);
   }
   truekeyf.close();
-  return (axolotlFileSystem::hash(inPassword) == truekey);
+  return (axolotlFileSystem::hash(password) == truekey);
 }
 
 /*
