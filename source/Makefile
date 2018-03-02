@@ -5,6 +5,8 @@ all:
 	make dashcamd
 	rm -f daemon_launcher
 	make daemon_launcher
+	rm -f datad_pyhelper
+	make datad_pyhelper
 
 daemon_launcher: datad dashcamd daemon_manager.cpp
 	g++ daemon_manager.cpp -o daemon_launcher -lpthread -lboost_system -lboost_filesystem -lcryptopp -std=c++11
