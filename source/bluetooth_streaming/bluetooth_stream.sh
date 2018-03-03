@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/expect
 
 #this script will allow a bluetooth device to be connected to the Jetson TX2 Tegra Ubuntu
 #will have to be run on every reboot, or bluetooth restart.
@@ -22,10 +22,17 @@
 #sudo service bluetooth restart
 
 #load module for bluetooth connection, may still fail after loading this module however
-pactl unload-module module-bluetooth-discover
-pactl load-module module-bluetooth-discover
 
+#spawn pactl
 
+#send "unload-module module-bluetooth-discover\r"
+#send "load-module module-bluetooth-discover\r"
+#sleep 1
+#puts "loading bluetooth dscover module\r"
+#sleep 1
+#send "load-module module-loopback\r"
+#sleep 1
+#puts "loading module loopback"
 #connect to the bluetooth device, can attempt this as many times as you need, or else show failure. Must fill in the bluetooth address here.
 ##catch output of bluetoothctl connect in a variable, to see if it failed or not
 
@@ -48,11 +55,27 @@ pactl load-module module-bluetooth-discover
 
 #hard code the bluetooth address for now
 
-ADDRESS="70:70:0D:87:4D:D4"
+set ADDRESS "70:70:0D:87:4D:D4"
 #bluez_source xxxx =  is the bluetooth mac address, output = speaker
 #set xxxx to the speaker source
-echo "connecting to: " $ADDRESS
+#send "connecting to: " $ADDRESS
 
-echo -e 'power on\nconnect 70\t \nquit' | bluetoothctl
+spawn bluetoothctl
+send "connect $ADDRESS\r"
+sleep 4
+#puts "connected\r"
+send "quit\r"
+sleep 1
 
-pacmd load-module module-loopback source=bluez_source.$ADDRESS sink=alsa_output.platform-3510000.hda.hdmi-stereo-extra1
+spawn /home/nvidia/Desktop/github/source/bluetooth_streaming/load_module.sh
+
+#spawn pacmd
+#send "load-module module-loopback source=bluez_source.$ADDRESS sink=alsa_output.platform-3510000.hda.hdmi-stereo-extra1\r"
+
+#spawn pactl
+#send "load-module module-loopback\r"
+#sleep 1
+#puts "loading module loopback\r"
+#sleep 1
+
+expect eof
