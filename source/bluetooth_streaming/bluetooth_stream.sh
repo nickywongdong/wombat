@@ -22,30 +22,37 @@
 #sudo service bluetooth restart
 
 #load module for bluetooth connection, may still fail after loading this module however
+pactl unload-module module-bluetooth-discover
 pactl load-module module-bluetooth-discover
 
 
 #connect to the bluetooth device, can attempt this as many times as you need, or else show failure. Must fill in the bluetooth address here.
 ##catch output of bluetoothctl connect in a variable, to see if it failed or not
 
-catch=$( { bluetoothctl connect $1; } 2>&1 )
+#catch=$( { bluetoothctl connect $1; } 2>&1 )
 
 
 ##keep trying if we have a failure, make sure to update string in statement to the actual output of bluetoothctl
-until [ $catch -ne "failed" ]
-do
-	echo $catch
-	catch=$( { bluetoothctl connect $1; } 2>&1 )
-done
+#until [ $catch -ne "failed" ]
+#do
+#	echo $catch
+#	catch=$( { bluetoothctl connect $1; } 2>&1 )
+#done
 
 ##testing output:
-echo $catch
+#echo $catch
 
 
 #pacmd list-sources
 #pacmd list-sinks
 
+#hard code the bluetooth address for now
+
+ADDRESS="70:70:0D:87:4D:D4"
 #bluez_source xxxx =  is the bluetooth mac address, output = speaker
 #set xxxx to the speaker source
+echo "connecting to: " $ADDRESS
 
-pacmd load-module module-loopback source=bluez_source.$1 sink=alsa_output.pci-xxxx
+echo -e 'power on\nconnect 70\t \nquit' | bluetoothctl
+
+pacmd load-module module-loopback source=bluez_source.$ADDRESS sink=alsa_output.platform-3510000.hda.hdmi-stereo-extra1
