@@ -21,3 +21,5 @@ sudo cp ../rtl-sdr.rules /etc/udev/rules.d/
 #install gqrx:
 sudo apt-get --assume-yes gqrx-sdr
 
+#bluetooth_streaming:
+sudo apt-get --assume-yes install expect
