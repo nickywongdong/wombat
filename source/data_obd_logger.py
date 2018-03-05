@@ -28,9 +28,15 @@ commands.append(obd.commands.RELATIVE_THROTTLE_POS)
 commands.append(obd.commands.RUN_TIME)
 commands.append(obd.commands.FUEL_LEVEL)
 commands.append(obd.commands.COOLANT_TEMP)
-commands.append(obd.commands.OIL_TEMP)
 commands.append(obd.commands.AMBIANT_AIR_TEMP)
 commands.append(obd.commands.BAROMETRIC_PRESSURE)
+
+# diagnostic commands for development
+diagCommands = []
+
+diagCommands.append(obd.commands.HYBRID_BATTERY_REMAINING)
+diagCommands.append(obd.commands.OIL_TEMP)
+
 
 # run in async mode?
 runAsync = True
@@ -52,6 +58,22 @@ def obdSnapshot(obdConnection):
     csvFileHandle.write(csvLine)
     csvFileHandle.close()
 
+    ########################################
+    # same operations for diagnostics...
+    csvLine = "@" + str(time.ctime()) + ","
+
+    # execute the command array, saving results to csvLine with "," delimitation
+    for i in xrange(0,len(diagCommands)-1):
+            csvLine += str(obdConnection.query(diagCommands[i]).value) + ","
+
+    csvLine += str(obdConnection.query(diagCommands[len(commands)-1]).value) + "\n"
+
+    # write entire csvLine to file in one file operation
+    csvFileHandle = open(sys.argv[2] + "/diag.csv",'a')
+    csvFileHandle.write(csvLine)
+    csvFileHandle.close()
+    ########################################
+
     # debug statement; outputs the time taken to complete the query
     print str(time.time()-logTime)
 
@@ -64,6 +86,12 @@ def obdAsync(obdConnection):
 def startAsyncWatch(obdConnection):
     for i in xrange(0,len(commands)-1):
         obdConnection.watch(commands[i])
+
+    # diagnostic commands
+    for i in xrange(0,len(diagCommands)-1):
+        obdConnection.watch(diagCommands[i])
+        obdConnection.supported_commands.add(diagCommands[i])
+
     obdConnection.start()
 
 
