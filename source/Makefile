@@ -21,4 +21,4 @@ datad_pyhelper: data_logger_pyhelper.cpp
 	g++ data_logger_pyhelper.cpp -o datad_pyhelper -lpthread -lboost_system -lboost_filesystem -lcryptopp -std=c++11
 
 rpirunner: rpidashcams/runforever.cpp
-	g++ rpidashcams/runforever.cpp -o rpirunner -std=c++11
+	g++ rpidashcams/runforever.cpp -o rpidashcams/rpirunner -std=c++11
