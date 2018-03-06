@@ -74,5 +74,7 @@ Dependencies:
 - Qt 5.10\*
 - CryptoPP 6.0.0
 - python-OBD 0.6.1
+- hostapd
+- dnsmasq
 
 \*Sub-dependencies not included in this listing.
