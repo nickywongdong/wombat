@@ -32,6 +32,21 @@ pid_t dcdpid = -5, dldpid = -5;
 string loggingDirectory, runDirectory;
 
 /*
+  Checks the supplied password against the stored password.
+*/
+bool checkPasswordCorrect(string password) {
+  string truekey;
+  ifstream truekeyf;
+  string hashfilePath = "~wombat/source" + "/hashkey"; //normally runDirectory + "/hashkey"
+  truekeyf.open(hashfilePath);
+  if(truekeyf.is_open()) {
+    getline(truekeyf,truekey);
+  }
+  truekeyf.close();
+  return (axolotlFileSystem::hash(password) == truekey);
+}
+
+/*
   Creates a logging directory from a path.
 */
 bool buildSaveDirectoryFromPath(string path) {
@@ -151,7 +166,7 @@ void deleteData(string password) {
   // Get true passkey hash from file
   ifstream hashfile;
   string truekeyHash = NULL;
-  string hashfilePath = runDirectory + "/hashkey";
+  string hashfilePath = "~/wombat/source" + "/hashkey"; //normally runDirectory + "/hashkey"
   hashfile.open(hashfilePath);
   if (hashfile.is_open()) {
     getline(hashfile,truekeyHash);
@@ -169,16 +184,21 @@ void deleteData(string password) {
 
 /*
   Hashes a new password and changes old password hash with the new hash.
+  Only if old password matches!
 */
-void changePassword(string password) {
-  ofstream hashfile;
-  string newhash = axolotlFileSystem::hash(password);
-  string hashfilePath = runDirectory + "/hashkey";
-  hashfile.open(hashfilePath, std::ofstream::trunc);
-  if(hashfile.is_open()) {
-    hashfile.write((const char *)newhash.c_str(),(long)newhash.length());
+bool changePassword(string checkPassword, string newPassword) {
+  if(checkPasswordCorrect(checkPassword)) {
+    ofstream hashfile;
+    string newhash = axolotlFileSystem::hash(newPassword);
+    string hashfilePath = "~/wombat/source" + "/hashkey"; // normally runDirectory + "/hashkey"
+    hashfile.open(hashfilePath, std::ofstream::trunc);
+    if(hashfile.is_open()) {
+      hashfile.write((const char *)newhash.c_str(),(long)newhash.length());
+    }
+    hashfile.close();
+    return true;
   }
-  hashfile.close();
+  return false;
 }
 
 /*
@@ -187,27 +207,12 @@ void changePassword(string password) {
 void resetPassword() {
   ofstream hashfile;
   string newhash = axolotlFileSystem::hash("orangemonkeyeagle");
-  string hashfilePath = runDirectory + "/hashkey";
+  string hashfilePath = "~/wombat/source" + "/hashkey"; // normally runDirectory + "/hashkey"
   hashfile.open(hashfilePath, std::ofstream::trunc);
   if(hashfile.is_open()) {
     hashfile.write((const char *)newhash.c_str(),(long)newhash.length());
   }
   hashfile.close();
-}
-
-/*
-  Checks the supplied password against the stored password.
-*/
-bool checkPasswordCorrect(string password) {
-  string truekey;
-  ifstream truekeyf;
-  string hashfilePath = runDirectory + "/hashkey";
-  truekeyf.open(hashfilePath);
-  if(truekeyf.is_open()) {
-    getline(truekeyf,truekey);
-  }
-  truekeyf.close();
-  return (axolotlFileSystem::hash(password) == truekey);
 }
 
 /*
@@ -319,12 +324,10 @@ int main() {
   // manager waits on quit
   while(1) {
     getline(cin,inputStr);
-    if(inputStr == "q" | inputStr == "Q") {
-      break;
+    if(checkPasswordCorrect(inputStr)) {
+      dataDeletionHandler();
     }
-    else {
-      inputStr = "";
-    }
+    inputStr = "";
   }
   #endif
 

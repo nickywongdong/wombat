@@ -66,7 +66,7 @@ def obdSnapshot(obdConnection):
     for i in xrange(0,len(diagCommands)-1):
             csvLine += str(obdConnection.query(diagCommands[i]).value) + ","
 
-    csvLine += str(obdConnection.query(diagCommands[len(commands)-1]).value) + "\n"
+    csvLine += str(obdConnection.query(diagCommands[len(diagCommands)-1]).value) + "\n"
 
     # write entire csvLine to file in one file operation
     csvFileHandle = open(sys.argv[2] + "/diag.csv",'a')
