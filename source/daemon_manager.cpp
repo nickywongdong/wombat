@@ -271,7 +271,7 @@ void registerDeleteHandler() {
   sigaction(SIGUSR1, &dsa, NULL);
 }
 
-int main() {
+int mainOperation() {
   string inputStr;
   runDirectory = axolotlFileSystem::getPWD();
 
