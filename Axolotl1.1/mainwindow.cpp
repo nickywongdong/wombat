@@ -16,6 +16,7 @@
 #include<string>
 #include<QCloseEvent>
 #include<QTabWidget>
+#include<QStackedWidget>
 
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -23,10 +24,13 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    system("sudo /home/nvidia/Desktop/wombat-victor-dev/source/wmanager/set_client.sh");
+    // music pulling here
+    system("sudo /home/nvidia/Desktop/wombat-victor-dev/source/wmanager/set_ap.sh");
     dmid = fork();
     chdir("/home/nvidia/wombat/source/");
     if(dmid==0){
-        execl("../source/daemon_launcher", "daemon_manager", NULL);
+        execl("../source/daemon_launcher", "daemon_launcher", NULL);
     }
     else{
         chdir("/home/nvidia/wombat/");
@@ -64,8 +68,9 @@ MainWindow::MainWindow(QWidget *parent) :
     layout->addWidget(widget);
     this->setLayout(layout);
     ui->tabWidget->addTab(widget,"Navigation");
-    ui->tabWidget->addTab(new MusicPage(),"Music");
-    ui->tabWidget->addTab(new Data(),"Data");
+    ui->tabWidget->addTab(new Data(this, dmid),"Data");
+    ui->tabWidget->addTab(new MusicPage(),"Media");
+
 }
 
 void MainWindow::closeEvent(QCloseEvent *event){

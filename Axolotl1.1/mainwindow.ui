@@ -87,6 +87,11 @@
       <height>641</height>
      </rect>
     </property>
+    <property name="styleSheet">
+     <string notr="true">QTabBar::tab {
+height: 30px;
+}</string>
+    </property>
     <property name="currentIndex">
      <number>-1</number>
     </property>

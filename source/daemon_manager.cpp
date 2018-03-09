@@ -7,7 +7,7 @@
 
 #include "dcomh.hpp"
 
-#define LOG_VOLUME_INSTALLED	// uncomment if logging to external storage
+//#define LOG_VOLUME_INSTALLED	// uncomment if logging to external storage
 
 #if defined(__linux__) && defined(LOG_VOLUME_INSTALLED)
 #define LOG_VOLUME "/media/nvidia/AXOLOTLDCV"   // external HDD must be named "AXOLOTLDCV"

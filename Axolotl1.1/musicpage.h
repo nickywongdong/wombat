@@ -22,8 +22,14 @@ private slots:
 
     void on_pushButton_3_clicked();
 
+    void on_pushButton_4_clicked();
+
 private:
     Ui::MusicPage *ui;
+    void closeEvent(QCloseEvent *);
+    pid_t mpid;
+    pid_t fmid;
+    bool open;
 };
 
 #endif // MUSICPAGE_H
