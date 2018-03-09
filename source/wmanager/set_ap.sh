@@ -18,4 +18,5 @@ sudo nmcli radio wifi on
 
 sudo service NetworkManager restart
 
+sudo service dnsmasq start
 sudo hostapd -B /etc/hostapd/hostapd.conf 
