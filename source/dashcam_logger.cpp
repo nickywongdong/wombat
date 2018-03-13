@@ -27,7 +27,8 @@ int s;
 
 void connectBluetooth1(string bluetoothAddress) {
   struct sockaddr_rc addr = { 0 };
-  char *dest = bluetoothAddress.c_str();    //Bluetooth Address of device to connect to
+  int status;
+  char *dest = (char *)bluetoothAddress.c_str();    //Bluetooth Address of device to connect to
 
   // allocate a socket
   s = socket(AF_BLUETOOTH, SOCK_STREAM, BTPROTO_RFCOMM);
