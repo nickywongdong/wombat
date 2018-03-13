@@ -225,13 +225,13 @@ void managerSigintHandler(int signumber, siginfo_t *siginfo, void *pointer) {
 
   // kill and wait on termination of dashcam daemon
   if(!(dcdpid < 0)) {
-    kill(dcdpid,SIGKILL);
+    kill(dcdpid,SIGTERM);
   }
   waitpid(dcdpid, &status, 0);
 
   // kill and wait on termination of data logging daemon
   if(!(dldpid < 0)) {
-    kill(dldpid,SIGKILL);
+    kill(dldpid,SIGTERM);
   }
   waitpid(dldpid, &status, 0);
 

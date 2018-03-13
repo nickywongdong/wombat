@@ -151,6 +151,7 @@ void killCamerasHandler(int signumber, siginfo_t *siginfo, void *pointer) {
 
   sendBluetoothCommand(FRONT_CAM_BT_ADDR,'q');
   //sendBluetoothCommand(REAR_CAM_BT_ADDR,'q');
+  exit(0);
 }
 
 /*
