@@ -1,6 +1,9 @@
 #include <iostream>
 #include <cstdlib>
 #include <unistd.h>
+#include <string>
+
+using namespace std;
 
 /*
   Records a chunk of video and saves to disk.
@@ -15,7 +18,6 @@ int main(int argc, char *argv[]) {
   //sleep(10);
   //printf("Recording complete. Saving to file.\n");
   int cameraPort = atoi(argv[1]);
-  sendBluetoothCommand(s,'s');
 
   string sysCmd = "gst-launch-1.0 -v udpsrc port=" + to_string(cameraPort) + " ! gdpdepay ! rtph264depay ! avdec_h264 ! autovideosink sync=false";
 

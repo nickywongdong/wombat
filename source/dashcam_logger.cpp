@@ -66,7 +66,8 @@ void cameraLooper() {
     dchelper0_pid = fork();
     if(dchelper0_pid == 0) {
       if (axolotlFileSystem::getAvailableMemory(loggingDirectory) > 2048) {
-
+        sendBluetoothCommand(s,'s');
+        execv("record",args);
       }
       else {
         dchelper1_pid = fork();
