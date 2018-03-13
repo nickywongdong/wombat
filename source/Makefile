@@ -1,4 +1,4 @@
-all: dashcamd datad datad_pyhelper daemon_launcher rp1dcd
+all: dashcamd datad datad_pyhelper daemon_launcher
 
 daemon_launcher: datad dashcamd daemon_manager.cpp
 	rm -f daemon_launcher
@@ -21,6 +21,5 @@ clean:
 	rm -f datad
 	rm -f datad_pyhelper
 	rm -f	dashcamd
-	rm -f rpidashcams/rpi1dcd
 
 fresh: clean all

@@ -7,6 +7,7 @@
 
 #include "dcomh.hpp"
 
+#include <stdio.h>
 #include <unistd.h>
 #include <sys/socket.h>
 #include <bluetooth/bluetooth.h>
@@ -22,12 +23,11 @@ bool loggingActive = true;
 
 pid_t dchelper0_pid = -5, dchelper1_pid = -5;
 
-void sendBluetoothCommand(string bluetoothAddress, char command) {
+int s;
+
+void connectBluetooth1(string bluetoothAddress) {
   struct sockaddr_rc addr = { 0 };
-  int s, status;
-  char dest[18] = bluetoothAddress.c_str();    //Bluetooth Address of device to connect to
-  char input; //reading input from keyboard
-  char buf[64];
+  char *dest = bluetoothAddress.c_str();    //Bluetooth Address of device to connect to
 
   // allocate a socket
   s = socket(AF_BLUETOOTH, SOCK_STREAM, BTPROTO_RFCOMM);
@@ -39,16 +39,18 @@ void sendBluetoothCommand(string bluetoothAddress, char command) {
 
   // connect to server
   status = connect(s, (struct sockaddr *)&addr, sizeof(addr));
+}
+
+void sendBluetoothCommand(char command) {
+  int status;
 
   // send a message
   if (status == 0) {
-          status = write(s, command, 1);    //send 1 char to server
+    status = write(s, command, 1);    //send 1 char to server
   }
   else if (status < 0) {
     perror("error in sending data");
-  };
-
-  close(s);
+  }
 }
 
 /*
@@ -59,12 +61,12 @@ void sendBluetoothCommand(string bluetoothAddress, char command) {
   Port 9002: rear dashcam
   Port 9003: backup camera
 */
-void record(string bluetoothAddress, int cameraPort) {
+void record(int cameraPort) {
   //printf("Recording...\n");
   //sleep(10);
   //printf("Recording complete. Saving to file.\n");
 
-  sendBluetoothCommand(bluetoothAddress,'s');
+  sendBluetoothCommand('s');
 
   string sysCmd = "gst-launch-1.0 -v udpsrc port=" + to_string(cameraPort) + " ! gdpdepay ! rtph264depay ! avdec_h264 ! autovideosink sync=false";
 
@@ -76,24 +78,25 @@ void record(string bluetoothAddress, int cameraPort) {
 */
 void cameraLooper() {
   clock_t timer1;
-  while(1) {
-    if(loggingActive) {
-      dchelper0_pid = fork();
-      if(dchelper0_pid == 0) {
-        if (axolotlFileSystem::getAvailableMemory(loggingDirectory) > 2048) {
-          record(FRONT_CAM_BT_ADDR,9001);
+  if(loggingActive) {
+    dchelper0_pid = fork();
+    if(dchelper0_pid == 0) {
+      if (axolotlFileSystem::getAvailableMemory(loggingDirectory) > 2048) {
+        record(9001);
+      }
+      else {
+        dchelper1_pid = fork();
+        if(dchelper1_pid == 0) {
+          //record(REAR_CAM_BT_ADDR,9002);
         }
         else {
-          dchelper1_pid = fork();
-          if(dchelper1_pid == 0) {
-            //record(REAR_CAM_BT_ADDR,9002);
-          }
-          else {
 
-          }
         }
       }
     }
+  }
+  while(1) {
+    // do nothing...
   }
 }
 
@@ -148,14 +151,14 @@ void killCamerasHandler(int signumber, siginfo_t *siginfo, void *pointer) {
     waitpid(dchelper1_pid, &status, -1);
   }
   dchelper1_pid = -5;*/
-
-  sendBluetoothCommand(FRONT_CAM_BT_ADDR,'q');
   //sendBluetoothCommand(REAR_CAM_BT_ADDR,'q');
+  sendBluetoothCommand(FRONT_CAM_BT_ADDR,'q');
+  close(s);
   exit(0);
 }
 
 /*
-  Registers the toggle handler with SIGTERM.
+  Registers the handler with SIGTERM.
 */
 void registerKillCamerasHandler() {
   static struct sigaction dsa;
@@ -170,6 +173,7 @@ int main(int argc, char *argv[]) {
 
   loggingDirectory = argv[1];
 
+  connectBluetooth1(FRONT_CAM_BT_ADDR);
   registerToggleOffHandler();
   registerToggleOnHandler();
   registerKillCamerasHandler();
