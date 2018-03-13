@@ -46,7 +46,7 @@ void sendBluetoothCommand(char command) {
 
   // send a message
   if (status == 0) {
-    status = write(s, command, 1);    //send 1 char to server
+    status = write(s, &command, 1);    //send 1 char to server
   }
   else if (status < 0) {
     perror("error in sending data");
