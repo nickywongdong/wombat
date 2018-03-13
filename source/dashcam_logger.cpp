@@ -42,12 +42,12 @@ void connectBluetooth1(string bluetoothAddress) {
   status = connect(s, (struct sockaddr *)&addr, sizeof(addr));
 }
 
-void sendBluetoothCommand(char command) {
+void sendBluetoothCommand(int fd, char command) {
   int status;
 
   // send a message
   if (status == 0) {
-    status = write(s, &command, 1);    //send 1 char to server
+    status = write(fd, &command, 1);    //send 1 char to server
   }
   else if (status < 0) {
     perror("error in sending data");
@@ -67,7 +67,7 @@ void record(int cameraPort) {
   //sleep(10);
   //printf("Recording complete. Saving to file.\n");
 
-  sendBluetoothCommand('s');
+  sendBluetoothCommand(s,'s');
 
   string sysCmd = "gst-launch-1.0 -v udpsrc port=" + to_string(cameraPort) + " ! gdpdepay ! rtph264depay ! avdec_h264 ! autovideosink sync=false";
 
@@ -142,6 +142,7 @@ void registerToggleOnHandler() {
 */
 void killCamerasHandler(int signumber, siginfo_t *siginfo, void *pointer) {
   int status;
+  sendBluetoothCommand(s,'q');
   if((dchelper0_pid != -5) && (dchelper0_pid > 1)) {
     kill(dchelper0_pid,SIGKILL);
     waitpid(dchelper0_pid, &status, -1);
@@ -153,7 +154,6 @@ void killCamerasHandler(int signumber, siginfo_t *siginfo, void *pointer) {
   }
   dchelper1_pid = -5;*/
   //sendBluetoothCommand(REAR_CAM_BT_ADDR,'q');
-  sendBluetoothCommand('q');
   close(s);
   exit(0);
 }
