@@ -1,5 +1,5 @@
 /*
- * jetsonGPIO.h
+ * JetsonGPIO.h
  *
  * Copyright (c) 2015 JetsonHacks
  * www.jetsonhacks.com

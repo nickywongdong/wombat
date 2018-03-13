@@ -1,4 +1,4 @@
-// jetsonGPIO.c
+// JetsonGPIO.c
 
 #include <stdio.h>
 #include <stdlib.h>
