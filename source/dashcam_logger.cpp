@@ -153,7 +153,7 @@ void killCamerasHandler(int signumber, siginfo_t *siginfo, void *pointer) {
   }
   dchelper1_pid = -5;*/
   //sendBluetoothCommand(REAR_CAM_BT_ADDR,'q');
-  sendBluetoothCommand(FRONT_CAM_BT_ADDR,'q');
+  sendBluetoothCommand('q');
   close(s);
   exit(0);
 }
