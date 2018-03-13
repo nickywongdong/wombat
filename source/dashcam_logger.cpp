@@ -12,6 +12,9 @@
 #include <bluetooth/bluetooth.h>
 #include <bluetooth/rfcomm.h>
 
+#define FRONT_CAM_BT_ADDR "B8:27:EB:FE:1C:65"
+#define REAR_CAM_BT_ADDR "iunnoyet"
+
 using namespace std;
 
 string loggingDirectory;
@@ -19,19 +22,7 @@ bool loggingActive = true;
 
 pid_t dchelper0_pid = -5, dchelper1_pid = -5;
 
-/*
-  Records a chunk of video and saves to disk.
-  Must be passed the bluetooth address of the respective dashcam and the TCP
-  port the Jetson is receiving the stream at.
-  Port 9001: front dashcam
-  Port 9002: rear dashcam
-  Port 9003: backup camera
-*/
-void record(string bluetoothAddress, int cameraPort) {
-  //printf("Recording...\n");
-  //sleep(10);
-  //printf("Recording complete. Saving to file.\n");
-
+void sendBluetoothCommand(string bluetoothAddress, char command) {
   struct sockaddr_rc addr = { 0 };
   int s, status;
   char dest[18] = bluetoothAddress.c_str();    //Bluetooth Address of device to connect to
@@ -51,13 +42,29 @@ void record(string bluetoothAddress, int cameraPort) {
 
   // send a message
   if (status == 0) {
-          status = write(s, 's', 1);    //send 1 char to server
+          status = write(s, command, 1);    //send 1 char to server
   }
   else if (status < 0) {
     perror("error in sending data");
   };
 
   close(s);
+}
+
+/*
+  Records a chunk of video and saves to disk.
+  Must be passed the bluetooth address of the respective dashcam and the TCP
+  port the Jetson is receiving the stream at.
+  Port 9001: front dashcam
+  Port 9002: rear dashcam
+  Port 9003: backup camera
+*/
+void record(string bluetoothAddress, int cameraPort) {
+  //printf("Recording...\n");
+  //sleep(10);
+  //printf("Recording complete. Saving to file.\n");
+
+  sendBluetoothCommand(bluetoothAddress,'s');
 
   string sysCmd = "gst-launch-1.0 -v udpsrc port=" + to_string(cameraPort) + " ! gdpdepay ! rtph264depay ! avdec_h264 ! autovideosink sync=false";
 
@@ -74,7 +81,16 @@ void cameraLooper() {
       dchelper0_pid = fork();
       if(dchelper0_pid == 0) {
         if (axolotlFileSystem::getAvailableMemory(loggingDirectory) > 2048) {
-          record("B8:27:EB:FE:1C:65",9001);
+          record(FRONT_CAM_BT_ADDR,9001);
+        }
+        else {
+          dchelper1_pid = fork();
+          if(dchelper1_pid == 0) {
+            //record(REAR_CAM_BT_ADDR,9002);
+          }
+          else {
+
+          }
         }
       }
     }
@@ -127,17 +143,25 @@ void killCamerasHandler(int signumber, siginfo_t *siginfo, void *pointer) {
     waitpid(dchelper0_pid, &status, -1);
   }
   dchelper0_pid = -5;
+  /*if((dchelper1_pid != -5) && (dchelper0_pid > 1)) {
+    kill(dchelper1_pid,SIGKILL);
+    waitpid(dchelper1_pid, &status, -1);
+  }
+  dchelper1_pid = -5;*/
+
+  sendBluetoothCommand(FRONT_CAM_BT_ADDR,'q');
+  //sendBluetoothCommand(REAR_CAM_BT_ADDR,'q');
 }
 
 /*
-  Registers the toggle handler with SIGUSR2.
+  Registers the toggle handler with SIGTERM.
 */
 void registerKillCamerasHandler() {
   static struct sigaction dsa;
   memset(&dsa, 0, sizeof(dsa));
   dsa.sa_sigaction = killCamerasHandler;
   dsa.sa_flags = SA_SIGINFO;
-  sigaction(SIGUSR2, &dsa, NULL);
+  sigaction(SIGTERM, &dsa, NULL);
 }
 
 int main(int argc, char *argv[]) {
