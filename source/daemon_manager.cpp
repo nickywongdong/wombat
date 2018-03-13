@@ -37,7 +37,7 @@ string loggingDirectory, runDirectory;
 bool checkPasswordCorrect(string password) {
   string truekey;
   ifstream truekeyf;
-  string hashfilePath = "~wombat/source" + "/hashkey"; //normally runDirectory + "/hashkey"
+  string hashfilePath = "~/wombat/source/hashkey"; //normally runDirectory + "/hashkey"
   truekeyf.open(hashfilePath);
   if(truekeyf.is_open()) {
     getline(truekeyf,truekey);
@@ -166,7 +166,7 @@ void deleteData(string password) {
   // Get true passkey hash from file
   ifstream hashfile;
   string truekeyHash = NULL;
-  string hashfilePath = "~/wombat/source" + "/hashkey"; //normally runDirectory + "/hashkey"
+  string hashfilePath = "~/wombat/source/hashkey"; //normally runDirectory + "/hashkey"
   hashfile.open(hashfilePath);
   if (hashfile.is_open()) {
     getline(hashfile,truekeyHash);
@@ -190,7 +190,7 @@ bool changePassword(string checkPassword, string newPassword) {
   if(checkPasswordCorrect(checkPassword)) {
     ofstream hashfile;
     string newhash = axolotlFileSystem::hash(newPassword);
-    string hashfilePath = "~/wombat/source" + "/hashkey"; // normally runDirectory + "/hashkey"
+    string hashfilePath = "~/wombat/source/hashkey"; // normally runDirectory + "/hashkey"
     hashfile.open(hashfilePath, std::ofstream::trunc);
     if(hashfile.is_open()) {
       hashfile.write((const char *)newhash.c_str(),(long)newhash.length());
@@ -207,7 +207,7 @@ bool changePassword(string checkPassword, string newPassword) {
 void resetPassword() {
   ofstream hashfile;
   string newhash = axolotlFileSystem::hash("orangemonkeyeagle");
-  string hashfilePath = "~/wombat/source" + "/hashkey"; // normally runDirectory + "/hashkey"
+  string hashfilePath = "~/wombat/source/hashkey"; // normally runDirectory + "/hashkey"
   hashfile.open(hashfilePath, std::ofstream::trunc);
   if(hashfile.is_open()) {
     hashfile.write((const char *)newhash.c_str(),(long)newhash.length());
@@ -271,7 +271,7 @@ void registerDeleteHandler() {
   sigaction(SIGUSR1, &dsa, NULL);
 }
 
-int mainOperation() {
+int main() {
   string inputStr;
   runDirectory = axolotlFileSystem::getPWD();
 

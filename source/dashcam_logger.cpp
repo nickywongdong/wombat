@@ -12,14 +12,20 @@ using namespace std;
 string loggingDirectory;
 bool loggingActive = true;
 
+pid_t dchelper0_pid, dchelper1_pid;
+
 /*
   Records a chunk of video and saves to disk.
-  INTERFACE: unimplemented as of now.
+  Must be passed the bluetooth address of the respective dashcam and the TCP
+  port the Jetson is receiving the stream at.
+  Port 9001: front dashcam
+  Port 9002: rear dashcam
+  Port 9003: backup camera
 */
-void record() {
-  printf("Recording...\n");
-  sleep(10);
-  printf("Recording complete. Saving to file.\n");
+void record(string bluetoothAddress, int cameraPort) {
+  //printf("Recording...\n");
+  //sleep(10);
+  //printf("Recording complete. Saving to file.\n");
 }
 
 /*
@@ -31,7 +37,7 @@ void cameraLooper() {
     if(loggingActive) {
       timer1 = clock();
       if (axolotlFileSystem::getAvailableMemory(loggingDirectory) > 2048) {
-        record();
+        record("ASDF",9001);
       }
 
       #ifdef DEBUG
