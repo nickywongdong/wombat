@@ -70,7 +70,7 @@ void cameraLooper() {
         execv("record",args);
       }
       else {
-        dchelper1_pid = fork();
+        //dchelper1_pid = fork();
         if(dchelper1_pid == 0) {
           //record(REAR_CAM_BT_ADDR,9002);
         }
