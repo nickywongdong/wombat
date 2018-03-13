@@ -10,7 +10,7 @@
   Port 9002: rear dashcam
   Port 9003: backup camera
 */
-int main(int argc; char *argv[]) {
+int main(int argc, char *argv[]) {
   //printf("Recording...\n");
   //sleep(10);
   //printf("Recording complete. Saving to file.\n");
