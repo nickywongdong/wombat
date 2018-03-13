@@ -141,6 +141,7 @@ void registerToggleOnHandler() {
   Turns logging on.
 */
 void killCamerasHandler(int signumber, siginfo_t *siginfo, void *pointer) {
+  printf("IMA FIRIN MAH LAZOR\n");
   int status;
   sendBluetoothCommand(s,'q');
   if((dchelper0_pid != -5) && (dchelper0_pid > 1)) {
