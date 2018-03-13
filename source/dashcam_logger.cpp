@@ -15,6 +15,8 @@
 
 #define FRONT_CAM_BT_ADDR "B8:27:EB:FE:1C:65"
 #define REAR_CAM_BT_ADDR "iunnoyet"
+#define FRONT_CAMERA_HELPER_NAME "./front_cam_helper"
+#define FRONT_CAMERA_PORT "9001"
 
 using namespace std;
 
@@ -55,35 +57,16 @@ void sendBluetoothCommand(int fd, char command) {
 }
 
 /*
-  Records a chunk of video and saves to disk.
-  Must be passed the bluetooth address of the respective dashcam and the TCP
-  port the Jetson is receiving the stream at.
-  Port 9001: front dashcam
-  Port 9002: rear dashcam
-  Port 9003: backup camera
-*/
-void record(int cameraPort) {
-  //printf("Recording...\n");
-  //sleep(10);
-  //printf("Recording complete. Saving to file.\n");
-
-  sendBluetoothCommand(s,'s');
-
-  string sysCmd = "gst-launch-1.0 -v udpsrc port=" + to_string(cameraPort) + " ! gdpdepay ! rtph264depay ! avdec_h264 ! autovideosink sync=false";
-
-  system(sysCmd.c_str());
-}
-
-/*
   Constantly loops, calling record().
 */
 void cameraLooper() {
   clock_t timer1;
+  char *args[] = {(char *)FRONT_CAMERA_HELPER_NAME, (char *)FRONT_CAMERA_PORT, NULL};
   if(loggingActive) {
     dchelper0_pid = fork();
     if(dchelper0_pid == 0) {
       if (axolotlFileSystem::getAvailableMemory(loggingDirectory) > 2048) {
-        record(9001);
+
       }
       else {
         dchelper1_pid = fork();

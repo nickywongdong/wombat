@@ -1,4 +1,4 @@
-all: dashcamd datad datad_pyhelper daemon_launcher
+all: dashcamd datad datad_pyhelper daemon_launcher record
 
 daemon_launcher: datad dashcamd daemon_manager.cpp
 	rm -f daemon_launcher
@@ -16,10 +16,15 @@ datad_pyhelper: data_logger_pyhelper.cpp
 	rm -f datad_pyhelper
 	g++ data_logger_pyhelper.cpp -o datad_pyhelper -lpthread -lboost_system -lboost_filesystem -lcryptopp -std=c++11
 
+record: record.cpp
+	rm -f record
+	g++ record.cpp -o record -std=c++11
+
 clean:
 	rm -f daemon_launcher
 	rm -f datad
 	rm -f datad_pyhelper
 	rm -f	dashcamd
+	rm -f record
 
 fresh: clean all
