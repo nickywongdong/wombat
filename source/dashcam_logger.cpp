@@ -7,12 +7,17 @@
 
 #include "dcomh.hpp"
 
+#include <unistd.h>
+#include <sys/socket.h>
+#include <bluetooth/bluetooth.h>
+#include <bluetooth/rfcomm.h>
+
 using namespace std;
 
 string loggingDirectory;
 bool loggingActive = true;
 
-pid_t dchelper0_pid, dchelper1_pid;
+pid_t dchelper0_pid = -5, dchelper1_pid = -5;
 
 /*
   Records a chunk of video and saves to disk.
@@ -26,6 +31,37 @@ void record(string bluetoothAddress, int cameraPort) {
   //printf("Recording...\n");
   //sleep(10);
   //printf("Recording complete. Saving to file.\n");
+
+  struct sockaddr_rc addr = { 0 };
+  int s, status;
+  char dest[18] = bluetoothAddress.c_str();    //Bluetooth Address of device to connect to
+  char input; //reading input from keyboard
+  char buf[64];
+
+  // allocate a socket
+  s = socket(AF_BLUETOOTH, SOCK_STREAM, BTPROTO_RFCOMM);
+
+  // set the connection parameters (who to connect to)
+  addr.rc_family = AF_BLUETOOTH;
+  addr.rc_channel = (uint8_t) 1;
+  str2ba( dest, &addr.rc_bdaddr );
+
+  // connect to server
+  status = connect(s, (struct sockaddr *)&addr, sizeof(addr));
+
+  // send a message
+  if (status == 0) {
+          status = write(s, 's', 1);    //send 1 char to server
+  }
+  else if (status < 0) {
+    perror("error in sending data");
+  };
+
+  close(s);
+
+  string sysCmd = "gst-launch-1.0 -v udpsrc port=" + to_string(cameraPort) + " ! gdpdepay ! rtph264depay ! avdec_h264 ! autovideosink sync=false";
+
+  system(sysCmd.c_str());
 }
 
 /*
@@ -35,16 +71,12 @@ void cameraLooper() {
   clock_t timer1;
   while(1) {
     if(loggingActive) {
-      timer1 = clock();
-      if (axolotlFileSystem::getAvailableMemory(loggingDirectory) > 2048) {
-        record("ASDF",9001);
+      dchelper0_pid = fork();
+      if(dchelper0_pid == 0) {
+        if (axolotlFileSystem::getAvailableMemory(loggingDirectory) > 2048) {
+          record("B8:27:EB:FE:1C:65",9001);
+        }
       }
-
-      #ifdef DEBUG
-      printf("Logged?\n");
-      printf("%f\n",(clock()-timer1)/(double)CLOCKS_PER_SEC);
-      printf("Sample Rate: %f\n",1/((clock()-timer1)/(double)CLOCKS_PER_SEC));
-      #endif
     }
   }
 }
@@ -85,6 +117,29 @@ void registerToggleOnHandler() {
   sigaction(SIGUSR2, &dsa, NULL);
 }
 
+/*
+  Turns logging on.
+*/
+void killCamerasHandler(int signumber, siginfo_t *siginfo, void *pointer) {
+  int status;
+  if((dchelper0_pid != -5) && (dchelper0_pid > 1)) {
+    kill(dchelper0_pid,SIGKILL);
+    waitpid(dchelper0_pid, &status, -1);
+  }
+  dchelper0_pid = -5;
+}
+
+/*
+  Registers the toggle handler with SIGUSR2.
+*/
+void registerKillCamerasHandler() {
+  static struct sigaction dsa;
+  memset(&dsa, 0, sizeof(dsa));
+  dsa.sa_sigaction = killCamerasHandler;
+  dsa.sa_flags = SA_SIGINFO;
+  sigaction(SIGUSR2, &dsa, NULL);
+}
+
 int main(int argc, char *argv[]) {
   // Ensure that a logging directory has been provided and bind it
 
@@ -92,6 +147,7 @@ int main(int argc, char *argv[]) {
 
   registerToggleOffHandler();
   registerToggleOnHandler();
+  registerKillCamerasHandler();
   cameraLooper();
 
   return 0;
