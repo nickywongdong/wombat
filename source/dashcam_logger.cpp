@@ -100,44 +100,6 @@ void cameraLooper() {
 }
 
 /*
-  Turns logging off.
-*/
-void toggleOffHandler(int signumber, siginfo_t *siginfo, void *pointer) {
-  loggingActive = false;
-  killallHelpers();
-  sendBluetoothCommand(fdcfd,'p');
-}
-
-/*
-  Registers the toggle off handler with SIGUSR1.
-*/
-void registerToggleOffHandler() {
-  static struct sigaction dsa;
-  memset(&dsa, 0, sizeof(dsa));
-  dsa.sa_sigaction = toggleOffHandler;
-  dsa.sa_flags = SA_SIGINFO;
-  sigaction(SIGUSR1, &dsa, NULL);
-}
-
-/*
-  Turns logging on.
-*/
-void toggleOnHandler(int signumber, siginfo_t *siginfo, void *pointer) {
-  loggingActive = true;
-}
-
-/*
-  Registers the toggle handler with SIGUSR2.
-*/
-void registerToggleOnHandler() {
-  static struct sigaction dsa;
-  memset(&dsa, 0, sizeof(dsa));
-  dsa.sa_sigaction = toggleOnHandler;
-  dsa.sa_flags = SA_SIGINFO;
-  sigaction(SIGUSR2, &dsa, NULL);
-}
-
-/*
   Kills all of the gstreamer processes, dashcam helpers, and record programs.
 */
 void killallHelpers() {
@@ -184,6 +146,44 @@ void registerKillCamerasHandler() {
   dsa.sa_sigaction = killCamerasHandler;
   dsa.sa_flags = SA_SIGINFO;
   sigaction(SIGTERM, &dsa, NULL);
+}
+
+/*
+  Turns logging off.
+*/
+void toggleOffHandler(int signumber, siginfo_t *siginfo, void *pointer) {
+  loggingActive = false;
+  killallHelpers();
+  sendBluetoothCommand(fdcfd,'p');
+}
+
+/*
+  Registers the toggle off handler with SIGUSR1.
+*/
+void registerToggleOffHandler() {
+  static struct sigaction dsa;
+  memset(&dsa, 0, sizeof(dsa));
+  dsa.sa_sigaction = toggleOffHandler;
+  dsa.sa_flags = SA_SIGINFO;
+  sigaction(SIGUSR1, &dsa, NULL);
+}
+
+/*
+  Turns logging on.
+*/
+void toggleOnHandler(int signumber, siginfo_t *siginfo, void *pointer) {
+  loggingActive = true;
+}
+
+/*
+  Registers the toggle handler with SIGUSR2.
+*/
+void registerToggleOnHandler() {
+  static struct sigaction dsa;
+  memset(&dsa, 0, sizeof(dsa));
+  dsa.sa_sigaction = toggleOnHandler;
+  dsa.sa_flags = SA_SIGINFO;
+  sigaction(SIGUSR2, &dsa, NULL);
 }
 
 /*
