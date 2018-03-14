@@ -211,7 +211,7 @@ int main(int argc, char *argv[]) {
 
   loggingDirectory = argv[1];
 
-  connectBluetooth(FRONT_CAM_BT_ADDR);
+  connectBluetooth(FRONT_CAM_BT_ADDR, fdcfd);
   registerToggleOffHandler();
   registerToggleOnHandler();
   registerKillCamerasHandler();
