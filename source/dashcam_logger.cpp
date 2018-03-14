@@ -72,7 +72,7 @@ void sendBluetoothCommand(int fd, char command) {
   Mananges all logging.
 */
 void cameraLooper() {
-  char *args[] = {(char *)FRONT_CAMERA_HELPER_NAME, (char *)FRONT_CAMERA_PORT, (char *)COMMAND_RECORD, (char *)loggingDirectory, NULL};
+  char *args[] = {(char *)FRONT_CAMERA_HELPER_NAME, (char *)FRONT_CAMERA_PORT, (char *)COMMAND_RECORD, (char *)loggingDirectory.c_str(), NULL};
   while(1) {
     if(loggingActive) {
       dchelper0_pid = fork();
@@ -190,7 +190,7 @@ void registerToggleOnHandler() {
   Starts the backup camera process, forcing it to display over the UI.
 */
 void startBackupCameraHandler(int signumber, siginfo_t *siginfo, void *pointer) {
-  char *args[] = {(char *)BACKUP_CAMERA_HELPER_NAME, (char *)BACKUP_CAMERA_PORT, (char *)COMMAND_WATCH, (char *)loggingDirectory, NULL};
+  char *args[] = {(char *)BACKUP_CAMERA_HELPER_NAME, (char *)BACKUP_CAMERA_PORT, (char *)COMMAND_WATCH, (char *)loggingDirectory.c_str(), NULL};
   sendBluetoothCommand(rdcfd,'b');
   execv("record",args);
 }
