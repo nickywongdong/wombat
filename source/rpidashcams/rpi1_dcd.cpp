@@ -2,7 +2,10 @@
 #include <cstdlib>
 #include <pthread.h>
 #include <string>
-//#include
+
+#include <unistd.h>
+#include <sys/types.h>
+#include <sys/socket.h>
 
 #include <bluetooth/bluetooth.h>
 #include <bluetooth/rfcomm.h>

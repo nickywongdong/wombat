@@ -58,7 +58,7 @@ void sendBluetoothCommand(int fd, char command) {
     status = write(fd, &command, 1);
   }
   else if (status < 0) {
-    perror("error in sending data");
+    perror("Problem sending to RaspberryPi: ");
   }
 }
 
@@ -68,26 +68,29 @@ void sendBluetoothCommand(int fd, char command) {
 void cameraLooper() {
   clock_t timer1;
   char *args[] = {(char *)FRONT_CAMERA_HELPER_NAME, (char *)FRONT_CAMERA_PORT, (char *)COMMAND_RECORD, NULL};
-  if(loggingActive) {
-    dchelper0_pid = fork();
-    if(dchelper0_pid == 0) {
-      if (axolotlFileSystem::getAvailableMemory(loggingDirectory) > 2048) {
-        sendBluetoothCommand(fdcfd,'s');
-        execv("record",args);
-      }
-      else {
-        //dchelper1_pid = fork();
-        if(dchelper1_pid == 0) {
-          //record(REAR_CAM_BT_ADDR,9002);
+  while(1) {
+    if(loggingActive) {
+      dchelper0_pid = fork();
+      if(dchelper0_pid == 0) {
+        if (axolotlFileSystem::getAvailableMemory(loggingDirectory) > 2048) {
+          sendBluetoothCommand(fdcfd,'s');
+          execv("record",args);
         }
         else {
+          //dchelper1_pid = fork();
+          if(dchelper1_pid == 0) {
+            //record(REAR_CAM_BT_ADDR,9002);
+          }
+          else {
 
+          }
         }
       }
     }
-  }
-  while(1) {
-    // wait and do nothing...
+    pause();
+    /*while(1) {
+      // wait and do nothing...
+    }*/
   }
 }
 
@@ -97,6 +100,7 @@ void cameraLooper() {
 void toggleOffHandler(int signumber, siginfo_t *siginfo, void *pointer) {
   loggingActive = false;
   killallHelpers();
+  sendBluetoothCommand(fdcfd,'p');
 }
 
 /*
@@ -175,6 +179,27 @@ void registerKillCamerasHandler() {
   dsa.sa_sigaction = killCamerasHandler;
   dsa.sa_flags = SA_SIGINFO;
   sigaction(SIGTERM, &dsa, NULL);
+}
+
+/*
+  Kills all cameras, send kill command to the raspberrypi.
+  Closes file descriptors to bluetooth sockets and exits cleanly.
+*/
+void startBackupCameraHandler(int signumber, siginfo_t *siginfo, void *pointer) {
+  char *args[] = {(char *)BACKUP_CAMERA_HELPER_NAME, (char *)BACKUP_CAMERA_PORT, (char *)COMMAND_WATCH, NULL};
+  sendBluetoothCommand(rdcfd,'b');
+  execv("record",args);
+}
+
+/*
+  Registers the kill handler with SIGTERM.
+*/
+void registerStartBackupCameraHandler() {
+  static struct sigaction dsa;
+  memset(&dsa, 0, sizeof(dsa));
+  dsa.sa_sigaction = startBackupCameraHandler;
+  dsa.sa_flags = SA_SIGINFO;
+  sigaction(SIGBUS, &dsa, NULL);
 }
 
 int main(int argc, char *argv[]) {
