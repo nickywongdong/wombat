@@ -29,7 +29,7 @@
 using namespace std;
 
 string loggingDirectory;
-bool loggingActive = true;
+bool loggingActive = true, backup_cam_active = false;
 
 pid_t dchelper0_pid = -5, dchelper1_pid = -5, bcamera_pid = -5;
 

@@ -25,7 +25,8 @@ sudo apt-get install build-essential libcrypto++ -y
 
 sudo apt-get install build-essential libbluetooth-dev -y
 
-sudo acm/installCDCACM.sh
+cd acm
+sudo ./installCDCACM.sh
 
 sudo apt-get install build-essential hostapd -y
 sudo apt-get install build-essential dnsmasq -y
