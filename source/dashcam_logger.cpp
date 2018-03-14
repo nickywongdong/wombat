@@ -66,7 +66,6 @@ void sendBluetoothCommand(int fd, char command) {
   Constantly loops, calling record().
 */
 void cameraLooper() {
-  clock_t timer1;
   char *args[] = {(char *)FRONT_CAMERA_HELPER_NAME, (char *)FRONT_CAMERA_PORT, (char *)COMMAND_RECORD, (char *)loggingDirectory, NULL};
   while(1) {
     if(loggingActive) {
@@ -182,8 +181,7 @@ void registerKillCamerasHandler() {
 }
 
 /*
-  Kills all cameras, send kill command to the raspberrypi.
-  Closes file descriptors to bluetooth sockets and exits cleanly.
+  Starts the backup camera process, forcing it to display over the UI.
 */
 void startBackupCameraHandler(int signumber, siginfo_t *siginfo, void *pointer) {
   char *args[] = {(char *)BACKUP_CAMERA_HELPER_NAME, (char *)BACKUP_CAMERA_PORT, (char *)COMMAND_WATCH, (char *)loggingDirectory, NULL};
@@ -192,7 +190,7 @@ void startBackupCameraHandler(int signumber, siginfo_t *siginfo, void *pointer) 
 }
 
 /*
-  Registers the kill handler with SIGTERM.
+  Registers the kill handler with SIGBUS.
 */
 void registerStartBackupCameraHandler() {
   static struct sigaction dsa;
