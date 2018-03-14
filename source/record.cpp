@@ -21,10 +21,10 @@ int main(int argc, char *argv[]) {
   int cameraPort = atoi(argv[1]);
   string runType = argv[2], loggingDirectory = argv[3], sysCmd;
 
-  if(runType = "r") {
+  if(runType == "r") {
     string sysCmd = "gst-launch-1.0 -v udpsrc port=" + to_string(cameraPort) + " ! gdpdepay ! rtph264depay ! avdec_h264 ! autovideosink sync=false";
   }
-  else if (runType = "w") {
+  else if (runType == "w") {
     string sysCmd = "gst-launch-1.0 -v udpsrc port=" + to_string(cameraPort) + " ! gdpdepay ! rtph264depay ! avdec_h264 ! autovideosink sync=false";
   }
 
