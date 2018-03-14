@@ -76,10 +76,10 @@ void cameraLooper() {
   char *args[] = {(char *)FRONT_CAMERA_HELPER_NAME, (char *)FRONT_CAMERA_PORT, (char *)COMMAND_RECORD, (char *)loggingDirectory.c_str(), NULL};
   while(1) {
     if(loggingActive) {
+      sendBluetoothCommand(fdcfd,'s');
       dchelper0_pid = fork();
       if(dchelper0_pid == 0) {
         if (axolotlFileSystem::getAvailableMemory(loggingDirectory) > 2048) {
-          sendBluetoothCommand(fdcfd,'s');
           execv("record",args);
         }
         else {
@@ -88,7 +88,9 @@ void cameraLooper() {
             //record(REAR_CAM_BT_ADDR,9002);
           }
           else {
-
+            while(1) {
+              // wait and do nothing...
+            }
           }
         }
       }
@@ -174,6 +176,15 @@ void registerToggleOffHandler() {
 */
 void toggleOnHandler(int signumber, siginfo_t *siginfo, void *pointer) {
   loggingActive = true;
+  sendBluetoothCommand(fdcfd,'s');
+  dchelper0_pid = fork();
+  if(dchelper0_pid == 0) {
+    if (axolotlFileSystem::getAvailableMemory(loggingDirectory) > 2048) {
+      execv("record",args);
+    }
+    else {
+    }
+  }
 }
 
 /*
