@@ -59,10 +59,11 @@ void connectBluetooth(string bluetoothAddress, int *fd) {
   Use an active bluetooth file descriptor to send a command.
 */
 void sendBluetoothCommand(int fd, char command) {
-  int status;
+  int status = 0;
+  START:
   status = write(fd, &command, 1);
-  while (status != 0) {
-    status = write(fd, &command, 1);
+  if (!(status == 0)) {
+    goto START;
   }
   /*else if (status < 0) {
     perror("Problem sending to RaspberryPi: ");
