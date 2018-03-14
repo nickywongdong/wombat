@@ -60,10 +60,9 @@ void connectBluetooth(string bluetoothAddress, int *fd) {
 */
 void sendBluetoothCommand(int fd, char command) {
   int status = 0;
-  START:
   status = write(fd, &command, 1);
-  if (!(status == 0)) {
-    goto START;
+  while (status < 0) {
+    status = write(fd, &command, 1);
   }
   /*else if (status < 0) {
     perror("Problem sending to RaspberryPi: ");
