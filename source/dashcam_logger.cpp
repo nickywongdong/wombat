@@ -16,7 +16,15 @@
 #define FRONT_CAM_BT_ADDR "B8:27:EB:FE:1C:65"
 #define REAR_CAM_BT_ADDR "iunnoyet"
 #define FRONT_CAMERA_HELPER_NAME "./front_cam_helper"
+#define REAR_CAMERA_HELPER_NAME "./rear_cam_helper"
+#define BACKUP_CAMERA_HELPER_NAME "./backup_cam_helper"
+
 #define FRONT_CAMERA_PORT "9001"
+#define REAR_CAMERA_PORT "9002"
+#define BACKUP_CAMERA_PORT "9003"
+
+#define COMMAND_RECORD "r"
+#define COMMAND_WATCH "w"
 
 using namespace std;
 
@@ -25,31 +33,29 @@ bool loggingActive = true;
 
 pid_t dchelper0_pid = -5, dchelper1_pid = -5;
 
-int s;
+int fdcfd, rdcfd;
 
-void connectBluetooth1(string bluetoothAddress) {
+void connectBluetooth(string bluetoothAddress, int *fd) {
   struct sockaddr_rc addr = { 0 };
   int status;
-  char *dest = (char *)bluetoothAddress.c_str();    //Bluetooth Address of device to connect to
+  char *dest = (char *)bluetoothAddress.c_str();    // connect to bt device @ given bluetooth address
 
-  // allocate a socket
-  s = socket(AF_BLUETOOTH, SOCK_STREAM, BTPROTO_RFCOMM);
+  // allocate bluetooth socket
+  *fd = socket(AF_BLUETOOTH, SOCK_STREAM, BTPROTO_RFCOMM);
 
-  // set the connection parameters (who to connect to)
+  // set connection parameters struct
   addr.rc_family = AF_BLUETOOTH;
   addr.rc_channel = (uint8_t) 1;
   str2ba( dest, &addr.rc_bdaddr );
 
-  // connect to server
-  status = connect(s, (struct sockaddr *)&addr, sizeof(addr));
+  // connect to the raspberrypi, saving connection into a global file descriptor
+  status = connect(*fd, (struct sockaddr *)&addr, sizeof(addr));
 }
 
 void sendBluetoothCommand(int fd, char command) {
   int status;
-
-  // send a message
   if (status == 0) {
-    status = write(fd, &command, 1);    //send 1 char to server
+    status = write(fd, &command, 1);
   }
   else if (status < 0) {
     perror("error in sending data");
@@ -61,12 +67,12 @@ void sendBluetoothCommand(int fd, char command) {
 */
 void cameraLooper() {
   clock_t timer1;
-  char *args[] = {(char *)FRONT_CAMERA_HELPER_NAME, (char *)FRONT_CAMERA_PORT, NULL};
+  char *args[] = {(char *)FRONT_CAMERA_HELPER_NAME, (char *)FRONT_CAMERA_PORT, (char *)COMMAND_RECORD, NULL};
   if(loggingActive) {
     dchelper0_pid = fork();
     if(dchelper0_pid == 0) {
       if (axolotlFileSystem::getAvailableMemory(loggingDirectory) > 2048) {
-        sendBluetoothCommand(s,'s');
+        sendBluetoothCommand(fdcfd,'s');
         execv("record",args);
       }
       else {
@@ -81,7 +87,7 @@ void cameraLooper() {
     }
   }
   while(1) {
-    // do nothing...
+    // wait and do nothing...
   }
 }
 
@@ -90,6 +96,7 @@ void cameraLooper() {
 */
 void toggleOffHandler(int signumber, siginfo_t *siginfo, void *pointer) {
   loggingActive = false;
+  killallHelpers();
 }
 
 /*
@@ -122,27 +129,45 @@ void registerToggleOnHandler() {
 }
 
 /*
-  Turns logging on.
+  Kills all of the gstreamer processes, dashcam helpers, and record programs.
 */
-void killCamerasHandler(int signumber, siginfo_t *siginfo, void *pointer) {
-  printf("IMA FIRIN MAH LAZOR\n");
+void killallHelpers() {
   int status;
-  sendBluetoothCommand(s,'q');
-  kill(dchelper0_pid,SIGKILL);
-  waitpid(dchelper0_pid, &status, -1);
-  dchelper0_pid = -5;
-  /*if((dchelper1_pid != -5) && (dchelper0_pid > 1)) {
+  system("killall record");
+  system("killall gst-launch-1.0");
+
+  if((dchelper0_pid != -5) && (dchelper0_pid > 1)) {
     kill(dchelper1_pid,SIGKILL);
     waitpid(dchelper1_pid, &status, -1);
   }
-  dchelper1_pid = -5;*/
-  //sendBluetoothCommand(REAR_CAM_BT_ADDR,'q');
-  close(s);
+  dchelper0_pid = -5;
+
+  if((dchelper1_pid != -5) && (dchelper1_pid > 1)) {
+    kill(dchelper1_pid,SIGKILL);
+    waitpid(dchelper1_pid, &status, -1);
+  }
+  dchelper1_pid = -5;
+}
+
+/*
+  Kills all cameras, send kill command to the raspberrypi.
+  Closes file descriptors to bluetooth sockets and exits cleanly.
+*/
+void killCamerasHandler(int signumber, siginfo_t *siginfo, void *pointer) {
+  printf("IMA FIRIN MAH LAZOR\n");
+
+  sendBluetoothCommand(fdcfd,'q');
+  //sendBluetoothCommand(rdcfd,'q');
+
+  killallHelpers();
+
+  close(fdcfd);
+  close(rdcfd);
   exit(0);
 }
 
 /*
-  Registers the handler with SIGTERM.
+  Registers the kill handler with SIGTERM.
 */
 void registerKillCamerasHandler() {
   static struct sigaction dsa;
