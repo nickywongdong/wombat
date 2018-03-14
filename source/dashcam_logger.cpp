@@ -31,7 +31,7 @@ using namespace std;
 string loggingDirectory;
 bool loggingActive = true;
 
-pid_t dchelper0_pid = -5, dchelper1_pid = -5;
+pid_t dchelper0_pid = -5, dchelper1_pid = -5, bcamera_pid = -5;
 
 int fdcfd, rdcfd;
 
@@ -67,7 +67,7 @@ void sendBluetoothCommand(int fd, char command) {
 */
 void cameraLooper() {
   clock_t timer1;
-  char *args[] = {(char *)FRONT_CAMERA_HELPER_NAME, (char *)FRONT_CAMERA_PORT, (char *)COMMAND_RECORD, NULL};
+  char *args[] = {(char *)FRONT_CAMERA_HELPER_NAME, (char *)FRONT_CAMERA_PORT, (char *)COMMAND_RECORD, (char *)loggingDirectory, NULL};
   while(1) {
     if(loggingActive) {
       dchelper0_pid = fork();
@@ -186,7 +186,7 @@ void registerKillCamerasHandler() {
   Closes file descriptors to bluetooth sockets and exits cleanly.
 */
 void startBackupCameraHandler(int signumber, siginfo_t *siginfo, void *pointer) {
-  char *args[] = {(char *)BACKUP_CAMERA_HELPER_NAME, (char *)BACKUP_CAMERA_PORT, (char *)COMMAND_WATCH, NULL};
+  char *args[] = {(char *)BACKUP_CAMERA_HELPER_NAME, (char *)BACKUP_CAMERA_PORT, (char *)COMMAND_WATCH, (char *)loggingDirectory, NULL};
   sendBluetoothCommand(rdcfd,'b');
   execv("record",args);
 }

@@ -19,7 +19,7 @@ int main(int argc, char *argv[]) {
   }*/
 
   int cameraPort = atoi(argv[1]);
-  string runType = argv[2], string sysCmd;
+  string runType = argv[2], loggingDirectory = argv[3], sysCmd;
 
   if(runType = "r") {
     string sysCmd = "gst-launch-1.0 -v udpsrc port=" + to_string(cameraPort) + " ! gdpdepay ! rtph264depay ! avdec_h264 ! autovideosink sync=false";
