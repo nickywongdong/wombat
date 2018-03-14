@@ -60,12 +60,13 @@ void connectBluetooth(string bluetoothAddress, int *fd) {
 */
 void sendBluetoothCommand(int fd, char command) {
   int status;
-  if (status == 0) {
+  status = write(fd, &command, 1);
+  while (status != 0) {
     status = write(fd, &command, 1);
   }
-  else if (status < 0) {
+  /*else if (status < 0) {
     perror("Problem sending to RaspberryPi: ");
-  }
+  }*/
 }
 
 /*
@@ -92,10 +93,10 @@ void cameraLooper() {
         }
       }
     }
-    pause();
-    /*while(1) {
+    //pause();
+    while(1) {
       // wait and do nothing...
-    }*/
+    }
   }
 }
 
