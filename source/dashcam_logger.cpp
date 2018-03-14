@@ -164,7 +164,6 @@ void toggleOffHandler(int signumber, siginfo_t *siginfo, void *pointer) {
   Registers the toggle off handler with SIGUSR1.
 */
 void registerToggleOffHandler() {
-  char *args[] = {(char *)FRONT_CAMERA_HELPER_NAME, (char *)FRONT_CAMERA_PORT, (char *)COMMAND_RECORD, (char *)loggingDirectory.c_str(), NULL};
   static struct sigaction dsa;
   memset(&dsa, 0, sizeof(dsa));
   dsa.sa_sigaction = toggleOffHandler;
@@ -176,6 +175,7 @@ void registerToggleOffHandler() {
   Turns logging on.
 */
 void toggleOnHandler(int signumber, siginfo_t *siginfo, void *pointer) {
+  char *args[] = {(char *)FRONT_CAMERA_HELPER_NAME, (char *)FRONT_CAMERA_PORT, (char *)COMMAND_RECORD, (char *)loggingDirectory.c_str(), NULL};
   loggingActive = true;
   sendBluetoothCommand(fdcfd,'s');
   dchelper0_pid = fork();
