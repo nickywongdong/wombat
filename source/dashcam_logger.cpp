@@ -35,6 +35,9 @@ pid_t dchelper0_pid = -5, dchelper1_pid = -5, bcamera_pid = -5;
 
 int fdcfd, rdcfd;
 
+/*
+  Makes a bluetooth connection, storing info for accessing into a file descriptor by address.
+*/
 void connectBluetooth(string bluetoothAddress, int *fd) {
   struct sockaddr_rc addr = { 0 };
   int status;
@@ -52,6 +55,9 @@ void connectBluetooth(string bluetoothAddress, int *fd) {
   status = connect(*fd, (struct sockaddr *)&addr, sizeof(addr));
 }
 
+/*
+  Use an active bluetooth file descriptor to send a command.
+*/
 void sendBluetoothCommand(int fd, char command) {
   int status;
   if (status == 0) {
@@ -63,7 +69,7 @@ void sendBluetoothCommand(int fd, char command) {
 }
 
 /*
-  Constantly loops, calling record().
+  Mananges all logging.
 */
 void cameraLooper() {
   char *args[] = {(char *)FRONT_CAMERA_HELPER_NAME, (char *)FRONT_CAMERA_PORT, (char *)COMMAND_RECORD, (char *)loggingDirectory, NULL};
@@ -205,7 +211,7 @@ int main(int argc, char *argv[]) {
 
   loggingDirectory = argv[1];
 
-  connectBluetooth1(FRONT_CAM_BT_ADDR);
+  connectBluetooth(FRONT_CAM_BT_ADDR);
   registerToggleOffHandler();
   registerToggleOnHandler();
   registerKillCamerasHandler();
