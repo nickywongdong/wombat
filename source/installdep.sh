@@ -25,12 +25,16 @@ sudo apt-get install build-essential libcrypto++ -y
 
 sudo apt-get install build-essential libbluetooth-dev -y
 
-cd acm
+cd acm/
 sudo ./installCDCACM.sh
 
 sudo apt-get install build-essential hostapd -y
 sudo apt-get install build-essential dnsmasq -y
 
 sudo apt-get install build-essential pulseaudio -y
+
+echo "Install script complete! Rebooting in 5 seconds..."
+
+sleep 5s
 
 sudo reboot
