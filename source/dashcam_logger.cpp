@@ -153,8 +153,8 @@ void registerKillCamerasHandler() {
 */
 void toggleOffHandler(int signumber, siginfo_t *siginfo, void *pointer) {
   loggingActive = false;
-  killallHelpers();
   sendBluetoothCommand(fdcfd,'p');
+  killallHelpers();
 }
 
 /*
