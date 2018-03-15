@@ -53,7 +53,7 @@ int main(int argc, char *argv[]){
     // Wait for the push button to be pressed
     std::cout << "Please press the button! ESC key quits the program" << std::endl;
 
-    //unsigned int value = low;
+    unsigned int value = low;
     //int outputValue = low ;
     // set output value to low
     //gpioSetValue(OUT,low) ;
