@@ -132,8 +132,8 @@ void killAllHelpers() {
   int status;   // holds our waitpid status
 
   // kill all of our gst-launch processes
+  system("killall -SIGINT gst-launch-1.0");
   system("killall record_helper");
-  system("killall gst-launch-1.0");
   if(backupCameraActive) {
     system("killall backup_cam_helper");
   }
@@ -167,10 +167,12 @@ void killAllHelpers() {
   Closes file descriptors to bluetooth sockets and exits cleanly.
 */
 void killCamerasHandler(int signumber, siginfo_t *siginfo, void *pointer) {
-  sendBluetoothCommand(fdcfd,'q');
+
   //sendBluetoothCommand(rdcfd,'q');
 
   killAllHelpers();
+
+  sendBluetoothCommand(fdcfd,'q');
 
   close(fdcfd);
   close(rdcfd);
