@@ -95,7 +95,9 @@ void cameraLoop() {
   char *args[] = {(char *)FRONT_CAMERA_HELPER_NAME, (char *)FRONT_CAMERA_PORT, (char *)COMMAND_RECORD, (char *)loggingDirectory.c_str(), NULL};
   while(1) {
     if(loggingActive) {
-      sendBluetoothCommand(fdcfd,'s');
+      if(frontCamBTActive) {
+        sendBluetoothCommand(fdcfd,'s');
+      }
       while(axolotlFileSystem::getAvailableMemory(loggingDirectory) < 2048) {   // wait until we have > 2GB storage
           optimizeStorage();    // attempt to optimize storage space if we don't have enough
       }
@@ -238,9 +240,11 @@ void registerToggleOffHandler() {
 void toggleOnHandler(int signumber, siginfo_t *siginfo, void *pointer) {
   char *args[] = {(char *)FRONT_CAMERA_HELPER_NAME, (char *)FRONT_CAMERA_PORT, (char *)COMMAND_RECORD, (char *)loggingDirectory.c_str(), NULL};
   loggingActive = true;
-  sendBluetoothCommand(fdcfd,'s');
+  if(frontCamBTActive) {
+    sendBluetoothCommand(fdcfd,'s');
+  }
   while(axolotlFileSystem::getAvailableMemory(loggingDirectory) < 2048) {   // wait until we have > 2GB storage
-      optimizeStorage();    // attempt to optimize storage space if we don't have enough
+    optimizeStorage();    // attempt to optimize storage space if we don't have enough
   }
   dchelper0pid = fork();
   if(dchelper0pid == 0) {
