@@ -72,7 +72,7 @@ int main(int argc, char *argv[]){
             system("sleep 0.1");
 
 			//send a wake up signal here:
-            system("xset -s activate");
+            system("xset s activate");
 
         }
         usleep(1000); // sleep for a millisecond
