@@ -310,12 +310,14 @@ int main(int argc, char *argv[]) {
     		kill(getpid(),SIGBUS);
     		backupCameraActive = true;
     		sleep(1);
+        printf("Yo\n");
         sendBluetoothCommand(rdcfd,'b');
     	}
     	else if(i == 0 && backupCameraActive){
     		kill(getpid(),SIGBUS);
     		backupCameraActive = false;
     		sleep(1);
+        printf("Sup\n");
         sendBluetoothCommand(rdcfd,'b');
     	}
     	f.close();
