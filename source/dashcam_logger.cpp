@@ -300,22 +300,23 @@ int main(int argc, char *argv[]) {
   ifstream f;
   int i;
   char *args[] = { NULL };
+  bool active = false;
 
   gpio_watcherpid = fork();
   if (gpio_watcherpid == 0) {
     while(1) {
       f.open("/sys/class/gpio/gpio298/value");
     	f >> i;
-    	if(i == 1 && not(backupCameraActive)){
+    	if(i == 1 && not(active)){
     		kill(getpid(),SIGBUS);
-    		backupCameraActive = true;
+    		active = true;
     		sleep(1);
         printf("Yo\n");
         sendBluetoothCommand(rdcfd,'b');
     	}
-    	else if(i == 0 && backupCameraActive){
+    	else if(i == 0 && active){
     		kill(getpid(),SIGBUS);
-    		backupCameraActive = false;
+    		active = false;
     		sleep(1);
         printf("Sup\n");
         sendBluetoothCommand(rdcfd,'b');
