@@ -84,7 +84,12 @@ int main(int argc, char *argv[]){
 
 				pfd.events = POLLPRI;
 
+				std::cout << "consuming priot interrupt" << std::endl;
+
    				lseek(value, 0, SEEK_SET);    /* consume any prior interrupt */
+
+				std::cout << "after lseek: " << std::endl;
+
 				read(value, buf, sizeof buf);
 
 				std::cout << "waiting for interrupt: " << std::endl;
