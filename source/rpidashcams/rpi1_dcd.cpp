@@ -1,11 +1,14 @@
 #include <iostream>
 #include <cstdlib>
+#include <cstdio>
 #include <pthread.h>
 #include <string>
 
 #include <unistd.h>
+#include <signal.h>
 #include <sys/types.h>
 #include <sys/socket.h>
+#include <sys/wait.h>
 
 #include <bluetooth/bluetooth.h>
 #include <bluetooth/rfcomm.h>
@@ -56,7 +59,10 @@ int main(int argc, char **argv) {
           }
           else if(buf[0] == 'p' || buf[0] == 'q'){
               if(camerahelper_pid > 1) {
+                system("killall raspivid");
+                system("killall gst-launch-1.0");
                 kill(camerahelper_pid,SIGKILL);
+                system("killall c1helper");
               }
               if(buf[0] == 'q') {
                 break;
