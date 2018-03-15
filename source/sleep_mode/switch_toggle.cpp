@@ -55,7 +55,7 @@ int main(int argc, char *argv[]){
         	std::cout << "Pin is Low " << std::endl;
         	system("sleep 1 ");
             //Switch is toggled on, tell Jetson to sleep:
-            system("echo mem > /sys/power/state")
+            system("echo mem > /sys/power/state");
         }
     }
 
