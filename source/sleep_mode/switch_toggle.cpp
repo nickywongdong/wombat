@@ -24,12 +24,13 @@ int main(int argc, char *argv[]){
     std::cout << "Toggle Switch Testing" << std::endl;
 
     // Make the button and led available in user space
-    gpioExport(OUT) ;
+   	//we will use voltage as output pin for now
+    //gpioExport(OUT) ;
     gpioExport(IN1) ;
     //original directions:
     //gpioSetDirection(pushButton,inputPin) ;
     //gpioSetDirection(redLED,outputPin) ;
-    gpioSetDirection(OUT, outputPin);
+    //gpioSetDirection(OUT, outputPin);
     gpioSetDirection(IN1, inputPin);
 
     // Reverse the button wiring; this is for when the button is wired
@@ -52,31 +53,28 @@ int main(int argc, char *argv[]){
     // Wait for the push button to be pressed
     std::cout << "Please press the button! ESC key quits the program" << std::endl;
 
-    unsigned int value = low;
-    int outputValue = low ;
+    //unsigned int value = low;
+    //int outputValue = low ;
     // set output value to low
-    gpioSetValue(OUT,low) ;
+    //gpioSetValue(OUT,low) ;
     while(getkey() != 27) {
         gpioGetValue(IN1, &value) ;
         // Useful for debugging
         // cout << "Input Value: " << value << endl;
-        if (value==high && outputValue != high) {
-            // button is pressed ; turn the LED on
-            outputValue = high ;
-            gpioSetValue(OUT,on) ;
+        if ( value==high ) {
+            //Switch is toggled on, tell Jetson to sleep:
+            system("echo mem > /sys/power/state");
+
         } else {
-            // button is *not* pressed ; turn the LED off
-            if (outputValue != low) {
-                outputValue = low ;
-                gpioSetValue(OUT,off) ;
-            }
+            // switch is toggled off, tell Jetson to wake up
+            system("echo \"hello World\"");
 
         }
         usleep(1000); // sleep for a millisecond
     }
 
     std::cout << "Finished" << std::endl;
-    gpioUnexport(OUT);      // unexport the output pin
+    //gpioUnexport(OUT);      // unexport the output pin
     gpioUnexport(IN1);      // unexport the input pin
     //gpioUnexport(IN2);
     return 0;
