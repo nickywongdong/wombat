@@ -8,14 +8,12 @@
 #include <string>
 #include <unistd.h>
 #include <csignal>
-#include <linux/gpio.h>
 #include "JetsonGPIO.h"
 
 
 //gpio pins for output, and input:
 jetsonTX2GPIONumber OUT = gpio296;
 jetsonTX2GPIONumber IN1 = gpio481;
-jetsonTX2GPIONumber WAKE = gpio397;
 //later use
 //jetsonTX2GPIONumber IN2;
 
@@ -37,14 +35,7 @@ int main(int argc, char *argv[]){
     //gpioSetDirection(OUT, outputPin);
     gpioSetDirection(IN1, inputPin);
 
-    //configure wake up pin:
-    if(gpio_request(WAKE, "WAKE_UP")){
-    	int flag = gpio_to_irq((unsigned) WAKE);
-    	if(flag >=0 ){
-    		request_irq(flag);
-    	}
 
-    }
 
     // Reverse the button wiring; this is for when the button is wired
     // with a pull up resistor
