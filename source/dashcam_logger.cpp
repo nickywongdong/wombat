@@ -269,7 +269,7 @@ void backupCameraToggleHandler(int signumber, siginfo_t *siginfo, void *pointer)
       waitpid(bcamerapid, &status, -1);
     }
     bcamerapid = -5;
-    //system("killall -SIGINT gst-launch-1.0");
+    system("killall -SIGINT gst-launch-1.0");
     system("pkill -SIGINT -f port=9003");
   }
 }
