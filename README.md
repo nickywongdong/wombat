@@ -1,5 +1,9 @@
 # Axolotl - Victor's Branch
-__Current Version:__ 0.3.5 alpha
+__Current Version:__ 0.4.1 alpha
+
+Version 0.4.1 alpha:
+- Fully working RaspberryPi stream for front camera logging and backup camera
+- Backup camera lingers for 5 seconds to fulfill FMVSS guidelines for backup cameras
 
 Version 0.3.5 alpha:
 - Added RaspberryPi streaming code (for install on RaspberryPi)
