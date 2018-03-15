@@ -50,9 +50,9 @@ int main(int argc, char *argv[]){
         gpioGetValue(IN1, &value) ;
         // Useful for debugging
         // cout << "Input Value: " << value << endl;
-        if ( value==low ) {
+        if ( value==high ) {
 
-        	std::cout << "Pin is Low " << std::endl;
+        	std::cout << "Pin is High " << std::endl;
         	system("sleep 1 ");
             //Switch is toggled on, tell Jetson to sleep:
             system("echo mem > /sys/power/state");
