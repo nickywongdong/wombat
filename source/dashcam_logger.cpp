@@ -129,8 +129,8 @@ void cameraLoop() {
   Kills the backup camera gstreamer process.
 */
 void killBackupCameraGstreamer() {
-  ofstream bcHandleFile;
-  string pidBackupCamGSTasSTR = "";
+  ifstream bcHandleFile;
+  string pidBackupCamGSTasSTR = NULL;
   int pidBackupCamGST;
 
   system("killall backup_cam_helper");
