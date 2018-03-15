@@ -159,7 +159,7 @@ void killAllHelpers() {
     }
     bcamerapid = -5;
 
-    // system("pkill -f port=9003");
+    system("pkill -f port=9003");
   }
 
 }
@@ -261,7 +261,13 @@ void backupCameraToggleHandler(int signumber, siginfo_t *siginfo, void *pointer)
     execv("backup_cam_helper",args);
   }
   else {
-    sleep(5);   // fulfill FMVSS by waiting 5 sec to kill backup camera after shifting out of reverse
+    //sleep(5);   // fulfill FMVSS by waiting 5 sec to kill backup camera after shifting out of reverse
+    //system("killall backup_cam_helper");
+    if(bcamerapid > 1) {
+      kill(bcamerapid,SIGKILL);
+      waitpid(bcamerapid, &status, -1);
+    }
+    bcamerapid = -5;
     system("pkill -f port=9003");
   }
 }
