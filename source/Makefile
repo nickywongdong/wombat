@@ -24,6 +24,10 @@ backup_cam_helper: backup_cam_helper.cpp
 	rm -f backup_cam_helper
 	g++ backup_cam_helper.cpp -o backup_cam_helper -std=c++11
 
+gpio_backup_camera: gpio_money.cpp
+	rm -f gpio_backup_camera
+	g++ gpio_money.cpp -o gpio_backup_camera -std=c++11
+
 clean:
 	rm -f daemon_launcher
 	rm -f datad
