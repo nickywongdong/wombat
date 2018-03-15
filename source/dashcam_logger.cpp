@@ -308,13 +308,13 @@ int main(int argc, char *argv[]) {
       f.open("/sys/class/gpio/gpio298/value");
     	f >> i;
     	if(i == 1 && not(active)){
-    		kill(getpid(),SIGBUS);
+    		kill(getppid(),SIGBUS);
     		active = true;
     		sleep(1);
         printf("Yo\n");
     	}
     	else if(i == 0 && active){
-    		kill(getpid(),SIGBUS);
+    		kill(getppid(),SIGBUS);
     		active = false;
     		sleep(1);
         printf("Sup\n");
