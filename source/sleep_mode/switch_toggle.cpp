@@ -70,7 +70,9 @@ int main(int argc, char *argv[]){
             // switch is toggled off, tell Jetson to wake up
             system("do echo -ne $(cat /sys/class/gpio/gpio481/value) \r");
             system("sleep 0.1");
-            //raise(SIGINT);
+
+			//send a wake up signal here:
+            system("xset -s activate");
 
         }
         usleep(1000); // sleep for a millisecond
