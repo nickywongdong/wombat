@@ -73,6 +73,7 @@ enum jetsonTX2GPIONumber {
        gpio388 = 388,      // J21 - Pin 31 - unknown - Motion Interrupt
        gpio389 = 389,      // J21 - Pin 33 - unknown - AP Wake Bt GPIO
        gpio481 = 481,      // J21 - Pin 18 - unknown - Modem Wake AP GPIO
+       gpio397 = 397,      // J21 - Pin 13 - unknown - Audio Code Interrupt
 } ;
 
 

@@ -8,12 +8,14 @@
 #include <string>
 #include <unistd.h>
 #include <csignal>
+#include <linux/gpio.h>
 #include "JetsonGPIO.h"
 
 
 //gpio pins for output, and input:
 jetsonTX2GPIONumber OUT = gpio296;
 jetsonTX2GPIONumber IN1 = gpio481;
+jetsonTX2GPIONumber WAKE = gpio397;
 //later use
 //jetsonTX2GPIONumber IN2;
 
@@ -28,30 +30,27 @@ int main(int argc, char *argv[]){
    	//we will use voltage as output pin for now
     //gpioExport(OUT) ;
     gpioExport(IN1) ;
+    //gpio_request();
     //original directions:
     //gpioSetDirection(pushButton,inputPin) ;
     //gpioSetDirection(redLED,outputPin) ;
     //gpioSetDirection(OUT, outputPin);
     gpioSetDirection(IN1, inputPin);
 
+    //configure wake up pin:
+    if(gpio_request(WAKE, "WAKE_UP")){
+    	int flag = gpio_to_irq((unsigned) WAKE);
+    	if(flag >=0 ){
+    		request_irq(flag);
+    	}
+
+    }
+
     // Reverse the button wiring; this is for when the button is wired
     // with a pull up resistor
     // gpioActiveLow(pushButton, true);
 
 
-    /*// Flash the LED 5 times
-    for(int i=0; i<5; i++){
-        cout << "Setting the LED on" << endl;
-        gpioSetValue(redLED, on);
-        usleep(200000);         // on for 200ms
-        cout << "Setting the LED off" << endl;
-        gpioSetValue(redLED, off);
-        usleep(200000);         // off for 200ms
-    }*/
-
-    //Instead of waiting for the LED to be pressed, we should wait for the
-    //Second input pin to receive a change in value later.
-    // Wait for the push button to be pressed
     std::cout << "Please press the button! ESC key quits the program" << std::endl;
 
     unsigned int value = low;
@@ -62,20 +61,10 @@ int main(int argc, char *argv[]){
         gpioGetValue(IN1, &value) ;
         // Useful for debugging
         // cout << "Input Value: " << value << endl;
-        if ( value==high ) {
+        if ( value==low ) {
             //Switch is toggled on, tell Jetson to sleep:
-            system("echo mem > /sys/power/state");
-
-        } else {
-            // switch is toggled off, tell Jetson to wake up
-            system("do echo -ne $(cat /sys/class/gpio/gpio481/value) \r");
-            system("sleep 0.1");
-
-			//send a wake up signal here:
-            system("xset s activate");
-
+            system("echo mem > /sys/power/state")
         }
-        usleep(1000); // sleep for a millisecond
     }
 
     std::cout << "Finished" << std::endl;
