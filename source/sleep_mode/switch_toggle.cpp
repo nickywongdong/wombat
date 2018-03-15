@@ -7,6 +7,7 @@
 #include <iostream>
 #include <string>
 #include <unistd.h>
+#include <csignal>
 #include "JetsonGPIO.h"
 
 
@@ -67,7 +68,8 @@ int main(int argc, char *argv[]){
 
         } else {
             // switch is toggled off, tell Jetson to wake up
-            system("echo \"hello World\"");
+            system("do echo -ne $(cat /sys/class/gpio/gpio481/value) \r");
+            //raise(SIGINT);
 
         }
         usleep(1000); // sleep for a millisecond
