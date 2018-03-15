@@ -30,6 +30,7 @@ int main(int argc, char *argv[]){
    	struct timeval tv;
    	struct pollfd pfd;
    	int fd;
+   	char buf[8];
 
     std::cout << "Toggle Switch Testing" << std::endl;
 
@@ -48,7 +49,7 @@ int main(int argc, char *argv[]){
     sprintf(str, "/sys/class/gpio/gpio%d/value", inputPin);
 
    	if ((fd = open(str, O_RDONLY)) < 0) {
-      fprintf(stderr, "Failed, gpio %d not exported.\n", gpio);
+      fprintf(stderr, "Failed, gpio %d not exported.\n", inputPin);
       exit(1);
   	}
 
