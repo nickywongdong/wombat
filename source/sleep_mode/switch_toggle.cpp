@@ -10,6 +10,8 @@
 #include <csignal>
 #include <sys/time.h>
 #include <poll.h>
+#include <fcntl.h>
+#include <unistd.h>
 #include "JetsonGPIO.h"
 
 
