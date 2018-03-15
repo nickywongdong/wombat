@@ -93,7 +93,7 @@ void cameraLoop() {
         else {
           //dchelper1pid = fork();
           if(dchelper1pid == 0) {
-            
+
           }
           else {
             while(1) {
@@ -110,10 +110,34 @@ void cameraLoop() {
 }
 
 /*
+  Kills the backup camera gstreamer process.
+*/
+void killBackupCameraGstreamer() {
+  ofstream bcHandleFile;
+  string pidBackupCamGSTasSTR = "";
+  int pidBackupCamGST;
+
+  system("killall backup_cam_helper");
+  system("pgrep port=9003 > bchandle");
+
+  bcHandleFile.open("bchandle");
+  if(bcHandleFile.is_open()) {
+    getline(bcHandleFile,pidBackupCamGSTasSTR);
+    bcHandleFile.close();
+  }
+  if(pidBackupCamGSTasSTR != "") {
+    pidBackupCamGST = stoi(pidBackupCamGSTasSTR);
+    kill(pidBackupCamGST, SIGTERM);
+  }
+
+  system("rm -f bchandle");
+}
+
+/*
   Kills all of the gstreamer processes, dashcam helpers, and record programs.
 */
-void killallHelpers() {
-  int status;
+void killAllHelpers() {
+  int status;   // holds our waitpid status
 
   // kill all of our gst-launch processes
   system("killall record_helper");
@@ -134,6 +158,15 @@ void killallHelpers() {
   }
   dchelper1pid = -5;
 
+  if(backupCameraActive) {
+    if(bcamerapid > 1) {
+      kill(bcamerapid,SIGKILL);
+      waitpid(bcamerapid, &status, -1);
+    }
+    bcamerapid = -5;
+
+    killBackupCameraGstreamer();
+  }
 
 }
 
@@ -147,7 +180,7 @@ void killCamerasHandler(int signumber, siginfo_t *siginfo, void *pointer) {
   sendBluetoothCommand(fdcfd,'q');
   //sendBluetoothCommand(rdcfd,'q');
 
-  killallHelpers();
+  killAllHelpers();
 
   close(fdcfd);
   close(rdcfd);
@@ -171,7 +204,7 @@ void registerKillCamerasHandler() {
 void toggleOffHandler(int signumber, siginfo_t *siginfo, void *pointer) {
   loggingActive = false;
   sendBluetoothCommand(fdcfd,'p');
-  killallHelpers();
+  killAllHelpers();
 }
 
 /*
@@ -218,25 +251,13 @@ void registerToggleOnHandler() {
 */
 void backupCameraToggleHandler(int signumber, siginfo_t *siginfo, void *pointer) {
   backupCameraActive = !backupCameraActive;
-  ofstream bcHandleFile;
-  string pidBackupCamGSTasSTR;
-  int pidBackupCamGST;
   char *args[] = {(char *)BACKUP_CAMERA_HELPER_NAME, (char *)BACKUP_CAMERA_PORT, (char *)COMMAND_WATCH, (char *)loggingDirectory.c_str(), NULL};
   if(backupCameraActive) {
     sendBluetoothCommand(rdcfd,'b');
     execv("backup_cam_helper",args);
   }
   else {
-    system("killall backup_cam_helper");
-    system("pgrep port=9003 > bchandle");
-    bcHandleFile.open("bchandle");
-    if(bcHandleFile.is_open()) {
-      getline(bcHandleFile,pidBackupCamGSTasSTR);
-      bcHandleFile.close();
-    }
-    pidBackupCamGST = stoi(pidBackupCamGSTasSTR);
-    kill(pidBackupCamGST, SIGTERM);
-    system("rm -f bchandle");
+    killBackupCameraGstreamer();
   }
 }
 
