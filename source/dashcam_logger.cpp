@@ -312,14 +312,12 @@ int main(int argc, char *argv[]) {
     		active = true;
     		sleep(1);
         printf("Yo\n");
-        sendBluetoothCommand(rdcfd,'b');
     	}
     	else if(i == 0 && active){
     		kill(getpid(),SIGBUS);
     		active = false;
     		sleep(1);
         printf("Sup\n");
-        sendBluetoothCommand(rdcfd,'b');
     	}
     	f.close();
     }
