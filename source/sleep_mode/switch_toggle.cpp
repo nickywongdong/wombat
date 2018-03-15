@@ -8,7 +8,6 @@
 #include <string>
 #include <unistd.h>
 #include <csignal>
-#include <linux/gpio.h>
 #include "JetsonGPIO.h"
 
 
