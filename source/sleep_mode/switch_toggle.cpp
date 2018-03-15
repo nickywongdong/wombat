@@ -46,10 +46,10 @@ int main(int argc, char *argv[]){
     gpioSetDirection(IN1, inputPin);
 
     //setup pin as interrupt
-    sprintf(str, "/sys/class/gpio/gpio%d/value", inputPin);
+    sprintf(str, "/sys/class/gpio/gpio%d/value", IN1);
 
    	if ((fd = open(str, O_RDONLY)) < 0) {
-      fprintf(stderr, "Failed, gpio %d not exported.\n", inputPin);
+      fprintf(stderr, "Failed, gpio %d not exported.\n", IN1);
       exit(1);
   	}
 
