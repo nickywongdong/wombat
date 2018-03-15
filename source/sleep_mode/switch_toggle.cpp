@@ -8,6 +8,8 @@
 #include <string>
 #include <unistd.h>
 #include <csignal>
+#include <sys/time.h>
+#include <poll.h>
 #include "JetsonGPIO.h"
 
 
@@ -22,6 +24,11 @@ int getkey();
 
 int main(int argc, char *argv[]){
 
+	char str[256];
+   	struct timeval tv;
+   	struct pollfd pfd;
+   	int fd;
+
     std::cout << "Toggle Switch Testing" << std::endl;
 
     // Make the button and led available in user space
@@ -34,6 +41,14 @@ int main(int argc, char *argv[]){
     //gpioSetDirection(redLED,outputPin) ;
     //gpioSetDirection(OUT, outputPin);
     gpioSetDirection(IN1, inputPin);
+
+    //setup pin as interrupt
+    sprintf(str, "/sys/class/gpio/gpio%d/value", inputPin);
+
+   	if ((fd = open(str, O_RDONLY)) < 0) {
+      fprintf(stderr, "Failed, gpio %d not exported.\n", gpio);
+      exit(1);
+  	}
 
 
 
@@ -55,7 +70,22 @@ int main(int argc, char *argv[]){
         if ( value==high ) {
             //Switch is toggled on, tell Jetson to sleep:
             system("echo mem > /sys/power/state");
-        }
+        } else {
+
+        	//allow for interrupt on pin to wake system:
+
+        	pfd.fd = fd;
+
+   			pfd.events = POLLPRI;
+
+   			lseek(fd, 0, SEEK_SET);    /* consume any prior interrupt */
+   			read(fd, buf, sizeof buf);
+
+   			poll(&pfd, 1, -1);         /* wait for interrupt */
+
+   			lseek(fd, 0, SEEK_SET);    /* consume interrupt */
+   			read(fd, buf, sizeof buf);
+   		}
     }
 
     std::cout << "Finished" << std::endl;
