@@ -54,7 +54,7 @@ int main(int argc, char *argv[]){
         // cout << "Input Value: " << value << endl;
         if ( value==low ) {
             //Switch is toggled on, tell Jetson to sleep:
-            system("echo mem > /sys/power/state")
+            system("echo mem > /sys/power/state");
         }
     }
 
