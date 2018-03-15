@@ -51,7 +51,7 @@ int main(int argc, char **argv) {
           printf("received [%s]\n", buf);
           if(buf[0] == 's'){
               camerahelper_pid = fork();
-              if(obdLoggerPid == 0) {
+              if(camerahelper_pid == 0) {
                 execv("c1helper",args);
               }
               waitpid(camerahelper_pid, &status, -1);
