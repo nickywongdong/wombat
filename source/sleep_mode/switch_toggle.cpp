@@ -69,6 +69,7 @@ int main(int argc, char *argv[]){
         } else {
             // switch is toggled off, tell Jetson to wake up
             system("do echo -ne $(cat /sys/class/gpio/gpio481/value) \r");
+            system("sleep 0.1");
             //raise(SIGINT);
 
         }
