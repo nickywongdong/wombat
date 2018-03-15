@@ -26,6 +26,8 @@
 #define COMMAND_RECORD "r"
 #define COMMAND_WATCH "w"
 
+#define AUTO_MEMORY_MANAGEMENT_MODE 0   // set to 1 if auto-delete of old footage desired
+
 using namespace std;
 
 string loggingDirectory;    // curr logging directory
@@ -35,6 +37,15 @@ bool backupCameraActive = false, frontCamBTActive = false, rearCamBTActive = fal
 pid_t dchelper0pid = -5, dchelper1pid = -5, bcamerapid = -5;    // process IDs for helpers
 
 int fdcfd, rdcfd;   // bluetooth file descriptors for front and rear dashcams
+
+/*
+  Optimize storage by deleting all past days' data.
+*/
+void optimizeStorage() {
+  if(AUTO_MEMORY_MANAGEMENT_MODE) {
+    // do things to optimize storage space
+  }
+}
 
 /*
   Makes a bluetooth connection, storing info for accessing into a file descriptor by address.
@@ -85,9 +96,12 @@ void cameraLoop() {
   while(1) {
     if(loggingActive) {
       sendBluetoothCommand(fdcfd,'s');
+      while(axolotlFileSystem::getAvailableMemory(loggingDirectory) < 2048) {   // wait until we have > 2GB storage
+          optimizeStorage();    // attempt to optimize storage space if we don't have enough
+      }
       dchelper0pid = fork();
       if(dchelper0pid == 0) {
-        if (axolotlFileSystem::getAvailableMemory(loggingDirectory) > 2048) {
+        if (frontCamBTActive) {
           execv("record_helper",args);
         }
         else {
@@ -225,12 +239,16 @@ void toggleOnHandler(int signumber, siginfo_t *siginfo, void *pointer) {
   char *args[] = {(char *)FRONT_CAMERA_HELPER_NAME, (char *)FRONT_CAMERA_PORT, (char *)COMMAND_RECORD, (char *)loggingDirectory.c_str(), NULL};
   loggingActive = true;
   sendBluetoothCommand(fdcfd,'s');
+  while(axolotlFileSystem::getAvailableMemory(loggingDirectory) < 2048) {   // wait until we have > 2GB storage
+      optimizeStorage();    // attempt to optimize storage space if we don't have enough
+  }
   dchelper0pid = fork();
   if(dchelper0pid == 0) {
-    if (axolotlFileSystem::getAvailableMemory(loggingDirectory) > 2048) {
+    if (frontCamBTActive) {
       execv("record_helper",args);
     }
     else {
+      //args = {(char *)REAR_CAMERA_HELPER_NAME, (char *)REAR_CAMERA_PORT, (char *)COMMAND_RECORD, (char *)loggingDirectory.c_str(), NULL};
     }
   }
 }
@@ -257,6 +275,7 @@ void backupCameraToggleHandler(int signumber, siginfo_t *siginfo, void *pointer)
     execv("backup_cam_helper",args);
   }
   else {
+    sleep(5);   // fulfill FMVSS by waiting 5 sec to kill backup camera after shifting out of reverse
     killBackupCameraGstreamer();
   }
 }
