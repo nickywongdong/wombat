@@ -70,9 +70,12 @@ int main(int argc, char *argv[]){
         // Useful for debugging
         // cout << "Input Value: " << value << endl;
         if ( value==high ) {
+        	std::cout << "Pin is Low" << std::endl;
+        	system(sleep 1);
             //Switch is toggled on, tell Jetson to sleep:
             system("echo mem > /sys/power/state");
         } else {
+        	std::cout << "Pin is Low" << std::endl;
 
         	//allow for interrupt on pin to wake system:
 
