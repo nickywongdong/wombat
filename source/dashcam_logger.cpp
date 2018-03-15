@@ -13,6 +13,8 @@
 #include <bluetooth/bluetooth.h>
 #include <bluetooth/rfcomm.h>
 
+#include<fstream>
+
 #define FRONT_CAM_BT_ADDR "B8:27:EB:FE:1C:65"
 #define REAR_CAM_BT_ADDR "B8:27:EB:59:5E:00"
 #define FRONT_CAMERA_HELPER_NAME "./front_cam_helper"
@@ -295,13 +297,49 @@ int main(int argc, char *argv[]) {
   registerKillCamerasHandler();
   registerBackupCameraHandler();
 
+  ifstream f;
+  int i;
   char *args[] = { NULL };
+
   gpio_watcherpid = fork();
   if (gpio_watcherpid == 0) {
-    execv("gpio_backup_camera",args);
+    while(1) {
+      f.open("/sys/class/gpio/gpio298/value");
+    	f >> i;
+    	printf("%i and... %i\n",getppid(),getpid());
+    	if(i == 1 && not(backupCameraActive)){
+    		kill(getppid(),SIGBUS);
+    		backupCameraActive = true;
+    		sleep(1);
+        sendBluetoothCommand(rdcfd,'b');
+        if(backupCameraActive) {
+          execv("backup_cam_helper",args);
+        }
+        else {
+          sleep(5);   // fulfill FMVSS by waiting 5 sec to kill backup camera after shifting out of reverse
+          system("pkill -f port=9003");
+        }
+    	}
+    	else if(i == 0 && backupCameraActive){
+    		kill(getppid(),SIGBUS);
+    		backupCameraActive = false;
+    		sleep(1);
+        sendBluetoothCommand(rdcfd,'b');
+        if(backupCameraActive) {
+          execv("backup_cam_helper",args);
+        }
+        else {
+          sleep(5);   // fulfill FMVSS by waiting 5 sec to kill backup camera after shifting out of reverse
+          system("pkill -f port=9003");
+        }
+    	}
+    	f.close();
+    }
+  }
+  else {
+    cameraLoop();
   }
   // Begin our camera loop
-  cameraLoop();
 
   return 0;
 }
