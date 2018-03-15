@@ -306,15 +306,14 @@ int main(int argc, char *argv[]) {
     while(1) {
       f.open("/sys/class/gpio/gpio298/value");
     	f >> i;
-    	printf("%i and... %i\n",getppid(),getpid());
     	if(i == 1 && not(backupCameraActive)){
-    		kill(getppid(),SIGBUS);
+    		kill(getpid(),SIGBUS);
     		backupCameraActive = true;
     		sleep(1);
         sendBluetoothCommand(rdcfd,'b');
     	}
     	else if(i == 0 && backupCameraActive){
-    		kill(getppid(),SIGBUS);
+    		kill(getpid(),SIGBUS);
     		backupCameraActive = false;
     		sleep(1);
         sendBluetoothCommand(rdcfd,'b');
