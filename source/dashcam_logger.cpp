@@ -259,17 +259,17 @@ void backupCameraToggleHandler(int signumber, siginfo_t *siginfo, void *pointer)
   char *args[] = {(char *)BACKUP_CAMERA_HELPER_NAME, (char *)BACKUP_CAMERA_PORT, (char *)COMMAND_WATCH, (char *)loggingDirectory.c_str(), NULL};
   sendBluetoothCommand(rdcfd,'b');
   if(backupCameraActive) {
-    execv("backup_cam_helper",args);
+    //execv("backup_cam_helper",args);
   }
   else {
     //sleep(5);   // fulfill FMVSS by waiting 5 sec to kill backup camera after shifting out of reverse
     //system("killall backup_cam_helper");
-    if(bcamerapid > 1) {
+    /*if(bcamerapid > 1) {
       kill(bcamerapid,SIGKILL);
       waitpid(bcamerapid, &status, -1);
     }
     bcamerapid = -5;
-    system("pkill -f port=9003");
+    system("pkill -f port=9003");*/
   }
 }
 
