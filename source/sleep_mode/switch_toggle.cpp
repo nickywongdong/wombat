@@ -12,7 +12,7 @@
 
 //gpio pins for output, and input:
 jetsonTX2GPIONumber OUT = gpio296;
-jetsonTX2GPIONumber IN1 = gpio297;
+jetsonTX2GPIONumber IN1 = gpio481;
 //later use
 //jetsonTX2GPIONumber IN2;
 
