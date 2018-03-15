@@ -73,12 +73,10 @@ int main(int argc, char *argv[]){
         	std::cout << "Pin is High" << std::endl;
         	system("sleep 1");
             //Switch is toggled on, tell Jetson to sleep:
-            system("echo mem > /sys/power/state");
+            //system("echo mem > /sys/power/state");
 
-            gpioGetValue(IN1, &value) ;
-
-            if( value == low ) {
-				std::cout << "Pin is Low" << std::endl;
+            //if( value == low ) {
+				//std::cout << "Pin is Low" << std::endl;
 
         	//allow for interrupt on pin to wake system:
 
@@ -89,13 +87,16 @@ int main(int argc, char *argv[]){
    				lseek(value, 0, SEEK_SET);    /* consume any prior interrupt */
 				read(value, buf, sizeof buf);
 
+				std::cout << "waiting for interrupt: " << std::endl;
    				poll(&pfd, 1, -1);         /* wait for interrupt */
+   				std::cout << "interrupt has ocurred " << std::endl;
+
+   				system("echo mem > /sys/power/state");
 
    				lseek(value, 0, SEEK_SET);    /* consume interrupt */
 				read(value, buf, sizeof buf);
 
-				break;
-			}
+			//}
 
 
 
