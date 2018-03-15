@@ -13,6 +13,7 @@ bool streaming = false;
 while(true){
 	f.open("/sys/class/gpio/gpio298/value");
 	f >> i;
+	printf("%i and... %i\n",getppid(),getpid());
 	if(i == 1 && not(streaming)){
 		kill(getppid(),SIGBUS);
 		//cout << i <<"\n";
@@ -29,6 +30,3 @@ while(true){
 }
 
 }
-
-
-
