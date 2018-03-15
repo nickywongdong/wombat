@@ -28,31 +28,38 @@
 
 using namespace std;
 
-string loggingDirectory;
-bool loggingActive = true, backup_cam_active = false;
+string loggingDirectory;    // curr logging directory
+bool loggingActive = true;    // bool to toggle logging on and off
+bool backupCameraActive = false, frontCamBTActive = false, rearCamBTActive = false;   // bools to check camera state
 
-pid_t dchelper0_pid = -5, dchelper1_pid = -5, bcamera_pid = -5;
+pid_t dchelper0pid = -5, dchelper1pid = -5, bcamerapid = -5;    // process IDs for helpers
 
-int fdcfd, rdcfd;
+int fdcfd, rdcfd;   // bluetooth file descriptors for front and rear dashcams
 
 /*
   Makes a bluetooth connection, storing info for accessing into a file descriptor by address.
 */
-void connectBluetooth(string bluetoothAddress, int *fd) {
-  struct sockaddr_rc addr = { 0 };
-  int status;
-  char *dest = (char *)bluetoothAddress.c_str();    // connect to bt device @ given bluetooth address
+bool connectBluetooth(string bluetoothAddress, int *fd) {
+  int status;   // to hold connection status based on connect() call
+  char *dest = (char *)bluetoothAddress.c_str();    // get the supplied address and cast to c string
 
-  // allocate bluetooth socket
+  // allocate bluetooths ocket
   *fd = socket(AF_BLUETOOTH, SOCK_STREAM, BTPROTO_RFCOMM);
 
-  // set connection parameters struct
+  // set bluetooth connection parameters
+  struct sockaddr_rc addr = { 0 };
   addr.rc_family = AF_BLUETOOTH;
   addr.rc_channel = (uint8_t) 1;
   str2ba( dest, &addr.rc_bdaddr );
 
   // connect to the raspberrypi, saving connection into a global file descriptor
   status = connect(*fd, (struct sockaddr *)&addr, sizeof(addr));
+
+  // return true or false based on connection status
+  if (status == 0) {
+    return true;
+  }
+  return false;
 }
 
 /*
@@ -60,44 +67,44 @@ void connectBluetooth(string bluetoothAddress, int *fd) {
 */
 void sendBluetoothCommand(int fd, char command) {
   int status = 0;
+
+  // send the command, saving our status
   status = write(fd, &command, 1);
+
+  // ensure that our command is sent by looping until we have a good return status
   while (status < 0) {
     status = write(fd, &command, 1);
   }
-  /*else if (status < 0) {
-    perror("Problem sending to RaspberryPi: ");
-  }*/
 }
 
 /*
   Mananges all logging.
 */
-void cameraLooper() {
+void cameraLoop() {
   char *args[] = {(char *)FRONT_CAMERA_HELPER_NAME, (char *)FRONT_CAMERA_PORT, (char *)COMMAND_RECORD, (char *)loggingDirectory.c_str(), NULL};
   while(1) {
     if(loggingActive) {
       sendBluetoothCommand(fdcfd,'s');
-      dchelper0_pid = fork();
-      if(dchelper0_pid == 0) {
+      dchelper0pid = fork();
+      if(dchelper0pid == 0) {
         if (axolotlFileSystem::getAvailableMemory(loggingDirectory) > 2048) {
-          execv("record",args);
+          execv("record_helper",args);
         }
         else {
-          //dchelper1_pid = fork();
-          if(dchelper1_pid == 0) {
-            //record(REAR_CAM_BT_ADDR,9002);
+          //dchelper1pid = fork();
+          if(dchelper1pid == 0) {
+            
           }
           else {
             while(1) {
-              // wait and do nothing...
+              // wait forever after we generate our two helpers
             }
           }
         }
       }
     }
-    //pause();
     while(1) {
-      // wait and do nothing...
+      // another wait just in case...
     }
   }
 }
@@ -107,20 +114,27 @@ void cameraLooper() {
 */
 void killallHelpers() {
   int status;
-  system("killall record");
+
+  // kill all of our gst-launch processes
+  system("killall record_helper");
   system("killall gst-launch-1.0");
-
-  if((dchelper0_pid != -5) && (dchelper0_pid > 1)) {
-    kill(dchelper1_pid,SIGKILL);
-    waitpid(dchelper1_pid, &status, -1);
+  if(backupCameraActive) {
+    system("killall backup_cam_helper");
   }
-  dchelper0_pid = -5;
 
-  if((dchelper1_pid != -5) && (dchelper1_pid > 1)) {
-    kill(dchelper1_pid,SIGKILL);
-    waitpid(dchelper1_pid, &status, -1);
+  if((dchelper0pid != -5) && (dchelper0pid > 1)) {
+    kill(dchelper1pid,SIGKILL);
+    waitpid(dchelper1pid, &status, -1);
   }
-  dchelper1_pid = -5;
+  dchelper0pid = -5;
+
+  if((dchelper1pid != -5) && (dchelper1pid > 1)) {
+    kill(dchelper1pid,SIGKILL);
+    waitpid(dchelper1pid, &status, -1);
+  }
+  dchelper1pid = -5;
+
+
 }
 
 /*
@@ -178,10 +192,10 @@ void toggleOnHandler(int signumber, siginfo_t *siginfo, void *pointer) {
   char *args[] = {(char *)FRONT_CAMERA_HELPER_NAME, (char *)FRONT_CAMERA_PORT, (char *)COMMAND_RECORD, (char *)loggingDirectory.c_str(), NULL};
   loggingActive = true;
   sendBluetoothCommand(fdcfd,'s');
-  dchelper0_pid = fork();
-  if(dchelper0_pid == 0) {
+  dchelper0pid = fork();
+  if(dchelper0pid == 0) {
     if (axolotlFileSystem::getAvailableMemory(loggingDirectory) > 2048) {
-      execv("record",args);
+      execv("record_helper",args);
     }
     else {
     }
@@ -202,33 +216,63 @@ void registerToggleOnHandler() {
 /*
   Starts the backup camera process, forcing it to display over the UI.
 */
-void startBackupCameraHandler(int signumber, siginfo_t *siginfo, void *pointer) {
+void backupCameraToggleHandler(int signumber, siginfo_t *siginfo, void *pointer) {
+  backupCameraActive = !backupCameraActive;
+  ofstream bcHandleFile;
+  string pidBackupCamGSTasSTR;
+  int pidBackupCamGST;
   char *args[] = {(char *)BACKUP_CAMERA_HELPER_NAME, (char *)BACKUP_CAMERA_PORT, (char *)COMMAND_WATCH, (char *)loggingDirectory.c_str(), NULL};
-  sendBluetoothCommand(rdcfd,'b');
-  execv("record",args);
+  if(backupCameraActive) {
+    sendBluetoothCommand(rdcfd,'b');
+    execv("backup_cam_helper",args);
+  }
+  else {
+    system("killall backup_cam_helper");
+    system("pgrep port=9003 > bchandle");
+    bcHandleFile.open("bchandle");
+    if(bcHandleFile.is_open()) {
+      getline(bcHandleFile,pidBackupCamGSTasSTR);
+      bcHandleFile.close();
+    }
+    pidBackupCamGST = stoi(pidBackupCamGSTasSTR);
+    kill(pidBackupCamGST, SIGTERM);
+    system("rm -f bchandle");
+  }
 }
 
 /*
   Registers the kill handler with SIGBUS.
 */
-void registerStartBackupCameraHandler() {
+void registerBackupCameraHandler() {
   static struct sigaction dsa;
   memset(&dsa, 0, sizeof(dsa));
-  dsa.sa_sigaction = startBackupCameraHandler;
+  dsa.sa_sigaction = backupCameraToggleHandler;
   dsa.sa_flags = SA_SIGINFO;
   sigaction(SIGBUS, &dsa, NULL);
 }
 
 int main(int argc, char *argv[]) {
   // Ensure that a logging directory has been provided and bind it
-
   loggingDirectory = argv[1];
 
-  connectBluetooth(FRONT_CAM_BT_ADDR, &fdcfd);
+  // Pair with front camera RPi
+  if(connectBluetooth(FRONT_CAM_BT_ADDR, &fdcfd)) {
+    frontCamBTActive = true;
+  }
+
+  // Pair with rear camera RPi
+  /*if(connectBluetooth(REAR_CAM_BT_ADDR, &rdcfd)) {
+    rearCamBTActive = true;
+  }*/
+
+  // Register all signal handlers
   registerToggleOffHandler();
   registerToggleOnHandler();
   registerKillCamerasHandler();
-  cameraLooper();
+  registerBackupCameraHandler();
+
+  // Begin our camera loop
+  cameraLoop();
 
   return 0;
 }

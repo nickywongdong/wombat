@@ -190,7 +190,7 @@ bool changePassword(string checkPassword, string newPassword) {
   if(checkPasswordCorrect(checkPassword)) {
     ofstream hashfile;
     string newhash = axolotlFileSystem::hash(newPassword);
-    string hashfilePath = "~/wombat/source/hashkey"; // normally runDirectory + "/hashkey"
+    string hashfilePath = "~/wombat/source/hashkey";    // normally runDirectory + "/hashkey"
     hashfile.open(hashfilePath, std::ofstream::trunc);
     if(hashfile.is_open()) {
       hashfile.write((const char *)newhash.c_str(),(long)newhash.length());
@@ -271,6 +271,7 @@ void registerDeleteHandler() {
   sigaction(SIGUSR1, &dsa, NULL);
 }
 
+//int mainOperation() {
 int main() {
   string inputStr;
   runDirectory = axolotlFileSystem::getPWD();
