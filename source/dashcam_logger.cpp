@@ -312,26 +312,12 @@ int main(int argc, char *argv[]) {
     		backupCameraActive = true;
     		sleep(1);
         sendBluetoothCommand(rdcfd,'b');
-        if(backupCameraActive) {
-          execv("backup_cam_helper",args);
-        }
-        else {
-          sleep(5);   // fulfill FMVSS by waiting 5 sec to kill backup camera after shifting out of reverse
-          system("pkill -f port=9003");
-        }
     	}
     	else if(i == 0 && backupCameraActive){
     		kill(getppid(),SIGBUS);
     		backupCameraActive = false;
     		sleep(1);
         sendBluetoothCommand(rdcfd,'b');
-        if(backupCameraActive) {
-          execv("backup_cam_helper",args);
-        }
-        else {
-          sleep(5);   // fulfill FMVSS by waiting 5 sec to kill backup camera after shifting out of reverse
-          system("pkill -f port=9003");
-        }
     	}
     	f.close();
     }
