@@ -64,6 +64,15 @@ int main(int argc, char **argv) {
               if(bhelper_pid == 0) {
                 execv("bchelper",args);
               }
+              else {
+                system("killall bchelper");
+                system("pkill -f port=9003");
+                if(bhelper_pid > 1) {
+                  kill(bhelper_pid,SIGKILL);
+                  waitpid(bhelper_pid, &status, -1);
+                  bhelper_pid = -5;
+                }
+              }
             }
           }
           else if(buf[0] == 'p' || buf[0] == 'q'){
