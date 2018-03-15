@@ -98,9 +98,9 @@ void cameraLoop() {
       if(frontCamBTActive) {
         sendBluetoothCommand(fdcfd,'s');
       }
-      while(axolotlFileSystem::getAvailableMemory(loggingDirectory) < 2048) {   // wait until we have > 2GB storage
+      /*while(axolotlFileSystem::getAvailableMemory(loggingDirectory) < 2048) {   // wait until we have > 2GB storage
           optimizeStorage();    // attempt to optimize storage space if we don't have enough
-      }
+      }*/
       dchelper0pid = fork();
       if(dchelper0pid == 0) {
         if (frontCamBTActive) {
@@ -123,30 +123,6 @@ void cameraLoop() {
       // another wait just in case...
     }
   }
-}
-
-/*
-  Kills the backup camera gstreamer process.
-*/
-void killBackupCameraGstreamer() {
-  ifstream bcHandleFile;
-  string pidBackupCamGSTasSTR = NULL;
-  int pidBackupCamGST;
-
-  system("killall backup_cam_helper");
-  system("pgrep port=9003 > bchandle");
-
-  bcHandleFile.open("bchandle");
-  if(bcHandleFile.is_open()) {
-    getline(bcHandleFile,pidBackupCamGSTasSTR);
-    bcHandleFile.close();
-  }
-  if(pidBackupCamGSTasSTR != "") {
-    pidBackupCamGST = stoi(pidBackupCamGSTasSTR);
-    kill(pidBackupCamGST, SIGTERM);
-  }
-
-  system("rm -f bchandle");
 }
 
 /*
@@ -181,7 +157,7 @@ void killAllHelpers() {
     }
     bcamerapid = -5;
 
-    killBackupCameraGstreamer();
+    // system("pkill -f port=9003");
   }
 
 }
@@ -191,8 +167,6 @@ void killAllHelpers() {
   Closes file descriptors to bluetooth sockets and exits cleanly.
 */
 void killCamerasHandler(int signumber, siginfo_t *siginfo, void *pointer) {
-  printf("IMA FIRIN MAH LAZOR\n");
-
   sendBluetoothCommand(fdcfd,'q');
   //sendBluetoothCommand(rdcfd,'q');
 
@@ -280,7 +254,7 @@ void backupCameraToggleHandler(int signumber, siginfo_t *siginfo, void *pointer)
   }
   else {
     sleep(5);   // fulfill FMVSS by waiting 5 sec to kill backup camera after shifting out of reverse
-    killBackupCameraGstreamer();
+    system("pkill -f port=9003");
   }
 }
 
