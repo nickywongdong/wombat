@@ -54,14 +54,14 @@ int main(int argc, char **argv) {
               if(camerahelper_pid == 0) {
                 execv("c1helper",args);
               }
-              waitpid(camerahelper_pid, &status, -1);
-              camerahelper_pid = -5;
           }
           else if(buf[0] == 'p' || buf[0] == 'q'){
               if(camerahelper_pid > 1) {
                 system("killall raspivid");
                 system("killall gst-launch-1.0");
                 kill(camerahelper_pid,SIGKILL);
+                waitpid(camerahelper_pid, &status, -1);
+                camerahelper_pid = -5;
                 system("killall c1helper");
               }
               if(buf[0] == 'q') {
