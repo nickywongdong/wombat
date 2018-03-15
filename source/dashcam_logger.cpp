@@ -34,7 +34,7 @@ string loggingDirectory;    // curr logging directory
 bool loggingActive = true;    // bool to toggle logging on and off
 bool backupCameraActive = false, frontCamBTActive = false, rearCamBTActive = false;   // bools to check camera state
 
-pid_t dchelper0pid = -5, dchelper1pid = -5, bcamerapid = -5;    // process IDs for helpers
+pid_t dchelper0pid = -5, dchelper1pid = -5, bcamerapid = -5, gpio_watcherpid = -5;    // process IDs for helpers
 
 int fdcfd, rdcfd;   // bluetooth file descriptors for front and rear dashcams
 
@@ -167,15 +167,19 @@ void killAllHelpers() {
   Closes file descriptors to bluetooth sockets and exits cleanly.
 */
 void killCamerasHandler(int signumber, siginfo_t *siginfo, void *pointer) {
-
-  //sendBluetoothCommand(rdcfd,'q');
-
   killAllHelpers();
 
   sendBluetoothCommand(fdcfd,'q');
-
+  sendBluetoothCommand(rdcfd,'q');
   close(fdcfd);
   close(rdcfd);
+
+  int status;
+  if(gpio_watcherpid > 1) {
+    kill(gpio_watcherpid,SIGTERM);
+    waitpid(gpio_watcherpid,&status,-1);
+  }
+
   exit(0);
 }
 
@@ -291,6 +295,11 @@ int main(int argc, char *argv[]) {
   registerKillCamerasHandler();
   registerBackupCameraHandler();
 
+  char *args[] = { NULL };
+  gpio_watcherpid = fork();
+  if (gpio_watcherpid == 0) {
+    execv("gpio_backup_camera",args);
+  }
   // Begin our camera loop
   cameraLoop();
 
