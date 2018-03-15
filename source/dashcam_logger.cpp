@@ -254,6 +254,7 @@ void registerToggleOnHandler() {
   Starts the backup camera process, forcing it to display over the UI.
 */
 void backupCameraToggleHandler(int signumber, siginfo_t *siginfo, void *pointer) {
+  int status;
   backupCameraActive = !backupCameraActive;
   char *args[] = {(char *)BACKUP_CAMERA_HELPER_NAME, (char *)BACKUP_CAMERA_PORT, (char *)COMMAND_WATCH, (char *)loggingDirectory.c_str(), NULL};
   sendBluetoothCommand(rdcfd,'b');
