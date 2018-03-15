@@ -13,7 +13,9 @@
 #include <bluetooth/bluetooth.h>
 #include <bluetooth/rfcomm.h>
 
-pid_t camerahelper_pid;
+pid_t camerahelper_pid, bhelper_pid;
+
+bool backupCameraActive = false;
 
 int main(int argc, char **argv) {
   struct sockaddr_rc loc_addr = { 0 }, rem_addr = { 0 };
@@ -50,18 +52,27 @@ int main(int argc, char **argv) {
       if( bytes_read > 0 ) {
           printf("received [%s]\n", buf);
           if(buf[0] == 's'){
-              camerahelper_pid = fork();
-              if(camerahelper_pid == 0) {
-                execv("c2helper",args);
+            camerahelper_pid = fork();
+            if(camerahelper_pid == 0) {
+              execv("c2helper",args);
+            }
+          }
+          else if(buf[0] == 'b') {
+            backupCameraActive = !backupCameraActive;
+            if(backupCameraActive) {
+              bhelper_pid = fork();
+              if(bhelper_pid == 0) {
+                execv("bchelper",args);
               }
-              waitpid(camerahelper_pid, &status, -1);
-              camerahelper_pid = -5;
+            }
           }
           else if(buf[0] == 'p' || buf[0] == 'q'){
               if(camerahelper_pid > 1) {
                 system("killall raspivid");
                 system("killall gst-launch-1.0");
                 kill(camerahelper_pid,SIGKILL);
+                waitpid(camerahelper_pid, &status, -1);
+                camerahelper_pid = -5;
                 system("killall c2helper");
               }
               if(buf[0] == 'q') {

@@ -14,7 +14,7 @@
 #include <bluetooth/rfcomm.h>
 
 #define FRONT_CAM_BT_ADDR "B8:27:EB:FE:1C:65"
-#define REAR_CAM_BT_ADDR "iunnoyet"
+#define REAR_CAM_BT_ADDR "B8:27:EB:59:5E:00"
 #define FRONT_CAMERA_HELPER_NAME "./front_cam_helper"
 #define REAR_CAMERA_HELPER_NAME "./rear_cam_helper"
 #define BACKUP_CAMERA_HELPER_NAME "./backup_cam_helper"
@@ -250,8 +250,8 @@ void registerToggleOnHandler() {
 void backupCameraToggleHandler(int signumber, siginfo_t *siginfo, void *pointer) {
   backupCameraActive = !backupCameraActive;
   char *args[] = {(char *)BACKUP_CAMERA_HELPER_NAME, (char *)BACKUP_CAMERA_PORT, (char *)COMMAND_WATCH, (char *)loggingDirectory.c_str(), NULL};
+  sendBluetoothCommand(rdcfd,'b');
   if(backupCameraActive) {
-    sendBluetoothCommand(rdcfd,'b');
     execv("backup_cam_helper",args);
   }
   else {
@@ -281,9 +281,9 @@ int main(int argc, char *argv[]) {
   }
 
   // Pair with rear camera RPi
-  /*if(connectBluetooth(REAR_CAM_BT_ADDR, &rdcfd)) {
+  if(connectBluetooth(REAR_CAM_BT_ADDR, &rdcfd)) {
     rearCamBTActive = true;
-  }*/
+  }
 
   // Register all signal handlers
   registerToggleOffHandler();
