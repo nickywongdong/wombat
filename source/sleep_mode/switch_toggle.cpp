@@ -29,7 +29,6 @@ int main(int argc, char *argv[]){
 	char str[256];
    	struct timeval tv;
    	struct pollfd pfd;
-   	int fd;
    	char buf[8];
 
     std::cout << "Toggle Switch Testing" << std::endl;
@@ -48,10 +47,10 @@ int main(int argc, char *argv[]){
     //setup pin as interrupt
     sprintf(str, "/sys/class/gpio/gpio%d/value", IN1);
 
-   	if ((fd = open(str, O_RDONLY)) < 0) {
+   	/*if ((fd = open(str, O_RDONLY)) < 0) {
       fprintf(stderr, "Failed, gpio %d not exported.\n", IN1);
       exit(1);
-  	}
+  	}*/
 
 
 
@@ -77,17 +76,17 @@ int main(int argc, char *argv[]){
 
         	//allow for interrupt on pin to wake system:
 
-        	pfd.fd = fd;
+        	pfd.fd = value;
 
    			pfd.events = POLLPRI;
 
-   			lseek(fd, 0, SEEK_SET);    /* consume any prior interrupt */
-   			read(fd, buf, sizeof buf);
+   			lseek(value, 0, SEEK_SET);    /* consume any prior interrupt */
+   			read(value, buf, sizeof buf);
 
    			poll(&pfd, 1, -1);         /* wait for interrupt */
 
-   			lseek(fd, 0, SEEK_SET);    /* consume interrupt */
-   			read(fd, buf, sizeof buf);
+   			lseek(value, 0, SEEK_SET);    /* consume interrupt */
+   			read(value, buf, sizeof buf);
    		}
     }
 
