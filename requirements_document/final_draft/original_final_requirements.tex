@@ -158,7 +158,7 @@ The Axolotl will be used by ourselves, our client, and the general public: speci
 \begin{itemize}
 	\item The Axolotl Software is a Linux program that is installed on the NVIDIA Jetson TX2.
 	\item Users interact with the Axolotl Infotainment System via a graphic user interface displayed on a touchscreen.
-	\item Users may switch between controlling media, navigation, and data logging settings at any time.
+	\item Users are able to control media, navigation, and data settings at any time.
 
 	\begin{itemize}
 		\item In the media menu:
@@ -180,8 +180,8 @@ The Axolotl will be used by ourselves, our client, and the general public: speci
 		
 		\item In the data menu:
 		\begin{itemize}
-	\item Users may wipe the data stored in the black box. This function is only available after entering a password.
-	\item Users may change the password used to wipe black box data. This function is only available after authentication using the current password.
+	\item Users may use a toggle switch to turn off the system's WiFi connectivity.
+	\item Users may wipe the data stored in the black box. This is only available after entering a password.
 \end{itemize}
 \end{itemize}
 
@@ -206,25 +206,20 @@ The Axolotl will be used by ourselves, our client, and the general public: speci
 	\item The system will search Internal/External storage drives and display a list of playable tracks to the user ordered by filename for playback selection. Playback of .mp3 is supported at minimum.
 	\item The black box data log must be saved to a removable storage medium.
 	\item The system will automatically play the next song when playing media from internal/external storage.
-	\item The system will format and log data from the following sources:
-	\begin{itemize}
-	\item an OBDII dongle plugged into an OBDII port,
-	\item a front-facing dashcam,
-	\item and an AHRS sensor.
-	\end{itemize}
+	\item The system will format data from an OBDII port, connected cameras, and AHRS sensors for logging.
 	\item The system will utilize a single GPS receiver unit to determine the vehicle's current location for routing.
 	\item The system will compensate for the loss of mobile data signal and allow for offline routing and mapping.
-	\item The navigation system must be capable of navigating to addresses within the United States at a minimum.
+	\item The navigation system will be limited to addresses within the United States.
 	\item The system will automatically switch to the backup camera feed when the vehicle is reversing. 
-	\item The system will switch off the display when the car turns off, and the Jetson TX2 will enter a low power mode.
+	\item The system will switch off the display when the car turns off, and the Jetson TX2 will enter a standby mode.
 	\item The system will also offer a minimum of one of any of the following optional functions:
         	\begin{itemize}
-        		\item The system will be able to control supplemental turn signals and backup lights wirelessly.
-        		\item The system will use multiple GPS receivers throughout the vehicle to improve GPS location accuracy.
-		\item The system will use a dead reckoning system to compensate for loss of GPS signal.
-		\item The system will record dashcam data from both front and back cameras.
-        		\item The system will utilize a connected LIDAR system to provide passive parallel parking assist.
-		\item The system will utilize computer vision algorithms in conjunction with the front dashcam to detect lane lines and provide lane departure warning.
+        	\item The system will exert control over microcontrollers to manage supplemental turn signals and backup lights.
+        	\item The system will use multiple GPS receivers throughout the vehicle to improve GPS location accuracy.
+			\item The system will use a dead reckoning system to compensate for loss of GPS signal.
+			\item The system will record dashcam data from both front and back cameras.
+        	\item The system will utilize a connected LIDAR system to provide passive parallel parking assist.
+	\item The system will utilize the dashcam to detect lane lines and provide lane departure warning.
 	\end{itemize}
 \end{itemize}
 
@@ -234,26 +229,8 @@ The Axolotl will be used by ourselves, our client, and the general public: speci
 \includegraphics[width=\textwidth ]{gantt.eps}
 \includegraphics[width=\textwidth]{tablegantt.eps}
 
-\newpage
-
 \subsection{Change History}
-\textbf{December 1st, 2017:} 
-\begin{itemize}
-\item Removed clause stating that users will be able to download data log to removable storage medium.
-\item Added clause to functional requirements section stating that data log will be saved to a removable storage medium by default.
-\end{itemize}
-
-\textbf{March 16th, 2018:} 
-\begin{itemize}
-\item Removed the hard requirement of having a WiFi toggle within the data settings menu; this is because WiFi connectivity is only needed to fulfill a stretch goal that is now no longer being developed. Stretch goal cannot be developed due to connectivity conflicts with the dashcam system, which needs to use the WiFi radio in AP mode.
-\item Expanded data settings menu clause to also include the ability to change the black box password. 
-\item Amended clause in external interfaces to stipulate that users may switch between controlling navigation/data logging/media systems at any time.
-\item Amended data formatting and log to make the requirement less ambiguous and easier to verify. 
-\item Amended navigation system address clause to offer U.S. maps at minimum. 
-\item Refined supplemental turn signal stretch goal to be more representative of development. 
-\item Expanded description of optional stretch goal for lane departure warning.
-\end{itemize}
-
+\textbf{December 1st, 2017:} Removed clause stating that users will be able to download data log to removable storage medium. Added clause to functional requirements section stating that data log will be saved to a removable storage medium by default.
 \end{document}
 
 
