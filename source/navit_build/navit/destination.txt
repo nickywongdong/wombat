@@ -1,4 +1,0 @@
-type=former_destination label="Southeast Woodstock Boulevard"
-mg:-0xcff1ca 0x56d436
-type=former_itinerary label="Southeast Woodstock Boulevard"
-mg:-0xcff1ca 0x56d436
