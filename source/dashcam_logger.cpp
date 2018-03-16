@@ -265,7 +265,7 @@ void backupCameraToggleHandler(int signumber, siginfo_t *siginfo, void *pointer)
     }
   }
   else {
-    //sleep(5);   // fulfill FMVSS by waiting 5 sec to kill backup camera after shifting out of reverse
+    sleep(5);   // fulfill FMVSS by waiting 5 sec to kill backup camera after shifting out of reverse
     system("killall backup_cam_helper");
     if(bcamerapid > 1) {
       kill(bcamerapid,SIGKILL);
