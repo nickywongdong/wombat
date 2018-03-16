@@ -22,7 +22,7 @@ int main(int argc, char *argv[]) {
   string runType = argv[2], loggingDirectory = argv[3], sysCmd;
 
   if(runType == "r") {
-    sysCmd = "gst-launch-1.0 -e -v udpsrc port=" + to_string(cameraPort) + " ! application/x-rtp, clock-rate=90000, encoding-name=H264, payload=96 ! rtph264depay ! h264parse ! mp4mux ! splitmuxsink location='" + loggingDirectory + "/front_dashcam%03d.mp4'";
+    sysCmd = "gst-launch-1.0 -e -v udpsrc port=" + to_string(cameraPort) + " ! application/x-rtp, clock-rate=90000, encoding-name=H264, payload=96 ! rtph264depay ! h264parse ! splitmuxsink location='" + loggingDirectory + "/front_dashcam%03d.mp4'";
   }
   else if (runType == "w") {
     sysCmd = "gst-launch-1.0 -v udpsrc port=" + to_string(cameraPort) + " ! gdpdepay ! rtph264depay ! avdec_h264 ! autovideosink sync=false";
