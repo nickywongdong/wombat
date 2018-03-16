@@ -48,6 +48,8 @@ MainWindow::MainWindow(QWidget *parent) :
 
     char c[256];
     std::string foo;
+    std::string bar;
+    std::string baz;
     std::ifstream f;
     chdir("/home/nvidia/wombat");
     snprintf(c, 256,"%s %d","bash getwindidbypid",(int)nvid);
@@ -64,19 +66,81 @@ MainWindow::MainWindow(QWidget *parent) :
     window->setFlags(Qt::FramelessWindowHint);
     QWidget *widget = QWidget::createWindowContainer(window);
     widget->setParent(this);
-    QVBoxLayout *layout = new QVBoxLayout();
-    layout->addWidget(widget);
-    this->setLayout(layout);
+    //QVBoxLayout *layout = new QVBoxLayout();
+    //layout->addWidget(widget);
+    //this->setLayout(layout);
     ui->tabWidget->addTab(widget,"Navigation");
     ui->tabWidget->addTab(new Data(this, dmid),"Data");
     ui->tabWidget->addTab(new MusicPage(),"Media");
+
+    fmid = fork();
+            //chdir("/home/nvidia/Desktop/github/source/");
+            if(fmid==0){
+                execl("/usr/bin/gqrx", "gqrx", NULL);
+            }
+            else{
+                chdir("/home/nvidia/wombat/");
+            }
+
+
+
+        chdir("/home/nvidia/wombat");
+        snprintf(c, 256,"%s %d","bash getwindidbypid",(int)fmid);
+        sleep(1);   //necessary
+        system(c);
+        f.open("./windowid.txt");
+        std::getline(f,bar);
+        f.close();
+        windid = strtoull(bar.c_str(),NULL,16);
+
+
+        QWindow *window1 = QWindow::fromWinId(windid);
+        window1->setFlags(Qt::FramelessWindowHint);
+        QWidget *widget1 = QWidget::createWindowContainer(window1);
+        widget1->setParent(this);
+        //QVBoxLayout *layout = new QVBoxLayout();
+        //layout->addWidget(widget);
+        //this->setLayout(layout);
+        ui->tabWidget->addTab(widget1, "FM");
+
+
+        mpid = fork();
+            chdir("/home/nvidia/Desktop/github/source/media_player");
+            if(mpid==0){
+                execl("/usr/bin/vlc", "vlc","--loop","--playlist-tree","Music", "/media/nvidia/S", NULL);
+            }
+            else{
+                chdir("/home/nvidia/wombat/");
+            }
+
+
+
+        chdir("/home/nvidia/wombat");
+        snprintf(c, 256,"%s %d","bash getwindidbypid",(int)mpid);
+        sleep(1);   //necessary
+        system(c);
+        f.open("./windowid.txt");
+        std::getline(f,baz);
+        f.close();
+        windid = strtoull(baz.c_str(),NULL,16);
+
+
+        QWindow *window2 = QWindow::fromWinId(windid);
+        window2->setFlags(Qt::FramelessWindowHint);
+        QWidget *widget2 = QWidget::createWindowContainer(window2);
+        widget2->setParent(this);
+        //QVBoxLayout *layout = new QVBoxLayout();
+        //layout->addWidget(widget);
+        //this->setLayout(layout);
+        ui->tabWidget->addTab(widget2, "Media Player");
 
 }
 
 void MainWindow::closeEvent(QCloseEvent *event){
 
     kill(dmid,SIGINT);
-    kill(nvid,SIGTERM);
+    kill(nvid,SIGINT);
+    kill(fmid,SIGINT);
     event->accept();
 
 }

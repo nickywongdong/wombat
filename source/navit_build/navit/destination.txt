@@ -2,5 +2,4 @@ type=former_destination label="Chula Vista Avenue"
 mg:-0xb52497 0x3e3fdd
 type=former_destination label="poi_pub Downward Dog"
 mg:-0xd1224d 0x54a34c
-type=former_itinerary label="poi_pub Downward Dog"
-mg:-0xd1224d 0x54a34c
+# navigation stopped

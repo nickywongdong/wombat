@@ -29,7 +29,8 @@ private:
     void closeEvent(QCloseEvent *);
     pid_t mpid;
     pid_t fmid;
-    bool open;
+    bool fopen;
+    bool mopen;
 };
 
 #endif // MUSICPAGE_H

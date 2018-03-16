@@ -20,7 +20,9 @@ MusicPage::MusicPage(QWidget *parent) :
     ui(new Ui::MusicPage)
 {
     ui->setupUi(this);
-    open = false;
+    fopen = false;
+    mopen = false;
+
 
 }
 
@@ -32,24 +34,29 @@ MusicPage::~MusicPage()
 //button to open the FM Radio
 void MusicPage::on_pushButton_clicked()
 {
-    system("pulseaudio -k");    //reset the pulseaudio stream
+    /*system("pulseaudio -k");    //reset the pulseaudio stream
 
-    if(open)    kill(mpid,SIGINT);  //kill before we spawn another one
+    if(mopen)    {
+        kill(mpid,SIGINT);  //kill the previously spawned activity
+        mopen = false;
+    }
+    if(fopen)    ui->stackedWidget->setCurrentIndex(0);
+    else{
 
     ui->auxLabel->setText("");
     ui->mediaLabel->setText("");
     ui->pairLabel->setText("");
     ui->fmLabel->setText("Opening FM Radio");
 
-    ui->stackedWidget->setCurrentIndex(0);
+
 
     std::ifstream f;
     char c[256];
     std::string foo;
 
-    mpid = fork();
+    fmid = fork();
         //chdir("/home/nvidia/Desktop/github/source/");
-        if(mpid==0){
+        if(fmid==0){
             execl("/usr/bin/gqrx", "gqrx", NULL);
         }
         else{
@@ -59,7 +66,7 @@ void MusicPage::on_pushButton_clicked()
 
 
     chdir("/home/nvidia/wombat");
-    snprintf(c, 256,"%s %d","bash getwindidbypid",(int)mpid);
+    snprintf(c, 256,"%s %d","bash getwindidbypid",(int)fmid);
     sleep(1);   //necessary
     system(c);
     f.open("./windowid.txt");
@@ -73,15 +80,16 @@ void MusicPage::on_pushButton_clicked()
     window->setFlags(Qt::FramelessWindowHint);
     QWidget *widget = QWidget::createWindowContainer(window);
     widget->setParent(this);
-    QVBoxLayout *layout = new QVBoxLayout();
-    layout->addWidget(widget);
-    this->setLayout(layout);
+    //QVBoxLayout *layout = new QVBoxLayout();
+    //layout->addWidget(widget);
+    //this->setLayout(layout);
     ui->stackedWidget->addWidget(widget);
-    ui->stackedWidget->setCurrentWidget(widget);
+    //ui->stackedWidget->setCurrentWidget(widget);
 
-
+    ui->stackedWidget->setCurrentIndex(0);
     ui->fmLabel->setText("");
-    open = true;
+    fopen = true;
+    }*/
 
 }
 
@@ -91,8 +99,8 @@ void MusicPage::on_pushButton_2_clicked()
 
     system("pulseaudio -k");    //reset the pulseaudio stream
 
-    if(open)    kill(mpid,SIGINT);  //kill the previously spawned activity
-
+    if(mopen)    kill(mpid,SIGINT);  //kill the previously spawned activity
+    if(fopen)    kill(mpid,SIGINT);
 
     ui->pairLabel->setText("Pairing with iPhone");
     ui->auxLabel->setText("");
@@ -108,8 +116,8 @@ void MusicPage::on_pushButton_3_clicked()
 
     system("pulseaudio -k");    //reset the pulseaudio stream
 
-    if(open)    kill(mpid,SIGINT);  //kill the previously spawned activity
-
+    if(mopen)    kill(mpid,SIGINT);  //kill the previously spawned activity
+    if(fopen)    kill(mpid,SIGINT);
     ui->auxLabel->setText("Enabling Aux");
 
     system("pacmd load-module module-loopback source=alsa_output.usb-0d8c_C-Media_USB_Audio_Device-00.analog-stereo sink=alsa_output.platform-3510000.hda.hdmi-stereo-extra1.monitor");
@@ -128,20 +136,24 @@ void MusicPage::on_pushButton_4_clicked()
 {
     system("pulseaudio -k");    //restart pulseaudio
 
-    if(open)    kill(mpid,SIGINT);  //kill the previously spawned activity
 
+    if(fopen)    {
+        kill(fmid,SIGINT);
+        fopen=false;
+    }
+    if(mopen)    ui->stackedWidget->setCurrentIndex(1);
     ui->auxLabel->setText("");
     ui->mediaLabel->setText("Opening Media Player");
     ui->pairLabel->setText("");
     ui->fmLabel->setText("");
 
-    ui->stackedWidget->setCurrentIndex(0);
+
 
     std::ifstream f;
     char c[256];
     std::string foo;
 
-    mpid = fork();
+ /*   mpid = fork();
         chdir("/home/nvidia/Desktop/github/source/media_player");
         if(mpid==0){
             execl("/usr/bin/vlc", "vlc","--playlist-autostart","--loop","--playlist-tree","Music", "/media/nvidia/S", NULL);
@@ -167,14 +179,14 @@ void MusicPage::on_pushButton_4_clicked()
     window->setFlags(Qt::FramelessWindowHint);
     QWidget *widget = QWidget::createWindowContainer(window);
     widget->setParent(this);
-    QVBoxLayout *layout = new QVBoxLayout();
-    layout->addWidget(widget);
-    this->setLayout(layout);
+    //QVBoxLayout *layout = new QVBoxLayout();
+    //layout->addWidget(widget);
+    //this->setLayout(layout);
     ui->stackedWidget->addWidget(widget);
-    ui->stackedWidget->setCurrentWidget(widget);
     ui->mediaLabel->setText("");
-    open=true;
-
+    ui->stackedWidget->setCurrentIndex(1);
+    mopen=true;
+*/
 }
 
 void MusicPage::closeEvent(QCloseEvent *event){

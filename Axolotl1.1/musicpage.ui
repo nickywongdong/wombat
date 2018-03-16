@@ -119,10 +119,10 @@
   <widget class="QStackedWidget" name="stackedWidget">
    <property name="geometry">
     <rect>
-     <x>390</x>
-     <y>80</y>
-     <width>611</width>
-     <height>361</height>
+     <x>360</x>
+     <y>10</y>
+     <width>841</width>
+     <height>641</height>
     </rect>
    </property>
    <property name="currentIndex">

@@ -23,6 +23,7 @@ private:
     void closeEvent(QCloseEvent *);
     pid_t dmid;
     pid_t nvid;
+    pid_t fmid;
     pid_t mpid;
 };
 
