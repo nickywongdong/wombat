@@ -234,7 +234,9 @@ void toggleOnHandler(int signumber, siginfo_t *siginfo, void *pointer) {
       execv("record_helper",args);
     }
     else {
-      //args = {(char *)REAR_CAMERA_HELPER_NAME, (char *)REAR_CAMERA_PORT, (char *)COMMAND_RECORD, (char *)loggingDirectory.c_str(), NULL};
+      // Rear dashcam code goes here. Commented out for now due to lack of bandwidth
+      // args = {(char *)REAR_CAMERA_HELPER_NAME, (char *)REAR_CAMERA_PORT, (char *)COMMAND_RECORD, (char *)loggingDirectory.c_str(), NULL};
+      //
     }
   }
 }
