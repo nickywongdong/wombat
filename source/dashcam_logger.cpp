@@ -324,13 +324,11 @@ int main(int argc, char *argv[]) {
     		kill(getppid(),SIGBUS);
     		active = true;
     		sleep(1);
-        printf("Yo\n");
     	}
     	else if(i == 0 && active){
     		kill(getppid(),SIGBUS);
     		active = false;
     		sleep(1);
-        printf("Sup\n");
     	}
     	f.close();
     }
