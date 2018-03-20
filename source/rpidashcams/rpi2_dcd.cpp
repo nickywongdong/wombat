@@ -65,6 +65,7 @@ int main(int argc, char **argv) {
                 execv("bchelper",args);
               }
               else {
+                sleep(5); // for FMVSS
                 system("killall bchelper");
                 system("pkill -f port=9003");
                 if(bhelper_pid > 1) {
