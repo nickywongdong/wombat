@@ -33,7 +33,10 @@ sudo apt-get install build-essential dnsmasq -y
 
 sudo apt-get install build-essential pulseaudio -y
 
+sudo apt-get install build-essential gstreamer-0.10 -y
 sudo apt-get install build-essential gstreamer0.10-plugins-good -y
+sudo apt-get install build-essential gstreamer0.10-plugins-bad -y
+sudo apt-get install build-essential gstreamer0.10-plugins-ugly -y
 
 echo "Install script complete! Rebooting in 5 seconds..."
 
