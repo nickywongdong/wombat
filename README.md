@@ -1,5 +1,12 @@
 # Axolotl - Victor's Branch
-__Current Version:__ 0.4.1 alpha
+__Current Version:__ 0.4.2 beta
+
+Verison 0.4.2 beta:
+- Beta release with small refinements to all existing features
+- Cleaned up some code
+- Fixed rear camera daemon to handle FMVSS (both ends need to sleep() before closing when gpio298 indicates toggle off)
+- Fixed splitmuxsink Gstreamer pipeline
+- Additions to install script for Gstreamer dependencies
 
 Version 0.4.1 alpha:
 - Fully working RaspberryPi stream for front camera logging and backup camera
