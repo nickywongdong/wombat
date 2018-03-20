@@ -7,6 +7,7 @@ Verison 0.4.2 beta:
 - Fixed rear camera daemon to handle FMVSS (both ends need to sleep() before closing when gpio298 indicates toggle off)
 - Fixed splitmuxsink Gstreamer pipeline
 - Additions to install script for Gstreamer dependencies
+- Added 802.11n WiFi configuration files for testing
 
 Version 0.4.1 alpha:
 - Fully working RaspberryPi stream for front camera logging and backup camera
