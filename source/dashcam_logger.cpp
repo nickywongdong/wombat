@@ -13,7 +13,7 @@
 #include <bluetooth/bluetooth.h>
 #include <bluetooth/rfcomm.h>
 
-#include<fstream>
+#include <fstream>
 
 #define FRONT_CAM_BT_ADDR "B8:27:EB:FE:1C:65"
 #define REAR_CAM_BT_ADDR "B8:27:EB:59:5E:00"
@@ -32,8 +32,8 @@
 
 using namespace std;
 
-string loggingDirectory;    // curr logging directory
-bool loggingActive = true;    // bool to toggle logging on and off
+string loggingDirectory;      // curr logging directory
+bool loggingActive = true;      // bool to toggle logging on and off
 bool backupCameraActive = false, frontCamBTActive = false, rearCamBTActive = false;   // bools to check camera state
 
 pid_t dchelper0pid = -5, dchelper1pid = -5, bcamerapid = -5, gpio_watcherpid = -5;    // process IDs for helpers
@@ -91,7 +91,7 @@ void sendBluetoothCommand(int fd, char command) {
 }
 
 /*
-  Mananges all logging.
+  Manages all logging.
 */
 void cameraLoop() {
   char *args[] = {(char *)FRONT_CAMERA_HELPER_NAME, (char *)FRONT_CAMERA_PORT, (char *)COMMAND_RECORD, (char *)loggingDirectory.c_str(), NULL};
@@ -100,30 +100,36 @@ void cameraLoop() {
       if(frontCamBTActive) {
         sendBluetoothCommand(fdcfd,'s');
       }
-      /*while(axolotlFileSystem::getAvailableMemory(loggingDirectory) < 2048) {   // wait until we have > 2GB storage
+      if(rearCamBTActive) {
+        sendBluetoothCommand(rdcfd,'s');
+      }
+      while(axolotlFileSystem::getAvailableMemory(loggingDirectory) < 2048) {   // wait until we have > 2GB storage
           optimizeStorage();    // attempt to optimize storage space if we don't have enough
-      }*/
-      dchelper0pid = fork();
+      }
+      dchelper0pid = fork();    // fork the front camera helper
       if(dchelper0pid == 0) {
         if (frontCamBTActive) {
           execv("record_helper",args);
         }
-        else {
-          //dchelper1pid = fork();
-          if(dchelper1pid == 0) {
-
+      }
+      else {
+        dchelper1pid = fork();
+        if (dchelper1pid == 0) {
+          if (rearCamBTActive) {
+            args = {(char *)REAR_CAMERA_HELPER_NAME, (char *)REAR_CAMERA_PORT, (char *)COMMAND_RECORD, (char *)loggingDirectory.c_str(), NULL};
+            execv("record_helper",args);
           }
-          else {
-            while(1) {
-              // wait forever after we generate our two helpers
-            }
+        }
+        else {
+          while(1) {
+            // wait indefinitely...
           }
         }
       }
     }
-    while(1) {
-      // another wait just in case...
-    }
+  }
+  while(1) {
+    // another wait just in case...
   }
 }
 
@@ -133,25 +139,28 @@ void cameraLoop() {
 void killAllHelpers() {
   int status;   // holds our waitpid status
 
-  // kill all of our gst-launch processes
+  // kill all of our gst-launch processes and helpers
   system("killall -SIGINT gst-launch-1.0");
   system("killall record_helper");
   if(backupCameraActive) {
     system("killall backup_cam_helper");
   }
 
+  // kill front camera process helper and reset its pid var
   if((dchelper0pid != -5) && (dchelper0pid > 1)) {
     kill(dchelper1pid,SIGKILL);
     waitpid(dchelper1pid, &status, -1);
   }
   dchelper0pid = -5;
 
+  // kill rear camera process helper and reset its pid var
   if((dchelper1pid != -5) && (dchelper1pid > 1)) {
     kill(dchelper1pid,SIGKILL);
     waitpid(dchelper1pid, &status, -1);
   }
   dchelper1pid = -5;
 
+  // kill backup camera process helper and reset its pid var
   if(backupCameraActive) {
     if(bcamerapid > 1) {
       kill(bcamerapid,SIGKILL);
@@ -159,6 +168,7 @@ void killAllHelpers() {
     }
     bcamerapid = -5;
 
+    // kill any camera processes running on the backup camera port
     system("pkill -f port=9003");
   }
 
@@ -225,18 +235,25 @@ void toggleOnHandler(int signumber, siginfo_t *siginfo, void *pointer) {
   if(frontCamBTActive) {
     sendBluetoothCommand(fdcfd,'s');
   }
+  if(rearCamBTActive) {
+    sendBluetoothCommand(rdcfd,'s');
+  }
   while(axolotlFileSystem::getAvailableMemory(loggingDirectory) < 2048) {   // wait until we have > 2GB storage
     optimizeStorage();    // attempt to optimize storage space if we don't have enough
   }
-  dchelper0pid = fork();
+  dchelper0pid = fork();    // fork the front camera helper
   if(dchelper0pid == 0) {
-    if (frontCamBTActive) {
+    if (frontCamBTActive) {   // execv
       execv("record_helper",args);
     }
-    else {
-      // Rear dashcam code goes here. Commented out for now due to lack of bandwidth
-      // args = {(char *)REAR_CAMERA_HELPER_NAME, (char *)REAR_CAMERA_PORT, (char *)COMMAND_RECORD, (char *)loggingDirectory.c_str(), NULL};
-      //
+  }
+  else {
+    dchelper1pid = fork();
+    if (dchelper1pid == 0) {
+      if (rearCamBTActive) {
+        args = {(char *)REAR_CAMERA_HELPER_NAME, (char *)REAR_CAMERA_PORT, (char *)COMMAND_RECORD, (char *)loggingDirectory.c_str(), NULL};
+        execv("record_helper",args);
+      }
     }
   }
 }
@@ -267,7 +284,7 @@ void backupCameraToggleHandler(int signumber, siginfo_t *siginfo, void *pointer)
     }
   }
   else {
-    sleep(5);   // fulfill FMVSS by waiting 5 sec to kill backup camera after shifting out of reverse
+    sleep(5);     // fulfill FMVSS by waiting 5 sec to kill backup camera after shifting out of reverse
     system("killall backup_cam_helper");
     if(bcamerapid > 1) {
       kill(bcamerapid,SIGKILL);
@@ -310,11 +327,13 @@ int main(int argc, char *argv[]) {
   registerKillCamerasHandler();
   registerBackupCameraHandler();
 
+  // Variables for gpio watching
   ifstream f;
   int i;
   char *args[] = { NULL };
   bool active = false;
 
+  // Fork a gpio watcher process
   gpio_watcherpid = fork();
   if (gpio_watcherpid == 0) {
     while(1) {
@@ -334,9 +353,8 @@ int main(int argc, char *argv[]) {
     }
   }
   else {
-    cameraLoop();
+    cameraLoop();   // begin our camera loop outside of the gpio watcher
   }
-  // Begin our camera loop
 
   return 0;
 }
