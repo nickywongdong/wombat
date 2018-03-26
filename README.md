@@ -1,5 +1,11 @@
 # Axolotl - Victor's Branch
-__Current Version:__ 0.4.2 beta
+__Current Version:__ 0.4.3 beta
+
+Version 0.4.3 beta:
+- Added rear camera logging functionality
+- Added 802.11n WiFi support
+- Bug fixes to camera logging process forks
+- Doubled camera bitrate and reduced resolution to 720p
 
 Verison 0.4.2 beta:
 - Beta release with small refinements to all existing features
