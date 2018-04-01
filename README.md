@@ -1,5 +1,8 @@
 # Axolotl - Victor's Branch
-__Current Version:__ 0.4.3 beta
+__Current Version:__ 0.4.4 beta
+
+Version 0.4.4 beta:
+- Added preliminary implementation of fuel economy monitor
 
 Version 0.4.3 beta:
 - Added rear camera logging functionality
