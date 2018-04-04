@@ -1,0 +1,15 @@
+language: cpp
+
+install:
+ - sudo apt-get install libboost-all-dev
+ - cd ./serial
+ - mkdir build
+ - cd build
+ - cmake ..
+ - make
+ - sudo make install
+ - cd ..
+
+script:
+ - cmake CMakeLists.txt  
+ - make all
