@@ -294,8 +294,8 @@ int main(int argc, char **argv) {
               std::cout<<"Yaw Z = "<<std::fixed<<IMU_EULER_Z*360/6.28318530718<<std::endl<<std::endl;
 
               if(ahrs_csv.is_open()) {
-                ahrs_csv << IMU_EULER_X*360/6.28318530718 << "," << IMU_EULER_Y*360/6.28318530718 << "," << IMU_EULER_Z*360/6.28318530718 << "\n";
-                printf("BOOP!");
+                //ahrs_csv << IMU_EULER_X*360/6.28318530718 << "," << IMU_EULER_Y*360/6.28318530718 << "," << IMU_EULER_Z*360/6.28318530718 << "\n";
+                //printf("BOOP!");
               }
 
               t = 0;
