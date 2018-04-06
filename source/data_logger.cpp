@@ -40,7 +40,7 @@ void startOBDLogger() {
     ahrs_logger_pid = fork();
     if(ahrs_logger_pid == 0) {
         char *args2[] = {(char *)DATA_HELPER_ARG0, (char *)logging_directory.c_str(), NULL};
-        //execv("um6/imu",args2);
+        execv("um6/imu",args2);
     }
     else {
 
