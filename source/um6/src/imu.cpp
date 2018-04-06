@@ -295,7 +295,7 @@ int main(int argc, char **argv) {
               std::cout<<"Yaw Z = "<<std::fixed<<IMU_EULER_Z*360/6.28318530718<<std::endl<<std::endl;
 
               if(ahrs_csv.is_open()) {
-                ahrs_csv.write(ftoa(IMU_EULER_X*360/6.28318530718)+","+ftoa(IMU_EULER_Y*360/6.28318530718)+","+ftoa(IMU_EULER_Z*360/6.28318530718));
+                ahrs_csv.write(std::to_string(IMU_EULER_X*360/6.28318530718)+","+std::to_string(IMU_EULER_Y*360/6.28318530718)+","+std::to_string(IMU_EULER_Z*360/6.28318530718));
               }
 
               t = 0;
