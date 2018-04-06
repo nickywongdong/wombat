@@ -225,10 +225,6 @@ int main(int argc, char **argv) {
     loggingDirectorySet = true;
     filepath = loggingDirectory + "/ahrs_log.csv";
     std::cout << filepath << std::endl;
-    ahrs_csv.open(filepath.c_str(), std::ofstream::out | std::ofstream::app);
-    if(ahrs_csv.is_open()) {
-      printf("File open for writing!\n");
-    }
   }
 
   // Load parameters from private node handle.
@@ -296,8 +292,10 @@ int main(int argc, char **argv) {
               std::string writeString = std::to_string(IMU_EULER_X*360/6.28318530718)+","+std::to_string(IMU_EULER_Y*360/6.28318530718)+","+std::to_string(IMU_EULER_Z*360/6.28318530718);
               std::cout << writeString << std::endl;
               char *buffer = (char *)writeString.c_str();
+              ahrs_csv.open(filepath.c_str(), std::ofstream::out | std::ofstream::app);
               if(ahrs_csv.is_open()) {
                 ahrs_csv << writeString;
+                ahrs_csv.close();
                 printf("Written!\n");
               }
 
@@ -335,7 +333,7 @@ int main(int argc, char **argv) {
     }
   }
 
-  ahrs_csv.close();
+
   ser.close();
   return 0;
 }
