@@ -97,44 +97,43 @@ void sendBluetoothCommand(int fd, char command) {
 */
 void cameraLoop() {
   char *args[] = {(char *)FRONT_CAMERA_HELPER_NAME, (char *)FRONT_CAMERA_PORT, (char *)COMMAND_RECORD_FRONT, (char *)logging_directory.c_str(), NULL};
-  while(1) {
-    if(logging_active) {
-      if(front_cam_bt_active) {
-        sendBluetoothCommand(front_dashcam_bluetooth_socket,'s');
+  if(logging_active) {
+    if(front_cam_bt_active) {
+      sendBluetoothCommand(front_dashcam_bluetooth_socket,'s');
+    }
+    if(rear_cam_bt_active) {
+      sendBluetoothCommand(rear_dashcam_bluetooth_socket,'s');
+    }
+    while(axolotlFileSystem::getAvailableMemory(logging_directory) < 2048) {   // wait until we have > 2GB storage
+        optimizeStorage();    // attempt to optimize storage space if we don't have enough
+    }
+    dashcam_helper_0_pid = fork();    // fork the front camera helper
+    if(dashcam_helper_0_pid == 0) {
+      if (front_cam_bt_active) {
+        execv("record_helper",args);
       }
-      if(rear_cam_bt_active) {
-        sendBluetoothCommand(rear_dashcam_bluetooth_socket,'s');
-      }
-      while(axolotlFileSystem::getAvailableMemory(logging_directory) < 2048) {   // wait until we have > 2GB storage
-          optimizeStorage();    // attempt to optimize storage space if we don't have enough
-      }
-      dashcam_helper_0_pid = fork();    // fork the front camera helper
-      if(dashcam_helper_0_pid == 0) {
-        if (front_cam_bt_active) {
-          execv("record_helper",args);
+    }
+    else {
+      #ifdef REAR_CAMERA
+      dashcam_helper_1_pid = fork();
+      if (dashcam_helper_1_pid == 0) {
+        if (rear_cam_bt_active) {
+          char *args2[] = {(char *)REAR_CAMERA_HELPER_NAME, (char *)REAR_CAMERA_PORT, (char *)COMMAND_RECORD_REAR, (char *)logging_directory.c_str(), NULL};
+          execv("record_helper",args2);
         }
       }
       else {
-        #ifdef REAR_CAMERA
-        dashcam_helper_1_pid = fork();
-        if (dashcam_helper_1_pid == 0) {
-          if (rear_cam_bt_active) {
-            char *args2[] = {(char *)REAR_CAMERA_HELPER_NAME, (char *)REAR_CAMERA_PORT, (char *)COMMAND_RECORD_REAR, (char *)logging_directory.c_str(), NULL};
-            execv("record_helper",args2);
-          }
-        }
-        else {
-          while(1) {
-            // wait indefinitely...
-          }
-        }
-        #endif
         while(1) {
-          
+          // wait indefinitely...
         }
+      }
+      #endif
+      while(1) {
+
       }
     }
   }
+
   while(1) {
     // another wait just in case...
   }
