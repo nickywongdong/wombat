@@ -297,7 +297,7 @@ int main(int argc, char **argv) {
               char *buffer = (char *)writeString.c_str();
               if(ahrs_csv.is_open()) {
                 ahrs_csv.write(buffer,strlen(buffer));
-
+                printf("Written!\n");
               }
 
               t = 0;
