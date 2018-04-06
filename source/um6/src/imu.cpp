@@ -268,37 +268,17 @@ int main(int argc, char **argv) {
         while (1)
         {
             if(t>20) {
-
-              // std::cout<<"Robo caido = "<<std::fixed<<IMU_STATE<<std::endl;
-              // std::cout<<"med_acc_z = "<<std::fixed<<med_accel_z<<std::endl;
-              // std::cout<<"giros_x = "<<std::fixed<<IMU_GYRO_X<<std::endl;
-              // std::cout<<"giros_y = "<<std::fixed<<IMU_GYRO_Y<<std::endl;
-              // std::cout<<"giros_z = "<<std::fixed<<IMU_GYRO_Z<<std::endl;
-              //
-              // std::cout<<"accel_x = "<<std::fixed<<IMU_ACCEL_X<<std::endl;
-              // std::cout<<"accel_y = "<<std::fixed<<IMU_ACCEL_Y<<std::endl;
-              // std::cout<<"accel_z = "<<std::fixed<<IMU_ACCEL_Z<<std::endl;
-              //
-              // std::cout<<"magne_x = "<<std::fixed<<IMU_COMPASS_X<<std::endl;
-              // std::cout<<"magne_y = "<<std::fixed<<IMU_COMPASS_Y<<std::endl;
-              // std::cout<<"magne_z = "<<std::fixed<<IMU_COMPASS_Z<<std::endl;
-              // std::cout<<"Quat_x = "<<std::fixed<<IMU_QUAT_X<<std::endl;
-              // std::cout<<"Quat_y = "<<std::fixed<<IMU_QUAT_Y<<std::endl;
-              // std::cout<<"Quat_z = "<<std::fixed<<IMU_QUAT_Z<<std::endl;
-
               std::cout<<"Pitch  X = "<<std::fixed<<IMU_EULER_X*360/6.28318530718<<std::endl;
               std::cout<<"Roll   Y = "<<std::fixed<<IMU_EULER_Y*360/6.28318530718<<std::endl;
               std::cout<<"Yaw Z = "<<std::fixed<<IMU_EULER_Z*360/6.28318530718<<std::endl<<std::endl;
-              std::string writeString = std::to_string(IMU_EULER_X*360/6.28318530718)+","+std::to_string(IMU_EULER_Y*360/6.28318530718)+","+std::to_string(IMU_EULER_Z*360/6.28318530718);
+              std::string writeString = std::to_string(IMU_EULER_X*360/6.28318530718)+","+std::to_string(IMU_EULER_Y*360/6.28318530718)+","+std::to_string(IMU_EULER_Z*360/6.28318530718)+"\n";
               std::cout << writeString << std::endl;
-              char *buffer = (char *)writeString.c_str();
               ahrs_csv.open(filepath.c_str(), std::ofstream::out | std::ofstream::app);
               if(ahrs_csv.is_open()) {
                 ahrs_csv << writeString;
                 ahrs_csv.close();
                 printf("Written!\n");
               }
-
               t = 0;
             }
             t++;
@@ -332,8 +312,7 @@ int main(int argc, char **argv) {
       first_failure = false;
     }
   }
-
-
+  
   ser.close();
   return 0;
 }
