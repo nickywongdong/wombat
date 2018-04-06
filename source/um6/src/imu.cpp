@@ -293,9 +293,9 @@ int main(int argc, char **argv) {
               std::cout<<"Pitch  X = "<<std::fixed<<IMU_EULER_X*360/6.28318530718<<std::endl;
               std::cout<<"Roll   Y = "<<std::fixed<<IMU_EULER_Y*360/6.28318530718<<std::endl;
               std::cout<<"Yaw Z = "<<std::fixed<<IMU_EULER_Z*360/6.28318530718<<std::endl<<std::endl;
-
+              std::string writeString = std::to_string(IMU_EULER_X*360/6.28318530718)+","+std::to_string(IMU_EULER_Y*360/6.28318530718)+","+std::to_string(IMU_EULER_Z*360/6.28318530718);
               if(ahrs_csv.is_open()) {
-                ahrs_csv.write(std::to_string(IMU_EULER_X*360/6.28318530718)+","+std::to_string(IMU_EULER_Y*360/6.28318530718)+","+std::to_string(IMU_EULER_Z*360/6.28318530718));
+                ahrs_csv.write(writeString.c_str());
               }
 
               t = 0;
