@@ -34,7 +34,7 @@ void startOBDLogger() {
   char *args[] = {(char *)DATA_HELPER_ARG0, (char *)logging_directory.c_str(), NULL};
   obd_logger_pid = fork();
   if (obd_logger_pid == 0) {
-    execv("datad_pyhelper",args);
+    //execv("datad_pyhelper",args);
   }
   else {
     ahrs_logger_pid = fork();
