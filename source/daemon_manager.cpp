@@ -271,6 +271,29 @@ void registerDeleteHandler() {
   sigaction(SIGUSR1, &dsa, NULL);
 }
 
+/*
+  Pauses data logging, signals the data logger to update files for DTCs
+  as well as fuel ecomnomy data, and restarts data logging.
+*/
+void updateDataHandler(int signumber, siginfo_t *siginfo, void *pointer) {
+  kill(dldpid,SIGUSR1);
+  sleep(1);
+  kill(dldpid,SIGBUS);
+  sleep(5);
+  kill(dldpid,SIGUSR2);
+}
+
+/*
+  Registers the update handler with SIGUSR2.
+*/
+void registerUpdateHandler() {
+  static struct sigaction dsa;
+  memset(&dsa, 0, sizeof(dsa));
+  dsa.sa_sigaction = updateDataHandler;
+  dsa.sa_flags = SA_SIGINFO;
+  sigaction(SIGUSR2, &dsa, NULL);
+}
+
 //int mainOperation() {
 int main() {
   string inputStr;
@@ -279,6 +302,7 @@ int main() {
   // Registering signal handlers
   registerSigintHandler();
   registerDeleteHandler();
+  registerUpdateHandler();
 
   // Testing password check and hashing
   #ifdef KEYTEST
@@ -297,30 +321,36 @@ int main() {
 
   // forking data logging daemon
   dldpid = fork();
-  if (dldpid == -1) {
-    printf("Error spawning data logging daemon... \n");
-  }
-  else if (dldpid == 0){
+  if (dldpid == 0){
+    #ifdef DEBUG
     printf("Trying to exec datad...\n");
+    #endif
     execv("datad", args);
   }
   else {
+    #ifdef DEBUG
     printf(" ");
+    #endif
     char *args2[] = {(char *)DCDARG1, (char *)loggingDirectory.c_str(), NULL};
 
     // forking dashcam daemon
     dcdpid = fork();
-    if (dcdpid == -1) {
-      printf("Error spawning dashcam daemon... \n");
-    }
-    else if (dcdpid == 0){
+    if (dcdpid == 0){
+      #ifdef DEBUG
       printf("Trying to exec dashcamd...\n");
+      #endif
       execv("dashcamd", args2);
     }
     else {
+      #ifdef DEBUG
       printf(" ");
+      #endif
+      while(1) {
+        
+      }
     }
   }
+  #endif
 
   // manager waits on quit
   while(1) {
@@ -330,7 +360,6 @@ int main() {
     }
     inputStr = "";
   }
-  #endif
 
   return 0;
 }

@@ -65,15 +65,21 @@ sudo make install
  */
 #include <string>
 #include <iostream>
+#include <fstream>
 #include <stdlib.h>
 #include <serial.h>
 #include <comms.h>
 #include <registers.h>
+#include <cmath>
+#include <unistd.h>
+
+// variables for data logging
+std::string loggingDirectory, filepath;
+bool loggingDirectorySet = false;
+std::ofstream ahrs_csv;
 
 double accelz;
 
-// Don't try to be too clever. Arrival of this message triggers
-// us to publish everything we have.
 const uint8_t TRIGGER_PACKET = UM6_TEMPERATURE;
 
 double IMU_GYRO_X, IMU_GYRO_Y, IMU_GYRO_Z, IMU_ACCEL_X, IMU_ACCEL_Y, IMU_ACCEL_Z, IMU_COMPASS_X, IMU_COMPASS_Y, IMU_COMPASS_Z, IMU_EULER_X, IMU_EULER_Y, IMU_EULER_Z, IMU_QUAT_X, IMU_QUAT_Y, IMU_QUAT_Z, IMU_STATE;
@@ -90,23 +96,6 @@ void configureVector3(um6::Comms* sensor, const um6::Accessor<RegT>& reg,
   {
     throw std::logic_error("configureVector3 may only be used with 3-field registers!");
   }
-
-  /*if (ros::param::has(param))
-  {
-    double x, y, z;
-    ros::param::get(param + "/x", x);
-    ros::param::get(param + "/y", y);
-    ros::param::get(param + "/z", z);
-    ROS_INFO_STREAM("Configuring " << human_name << " to ("
-                    << x << ", " << y << ", " << z << ")");
-    reg.set_scaled(0, x);
-    reg.set_scaled(1, y);
-    reg.set_scaled(2, z);
-    if (sensor->sendWaitAck(reg))
-    {
-      throw std::runtime_error("Unable to configure vector.");
-    }
-  }*/
 }
 
 /**
@@ -202,78 +191,6 @@ bool handleResetService(um6::Comms* sensor,
 //void publishMsgs(um6::Registers& r, ros::NodeHandle* n, const std_msgs::Header& header)
 void publishMsgs(um6::Registers& r)
 {
-  //static ros::Publisher imu_pub = n->advertise<sensor_msgs::Imu>("imu/data", 1, false);
-  //static ros::Publisher mag_pub = n->advertise<geometry_msgs::Vector3Stamped>("imu/mag", 1, false);
-  //static ros::Publisher rpy_pub = n->advertise<geometry_msgs::Vector3Stamped>("imu/rpy", 1, false);
-  //static ros::Publisher temp_pub = n->advertise<std_msgs::Float32>("imu/temperature", 1, false);
-
-//std::cout<<"accel"<< r.accel.get_scaled(2)<<std::endl;
-//accelz = r.accel.get_scaled(2);
-/*
-  //if (imu_pub.getNumSubscribers() > 0)
-  {
-    sensor_msgs::Imu imu_msg;
-    imu_msg.header = header;
-
-    // IMU outputs [w,x,y,z] NED, convert to [x,y,z,w] ENU
-    imu_msg.orientation.x = r.quat.get_scaled(2);
-    imu_msg.orientation.y = r.quat.get_scaled(1);
-    imu_msg.orientation.z = -r.quat.get_scaled(3);
-    imu_msg.orientation.w = r.quat.get_scaled(0);
-
-    // IMU reports a 4x4 wxyz covariance, ROS requires only 3x3 xyz.
-    // NED -> ENU conversion req'd?
-    imu_msg.orientation_covariance[0] = r.covariance.get_scaled(5);
-    imu_msg.orientation_covariance[1] = r.covariance.get_scaled(6);
-    imu_msg.orientation_covariance[2] = r.covariance.get_scaled(7);
-    imu_msg.orientation_covariance[3] = r.covariance.get_scaled(9);
-    imu_msg.orientation_covariance[4] = r.covariance.get_scaled(10);
-    imu_msg.orientation_covariance[5] = r.covariance.get_scaled(11);
-    imu_msg.orientation_covariance[6] = r.covariance.get_scaled(13);
-    imu_msg.orientation_covariance[7] = r.covariance.get_scaled(14);
-    imu_msg.orientation_covariance[8] = r.covariance.get_scaled(15);
-
-    // NED -> ENU conversion.
-    imu_msg.angular_velocity.x = r.gyro.get_scaled(1);
-    imu_msg.angular_velocity.y = r.gyro.get_scaled(0);
-    imu_msg.angular_velocity.z = -r.gyro.get_scaled(2);
-
-    // NED -> ENU conversion.
-    imu_msg.linear_acceleration.x = r.accel.get_scaled(1);
-    imu_msg.linear_acceleration.y = r.accel.get_scaled(0);
-    imu_msg.linear_acceleration.z = -r.accel.get_scaled(2);
-
-    imu_pub.publish(imu_msg);
-  }
-
-  if (mag_pub.getNumSubscribers() > 0)
-  {
-    geometry_msgs::Vector3Stamped mag_msg;
-    mag_msg.header = header;
-    mag_msg.vector.x = r.mag.get_scaled(1);
-    mag_msg.vector.y = r.mag.get_scaled(0);
-    mag_msg.vector.z = -r.mag.get_scaled(2);
-    mag_pub.publish(mag_msg);
-  }
-
-  if (rpy_pub.getNumSubscribers() > 0)
-  {
-    geometry_msgs::Vector3Stamped rpy_msg;
-    rpy_msg.header = header;
-    rpy_msg.vector.x = r.euler.get_scaled(1);
-    rpy_msg.vector.y = r.euler.get_scaled(0);
-    rpy_msg.vector.z = -r.euler.get_scaled(2);
-    rpy_pub.publish(rpy_msg);
-  }
-
-  if (temp_pub.getNumSubscribers() > 0)
-  {
-    std_msgs::Float32 temp_msg;
-    temp_msg.data = r.temperature.get_scaled(0);
-    temp_pub.publish(temp_msg);
-  }
-  */
-
     IMU_GYRO_X = r.gyro.get_scaled(1);
     IMU_GYRO_Y = r.gyro.get_scaled(0);
     IMU_GYRO_Z = -r.gyro.get_scaled(2);
@@ -293,17 +210,25 @@ void publishMsgs(um6::Registers& r)
     IMU_QUAT_X = r.quat.get_scaled(2);
     IMU_QUAT_Y = r.quat.get_scaled(1);
     IMU_QUAT_Z = -r.quat.get_scaled(3);
-
-//std::cout<<"accel "<< r.quat.get_scaled(2)<<std::endl;
-
 }
 
 
 /**
  * serial port connection/reconnection.
  */
-int main(int argc, char **argv)
-{
+int main(int argc, char **argv) {
+
+  // get logging directory from arguments
+  if(argc > 1) {
+    loggingDirectory = argv[1];
+    loggingDirectorySet = true;
+    filepath = loggingDirectory + "/ahrs_log.csv";
+    std::cout << filepath << std::endl;
+    ahrs_csv.open(filepath.c_str(), std::ofstream::out | std::ofstream::app);
+    if(ahrs_csv.is_open()) {
+      printf("File open for writing!\n");
+    }
+  }
 
   // Load parameters from private node handle.
   //std::string port("/dev/robot/imu");
@@ -316,22 +241,26 @@ int main(int argc, char **argv)
   serial::Timeout to = serial::Timeout(50, 50, 0, 50, 0);
   ser.setTimeout(to);
 
-
   bool first_failure = true;
-  while (1)
-  {
+  while (1) {
     try
     {
       ser.open();
     }
     catch(const serial::IOException& e)
     {
+      #if DEBUG
       std::cout<<"Unable to connect to port."<<std::endl;
+      #endif
     }
     if (ser.isOpen())
     {
+      #if DEBUG
       std::cout<<"Successfully connected to serial port."<<std::endl;
+      #endif
+
       first_failure = true;
+
       try
       {
         um6::Comms sensor(&ser);
@@ -339,50 +268,37 @@ int main(int argc, char **argv)
         um6::Registers registers;
         handleResetService(&sensor);
         int t=0;
-        int contador = 0;
-        float med_accel_z = 0, ac_med_accel_z = 0;
         while (1)
         {
+            if(t>20) {
 
-            //--------- calcula a média do accel em Z-----------------------------
-            if(contador>=40)
-            {
-                med_accel_z = ac_med_accel_z/40; // calcula a média do accel em Z
-                contador = 0;
-                ac_med_accel_z = 0;
-            }
-            ac_med_accel_z = ac_med_accel_z + IMU_ACCEL_Z;
-            contador++;
-            //--------------------------------------------------------------------
+              // std::cout<<"Robo caido = "<<std::fixed<<IMU_STATE<<std::endl;
+              // std::cout<<"med_acc_z = "<<std::fixed<<med_accel_z<<std::endl;
+              // std::cout<<"giros_x = "<<std::fixed<<IMU_GYRO_X<<std::endl;
+              // std::cout<<"giros_y = "<<std::fixed<<IMU_GYRO_Y<<std::endl;
+              // std::cout<<"giros_z = "<<std::fixed<<IMU_GYRO_Z<<std::endl;
+              //
+              // std::cout<<"accel_x = "<<std::fixed<<IMU_ACCEL_X<<std::endl;
+              // std::cout<<"accel_y = "<<std::fixed<<IMU_ACCEL_Y<<std::endl;
+              // std::cout<<"accel_z = "<<std::fixed<<IMU_ACCEL_Z<<std::endl;
+              //
+              // std::cout<<"magne_x = "<<std::fixed<<IMU_COMPASS_X<<std::endl;
+              // std::cout<<"magne_y = "<<std::fixed<<IMU_COMPASS_Y<<std::endl;
+              // std::cout<<"magne_z = "<<std::fixed<<IMU_COMPASS_Z<<std::endl;
+              // std::cout<<"Quat_x = "<<std::fixed<<IMU_QUAT_X<<std::endl;
+              // std::cout<<"Quat_y = "<<std::fixed<<IMU_QUAT_Y<<std::endl;
+              // std::cout<<"Quat_z = "<<std::fixed<<IMU_QUAT_Z<<std::endl;
 
-            if(med_accel_z>-0.70) // Identifica se o robô esta caido ou em pé
-                IMU_STATE = 1; // Robo caido
-            else
-                IMU_STATE = 0; // Robo em pé
+              std::cout<<"Pitch  X = "<<std::fixed<<IMU_EULER_X*360/6.28318530718<<std::endl;
+              std::cout<<"Roll   Y = "<<std::fixed<<IMU_EULER_Y*360/6.28318530718<<std::endl;
+              std::cout<<"Yaw Z = "<<std::fixed<<IMU_EULER_Z*360/6.28318530718<<std::endl<<std::endl;
 
-            if(t>20)
-            {
+              if(ahrs_csv.is_open()) {
+                ahrs_csv << IMU_EULER_X*360/6.28318530718 << "," << IMU_EULER_Y*360/6.28318530718 << "," << IMU_EULER_Z*360/6.28318530718 << "\n";
+                sleep(1);
+              }
 
-            std::cout<<"Robo caido = "<<std::fixed<<IMU_STATE<<std::endl;
-            std::cout<<"med_acc_z = "<<std::fixed<<med_accel_z<<std::endl;
-            std::cout<<"giros_x = "<<std::fixed<<IMU_GYRO_X<<std::endl;
-            std::cout<<"giros_y = "<<std::fixed<<IMU_GYRO_Y<<std::endl;
-            std::cout<<"giros_z = "<<std::fixed<<IMU_GYRO_Z<<std::endl;
-
-            std::cout<<"accel_x = "<<std::fixed<<IMU_ACCEL_X<<std::endl;
-            std::cout<<"accel_y = "<<std::fixed<<IMU_ACCEL_Y<<std::endl;
-            std::cout<<"accel_z = "<<std::fixed<<IMU_ACCEL_Z<<std::endl;
-
-            std::cout<<"magne_x = "<<std::fixed<<IMU_COMPASS_X<<std::endl;
-            std::cout<<"magne_y = "<<std::fixed<<IMU_COMPASS_Y<<std::endl;
-            std::cout<<"magne_z = "<<std::fixed<<IMU_COMPASS_Z<<std::endl;
-            std::cout<<"Quat_x = "<<std::fixed<<IMU_QUAT_X<<std::endl;
-            std::cout<<"Quat_y = "<<std::fixed<<IMU_QUAT_Y<<std::endl;
-            std::cout<<"Quat_z = "<<std::fixed<<IMU_QUAT_Z<<std::endl;
-            std::cout<<"Euler_x = "<<std::fixed<<IMU_EULER_X<<std::endl;
-            std::cout<<"Euler_y = "<<std::fixed<<IMU_EULER_Y<<std::endl;
-            std::cout<<"Euler_z = "<<std::fixed<<IMU_EULER_Z<<std::endl<<std::endl;
-            t=0;
+              t = 0;
             }
             t++;
           if (sensor.receive(&registers) == TRIGGER_PACKET)
@@ -397,17 +313,26 @@ int main(int argc, char **argv)
       }
       catch(const std::exception& e)
       {
-        if (ser.isOpen()) ser.close();
-        std::cout<<"Attempting reconnection after error."<<std::endl;
-        //ros::Duration(1.0).sleep();
+        if (ser.isOpen()) {
+          ser.close();
+        }
+
+        #if DEBUG
+        std::cout << "Attempting reconnection after error." << std::endl;
+        #endif
       }
     }
     else
     {
-      std::cout<< "Could not connect to serial device "
-                << port << ". Trying again every 1 second."<< std::endl;
+      #if DEBUG
+      std::cout<< "Could not connect to serial device " << port << ". Trying again." << std::endl;
+      #endif
+
       first_failure = false;
-      //ros::Duration(1.0).sleep();
     }
   }
+
+  ahrs_csv.close();
+  ser.close();
+  return 0;
 }

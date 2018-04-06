@@ -38,7 +38,7 @@ sudo apt-get install build-essential gstreamer0.10-plugins-good -y
 sudo apt-get install build-essential gstreamer0.10-plugins-bad -y
 sudo apt-get install build-essential gstreamer0.10-plugins-ugly -y
 
-echo "Install script complete! Rebooting in 5 seconds..."
+echo "Install complete! Rebooting in 5 seconds..."
 
 sleep 5s
 

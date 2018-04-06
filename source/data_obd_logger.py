@@ -32,76 +32,80 @@ commands.append(obd.commands.AMBIANT_AIR_TEMP)
 commands.append(obd.commands.BAROMETRIC_PRESSURE)
 
 # diagnostic commands for development
-diagCommands = []
+diag = []
 
-diagCommands.append(obd.commands.HYBRID_BATTERY_REMAINING)
-diagCommands.append(obd.commands.OIL_TEMP)
+diag.append(obd.commands.HYBRID_BATTERY_REMAINING)
+diag.append(obd.commands.OIL_TEMP)
 
 
 # run in async mode?
-runAsync = True
+run_asynchronous_mode = True
 
-def obdSnapshot(obdConnection):
-    logTime = time.time()
+def obdSnapshot(obd_connection_handle):
+    log_time = time.time()
 
     # snapshot time start (grabs computer time)
-    csvLine = "@" + str(time.ctime()) + ","
+    csv_line = "@" + str(time.ctime()) + ","
 
-    # execute the command array, saving results to csvLine with "," delimitation
+    # execute the command array, saving results to csv_line with "," delimitation
     for i in xrange(0,len(commands)-1):
-            csvLine += str(obdConnection.query(commands[i]).value) + ","
+            csv_line += str(obd_connection_handle.query(commands[i]).value) + ","
 
-    csvLine += str(obdConnection.query(commands[len(commands)-1]).value) + "\n"
+    csv_line += str(obd_connection_handle.query(commands[len(commands)-1]).value) + "\n"
 
-    # write entire csvLine to file in one file operation
-    csvFileHandle = open(sys.argv[2] + "/obd_log.csv",'a')
-    csvFileHandle.write(csvLine)
-    csvFileHandle.close()
+    # write entire csv_line to file in one file operation
+    csv_file_handle = open(sys.argv[2] + "/obd_log.csv",'a')
+    csv_file_handle.write(csv_line)
+    csv_file_handle.close()
 
     ########################################
     # same operations for diagnostics...
-    csvLine = "@" + str(time.ctime()) + ","
+    csv_line = "@" + str(time.ctime()) + ","
 
-    # execute the command array, saving results to csvLine with "," delimitation
-    for i in xrange(0,len(diagCommands)-1):
-            csvLine += str(obdConnection.query(diagCommands[i]).value) + ","
+    # execute the command array, saving results to csv_line with "," delimitation
+    for i in xrange(0,len(diag)-1):
+            csv_line += str(obd_connection_handle.query(diag[i]).value) + ","
 
-    csvLine += str(obdConnection.query(diagCommands[len(diagCommands)-1]).value) + "\n"
+    csv_line += str(obd_connection_handle.query(diag[len(diag)-1]).value) + "\n"
 
-    # write entire csvLine to file in one file operation
-    csvFileHandle = open(sys.argv[2] + "/diag.csv",'a')
-    csvFileHandle.write(csvLine)
-    csvFileHandle.close()
+    # write entire csv_line to file in one file operation
+    csv_file_handle = open(sys.argv[2] + "/diag.csv",'a')
+    csv_file_handle.write(csv_line)
+    csv_file_handle.close()
     ########################################
 
     # debug statement; outputs the time taken to complete the query
-    print str(time.time()-logTime)
+    # print str(time.time()-log_time)
 
 # set the command array to watch mode, allowing for async non-blocking updates
-def obdAsync(obdConnection):
+def obdAsync(obd_connection_handle):
     for i in xrange(0, len(commands)-1):
-        obdConnection.watch(commands[i])
+        obd_connection_handle.watch(commands[i])
 
 # starts watching on the OBD connection
-def startAsyncWatch(obdConnection):
+def startAsyncWatch(obd_connection_handle):
     for i in xrange(0,len(commands)-1):
-        obdConnection.watch(commands[i])
+        obd_connection_handle.watch(commands[i])
 
     # diagnostic commands
-    for i in xrange(0,len(diagCommands)-1):
-        obdConnection.watch(diagCommands[i])
-        obdConnection.supported_commands.add(diagCommands[i])
+    for i in xrange(0,len(diag)-1):
+        obd_connection_handle.watch(diag[i])
+        obd_connection_handle.supported_commands.add(diag[i])
 
-    obdConnection.start()
+    obd_connection_handle.start()
 
 
 if __name__ == '__main__':
     ## Set up connection to the OBDLink MX
-    if runAsync:
-        obdBluetoothConnection = obd.Async()
-        startAsyncWatch(obdBluetoothConnection)
+    if run_asynchronous_mode:
+        obd_bluetooth_socket = obd.Async()
+        startAsyncWatch(obd_bluetooth_socket)
     else:
-        obdBluetoothConnection = obd.OBD()
+        obd_bluetooth_socket = obd.OBD()
+
+    #dtc_error_file = open(sys.argv[2] + "/dtc_errors",'w')
+    #dtc_error_file.write(str(obd_bluetooth_handle.query(obd.commands.GET_DTC)))
+    #dtc_error_file.close()
 
     ## Logic based on command line call
     if(sys.argv[1] == "snapshot"):
@@ -111,7 +115,7 @@ if __name__ == '__main__':
             except OSError:
                 break;
             else:
-                obdSnapshot(obdBluetoothConnection)
+                obdSnapshot(obd_bluetooth_socket)
                 time.sleep(.2)
 
-    obdBluetoothConnection.close()
+    obd_bluetooth_socket.close()

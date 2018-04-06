@@ -1,3 +1,11 @@
+/* ------------------------------------
+   Axolotl Dashcam Record Helper
+   ------------------------------------
+   Helper process that opens the pipeline for the RaspberryPis.
+   May seem redundant, but encapsulating this within its own program allows us
+   to pause and restart data logging so that data deletion doesn't mess up further logging.
+*/
+
 #include <iostream>
 #include <cstdlib>
 #include <unistd.h>
@@ -6,29 +14,21 @@
 using namespace std;
 
 /*
-  Records a chunk of video and saves to disk.
-  Must be passed the bluetooth address of the respective dashcam and the TCP
-  port the Jetson is receiving the stream at.
-  Port 9001: front dashcam
-  Port 9002: rear dashcam
-  Port 9003: backup camera
+  Opens a video pipeline at a given port so that we can receive a RPi stream on that port.
 */
 int main(int argc, char *argv[]) {
-  /*if(argc != 3) {
-    exit(0);
-  }*/
 
-  int cameraPort = atoi(argv[1]);
-  string runType = argv[2], loggingDirectory = argv[3], sysCmd;
+  int camera_port = atoi(argv[1]);
+  string run_type = argv[2], logging_directory = argv[3], stream_open_command;
 
-  if(runType == "r") {
-    sysCmd = "gst-launch-1.0 -e -v udpsrc port=" + to_string(cameraPort) + " ! application/x-rtp, clock-rate=90000, encoding-name=H264, payload=96 ! rtph264depay ! h264parse ! splitmuxsink location='" + loggingDirectory + "/front_dashcam%03d.mp4'";
+  if(run_type == "f") {
+    stream_open_command = "gst-launch-1.0 -e -v udpsrc port=" + to_string(camera_port) + " ! application/x-rtp, clock-rate=90000, encoding-name=H264, payload=96 ! rtph264depay ! h264parse ! splitmuxsink location='" + logging_directory + "/front_dashcam%03d.mp4'";
   }
-  else if (runType == "w") {
-    sysCmd = "gst-launch-1.0 -v udpsrc port=" + to_string(cameraPort) + " ! gdpdepay ! rtph264depay ! avdec_h264 ! autovideosink sync=false";
+  else if (run_type == "r") {
+    stream_open_command = "gst-launch-1.0 -e -v udpsrc port=" + to_string(camera_port) + " ! application/x-rtp, clock-rate=90000, encoding-name=H264, payload=96 ! rtph264depay ! h264parse ! splitmuxsink location='" + logging_directory + "/rear_dashcam%03d.mp4'";
   }
 
-  system(sysCmd.c_str());
+  system(stream_open_command.c_str());
   while(1) {
 
   }

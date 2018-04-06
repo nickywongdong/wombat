@@ -25,20 +25,22 @@
 #define REAR_CAMERA_PORT "9002"
 #define BACKUP_CAMERA_PORT "9003"
 
-#define COMMAND_RECORD "r"
+#define COMMAND_RECORD_FRONT "f"
+#define COMMAND_RECORD_REAR "r"
 #define COMMAND_WATCH "w"
 
 #define AUTO_MEMORY_MANAGEMENT_MODE 0   // set to 1 if auto-delete of old footage desired
+//#define REAR_CAMERA
 
 using namespace std;
 
-string loggingDirectory;      // curr logging directory
-bool loggingActive = true;      // bool to toggle logging on and off
-bool backupCameraActive = false, frontCamBTActive = false, rearCamBTActive = false;   // bools to check camera state
+string logging_directory;
+bool logging_active = true;
+bool backup_camera_active = false, front_cam_bt_active = false, rear_cam_bt_active = false;
 
-pid_t dchelper0pid = -5, dchelper1pid = -5, bcamerapid = -5, gpio_watcherpid = -5;    // process IDs for helpers
+pid_t dashcam_helper_0_pid = -5, dashcam_helper_1_pid = -5, b_camera_helper_pid = -5, gpio_watcher_pid = -5;
 
-int fdcfd, rdcfd;   // bluetooth file descriptors for front and rear dashcams
+int front_dashcam_bluetooth_socket, rear_dashcam_bluetooth_socket;   // bluetooth file descriptors for front and rear dashcams
 
 /*
   Optimize storage by deleting all past days' data.
@@ -94,36 +96,41 @@ void sendBluetoothCommand(int fd, char command) {
   Manages all logging.
 */
 void cameraLoop() {
-  char *args[] = {(char *)FRONT_CAMERA_HELPER_NAME, (char *)FRONT_CAMERA_PORT, (char *)COMMAND_RECORD, (char *)loggingDirectory.c_str(), NULL};
+  char *args[] = {(char *)FRONT_CAMERA_HELPER_NAME, (char *)FRONT_CAMERA_PORT, (char *)COMMAND_RECORD_FRONT, (char *)logging_directory.c_str(), NULL};
   while(1) {
-    if(loggingActive) {
-      if(frontCamBTActive) {
-        sendBluetoothCommand(fdcfd,'s');
+    if(logging_active) {
+      if(front_cam_bt_active) {
+        sendBluetoothCommand(front_dashcam_bluetooth_socket,'s');
       }
-      if(rearCamBTActive) {
-        sendBluetoothCommand(rdcfd,'s');
+      if(rear_cam_bt_active) {
+        sendBluetoothCommand(rear_dashcam_bluetooth_socket,'s');
       }
-      while(axolotlFileSystem::getAvailableMemory(loggingDirectory) < 2048) {   // wait until we have > 2GB storage
+      while(axolotlFileSystem::getAvailableMemory(logging_directory) < 2048) {   // wait until we have > 2GB storage
           optimizeStorage();    // attempt to optimize storage space if we don't have enough
       }
-      dchelper0pid = fork();    // fork the front camera helper
-      if(dchelper0pid == 0) {
-        if (frontCamBTActive) {
+      dashcam_helper_0_pid = fork();    // fork the front camera helper
+      if(dashcam_helper_0_pid == 0) {
+        if (front_cam_bt_active) {
           execv("record_helper",args);
         }
       }
       else {
-        dchelper1pid = fork();
-        if (dchelper1pid == 0) {
-          if (rearCamBTActive) {
-            args = {(char *)REAR_CAMERA_HELPER_NAME, (char *)REAR_CAMERA_PORT, (char *)COMMAND_RECORD, (char *)loggingDirectory.c_str(), NULL};
-            execv("record_helper",args);
+        #ifdef REAR_CAMERA
+        dashcam_helper_1_pid = fork();
+        if (dashcam_helper_1_pid == 0) {
+          if (rear_cam_bt_active) {
+            char *args2[] = {(char *)REAR_CAMERA_HELPER_NAME, (char *)REAR_CAMERA_PORT, (char *)COMMAND_RECORD_REAR, (char *)logging_directory.c_str(), NULL};
+            execv("record_helper",args2);
           }
         }
         else {
           while(1) {
             // wait indefinitely...
           }
+        }
+        #endif
+        while(1) {
+          
         }
       }
     }
@@ -142,31 +149,31 @@ void killAllHelpers() {
   // kill all of our gst-launch processes and helpers
   system("killall -SIGINT gst-launch-1.0");
   system("killall record_helper");
-  if(backupCameraActive) {
+  if(backup_camera_active) {
     system("killall backup_cam_helper");
   }
 
   // kill front camera process helper and reset its pid var
-  if((dchelper0pid != -5) && (dchelper0pid > 1)) {
-    kill(dchelper1pid,SIGKILL);
-    waitpid(dchelper1pid, &status, -1);
+  if((dashcam_helper_0_pid != -5) && (dashcam_helper_0_pid > 1)) {
+    kill(dashcam_helper_1_pid,SIGKILL);
+    waitpid(dashcam_helper_1_pid, &status, -1);
   }
-  dchelper0pid = -5;
+  dashcam_helper_0_pid = -5;
 
   // kill rear camera process helper and reset its pid var
-  if((dchelper1pid != -5) && (dchelper1pid > 1)) {
-    kill(dchelper1pid,SIGKILL);
-    waitpid(dchelper1pid, &status, -1);
+  if((dashcam_helper_1_pid != -5) && (dashcam_helper_1_pid > 1)) {
+    kill(dashcam_helper_1_pid,SIGKILL);
+    waitpid(dashcam_helper_1_pid, &status, -1);
   }
-  dchelper1pid = -5;
+  dashcam_helper_1_pid = -5;
 
   // kill backup camera process helper and reset its pid var
-  if(backupCameraActive) {
-    if(bcamerapid > 1) {
-      kill(bcamerapid,SIGKILL);
-      waitpid(bcamerapid, &status, -1);
+  if(backup_camera_active) {
+    if(b_camera_helper_pid > 1) {
+      kill(b_camera_helper_pid,SIGKILL);
+      waitpid(b_camera_helper_pid, &status, -1);
     }
-    bcamerapid = -5;
+    b_camera_helper_pid = -5;
 
     // kill any camera processes running on the backup camera port
     system("pkill -f port=9003");
@@ -181,15 +188,15 @@ void killAllHelpers() {
 void killCamerasHandler(int signumber, siginfo_t *siginfo, void *pointer) {
   killAllHelpers();
 
-  sendBluetoothCommand(fdcfd,'q');
-  sendBluetoothCommand(rdcfd,'q');
-  close(fdcfd);
-  close(rdcfd);
+  sendBluetoothCommand(front_dashcam_bluetooth_socket,'q');
+  sendBluetoothCommand(rear_dashcam_bluetooth_socket,'q');
+  close(front_dashcam_bluetooth_socket);
+  close(rear_dashcam_bluetooth_socket);
 
   int status;
-  if(gpio_watcherpid > 1) {
-    kill(gpio_watcherpid,SIGTERM);
-    waitpid(gpio_watcherpid,&status,-1);
+  if(gpio_watcher_pid > 1) {
+    kill(gpio_watcher_pid,SIGTERM);
+    waitpid(gpio_watcher_pid,&status,-1);
   }
 
   exit(0);
@@ -210,8 +217,8 @@ void registerKillCamerasHandler() {
   Turns logging off.
 */
 void toggleOffHandler(int signumber, siginfo_t *siginfo, void *pointer) {
-  loggingActive = false;
-  sendBluetoothCommand(fdcfd,'p');
+  logging_active = false;
+  sendBluetoothCommand(front_dashcam_bluetooth_socket,'p');
   killAllHelpers();
 }
 
@@ -230,31 +237,36 @@ void registerToggleOffHandler() {
   Turns logging on.
 */
 void toggleOnHandler(int signumber, siginfo_t *siginfo, void *pointer) {
-  char *args[] = {(char *)FRONT_CAMERA_HELPER_NAME, (char *)FRONT_CAMERA_PORT, (char *)COMMAND_RECORD, (char *)loggingDirectory.c_str(), NULL};
-  loggingActive = true;
-  if(frontCamBTActive) {
-    sendBluetoothCommand(fdcfd,'s');
+  char *args[] = {(char *)FRONT_CAMERA_HELPER_NAME, (char *)FRONT_CAMERA_PORT, (char *)COMMAND_RECORD_FRONT, (char *)logging_directory.c_str(), NULL};
+  logging_active = true;
+  if(front_cam_bt_active) {
+    sendBluetoothCommand(front_dashcam_bluetooth_socket,'s');
   }
-  if(rearCamBTActive) {
-    sendBluetoothCommand(rdcfd,'s');
+  if(rear_cam_bt_active) {
+    sendBluetoothCommand(rear_dashcam_bluetooth_socket,'s');
   }
-  while(axolotlFileSystem::getAvailableMemory(loggingDirectory) < 2048) {   // wait until we have > 2GB storage
+  while(axolotlFileSystem::getAvailableMemory(logging_directory) < 2048) {   // wait until we have > 2GB storage
     optimizeStorage();    // attempt to optimize storage space if we don't have enough
   }
-  dchelper0pid = fork();    // fork the front camera helper
-  if(dchelper0pid == 0) {
-    if (frontCamBTActive) {   // execv
+  dashcam_helper_0_pid = fork();    // fork the front camera helper
+  if(dashcam_helper_0_pid == 0) {
+    if (front_cam_bt_active) {   // execv
       execv("record_helper",args);
     }
   }
   else {
-    dchelper1pid = fork();
-    if (dchelper1pid == 0) {
-      if (rearCamBTActive) {
-        args = {(char *)REAR_CAMERA_HELPER_NAME, (char *)REAR_CAMERA_PORT, (char *)COMMAND_RECORD, (char *)loggingDirectory.c_str(), NULL};
-        execv("record_helper",args);
+    #ifdef REAR_CAMERA
+    dashcam_helper_1_pid = fork();
+    if (dashcam_helper_1_pid == 0) {
+      if (rear_cam_bt_active) {
+        char *args2[] = {(char *)REAR_CAMERA_HELPER_NAME, (char *)REAR_CAMERA_PORT, (char *)COMMAND_RECORD_REAR, (char *)logging_directory.c_str(), NULL};
+        execv("record_helper",args2);
       }
     }
+    else {
+
+    }
+    #endif
   }
 }
 
@@ -274,23 +286,23 @@ void registerToggleOnHandler() {
 */
 void backupCameraToggleHandler(int signumber, siginfo_t *siginfo, void *pointer) {
   int status;
-  backupCameraActive = !backupCameraActive;
-  char *args[] = {(char *)BACKUP_CAMERA_HELPER_NAME, (char *)BACKUP_CAMERA_PORT, (char *)COMMAND_WATCH, (char *)loggingDirectory.c_str(), NULL};
-  sendBluetoothCommand(rdcfd,'b');
-  if(backupCameraActive) {
-    bcamerapid = fork();
-    if(bcamerapid == 0) {
+  backup_camera_active = !backup_camera_active;
+  char *args[] = {(char *)BACKUP_CAMERA_HELPER_NAME, (char *)BACKUP_CAMERA_PORT, (char *)COMMAND_WATCH, (char *)logging_directory.c_str(), NULL};
+  sendBluetoothCommand(rear_dashcam_bluetooth_socket,'b');
+  if(backup_camera_active) {
+    b_camera_helper_pid = fork();
+    if(b_camera_helper_pid == 0) {
       execv("backup_cam_helper",args);
     }
   }
   else {
     sleep(5);     // fulfill FMVSS by waiting 5 sec to kill backup camera after shifting out of reverse
     system("killall backup_cam_helper");
-    if(bcamerapid > 1) {
-      kill(bcamerapid,SIGKILL);
-      waitpid(bcamerapid, &status, -1);
+    if(b_camera_helper_pid > 1) {
+      kill(b_camera_helper_pid,SIGKILL);
+      waitpid(b_camera_helper_pid, &status, -1);
     }
-    bcamerapid = -5;
+    b_camera_helper_pid = -5;
     //system("killall -SIGINT gst-launch-1.0");
     system("pkill -SIGINT -f port=9003");
   }
@@ -309,17 +321,19 @@ void registerBackupCameraHandler() {
 
 int main(int argc, char *argv[]) {
   // Ensure that a logging directory has been provided and bind it
-  loggingDirectory = argv[1];
+  logging_directory = argv[1];
 
   // Pair with front camera RPi
-  if(connectBluetooth(FRONT_CAM_BT_ADDR, &fdcfd)) {
-    frontCamBTActive = true;
+  if(connectBluetooth(FRONT_CAM_BT_ADDR, &front_dashcam_bluetooth_socket)) {
+    front_cam_bt_active = true;
   }
 
   // Pair with rear camera RPi
-  if(connectBluetooth(REAR_CAM_BT_ADDR, &rdcfd)) {
-    rearCamBTActive = true;
+  if(connectBluetooth(REAR_CAM_BT_ADDR, &rear_dashcam_bluetooth_socket)) {
+    rear_cam_bt_active = true;
   }
+
+  printf("YAY!\n");
 
   // Register all signal handlers
   registerToggleOffHandler();
@@ -334,8 +348,8 @@ int main(int argc, char *argv[]) {
   bool active = false;
 
   // Fork a gpio watcher process
-  gpio_watcherpid = fork();
-  if (gpio_watcherpid == 0) {
+  gpio_watcher_pid = fork();
+  if (gpio_watcher_pid == 0) {
     while(1) {
       f.open("/sys/class/gpio/gpio298/value");
     	f >> i;
