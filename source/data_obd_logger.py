@@ -99,6 +99,7 @@ if __name__ == '__main__':
     ## Set up connection to the OBDLink MX
     if run_asynchronous_mode:
         obd_bluetooth_socket = obd.Async()
+        # obd_bluetooth_socket = obd.Async("/dev/tty.OBDII-Port")
         startAsyncWatch(obd_bluetooth_socket)
     else:
         obd_bluetooth_socket = obd.OBD()

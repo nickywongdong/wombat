@@ -287,6 +287,10 @@ void publishMsgs(um6::Registers& r, ros::NodeHandle* imu_nh, sensor_msgs::Imu& i
     temp_msg.data = r.temperature.get_scaled(0);
     temp_pub.publish(temp_msg);
   }
+
+  /*
+    AXOLOTL CODE GOES HERE
+  */
 }
 
 /**
