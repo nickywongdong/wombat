@@ -295,7 +295,7 @@ int main(int argc, char **argv) {
 
               if(ahrs_csv.is_open()) {
                 ahrs_csv << IMU_EULER_X*360/6.28318530718 << "," << IMU_EULER_Y*360/6.28318530718 << "," << IMU_EULER_Z*360/6.28318530718 << "\n";
-                sleep(1);
+                usleep(200);
               }
 
               t = 0;
