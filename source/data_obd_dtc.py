@@ -1,12 +1,9 @@
 ## ------------------------------------
-## Axolotl Data Logging Python Adapter
+## Axolotl Data Logging DTC Fetcher
 ## ------------------------------------
-## Describes methods that interact with pyOBD's IO interface
-## to gather and log data on behalf of the data logging daemon.
+## Describes methods that interact with python-OBD's to fetch DTC data to file.
+## Script is only executed once when commanded by the data logger process.
 ##
-## Dependencies:
-## - python-OBD
-## - Python 2.7
 
 import sys
 import datetime
@@ -24,16 +21,6 @@ def fetchDTC(obd_bluetooth_handle, file_path):
 # commands the vehicle to delete all of its stored DTCs
 def clearDTC(obd_bluetooth_handle):
     obd_bluetooth_handle.query(obd.commands.CLEAR_DTC)
-
-# set the command array to watch mode, allowing for async non-blocking updates
-def obdAsync(obd_bluetooth_handle):
-    for i in xrange(0, len(commands)):
-        obd_bluetooth_handle.watch(commands[i])
-
-# get the file path to the dtc log
-def getDTCFilePath():
-    return sys.argv[2] + "/dtc_errors"
-
 
 if __name__ == '__main__':
     ## Set up connection to the OBDLink MX
