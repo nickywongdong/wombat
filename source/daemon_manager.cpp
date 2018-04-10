@@ -100,6 +100,7 @@ bool buildSaveDirectory() {
   if(startHourProcessed < 0) {
     startHourProcessed += 24;   // adjusts if UTC-8 is earlier than UTC midnight
     startDay = to_string(startTimeAsUTC->tm_mday-1);    // day rollback if UTC is 1 day ahead of PST
+    
   }
   string startHour = "" + to_string(startHourProcessed);
   if(startHourProcessed < 10) {
@@ -346,7 +347,7 @@ int main() {
       printf(" ");
       #endif
       while(1) {
-        
+
       }
     }
   }

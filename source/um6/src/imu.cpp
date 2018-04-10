@@ -63,16 +63,23 @@ sudo make install
  * Please send comments, questions, or patches to code@clearpathrobotics.com
  *
  */
-#include <string>
+
 #include <iostream>
 #include <fstream>
+#include <string>
+
+#include <cmath>
+#include <stdio.h>
 #include <stdlib.h>
+#include <unistd.h>
+#include <string.h>
+#include <time.h>
+
 #include <serial.h>
 #include <comms.h>
 #include <registers.h>
-#include <cmath>
-#include <unistd.h>
-#include <string.h>
+
+#define PST -8
 
 // variables for data logging
 std::string loggingDirectory, filepath;
@@ -84,6 +91,19 @@ double accelz;
 const uint8_t TRIGGER_PACKET = UM6_TEMPERATURE;
 
 double IMU_GYRO_X, IMU_GYRO_Y, IMU_GYRO_Z, IMU_ACCEL_X, IMU_ACCEL_Y, IMU_ACCEL_Z, IMU_COMPASS_X, IMU_COMPASS_Y, IMU_COMPASS_Z, IMU_EULER_X, IMU_EULER_Y, IMU_EULER_Z, IMU_QUAT_X, IMU_QUAT_Y, IMU_QUAT_Z, IMU_STATE;
+
+/*
+  Creates a timestamp in the same format as the OBD log.
+*/
+
+std::string createTimestamp() {
+  time_t raw_time;
+  time (&raw_time);
+
+  struct tm *time_sample = localtime(&raw_time);
+  std::string timestamp = asctime(time_sample);
+  return timestamp;
+}
 
 /**
  * Function generalizes the process of writing an XYZ vector into consecutive
@@ -271,8 +291,8 @@ int main(int argc, char **argv) {
               std::cout<<"Pitch  X = "<<std::fixed<<IMU_EULER_X*360/6.28318530718<<std::endl;
               std::cout<<"Roll   Y = "<<std::fixed<<IMU_EULER_Y*360/6.28318530718<<std::endl;
               std::cout<<"Yaw Z = "<<std::fixed<<IMU_EULER_Z*360/6.28318530718<<std::endl<<std::endl;
-              std::string writeString = std::to_string(IMU_EULER_X*360/6.28318530718)+","+std::to_string(IMU_EULER_Y*360/6.28318530718)+","+std::to_string(IMU_EULER_Z*360/6.28318530718)+"\n";
-              std::cout << writeString << std::endl;
+              std::string writeString = ","+std::to_string(IMU_EULER_X*360/6.28318530718)+","+std::to_string(IMU_EULER_Y*360/6.28318530718)+","+std::to_string(IMU_EULER_Z*360/6.28318530718)+"\n";
+              std::cout << createTimestamp() << writeString << std::endl;
               ahrs_csv.open(filepath.c_str(), std::ofstream::out | std::ofstream::app);
               if(ahrs_csv.is_open()) {
                 ahrs_csv << writeString;
@@ -312,7 +332,7 @@ int main(int argc, char **argv) {
       first_failure = false;
     }
   }
-  
+
   ser.close();
   return 0;
 }
