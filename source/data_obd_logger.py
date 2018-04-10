@@ -96,16 +96,17 @@ if __name__ == '__main__':
     ## Set up connection to the OBDLink MX
     if run_asynchronous_mode:
         obd_bluetooth_socket = obd.Async()
-        # obd_bluetooth_socket = obd.Async("/dev/tty.OBDII-Port")
+        # obd_bluetooth_socket = obd.Async("/dev/tty.OBDII-Port")       # experimental explicit connect command
         startAsyncWatch(obd_bluetooth_socket)
     else:
         obd_bluetooth_socket = obd.OBD()
 
-    #dtc_error_file = open(sys.argv[2] + "/dtc_errors",'w')
-    #dtc_error_file.write(str(obd_bluetooth_handle.query(obd.commands.GET_DTC)))
-    #dtc_error_file.close()
+    # Preemptively cache DTCs
+    dtc_error_file = open(file_path + "/dtc_errors",'w')
+    dtc_error_file.write(str(obd_bluetooth_handle.query(obd.commands.GET_DTC)))
+    dtc_error_file.close()
 
-    ## Logic based on command line call
+    # Logic based on command line arguments
     if(sys.argv[1] == "snapshot"):
         while(1):
             try:
