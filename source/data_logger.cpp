@@ -153,10 +153,12 @@ void registerSigtermHandler() {
 }
 
 /*
-  Calls the fuel economy analysis script.
+  Calls the fuel economy analysis script and the DTC fetch script.
 */
-void fuelEconomyAnalysis(int signumber, siginfo_t *siginfo, void *pointer) {
+void updateDataFiles(int signumber, siginfo_t *siginfo, void *pointer) {
   string python_command = "python fuel_economy_analysis.py " + logging_directory;
+  system(python_command.c_str());
+  python_command = "python data_obd_dtc.py fetchDTC " + logging_directory;
   system(python_command.c_str());
 }
 
@@ -166,7 +168,7 @@ void fuelEconomyAnalysis(int signumber, siginfo_t *siginfo, void *pointer) {
 void registerUpdateHandler() {
   static struct sigaction dsa;
   memset(&dsa, 0, sizeof(dsa));
-  dsa.sa_sigaction = fuelEconomyAnalysis;
+  dsa.sa_sigaction = updateDataFiles;
   dsa.sa_flags = SA_SIGINFO;
   sigaction(SIGBUS, &dsa, NULL);
 }

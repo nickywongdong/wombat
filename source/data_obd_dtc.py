@@ -16,8 +16,8 @@ import time
 import obd
 
 # grabs all DTCs and outputs them to file
-def fetchDTC(obd_bluetooth_handle):
-    dtc_error_file = open(sys.argv[2] + "/dtc_errors",'a')
+def fetchDTC(obd_bluetooth_handle, file_path):
+    dtc_error_file = open(file_path + "/dtc_errors",'a')
     dtc_error_file.write(str(obd_bluetooth_handle.query(obd.commands.GET_DTC)))
     dtc_error_file.close()
 
@@ -38,9 +38,14 @@ def getDTCFilePath():
 if __name__ == '__main__':
     ## Set up connection to the OBDLink MX
     obd_bluetooth_socket = obd.OBD()
+    # obd_bluetooth_socket = obd.OBD("/dev/tty.OBDII-Port")
+
+    path = "."
+    if (len(sys.argv) > 2):
+        path = sys.argv[2]
 
     if(sys.argv[1] == "fetch"):
-        fetchDTC(obd_bluetooth_socket)
+        fetchDTC(obd_bluetooth_socket, file_path)
     elif(sys.argv[1] == "clear"):
         clearDTC(obd_bluetooth_socket)
 
