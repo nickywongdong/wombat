@@ -27,6 +27,16 @@ sudo apt-get install build-essential libbluetooth-dev -y
 
 cd acm/
 sudo ./installCDCACM.sh
+cd ..
+
+cd um6/serial
+rm -rf build
+mkdir build
+cd build
+cmake ..
+make
+sudo make install
+cd ../..
 
 sudo apt-get install build-essential hostapd -y
 sudo apt-get install build-essential dnsmasq -y
