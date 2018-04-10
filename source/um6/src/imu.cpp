@@ -288,9 +288,9 @@ int main(int argc, char **argv) {
         while (1)
         {
             if(t>20) {
-              std::cout<<"Pitch  X = "<<std::fixed<<IMU_EULER_X*360/6.28318530718<<std::endl;
-              std::cout<<"Roll   Y = "<<std::fixed<<IMU_EULER_Y*360/6.28318530718<<std::endl;
-              std::cout<<"Yaw Z = "<<std::fixed<<IMU_EULER_Z*360/6.28318530718<<std::endl<<std::endl;
+              std::cout<<"Pitch   X = "<<std::fixed<<IMU_EULER_X*360/6.28318530718<<std::endl;
+              std::cout<<"Roll    Y = "<<std::fixed<<IMU_EULER_Y*360/6.28318530718<<std::endl;
+              std::cout<<"Yaw     Z = "<<std::fixed<<IMU_EULER_Z*360/6.28318530718<<std::endl<<std::endl;
               std::string writeString = ","+std::to_string(IMU_EULER_X*360/6.28318530718)+","+std::to_string(IMU_EULER_Y*360/6.28318530718)+","+std::to_string(IMU_EULER_Z*360/6.28318530718)+"\n";
               std::cout << createTimestamp() << writeString << std::endl;
               ahrs_csv.open(filepath.c_str(), std::ofstream::out | std::ofstream::app);
