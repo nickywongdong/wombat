@@ -84,6 +84,10 @@ if show_stopstart_tip or show_acceleration_tip or show_averagespeed_tip:
             tipsOutputFile.write("- Avoid driving too slowly; slow speeds means your vehicle cannot use higher gearing and results in worse fuel economy.\n")
         else:
             tipsOutputFile.write("- Avoid driving too fast; reduced speed reduces drag and increased fuel economy.\n")
+    if show_acceleration_tip:
+        tipsOutputFile.write("- Gently ease onto the accelerator; aggressive acceleration wastes fuel.\n")
+    if show_stopstart_tip:
+        tipsOutputFile.write("- Try to minimize your idling; idling wastes fuel.\n")
 else:
     tipsOutputFile.write("No tips to report!\n")
 
