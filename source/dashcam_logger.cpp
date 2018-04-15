@@ -93,7 +93,7 @@ void sendBluetoothCommand(int fd, char command) {
 }
 
 /*
-  Manages all logging.
+  Main program loop for dashcams.
 */
 void cameraLoop() {
   char *args[] = {(char *)FRONT_CAMERA_HELPER_NAME, (char *)FRONT_CAMERA_PORT, (char *)COMMAND_RECORD_FRONT, (char *)logging_directory.c_str(), NULL};
