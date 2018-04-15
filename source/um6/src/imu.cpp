@@ -75,6 +75,8 @@ sudo make install
 #include <string.h>
 #include <time.h>
 
+#include <sys/stat.h>
+
 #include <serial.h>
 #include <comms.h>
 #include <registers.h>
@@ -239,12 +241,26 @@ void publishMsgs(um6::Registers& r)
  */
 int main(int argc, char **argv) {
 
-  // get logging directory from arguments
+  // Get logging directory from arguments
   if(argc > 1) {
     loggingDirectory = argv[1];
     loggingDirectorySet = true;
     filepath = loggingDirectory + "/ahrs_log.csv";
     std::cout << filepath << std::endl;
+  }
+
+  // Block and wait if the OBD logger hasn't established a Bluetooth connection yet
+  // This prevents any conflicts with accessing the serial port
+  obd_filepath = loggingDirectory + "/obd_log.csv";
+  clock_t ahrs_start = clock(), ahrs_curr;
+  struct stat buffer;
+  while(!(stat(obd_filepath.c_str(), &buffer) == 0)) {
+    ahrs_curr = clock();
+
+    // Stop waiting after 40 seconds of not detecting an OBD log (OBD connection probably failed!)
+    if((double(ahrs_curr - ahrs_start)/CLOCKS_PER_SEC) > 40) {
+      break;
+    }
   }
 
   // Load parameters from private node handle.
