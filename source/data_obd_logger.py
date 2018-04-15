@@ -12,6 +12,7 @@ import time
 
 # python OBD (from pyOBD-pi fork)
 import obd
+from obd import OBDStatus as obdstat
 
 # establish a global command array
 commands = []
@@ -107,14 +108,15 @@ if __name__ == '__main__':
     dtc_error_file.close()
 
     # Logic based on command line arguments
-    if(sys.argv[1] == "snapshot"):
-        while(1):
-            try:
-                os.kill(int(sys.argv[3]),0);
-            except OSError:
-                break;
-            else:
-                obdSnapshot(obd_bluetooth_socket)
-                time.sleep(.2)
+    if(obd_bluetooth_socket.is_connected()):
+        if(sys.argv[1] == "snapshot"):
+            while(1):
+                try:
+                    os.kill(int(sys.argv[3]),0);
+                except OSError:
+                    break;
+                else:
+                    obdSnapshot(obd_bluetooth_socket)
+                    time.sleep(.2)
 
     obd_bluetooth_socket.close()
