@@ -24,9 +24,8 @@ bool logging_active = true;
 pid_t obd_logger_pid = -5, ahrs_logger_pid = -5;
 
 /*
-  Starts data logging.
-  Spawns the process managing OBD logging.
-  Spawns the process managing AHRS logging.
+  Starts OBD and AHRS logging processes.
+  Used on program start and signalled logging restarts.
 */
 void startOBDLogger() {
   string built_command, curr_pid;
@@ -34,7 +33,7 @@ void startOBDLogger() {
   char *args[] = {(char *)DATA_HELPER_ARG0, (char *)logging_directory.c_str(), NULL};
   obd_logger_pid = fork();
   if (obd_logger_pid == 0) {
-    //execv("datad_pyhelper",args);
+    execv("datad_pyhelper",args);   // comment out if AHRS breaks; serial port access violation
   }
   else {
     ahrs_logger_pid = fork();
@@ -49,7 +48,7 @@ void startOBDLogger() {
 }
 
 /*
-  A loops that conducts all of the data logging.
+  Main program loop.
 */
 void loggingLooper() {
   startOBDLogger();
@@ -58,6 +57,15 @@ void loggingLooper() {
   }
 }
 
+/*
+  Creates .csv files for logging.
+
+  BUG FIX: no longer creates obd_log.csv, as imu will check for the existence of this file
+  as an indicator of successful connection to thd OBDLink MX. This prevents serial port
+  violations as the OBD autoconnect will no longer try to access the serial port while
+  the imu program is reading from it.
+*/
+
 void createLogfiles() {
   string create_command;
   while(axolotlFileSystem::getAvailableMemory(logging_directory) < 200) {
@@ -65,8 +73,10 @@ void createLogfiles() {
     printf("Not enough free space. Waiting...");
     #endif
   }
-  create_command = "touch " + logging_directory + "/obd_log.csv";
-  system(create_command.c_str());
+
+  //create_command = "touch " + logging_directory + "/obd_log.csv";
+  //system(create_command.c_str());
+
   create_command = "touch " + logging_directory + "/ahrs_log.csv";
   system(create_command.c_str());
 }
@@ -76,15 +86,20 @@ void createLogfiles() {
 */
 void toggleOffHandler(int signumber, siginfo_t *siginfo, void *pointer) {
   int status = 0;
+
+  // Kills OBD process
   if(!(obd_logger_pid < 0)) {
     kill(obd_logger_pid, SIGTERM);
   }
   waitpid(obd_logger_pid, &status, 0);
 
+  // Kills AHRS process
   if(!(ahrs_logger_pid < 0)) {
     kill(ahrs_logger_pid, SIGTERM);
   }
   waitpid(ahrs_logger_pid, &status, 0);
+
+  // Resets globals
   logging_active = false;
   obd_logger_pid = -5;
   ahrs_logger_pid = -5;
@@ -125,6 +140,8 @@ void registerToggleOnHandler() {
   Kills the subservient logging process and ends this process safely.
 */
 void datadSigtermHandler(int signumber, siginfo_t *siginfo, void *pointer) {
+
+  // Code verbatim from toggle off handler, save for exit(0)
   int status = 0;
   if(!(obd_logger_pid < 0)) {
     kill(obd_logger_pid, SIGKILL);
@@ -138,6 +155,7 @@ void datadSigtermHandler(int signumber, siginfo_t *siginfo, void *pointer) {
   logging_active = false;
   obd_logger_pid = -5;
   ahrs_logger_pid = -5;
+
   exit(0);
 }
 
@@ -187,10 +205,10 @@ int main(int argc, char *argv[]) {
   registerSigtermHandler();
   registerUpdateHandler();
 
-  // Create the .csvs where OBDII and AHRS data will be logged
+  // Prepare the .csvs
   createLogfiles();
 
-  // Start Data Logging
+  // Starts the main progrma loop
   loggingLooper();
 
   return 0;
