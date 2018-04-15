@@ -1,5 +1,10 @@
 # Axolotl - Victor's Branch
-__Current Version:__ 0.4.4 beta
+__Current Version:__ 0.4.5 beta
+
+Version 0.4.5 beta:
+- Added full implementation of fuel economy monitor
+- Added full implementation of DTC fetcher
+- Added full implementation of AHRS logging (with bugs)
 
 Version 0.4.4 beta:
 - Added preliminary implementation of fuel economy monitor
