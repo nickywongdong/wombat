@@ -1,5 +1,10 @@
 # Axolotl - Victor's Branch
-__Current Version:__ 0.4.5 beta
+__Current Version:__ 0.4.6 beta
+
+Version 0.4.6 beta:
+- Adding user-changeable "preferences"
+- Fixed bug where OBD connections would interfere with serial port communications
+- Added extra documentation
 
 Version 0.4.5 beta:
 - Added full implementation of fuel economy monitor
