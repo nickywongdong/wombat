@@ -1,12 +1,12 @@
 # Axolotl - Victor's Branch
-__Current Version:__ 0.4.6 beta
+__Current Version:__ 0.5.2 beta
 
-Version 0.4.6 beta:
+Version 0.5.2 beta:
 - Adding user-changeable "preferences"
 - Fixed bug where OBD connections would interfere with serial port communications
 - Added extra documentation
 
-Version 0.4.5 beta:
+Version 0.5.1 beta:
 - Added full implementation of fuel economy monitor
 - Added full implementation of DTC fetcher
 - Added full implementation of AHRS logging (with bugs)
