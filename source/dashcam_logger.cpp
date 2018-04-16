@@ -34,7 +34,7 @@
 
 using namespace std;
 
-string logging_directory;
+string logging_directory, front_cam_bt_addr_f, rear_cam_bt_addr_f;
 bool logging_active = true;
 bool backup_camera_active = false, front_cam_bt_active = false, rear_cam_bt_active = false;
 
@@ -321,6 +321,19 @@ void registerBackupCameraHandler() {
 int main(int argc, char *argv[]) {
   // Ensure that a logging directory has been provided and bind it
   logging_directory = argv[1];
+
+  // Get bluetooth addresses from file or resort to default bluetooth addresses
+  ifstream bt_addr_file;
+  bt_addr_file.open("macaddrs");
+  if(m.is_open()) {
+    getline(bt_addr_file,front_cam_bt_addr_f);
+    getline(bt_addr_file,rear_cam_bt_addr_f);
+    bt_addr_file.close();
+  }
+  else {
+    front_cam_bt_addr_f = FRONT_CAM_BT_ADDR;
+    rear_cam_bt_addr_f = REAR_CAM_BT_ADDR;
+  }
 
   // Pair with front camera RPi
   if(connectBluetooth(FRONT_CAM_BT_ADDR, &front_dashcam_bluetooth_socket)) {
