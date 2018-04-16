@@ -24,6 +24,7 @@ From left to right:
 
 | **Field** | **Units** |
 | --------- | --------- |
+| Timestamp | Date/Time (24hr) |
 | Pitch | Degrees |
 | Roll | Degrees |
 | Yaw | Degrees |
