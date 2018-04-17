@@ -325,7 +325,7 @@ int main(int argc, char *argv[]) {
   // Get bluetooth addresses from file or resort to default bluetooth addresses
   ifstream bt_addr_file;
   bt_addr_file.open("macaddrs");
-  if(m.is_open()) {
+  if(bt_addr_file.is_open()) {
     getline(bt_addr_file,front_cam_bt_addr_f);
     getline(bt_addr_file,rear_cam_bt_addr_f);
     bt_addr_file.close();
