@@ -1,0 +1,2 @@
+- setup-file:
+    local-name: /home/nvidia/wombat/source/um6-indigo-devel/devel/setup.sh

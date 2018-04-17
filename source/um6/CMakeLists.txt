@@ -16,6 +16,8 @@ include_directories(
 
 )
 
+set (CMAKE_CXX_STANDARD 11)
+
 include_directories(include)
 add_library(comms SHARED src/comms.cpp)
 install(TARGETS comms DESTINATION ./lib)
