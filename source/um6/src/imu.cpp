@@ -309,9 +309,11 @@ int main(int argc, char **argv) {
               std::cout<<"Yaw     Z = "<<std::fixed<<IMU_EULER_Z*360/6.28318530718<<std::endl<<std::endl;
               #endif
               std::string pre_write_string = ","+std::to_string(IMU_EULER_X*360/6.28318530718)+","+std::to_string(IMU_EULER_Y*360/6.28318530718)+","+std::to_string(IMU_EULER_Z*360/6.28318530718)+"\n";
-              std::string write_string = createTimestamp().c_str() + pre_write_string;
+              std::string timestamp_prefix = createTimestamp();
+              std::string write_string = timestamp_prefix + pre_write_string;
 
-              std::cout << createTimestamp() << write_string << std::endl;
+              std::cout << createTimestamp() << pre_write_string << std::endl;
+              std::cout << write_string << std::endl;
               ahrs_csv.open(filepath.c_str(), std::ofstream::out | std::ofstream::app);
               if(ahrs_csv.is_open()) {
                 ahrs_csv << write_string;
