@@ -119,4 +119,8 @@ if __name__ == '__main__':
                     obdSnapshot(obd_bluetooth_socket)
                     time.sleep(.2)
 
+    # Make sure this process doesn't go defunct
+    while(1):
+        continue
+
     obd_bluetooth_socket.close()
