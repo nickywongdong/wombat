@@ -251,7 +251,7 @@ int main(int argc, char **argv) {
 
   // Block and wait if the OBD logger hasn't established a Bluetooth connection yet
   // This prevents any conflicts with accessing the serial port
-  obd_filepath = loggingDirectory + "/obd_log.csv";
+  std::string obd_filepath = loggingDirectory + "/obd_log.csv";
   clock_t ahrs_start = clock(), ahrs_curr;
   struct stat buffer;
   while(!(stat(obd_filepath.c_str(), &buffer) == 0)) {
