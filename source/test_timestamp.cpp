@@ -45,7 +45,15 @@ std::string createTimestamp() {
 }
 
 int main() {
-  std::cout << createTimestamp() << std::endl;
+  time_t raw_time;
+  time (&raw_time);
+
+  struct tm *time_sample = localtime(&raw_time);
+  std::string timestamp = asctime(time_sample);
+
+  timestamp.pop_back();
+  std::cout << timestamp << "...." << std::endl;
+
   return 0;
 
 }

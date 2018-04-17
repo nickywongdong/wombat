@@ -102,7 +102,8 @@ std::string createTimestamp() {
 
   struct tm *time_sample = localtime(&raw_time);
   std::string timestamp = asctime(time_sample);
-  std::cout << timestamp << std::endl;
+  //std::cout << timestamp << std::endl;
+  timestamp.pop_back();
   return timestamp;
 }
 
@@ -312,13 +313,12 @@ int main(int argc, char **argv) {
               std::string timestamp_prefix = createTimestamp();
               std::string write_string = timestamp_prefix + pre_write_string;
 
-              std::cout << createTimestamp() << pre_write_string << std::endl;
-              std::cout << write_string << std::endl;
+              //std::cout << createTimestamp() << pre_write_string << std::endl;
+              //std::cout << write_string << std::endl;
               ahrs_csv.open(filepath.c_str(), std::ofstream::out | std::ofstream::app);
               if(ahrs_csv.is_open()) {
                 ahrs_csv << write_string;
                 ahrs_csv.close();
-                printf("Written!\n");
               }
               t = 0;
             }
