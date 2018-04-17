@@ -329,6 +329,7 @@ int main(int argc, char *argv[]) {
     getline(bt_addr_file,front_cam_bt_addr_f);
     getline(bt_addr_file,rear_cam_bt_addr_f);
     bt_addr_file.close();
+    cout << front_cam_bt_addr_f << " && " << rear_cam_bt_addr_f << endl;
   }
   else {
     front_cam_bt_addr_f = FRONT_CAM_BT_ADDR;
@@ -344,8 +345,6 @@ int main(int argc, char *argv[]) {
   if(connectBluetooth(REAR_CAM_BT_ADDR, &rear_dashcam_bluetooth_socket)) {
     rear_cam_bt_active = true;
   }
-
-  printf("YAY!\n");
 
   // Register all signal handlers
   registerToggleOffHandler();
