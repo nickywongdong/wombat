@@ -34,5 +34,6 @@ clean:
 
 fresh: clean all
 	cd um6
+	rm -f imu
 	make
 	cd ..
