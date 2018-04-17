@@ -33,3 +33,6 @@ clean:
 	rm -f backup_cam_helper
 
 fresh: clean all
+	cd um6
+	make
+	cd ..
