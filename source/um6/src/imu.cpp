@@ -82,8 +82,8 @@ sudo make install
 #include <registers.h>
 
 // variables for data logging
-std::string loggingDirectory, filepath;
-bool loggingDirectorySet = false;
+std::string logging_directory, filepath;
+bool logging_directory_set = false;
 std::ofstream ahrs_csv;
 
 double accelz;
@@ -242,15 +242,15 @@ int main(int argc, char **argv) {
 
   // Get logging directory from arguments
   if(argc > 1) {
-    loggingDirectory = argv[1];
-    loggingDirectorySet = true;
-    filepath = loggingDirectory + "/ahrs_log.csv";
+    logging_directory = argv[1];
+    logging_directory_set = true;
+    filepath = logging_directory + "/ahrs_log.csv";
     std::cout << filepath << std::endl;
   }
 
   // Block and wait if the OBD logger hasn't established a Bluetooth connection yet
   // This prevents any conflicts with accessing the serial port
-  std::string obd_filepath = loggingDirectory + "/obd_log.csv";
+  std::string obd_filepath = logging_directory + "/obd_log.csv";
   clock_t ahrs_start = clock(), ahrs_curr;
   struct stat buffer;
   while(!(stat(obd_filepath.c_str(), &buffer) == 0)) {
@@ -308,11 +308,13 @@ int main(int argc, char **argv) {
               std::cout<<"Roll    Y = "<<std::fixed<<IMU_EULER_Y*360/6.28318530718<<std::endl;
               std::cout<<"Yaw     Z = "<<std::fixed<<IMU_EULER_Z*360/6.28318530718<<std::endl<<std::endl;
               #endif
-              std::string writeString = ","+std::to_string(IMU_EULER_X*360/6.28318530718)+","+std::to_string(IMU_EULER_Y*360/6.28318530718)+","+std::to_string(IMU_EULER_Z*360/6.28318530718)+"\n";
-              std::cout << createTimestamp() << writeString << std::endl;
+              std::string pre_write_string = ","+std::to_string(IMU_EULER_X*360/6.28318530718)+","+std::to_string(IMU_EULER_Y*360/6.28318530718)+","+std::to_string(IMU_EULER_Z*360/6.28318530718)+"\n";
+              std::string write_string = createTimestamp() + pre_write_string;
+
+              std::cout << createTimestamp() << write_string << std::endl;
               ahrs_csv.open(filepath.c_str(), std::ofstream::out | std::ofstream::app);
               if(ahrs_csv.is_open()) {
-                ahrs_csv << writeString;
+                ahrs_csv << write_string;
                 ahrs_csv.close();
                 printf("Written!\n");
               }
