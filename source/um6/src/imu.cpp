@@ -81,8 +81,6 @@ sudo make install
 #include <comms.h>
 #include <registers.h>
 
-#define PST -8
-
 // variables for data logging
 std::string loggingDirectory, filepath;
 bool loggingDirectorySet = false;
@@ -104,6 +102,7 @@ std::string createTimestamp() {
 
   struct tm *time_sample = localtime(&raw_time);
   std::string timestamp = asctime(time_sample);
+  std::cout << timestamp << std::endl;
   return timestamp;
 }
 
@@ -258,7 +257,7 @@ int main(int argc, char **argv) {
     ahrs_curr = clock();
 
     // Stop waiting after 40 seconds of not detecting an OBD log (OBD connection probably failed!)
-    if((double(ahrs_curr - ahrs_start)/CLOCKS_PER_SEC) > 40) {
+    if((double(ahrs_curr - ahrs_start)/CLOCKS_PER_SEC) > 20) {
       break;
     }
   }
@@ -304,9 +303,11 @@ int main(int argc, char **argv) {
         while (1)
         {
             if(t>20) {
+              #ifdef DEBUG
               std::cout<<"Pitch   X = "<<std::fixed<<IMU_EULER_X*360/6.28318530718<<std::endl;
               std::cout<<"Roll    Y = "<<std::fixed<<IMU_EULER_Y*360/6.28318530718<<std::endl;
               std::cout<<"Yaw     Z = "<<std::fixed<<IMU_EULER_Z*360/6.28318530718<<std::endl<<std::endl;
+              #endif
               std::string writeString = ","+std::to_string(IMU_EULER_X*360/6.28318530718)+","+std::to_string(IMU_EULER_Y*360/6.28318530718)+","+std::to_string(IMU_EULER_Z*360/6.28318530718)+"\n";
               std::cout << createTimestamp() << writeString << std::endl;
               ahrs_csv.open(filepath.c_str(), std::ofstream::out | std::ofstream::app);
