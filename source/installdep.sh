@@ -54,4 +54,8 @@ echo "Install complete! Rebooting in 5 seconds..."
 
 sleep 5s
 
+sudo cp axolotl_bt_camera /etc/init.d/axolotl_bt_camera
+sudo chmod +x camera_bt_autoconnect.sh
+sudo update-rc.d axolotl_bt_camera defaults
+
 sudo reboot

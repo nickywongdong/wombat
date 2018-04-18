@@ -1,3 +1,6 @@
 #!/usr/bin/env bash
 make
-cp rpi1dcd -R ~/rpi1dcd
+sudo cp front_cam_autostart /etc/init.d/front_cam_autostart
+sleep 5s
+sudo update-rc.d front_cam_autostart defaults
+sudo reboot

@@ -1,0 +1,4 @@
+#!/bin/sh
+/home/nvidia/wombat/source/rpidashcams/.rpi2dcd &
+
+exit 0
