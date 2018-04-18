@@ -86,7 +86,7 @@ int main(int argc, char **argv) {
                 system("killall c2helper");
               }
               if(buf[0] == 'q') {
-                break;
+                printf("Quit signal received.\n");
               }
           }
       }

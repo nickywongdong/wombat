@@ -102,13 +102,14 @@ if __name__ == '__main__':
     else:
         obd_bluetooth_socket = obd.OBD()
 
-    # Preemptively cache DTCs
-    dtc_error_file = open(file_path + "/dtc_errors",'w')
-    dtc_error_file.write(str(obd_bluetooth_handle.query(obd.commands.GET_DTC)))
-    dtc_error_file.close()
-
     # Logic based on command line arguments
     if(obd_bluetooth_socket.is_connected()):
+        # Preemptively cache DTCs
+        dtc_error_file = open(file_path + "/dtc_errors",'w')
+        dtc_error_file.write(str(obd_bluetooth_handle.query(obd.commands.GET_DTC)))
+        dtc_error_file.close()
+
+        # Do some command based on argument
         if(sys.argv[1] == "snapshot"):
             while(1):
                 try:
@@ -118,6 +119,10 @@ if __name__ == '__main__':
                 else:
                     obdSnapshot(obd_bluetooth_socket)
                     time.sleep(.2)
+    else:
+        dtc_error_file = open(file_path + "/dtc_errors",'w')
+        dtc_error_file.write("Error: No OBD connection detected; DTC fetch failed.")
+        dtc_error_file.close()
 
     # Make sure this process doesn't go defunct
     while(1):
