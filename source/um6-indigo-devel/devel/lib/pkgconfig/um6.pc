@@ -1,8 +1,0 @@
-prefix=/home/nvidia/wombat/source/um6-indigo-devel/devel
-
-Name: um6
-Description: Description of um6
-Version: 1.1.2
-Cflags: -I/home/nvidia/wombat/source/um6-indigo-devel/devel/include -I/home/nvidia/wombat/source/um6-indigo-devel/include
-Libs: -L/home/nvidia/wombat/source/um6-indigo-devel/devel/lib 
-Requires: message_runtime

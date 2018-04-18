@@ -1,8 +1,0 @@
-prefix=/usr/local
-
-Name: um6
-Description: Description of um6
-Version: 1.1.2
-Cflags: -I/usr/local/include
-Libs: -L/usr/local/lib 
-Requires: message_runtime
