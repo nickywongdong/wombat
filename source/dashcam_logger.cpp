@@ -96,7 +96,6 @@ void sendBluetoothCommand(int fd, char command) {
   Main program loop for dashcams.
 */
 void cameraLoop() {
-  char *args[] = {(char *)FRONT_CAMERA_HELPER_NAME, (char *)FRONT_CAMERA_PORT, (char *)COMMAND_RECORD_FRONT, (char *)logging_directory.c_str(), NULL};
   if(logging_active) {
     if(front_cam_bt_active) {
       sendBluetoothCommand(front_dashcam_bluetooth_socket,'s');
@@ -110,6 +109,7 @@ void cameraLoop() {
     dashcam_helper_0_pid = fork();    // fork the front camera helper
     if(dashcam_helper_0_pid == 0) {
       if (front_cam_bt_active) {
+        char *args[] = {(char *)FRONT_CAMERA_HELPER_NAME, (char *)FRONT_CAMERA_PORT, (char *)COMMAND_RECORD_FRONT, (char *)logging_directory.c_str(), NULL};
         execv("record_helper",args);
       }
     }
@@ -128,9 +128,6 @@ void cameraLoop() {
         }
       }
       #endif
-      while(1) {
-
-      }
     }
   }
 
@@ -359,27 +356,28 @@ int main(int argc, char *argv[]) {
   bool active = false;
 
   // Fork a gpio watcher process
-  gpio_watcher_pid = fork();
-  if (gpio_watcher_pid == 0) {
-    while(1) {
-      f.open("/sys/class/gpio/gpio298/value");
-    	f >> i;
-    	if(i == 1 && not(active)){
-    		kill(getppid(),SIGBUS);
-    		active = true;
-    		sleep(1);
-    	}
-    	else if(i == 0 && active){
-    		kill(getppid(),SIGBUS);
-    		active = false;
-    		sleep(1);
-    	}
-    	f.close();
+  if(rear_cam_bt_active) {
+    gpio_watcher_pid = fork();
+    if (gpio_watcher_pid == 0) {
+      while(1) {
+        f.open("/sys/class/gpio/gpio298/value");
+      	f >> i;
+      	if(i == 1 && not(active)){
+      		kill(getppid(),SIGBUS);
+      		active = true;
+      		sleep(1);
+      	}
+      	else if(i == 0 && active){
+      		kill(getppid(),SIGBUS);
+      		active = false;
+      		sleep(1);
+      	}
+      	f.close();
+      }
+    }
+    else {
+      cameraLoop();   // begin our camera loop outside of the gpio watcher
     }
   }
-  else {
-    cameraLoop();   // begin our camera loop outside of the gpio watcher
-  }
-
   return 0;
 }
