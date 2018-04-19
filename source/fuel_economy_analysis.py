@@ -57,16 +57,17 @@ with open(filename, 'r') as csvfile:
                 accelsamples += 1
 
 # Doing some checks
-if (totalspeed/samples < 40) or (totalspeed/samples > 105):
-    show_averagespeed_tip = True
-    if (totalspeed/samples < 60):
-        speed_low = True
+if not samples == 0:
+    if (totalspeed/samples < 40) or (totalspeed/samples > 105):
+        show_averagespeed_tip = True
+        if (totalspeed/samples < 60):
+            speed_low = True
 
-if (float(stopsamples)/float(samples) > 0.4):
-    show_stopstart_tip = True
+    if (float(stopsamples)/float(samples) > 0.4):
+        show_stopstart_tip = True
 
-if (float(accelsamples)/float(samples) > 0.4):
-    show_acceleration_tip = True
+    if (float(accelsamples)/float(samples) > 0.4):
+        show_acceleration_tip = True
 
 # Print status of bools for tips
 print show_stopstart_tip
