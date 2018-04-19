@@ -52,7 +52,7 @@ def obdSnapshot(obd_connection_handle):
     csv_line += str(obd_connection_handle.query(commands[len(commands)-1]).value) + "\n"
 
     # write entire csv_line to file in one file operation
-    csv_file_handle = open(sys.argv[2] + "/obd_log.csv",'a')
+    csv_file_handle = open(sys.argv[2] + "/obd_log.csv",'w+')
     csv_file_handle.write(csv_line)
     csv_file_handle.close()
 
@@ -102,11 +102,16 @@ if __name__ == '__main__':
     else:
         obd_bluetooth_socket = obd.OBD()
 
-    file_path = "~/axolotl/"
+    file_path = "."
+    if(len(sys.argv) > 2):
+        new_path = sys.argv[1].split('/')
+        new_path = new_path[:-2]
+        file_path = '/'.join(new_path)
+
     # Logic based on command line arguments
     if(obd_bluetooth_socket.is_connected()):
         # Preemptively cache DTCs
-        dtc_error_file = open(file_path + "dtc_errors",'w')
+        dtc_error_file = open(file_path + "/dtc_errors",'w+')
         dtc_error_file.write(str(obd_bluetooth_handle.query(obd.commands.GET_DTC)))
         dtc_error_file.close()
 
@@ -121,8 +126,9 @@ if __name__ == '__main__':
                     obdSnapshot(obd_bluetooth_socket)
                     time.sleep(.2)
     else:
-        dtc_error_file = open(file_path + "dtc_errors",'w')
+        dtc_error_file = open(file_path + "/dtc_errors",'w+')
         dtc_error_file.write("Error: No OBD connection detected; DTC fetch failed.")
+        dtc_error_file.write(" ")
         dtc_error_file.close()
 
     # Make sure this process doesn't go defunct
