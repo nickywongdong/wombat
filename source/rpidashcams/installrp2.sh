@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/sh
 make
 sudo cp rear_cam_autostart /etc/init.d/rear_cam_autostart
 sleep 5s

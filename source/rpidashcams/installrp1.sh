@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/sh
 make
 sudo cp front_cam_autostart /etc/init.d/front_cam_autostart
 sleep 5s
