@@ -74,7 +74,7 @@ print show_stopstart_tip
 print show_acceleration_tip
 print show_averagespeed_tip
 
-tipsOutputFile = open(path + "/festatus",'w')
+tipsOutputFile = open(path + "/festatus",'w+')
 
 tipsOutputFile.write("Please obey all speed laws when considering these instructions.\n\n")
 
