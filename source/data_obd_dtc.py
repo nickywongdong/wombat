@@ -45,6 +45,6 @@ if __name__ == '__main__':
         dtc_error_file.write("Error: No OBD connection detected; DTC fetch failed.")
         dtc_error_file.write(" ")
         dtc_error_file.close()
-        echo \"Error: could not connect to rear camera.\" >> ~/axolotl/debug
+        os.system('echo \"Error: could not fetch DTCs; bluetooth connection not available.\" >> ~/axolotl/debug')
 
     obd_bluetooth_socket.close()
