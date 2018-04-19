@@ -28,7 +28,7 @@ if __name__ == '__main__':
     # obd_bluetooth_socket = obd.OBD("/dev/tty.OBDII-Port")     # experimental explicit connect command
 
     # Get filepath from arguments, or leave the filepath as pwd if empty
-    file_path = "."
+    file_path = ""
 
     if(obd_bluetooth_socket.is_connected()):
         # Logic based on command line arguments
@@ -37,7 +37,7 @@ if __name__ == '__main__':
         elif(sys.argv[1] == "clear"):
             clearDTC(obd_bluetooth_socket)
     else:
-        dtc_error_file = open(file_path + "/dtc_errors",'w')
+        dtc_error_file = open(file_path + "dtc_errors",'w')
         dtc_error_file.write(str(obd_bluetooth_handle.query(obd.commands.GET_DTC)))
         dtc_error_file.close()
 
