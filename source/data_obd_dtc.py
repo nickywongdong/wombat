@@ -28,7 +28,7 @@ if __name__ == '__main__':
     # obd_bluetooth_socket = obd.OBD("/dev/tty.OBDII-Port")     # experimental explicit connect command
 
     # Get filepath from arguments, or leave the filepath as pwd if empty
-    file_path = ""
+    file_path = "~/axolotl/"
 
     if(obd_bluetooth_socket.is_connected()):
         # Logic based on command line arguments

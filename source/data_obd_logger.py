@@ -102,7 +102,7 @@ if __name__ == '__main__':
     else:
         obd_bluetooth_socket = obd.OBD()
 
-    file_path = ""
+    file_path = "~/axolotl/"
     # Logic based on command line arguments
     if(obd_bluetooth_socket.is_connected()):
         # Preemptively cache DTCs
