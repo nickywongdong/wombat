@@ -130,6 +130,8 @@ if __name__ == '__main__':
         dtc_error_file.write("Error: No OBD connection detected; DTC fetch failed.")
         dtc_error_file.write(" ")
         dtc_error_file.close()
+        os.system('echo \"Error: could not establish connection to OBD bluetooth device.\" >> ~/axolotl/debug')
+        os.system('echo \"Error: could not fetch DTCs; bluetooth connection not available.\" >> ~/axolotl/debug')
 
     # Make sure this process doesn't go defunct
     while(1):

@@ -41,9 +41,10 @@ if __name__ == '__main__':
         elif(sys.argv[1] == "clear"):
             clearDTC(obd_bluetooth_socket)
     else:
-        dtc_error_file = open(file_path + "/dtc_errors",'w')
-        dtc_error_file.write(str(obd_bluetooth_handle.query(obd.commands.GET_DTC)))
+        dtc_error_file = open(file_path + "/dtc_errors",'w+')
+        dtc_error_file.write("Error: No OBD connection detected; DTC fetch failed.")
         dtc_error_file.write(" ")
         dtc_error_file.close()
+        echo \"Error: could not connect to rear camera.\" >> ~/axolotl/debug
 
     obd_bluetooth_socket.close()

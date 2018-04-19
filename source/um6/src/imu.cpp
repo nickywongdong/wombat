@@ -81,15 +81,14 @@ sudo make install
 #include <comms.h>
 #include <registers.h>
 
-// variables for data logging
+// Global variables for logging
 std::string logging_directory, filepath;
 bool logging_directory_set = false;
 std::ofstream ahrs_csv;
 
+// IMU-specific variables
 double accelz;
-
 const uint8_t TRIGGER_PACKET = UM6_TEMPERATURE;
-
 double IMU_GYRO_X, IMU_GYRO_Y, IMU_GYRO_Z, IMU_ACCEL_X, IMU_ACCEL_Y, IMU_ACCEL_Z, IMU_COMPASS_X, IMU_COMPASS_Y, IMU_COMPASS_Z, IMU_EULER_X, IMU_EULER_Y, IMU_EULER_Z, IMU_QUAT_X, IMU_QUAT_Y, IMU_QUAT_Z, IMU_STATE;
 
 /*
@@ -211,7 +210,6 @@ bool handleResetService(um6::Comms* sensor,
 /**
  * Uses the register accessors to grab data from the IMU.
  */
-//void publishMsgs(um6::Registers& r, ros::NodeHandle* n, const std_msgs::Header& header)
 void publishMsgs(um6::Registers& r)
 {
     IMU_GYRO_X = r.gyro.get_scaled(1);
@@ -264,7 +262,6 @@ int main(int argc, char **argv) {
   }
 
   // Load parameters from private node handle.
-  //std::string port("/dev/robot/imu");
   std::string port("/dev/ttyUSB0");
   int32_t baud = 115200;
 
@@ -274,47 +271,28 @@ int main(int argc, char **argv) {
   serial::Timeout to = serial::Timeout(500, 500, 0, 500, 0);
   ser.setTimeout(to);
 
-  bool first_failure = true;
+  bool //first_failure = true;
   while (1) {
-    try
-    {
+    try {
       ser.open();
     }
-    catch(const serial::IOException& e)
-    {
-      #if DEBUG
-      std::cout<<"Unable to connect to port."<<std::endl;
-      #endif
+    catch(const serial::IOException& e) {
+      system("echo \"Error: unable to connect to serial port.\" >> ~/axolotl/debug");
     }
-    if (ser.isOpen())
-    {
-      #if DEBUG
-      std::cout<<"Successfully connected to serial port."<<std::endl;
-      #endif
-
-      first_failure = true;
-
-      try
-      {
+    if (ser.isOpen()) {
+      //first_failure = true;
+      try {
         um6::Comms sensor(&ser);
         configureSensor(&sensor);
         um6::Registers registers;
         handleResetService(&sensor);
-        int t=0;
-        while (1)
-        {
+
+        int t = 0;
+        while (1) {
             if(t>20) {
-              #ifdef DEBUG
-              std::cout<<"Pitch   X = "<<std::fixed<<IMU_EULER_X*360/6.28318530718<<std::endl;
-              std::cout<<"Roll    Y = "<<std::fixed<<IMU_EULER_Y*360/6.28318530718<<std::endl;
-              std::cout<<"Yaw     Z = "<<std::fixed<<IMU_EULER_Z*360/6.28318530718<<std::endl<<std::endl;
-              #endif
               std::string pre_write_string = ","+std::to_string(IMU_EULER_X*360/6.28318530718)+","+std::to_string(IMU_EULER_Y*360/6.28318530718)+","+std::to_string(IMU_EULER_Z*360/6.28318530718)+"\n";
               std::string timestamp_prefix = createTimestamp();
               std::string write_string = timestamp_prefix + pre_write_string;
-
-              //std::cout << createTimestamp() << pre_write_string << std::endl;
-              //std::cout << write_string << std::endl;
               ahrs_csv.open(filepath.c_str(), std::ofstream::out | std::ofstream::app);
               if(ahrs_csv.is_open()) {
                 ahrs_csv << write_string;
@@ -323,34 +301,22 @@ int main(int argc, char **argv) {
               t = 0;
             }
             t++;
-          if (sensor.receive(&registers) == TRIGGER_PACKET)
-          {
-            // Triggered by arrival of final message in group.
-            //header.stamp = ros::Time::now();
-            //publishMsgs(registers, &n, header);
+          if (sensor.receive(&registers) == TRIGGER_PACKET) {
             publishMsgs(registers);
-            //ros::spinOnce();
           }
         }
       }
-      catch(const std::exception& e)
-      {
+      catch(const std::exception& e) {
         if (ser.isOpen()) {
           ser.close();
         }
-
-        #if DEBUG
-        std::cout << "Attempting reconnection after error." << std::endl;
-        #endif
+        system("echo \"Warning: serial port open but sensor config failed. Retrying.\" >> ~/axolotl/debug");
       }
     }
-    else
-    {
-      #if DEBUG
-      std::cout<< "Could not connect to serial device " << port << ". Trying again." << std::endl;
-      #endif
+    else {
+      system("echo \"Error: serial port cannot be opened. Retrying.\" >> ~/axolotl/debug");
 
-      first_failure = false;
+      //first_failure = false;
     }
   }
 

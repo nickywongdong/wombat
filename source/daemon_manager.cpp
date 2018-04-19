@@ -300,10 +300,8 @@ int main() {
   registerDeleteHandler();
   registerUpdateHandler();
 
-  // Testing password check and hashing
-  #ifdef KEYTEST
-  printf("Checking true key: %i\n",checkPasswordCorrect("orangemonkeyeagle"));
-  #endif
+  // Clear this boot cycle's debug file
+  system("rm -f ~/axolotl/debug");
 
   // Data Logging Daemon Test
   #ifdef LOGTEST

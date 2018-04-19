@@ -333,14 +333,23 @@ int main(int argc, char *argv[]) {
     rear_cam_bt_addr_f = REAR_CAM_BT_ADDR;
   }
 
+  string debug_command;
+
   // Pair with front camera RPi
   if(connectBluetooth(FRONT_CAM_BT_ADDR, &front_dashcam_bluetooth_socket)) {
     front_cam_bt_active = true;
+  }
+  else {
+    system("echo \"Error: could not connect to front camera.\" >> ~/axolotl/debug");
   }
 
   // Pair with rear camera RPi
   if(connectBluetooth(REAR_CAM_BT_ADDR, &rear_dashcam_bluetooth_socket)) {
     rear_cam_bt_active = true;
+  }
+  else {
+    debug_command = ;
+    system("echo \"Error: could not connect to rear camera.\" >> ~/axolotl/debug");
   }
 
   // Register all signal handlers
@@ -355,7 +364,7 @@ int main(int argc, char *argv[]) {
   char *args[] = { NULL };
   bool active = false;
 
-  // Fork a gpio watcher process
+  // Fork a gpio watcher process if we have a rear camera
   if(rear_cam_bt_active) {
     gpio_watcher_pid = fork();
     if (gpio_watcher_pid == 0) {
