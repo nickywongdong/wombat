@@ -29,8 +29,6 @@ if __name__ == '__main__':
 
     # Get filepath from arguments, or leave the filepath as pwd if empty
     file_path = "."
-    if (len(sys.argv) > 2):
-        file_path = sys.argv[2]
 
     if(obd_bluetooth_socket.is_connected()):
         # Logic based on command line arguments
