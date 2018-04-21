@@ -68,7 +68,14 @@ bool connectBluetooth(string bluetoothAddress, int *fd) {
   str2ba( dest, &addr.rc_bdaddr );
 
   // connect to the raspberrypi, saving connection into a global file descriptor
+  // will attempt for 10 seconds before giving up
   status = connect(*fd, (struct sockaddr *)&addr, sizeof(addr));
+  int attempts = 0;
+  if (status == false) && (attempts < 10) {
+    sleep(1);
+    status = connect(*fd, (struct sockaddr *)&addr, sizeof(addr));
+    attempts += 1;
+  }
 
   // return true or false based on connection status
   if (status == 0) {
@@ -336,7 +343,7 @@ int main(int argc, char *argv[]) {
   string debug_command;
 
   // Pair with front camera RPi
-  if(connectBluetooth(FRONT_CAM_BT_ADDR, &front_dashcam_bluetooth_socket)) {
+  if(connectBluetooth(front_cam_bt_addr_f, &front_dashcam_bluetooth_socket)) {
     front_cam_bt_active = true;
   }
   else {
@@ -344,7 +351,7 @@ int main(int argc, char *argv[]) {
   }
 
   // Pair with rear camera RPi
-  if(connectBluetooth(REAR_CAM_BT_ADDR, &rear_dashcam_bluetooth_socket)) {
+  if(connectBluetooth(front_cam_bt_addr_f, &rear_dashcam_bluetooth_socket)) {
     rear_cam_bt_active = true;
   }
   else {
@@ -365,6 +372,8 @@ int main(int argc, char *argv[]) {
   bool active = false;
 
   // Fork a gpio watcher process if we have a rear camera
+  #define BU_CAMERA
+  #ifdef BU_CAMERA
   if(rear_cam_bt_active) {
     gpio_watcher_pid = fork();
     if (gpio_watcher_pid == 0) {
@@ -388,5 +397,6 @@ int main(int argc, char *argv[]) {
       cameraLoop();   // begin our camera loop outside of the gpio watcher
     }
   }
+  #endif
   return 0;
 }
