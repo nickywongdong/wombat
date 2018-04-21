@@ -54,6 +54,10 @@ int main() {
   timestamp.pop_back();
   std::cout << timestamp << "...." << std::endl;
 
+  struct stat buffer;
+  bool is_dir = ((stat("/Users/VictorLi/axolotl/", &buffer) == 0) && S_ISDIR(buffer.st_mode));
+  std::cout << is_dir << std::endl;
+
   return 0;
 
 }

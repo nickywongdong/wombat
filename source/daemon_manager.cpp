@@ -6,6 +6,7 @@
 */
 
 #include "dcomh.hpp"
+#include <sys/stat.h>
 
 // uncomment if an external storage device is connected
 // external storage device MUST be named "AXOLOTLDCV"
@@ -29,7 +30,7 @@ using namespace std;
 
 pid_t dcdpid = -5, dldpid = -5;
 
-string logging_directory, run_directory;
+string logging_directory, run_directory, log_volume;
 
 /*
   Checks the supplied password against the stored password.
@@ -50,7 +51,7 @@ bool checkPasswordCorrect(string password) {
   Creates a logging directory from a path.
 */
 bool buildSaveDirectoryFromPath(string path) {
-  string base_directory_str = LOG_VOLUME, data_dir_create_command = "mkdir -p " + base_directory_str + "/axolotl/data";
+  string base_directory_str = log_volume, data_dir_create_command = "mkdir -p " + base_directory_str + "/axolotl/data";
   system(data_dir_create_command.c_str());
   bool dir_build_status;
   do {
@@ -71,7 +72,7 @@ bool buildSaveDirectoryFromPath(string path) {
 bool buildSaveDirectory() {
   // Getting info to build data storage directory
   int dir_build_status = 2;
-  string dirPrefix = "/axolotl/data/axolotl_log_", base_directory_str = LOG_VOLUME, create_directory_name = base_directory_str + dirPrefix;
+  string dirPrefix = "/axolotl/data/axolotl_log_", base_directory_str = log_volume, create_directory_name = base_directory_str + dirPrefix;
 
   // create the base axolotl data directory if it doesn't exist
   string data_dir_create_command = "mkdir -p " + base_directory_str + "/axolotl/data";
@@ -135,7 +136,7 @@ void dataDeletionHandler() {
   sleep(2);
 
   // delete the data directory
-  string base_directory_str = LOG_VOLUME, delete_dir = base_directory_str + "/axolotl/data", deleteCommand = "rm -rf " + delete_dir;
+  string base_directory_str = log_volume, delete_dir = base_directory_str + "/axolotl/data", deleteCommand = "rm -rf " + delete_dir;
   system(deleteCommand.c_str());
 
   // rebuild the data directory using existing path so as to not break our daemons
@@ -295,6 +296,13 @@ int main() {
   string input_str;
   run_directory = axolotlFileSystem::getPWD();
 
+  // Test for connected flash drive
+  if ((stat("/media/nvidia/AXOLOTLDCV" &buffer) == 0) && S_ISDIR(buffer.st_mode)) {
+    log_volume = "/media/nvidia/AXOLOTLDCV";
+  }
+  else {
+    log_volume = axolotlFileSystem::getHomeDir();
+  }
   // Registering signal handlers
   registerSigintHandler();
   registerDeleteHandler();
