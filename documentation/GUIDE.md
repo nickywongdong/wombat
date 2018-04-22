@@ -16,7 +16,7 @@ Whilst logged into the `nvidia` profile of the Jetson (only if using RaspberryPi
 1. Determine the Bluetooth address of each RaspberryPi, and replace the Bluetooth addresses in `bluetooth_addresses` with those addresses. `bluetooth_addresses` should only be comprised of two lines; the first with the Bluetooth address of the front RaspberryPi, the second with the Bluetooth address of the rear RaspberryPi.
 
 ## Using External Storage
-Axolotl is designed to be able to take advantage of external storage devices, either SD cards or USB drives of any type.
+Axolotl is designed to be able to take advantage of external storage devices, either SD cards or USB drives that are compatible with the Jetson TX2.
 
 When connecting an external storage device to the system, make sure the storage device is formatted in a Linux-compatible format.
 
