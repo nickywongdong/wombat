@@ -72,11 +72,11 @@ bool connectBluetooth(string bluetoothAddress, int *fd) {
   // will attempt for 10 seconds before giving up
   status = connect(*fd, (struct sockaddr *)&addr, sizeof(addr));
   int attempts = 0;
-  if (status == false) && (attempts < 10) {
+  if ((status == false) && (attempts < 10)) {
     sleep(1);
     status = connect(*fd, (struct sockaddr *)&addr, sizeof(addr));
     attempts += 1;
-    debug_string = "echo \"Error: bluetooth connection to " + bluetoothAddress + " failed. Retrying. Attempt: " + attempts + "\" >> ~/axolotl/debug";
+    debug_string = "echo \"Error: bluetooth connection to " + bluetoothAddress + " failed. Retrying. Attempt: " + to_string(attempts) + "\" >> ~/axolotl/debug";
     system(debug_string.c_str());
   }
 
@@ -364,7 +364,6 @@ int main(int argc, char *argv[]) {
     rear_cam_bt_active = true;
   }
   else {
-    debug_command = ;
     system("echo \"Error: could not connect to rear camera.\" >> ~/axolotl/debug");
   }
 

@@ -271,7 +271,6 @@ int main(int argc, char **argv) {
   serial::Timeout to = serial::Timeout(500, 500, 0, 500, 0);
   ser.setTimeout(to);
 
-  bool //first_failure = true;
   while (1) {
     try {
       ser.open();

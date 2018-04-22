@@ -301,7 +301,7 @@ int main() {
 
   // Test for connected flash drive
   struct stat buffer;
-  if ((stat("/media/nvidia/AXOLOTLDCV" &buffer) == 0) && S_ISDIR(buffer.st_mode)) {
+  if ((stat("/media/nvidia/AXOLOTLDCV", &buffer) == 0) && S_ISDIR(buffer.st_mode)) {
     log_volume = "/media/nvidia/AXOLOTLDCV";
   }
   else {
