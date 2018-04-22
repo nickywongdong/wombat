@@ -296,6 +296,9 @@ int main() {
   string input_str;
   run_directory = axolotlFileSystem::getPWD();
 
+  // Clear this boot cycle's debug file
+  system("rm -f ~/axolotl/debug");
+
   // Test for connected flash drive
   struct stat buffer;
   if ((stat("/media/nvidia/AXOLOTLDCV" &buffer) == 0) && S_ISDIR(buffer.st_mode)) {
@@ -303,14 +306,12 @@ int main() {
   }
   else {
     log_volume = axolotlFileSystem::getHomeDir();
+    system("echo \"Warning: could not find an external 'AXOLOTLDCV'. Logging to internal storage.\" >> ~/axolotl/debug");
   }
   // Registering signal handlers
   registerSigintHandler();
   registerDeleteHandler();
   registerUpdateHandler();
-
-  // Clear this boot cycle's debug file
-  system("rm -f ~/axolotl/debug");
 
   // Data Logging Daemon Test
   #ifdef LOGTEST

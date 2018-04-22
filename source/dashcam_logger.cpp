@@ -57,6 +57,7 @@ void optimizeStorage() {
 bool connectBluetooth(string bluetoothAddress, int *fd) {
   int status;   // to hold connection status based on connect() call
   char *dest = (char *)bluetoothAddress.c_str();    // get the supplied address and cast to c string
+  string debug_string;
 
   // allocate bluetooths ocket
   *fd = socket(AF_BLUETOOTH, SOCK_STREAM, BTPROTO_RFCOMM);
@@ -75,6 +76,8 @@ bool connectBluetooth(string bluetoothAddress, int *fd) {
     sleep(1);
     status = connect(*fd, (struct sockaddr *)&addr, sizeof(addr));
     attempts += 1;
+    debug_string = "echo \"Error: bluetooth connection to " + bluetoothAddress + " failed. Retrying. Attempt: " + attempts + "\" >> ~/axolotl/debug";
+    system(debug_string.c_str());
   }
 
   // return true or false based on connection status
@@ -107,8 +110,14 @@ void cameraLoop() {
     if(front_cam_bt_active) {
       sendBluetoothCommand(front_dashcam_bluetooth_socket,'s');
     }
+    else {
+      system("echo \"Error: could not connect to front camera controller. Front camera logging disabled.\" >> ~/axolotl/debug");
+    }
     if(rear_cam_bt_active) {
       sendBluetoothCommand(rear_dashcam_bluetooth_socket,'s');
+    }
+    else {
+      system("echo \"Error: could not connect to rear camera controller. Rear camera logging and backup camera disabled.\" >> ~/axolotl/debug");
     }
     while(axolotlFileSystem::getAvailableMemory(logging_directory) < 2048) {   // wait until we have > 2GB storage
         optimizeStorage();    // attempt to optimize storage space if we don't have enough
@@ -396,6 +405,9 @@ int main(int argc, char *argv[]) {
     else {
       cameraLoop();   // begin our camera loop outside of the gpio watcher
     }
+  }
+  else {
+    system("echo \"Error: GPIO watcher not spawned as rear camera connection is inactive.\" >> ~/axolotl/debug");
   }
   #endif
   return 0;
