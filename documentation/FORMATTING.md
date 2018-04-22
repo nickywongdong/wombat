@@ -18,6 +18,8 @@ From left to right:
 | Ambient Air Temp | Celsius |
 | Barometric Pressure | Kilopascal |
 
+__Note:__ Timestamp field uses the Axolotl's time/date.
+
 ## ahrs_log.csv
 
 From left to right:
@@ -29,4 +31,6 @@ From left to right:
 | Roll | Degrees |
 | Yaw | Degrees |
 
-Note that AHRS orientation is based on the PCB facing right-side up and the serial port end facing towards you.
+__Note:__ Timestamp field uses the Axolotl's time/date.
+
+__Note:__ AHRS orientation is based on the PCB facing right-side up and the serial port end facing towards you.
