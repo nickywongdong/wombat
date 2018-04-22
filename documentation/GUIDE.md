@@ -13,7 +13,7 @@ Whilst logged into the `pi` profile of RaspberryPi:
 1. Navigate to the `/rpidashcams` directory and follow installation instructions for front and back RaspberryPis.
 
 Whilst logged into the `nvidia` profile of the Jetson (only if using RaspberryPis that were not shipped):
-2. Determine the Bluetooth address of each RaspberryPi, and replace the Bluetooth addresses in `bluetooth_addresses` with those addresses. `bluetooth_addresses` should only be comprised of two lines; the first with the Bluetooth address of the front RaspberryPi, the second with the Bluetooth address of the rear RaspberryPi.
+1. Determine the Bluetooth address of each RaspberryPi, and replace the Bluetooth addresses in `bluetooth_addresses` with those addresses. `bluetooth_addresses` should only be comprised of two lines; the first with the Bluetooth address of the front RaspberryPi, the second with the Bluetooth address of the rear RaspberryPi.
 
 ## Using External Storage
 Axolotl is designed to be able to take advantage of external storage devices, either SD cards or USB drives of any type.
