@@ -72,11 +72,21 @@ bool connectBluetooth(string bluetoothAddress, int *fd) {
   // will attempt for 10 seconds before giving up
   status = connect(*fd, (struct sockaddr *)&addr, sizeof(addr));
   int attempts = 0;
-  if ((status == false) && (attempts < 10)) {
+  if ((status == 0) && (attempts < 10)) {
     sleep(1);
-    status = connect(*fd, (struct sockaddr *)&addr, sizeof(addr));
     attempts += 1;
     debug_string = "echo \"Error: bluetooth connection to " + bluetoothAddress + " failed. Retrying. Attempt: " + to_string(attempts) + "\" >> ~/axolotl/debug";
+    system(debug_string.c_str());
+    status = connect(*fd, (struct sockaddr *)&addr, sizeof(addr));
+  }
+
+  // If failed connection attempts, say so in debug file
+  if ((attempts > 0) && (status == 0)) {
+    debug_string = "echo \"Error: failed to connected to " + bluetoothAddress + " after " + to_string(attempts) + " tries.\" >> ~/axolotl/debug";
+    system(debug_string.c_str());
+  }
+  else if ((attempts > 0) && (status != 0)) {
+    debug_string = "echo \"Warning: connected to " + bluetoothAddress + " after " + to_string(attempts) + " tries.\" >> ~/axolotl/debug";
     system(debug_string.c_str());
   }
 
@@ -344,7 +354,7 @@ int main(int argc, char *argv[]) {
 
   // Get bluetooth addresses from file or resort to default bluetooth addresses
   ifstream bt_addr_file;
-  bt_addr_file.open("macaddrs");
+  bt_addr_file.open("bluetooth_addresses");
   if(bt_addr_file.is_open()) {
     getline(bt_addr_file,front_cam_bt_addr_f);
     getline(bt_addr_file,rear_cam_bt_addr_f);
@@ -359,7 +369,9 @@ int main(int argc, char *argv[]) {
   string debug_command;
 
   // Pair with front camera RPi
-  if(connectBluetooth(front_cam_bt_addr_f, &front_dashcam_bluetooth_socket)) {
+  bool bt_connect;
+  bt_connect = connectBluetooth(front_cam_bt_addr_f, &front_dashcam_bluetooth_socket)
+  if(bt_connect) {
     front_cam_bt_active = true;
   }
   else {
@@ -367,7 +379,8 @@ int main(int argc, char *argv[]) {
   }
 
   // Pair with rear camera RPi
-  if(connectBluetooth(front_cam_bt_addr_f, &rear_dashcam_bluetooth_socket)) {
+  bt_connect = connectBluetooth(rear_cam_bt_addr_f, &rear_dashcam_bluetooth_socket)
+  if(bt_connect) {
     rear_cam_bt_active = true;
   }
   else {
@@ -387,7 +400,7 @@ int main(int argc, char *argv[]) {
   bool active = false;
 
   // Fork a gpio watcher process if we have a rear camera
-  #define BU_CAMERA
+  //#define BU_CAMERA
   #ifdef BU_CAMERA
   if(rear_cam_bt_active) {
     gpio_watcher_pid = fork();
