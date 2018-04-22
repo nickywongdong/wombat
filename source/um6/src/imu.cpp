@@ -261,6 +261,9 @@ int main(int argc, char **argv) {
     }
   }
 
+  std::string create_ahrs_log = "touch " + filepath;
+  system(create_ahrs_log.c_str());
+
   // Load parameters from private node handle.
   std::string port("/dev/ttyUSB0");
   int32_t baud = 115200;

@@ -334,6 +334,13 @@ void registerBackupCameraHandler() {
 int main(int argc, char *argv[]) {
   // Ensure that a logging directory has been provided and bind it
   logging_directory = argv[1];
+  string ahrs_filepath = logging_directory + "/ahrs_log.csv";
+
+  // Wait on AHRS to complete connection
+  struct stat buffer;
+  while(stat(ahrs_filepath.c_str(), &buffer) != 0) {
+    sleep(1);
+  }
 
   // Get bluetooth addresses from file or resort to default bluetooth addresses
   ifstream bt_addr_file;
