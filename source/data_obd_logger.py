@@ -98,7 +98,8 @@ if __name__ == '__main__':
     if run_asynchronous_mode:
         obd_bluetooth_socket = obd.Async()
         # obd_bluetooth_socket = obd.Async("/dev/tty.OBDII-Port")       # experimental explicit connect command
-        startAsyncWatch(obd_bluetooth_socket)
+        if(obd_bluetooth_socket.is_connected()):
+            startAsyncWatch(obd_bluetooth_socket)
     else:
         obd_bluetooth_socket = obd.OBD()
 
