@@ -154,6 +154,9 @@ void cameraLoop() {
         }
       }
       #endif
+      while(1) {
+        // another wait just in case...
+      }
     }
   }
 
@@ -210,8 +213,14 @@ void killAllHelpers() {
 void killCamerasHandler(int signumber, siginfo_t *siginfo, void *pointer) {
   killAllHelpers();
 
-  sendBluetoothCommand(front_dashcam_bluetooth_socket,'q');
-  sendBluetoothCommand(rear_dashcam_bluetooth_socket,'q');
+  if(front_cam_bt_active) {
+    sendBluetoothCommand(front_dashcam_bluetooth_socket,'q');
+    system("echo \"Debug: attempting to kill front camera.\" >> ~/axolotl/debug");
+  }
+  if(rear_cam_bt_active) {
+    sendBluetoothCommand(rear_dashcam_bluetooth_socket,'q');
+    system("echo \"Debug: attempting to kill rear camera.\" >> ~/axolotl/debug");
+  }
   close(front_dashcam_bluetooth_socket);
   close(rear_dashcam_bluetooth_socket);
 
@@ -240,7 +249,12 @@ void registerKillCamerasHandler() {
 */
 void toggleOffHandler(int signumber, siginfo_t *siginfo, void *pointer) {
   logging_active = false;
-  sendBluetoothCommand(front_dashcam_bluetooth_socket,'p');
+  if(front_cam_bt_active) {
+    sendBluetoothCommand(front_dashcam_bluetooth_socket,'p');
+  }
+  if(rear_cam_bt_active) {
+    sendBluetoothCommand(front_dashcam_bluetooth_socket,'p');
+  }
   killAllHelpers();
 }
 

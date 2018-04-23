@@ -52,9 +52,11 @@ int main(int argc, char **argv) {
       if( bytes_read > 0 ) {
           printf("received [%s]\n", buf);
           if(buf[0] == 's'){
-            camerahelper_pid = fork();
-            if(camerahelper_pid == 0) {
-              execv("c2helper",args);
+            if (camerahelper_pid < 1) {
+              camerahelper_pid = fork();
+              if(camerahelper_pid == 0) {
+                execv("c1helper",args);
+              }
             }
           }
           else if(buf[0] == 'b') {
@@ -76,7 +78,7 @@ int main(int argc, char **argv) {
               }
             }
           }
-          else if(buf[0] == 'p' || buf[0] == 'q'){
+          else if ((buf[0] == 'p') || (buf[0] == 'q')) {
               if(camerahelper_pid > 1) {
                 system("killall raspivid");
                 system("killall gst-launch-1.0");

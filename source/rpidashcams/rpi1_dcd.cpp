@@ -13,7 +13,7 @@
 #include <bluetooth/bluetooth.h>
 #include <bluetooth/rfcomm.h>
 
-pid_t camerahelper_pid;
+pid_t camerahelper_pid = -5;
 
 int main(int argc, char **argv) {
   struct sockaddr_rc loc_addr = { 0 }, rem_addr = { 0 };
@@ -50,12 +50,14 @@ int main(int argc, char **argv) {
       if( bytes_read > 0 ) {
           printf("received [%s]\n", buf);
           if(buf[0] == 's'){
-              camerahelper_pid = fork();
-              if(camerahelper_pid == 0) {
-                execv("c1helper",args);
+              if (camerahelper_pid < 1) {
+                camerahelper_pid = fork();
+                if(camerahelper_pid == 0) {
+                  execv("c1helper",args);
+                }
               }
           }
-          else if(buf[0] == 'p' || buf[0] == 'q'){
+          else if ((buf[0] == 'p') || (buf[0] == 'q')) {
               if(camerahelper_pid > 1) {
                 system("killall raspivid");
                 system("killall gst-launch-1.0");
