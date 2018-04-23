@@ -30,7 +30,7 @@
 #define COMMAND_WATCH "w"
 
 #define AUTO_MEMORY_MANAGEMENT_MODE 0   // set to 1 if auto-delete of old footage desired
-//#define REAR_CAMERA
+#define REAR_CAMERA
 
 using namespace std;
 
