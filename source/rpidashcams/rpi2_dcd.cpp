@@ -89,6 +89,10 @@ int main(int argc, char **argv) {
               }
               if(buf[0] == 'q') {
                 printf("Quit signal received.\n");
+
+                // close connection
+                close(client);
+                close(s);
               }
           }
       }
