@@ -1,8 +1,11 @@
-all: dashcamd datad datad_pyhelper daemon_launcher record_helper backup_cam_helper
+all: dashcamd datad datad_pyhelper daemon_manager record_helper backup_cam_helper
 
-daemon_launcher: datad dashcamd daemon_manager.cpp
-	rm -f daemon_launcher
-	g++ daemon_manager.cpp -o daemon_launcher -lpthread -lboost_system -lboost_filesystem -lcryptopp -std=c++11
+daemon_launcher: daemon_manager daemon_launcher.cpp
+	g++ daemon_launcher.cpp -o daemon_launcher
+
+daemon_manager: datad dashcamd daemon_manager.cpp
+	rm -f daemon_manager
+	g++ daemon_manager.cpp -o daemon_manager -lpthread -lboost_system -lboost_filesystem -lcryptopp -std=c++11
 
 dashcamd: dashcam_logger.cpp
 	rm -f dashcamd
@@ -26,6 +29,7 @@ backup_cam_helper: backup_cam_helper.cpp
 
 clean:
 	rm -f daemon_launcher
+	rm -f daemon_manager
 	rm -f datad
 	rm -f datad_pyhelper
 	rm -f	dashcamd
@@ -33,7 +37,7 @@ clean:
 	rm -f backup_cam_helper
 
 fresh: clean all
+	#rm -f um6/imu
 	cd um6
-	rm -f imu
 	make
 	cd ..
