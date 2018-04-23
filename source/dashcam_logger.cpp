@@ -400,11 +400,12 @@ int main(int argc, char *argv[]) {
   bool active = false;
 
   // Fork a gpio watcher process if we have a rear camera
-  #define BU_CAMERA
-  #ifdef BU_CAMERA
+
   if(rear_cam_bt_active) {
     gpio_watcher_pid = fork();
     if (gpio_watcher_pid == 0) {
+      #define BU_CAMERA
+      #ifdef BU_CAMERA
       while(1) {
         f.open("/sys/class/gpio/gpio298/value");
       	f >> i;
@@ -420,6 +421,7 @@ int main(int argc, char *argv[]) {
       	}
       	f.close();
       }
+      #endif
     }
     else {
       cameraLoop();   // begin our camera loop outside of the gpio watcher
@@ -428,6 +430,6 @@ int main(int argc, char *argv[]) {
   else {
     system("echo \"Error: GPIO watcher not spawned as rear camera connection is inactive.\" >> ~/axolotl/debug");
   }
-  #endif
+
   return 0;
 }
