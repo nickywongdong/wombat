@@ -232,6 +232,11 @@ void managerSigintHandler(int signumber, siginfo_t *siginfo, void *pointer) {
   }
   waitpid(dldpid, &status, 0);
 
+  #ifdef RESET_WIFI
+  chdir("wmanager");
+  system("./set_client.sh");
+  #endif
+
   // exit cleanly
   exit(0);
 }
