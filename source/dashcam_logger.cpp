@@ -72,7 +72,7 @@ bool connectBluetooth(string bluetoothAddress, int *fd) {
   // will attempt for 10 seconds before giving up
   status = connect(*fd, (struct sockaddr *)&addr, sizeof(addr));
   int attempts = 0;
-  if ((status != 0) && (attempts < 10)) {
+  while ((status != 0) && (attempts < 10)) {
     sleep(1);
     attempts += 1;
     debug_string = "echo \"Error: bluetooth connection to " + bluetoothAddress + " failed. Retrying. Attempt: " + to_string(attempts) + "\" >> ~/axolotl/debug";
@@ -400,7 +400,7 @@ int main(int argc, char *argv[]) {
   bool active = false;
 
   // Fork a gpio watcher process if we have a rear camera
-  //#define BU_CAMERA
+  #define BU_CAMERA
   #ifdef BU_CAMERA
   if(rear_cam_bt_active) {
     gpio_watcher_pid = fork();
