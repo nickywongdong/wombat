@@ -36,6 +36,8 @@ int main(int argc, char **argv) {
   // put socket into listening mode
   listen(s, 1);
 
+start_accept:
+
   // accept one connection
   client = accept(s, (struct sockaddr *)&rem_addr, &opt);
 
@@ -75,6 +77,7 @@ int main(int argc, char **argv) {
                 // close connection
                 close(client);
                 close(s);
+                goto start_accept;
               }
           }
       }

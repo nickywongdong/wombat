@@ -14,8 +14,6 @@ while IFS='' read -r line || [[ -n "$line" ]]; do
 		rear=$line
 	fi
 	pos+=1
-	# bt-device --disconnect=$line
-	# bt-device --connect=$line
 done < "bluetooth_addresses"
 
 echo $front
@@ -28,5 +26,3 @@ connect $front
 connect $rear
 exit
 EOF
-#sudo hidd --connect $0 > /dev/null 2>&1
-#sudo hidd --connect $1 > /dev/null 2>&1
