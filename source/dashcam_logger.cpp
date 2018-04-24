@@ -407,6 +407,9 @@ int main(int argc, char *argv[]) {
   registerKillCamerasHandler();
   registerBackupCameraHandler();
 
+  // Write a lock file so we know when we can start the nav system
+  system("echo \"0\" > ~/axolotl/device_free");
+
   // Variables for gpio watching
   ifstream f;
   int i;
@@ -414,7 +417,6 @@ int main(int argc, char *argv[]) {
   bool active = false;
 
   // Fork a gpio watcher process if we have a rear camera
-
   if(rear_cam_bt_active) {
     gpio_watcher_pid = fork();
     if (gpio_watcher_pid == 0) {
