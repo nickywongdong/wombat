@@ -14,6 +14,7 @@
 #include <bluetooth/rfcomm.h>
 
 pid_t camerahelper_pid = -5;
+bool camera_active = false;
 
 int main(int argc, char **argv) {
   struct sockaddr_rc loc_addr = { 0 }, rem_addr = { 0 };
@@ -51,6 +52,7 @@ int main(int argc, char **argv) {
           printf("received [%s]\n", buf);
           if(buf[0] == 's'){
               if (camerahelper_pid < 1) {
+                camera_active = true;
                 camerahelper_pid = fork();
                 if(camerahelper_pid == 0) {
                   execv("c1helper",args);
@@ -59,6 +61,7 @@ int main(int argc, char **argv) {
           }
           else if ((buf[0] == 'p') || (buf[0] == 'q')) {
               if(camerahelper_pid > 1) {
+                camera_active = false;
                 system("killall raspivid");
                 system("killall gst-launch-1.0");
                 kill(camerahelper_pid,SIGKILL);
