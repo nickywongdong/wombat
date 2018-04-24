@@ -26,6 +26,7 @@ pactl load-module module-bluetooth-discover
 bluetoothctl << EOF
 connect $front
 connect $rear
+exit
 EOF
 #sudo hidd --connect $0 > /dev/null 2>&1
 #sudo hidd --connect $1 > /dev/null 2>&1
