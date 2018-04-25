@@ -35,7 +35,7 @@ filename = 'test_obd_log.csv'
 if (len(sys.argv) > 1):
     path = sys.argv[1]
     os.chdir(path)      # change path to logging directory
-    call(["cp","obd_log.csv","test_obd_log.csv"])   # make a duplicate of the csv
+    call(["cp","obd_log.csv","test_obd_log.csv"])   # duplicate the csv
 
 master_obd_log = Path(path + "/" + filename)
 if master_obd_log.is_file():
