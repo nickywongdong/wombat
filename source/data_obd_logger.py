@@ -136,6 +136,6 @@ if __name__ == '__main__':
 
     # Make sure this process doesn't go defunct
     while(1):
-        continue
+        time.sleep(1)
 
     obd_bluetooth_socket.close()
