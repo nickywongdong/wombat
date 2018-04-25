@@ -150,6 +150,8 @@ void datadSigtermHandler(int signumber, siginfo_t *siginfo, void *pointer) {
   }
   waitpid(obd_logger_pid, &status, 0);
 
+  system("pkill -9 -f data_obd_logger.py");
+
   if(!(ahrs_logger_pid < 0)) {
     kill(ahrs_logger_pid, SIGKILL);
   }
