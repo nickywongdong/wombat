@@ -211,8 +211,6 @@ void killAllHelpers() {
   Closes file descriptors to bluetooth sockets and exits cleanly.
 */
 void killCamerasHandler(int signumber, siginfo_t *siginfo, void *pointer) {
-  killAllHelpers();
-
   if(front_cam_bt_active) {
     sendBluetoothCommand(front_dashcam_bluetooth_socket,'q');
     system("echo \"Debug: attempting to kill front camera.\" >> ~/axolotl/debug");
@@ -223,6 +221,8 @@ void killCamerasHandler(int signumber, siginfo_t *siginfo, void *pointer) {
   }
   close(front_dashcam_bluetooth_socket);
   close(rear_dashcam_bluetooth_socket);
+
+  killAllHelpers();     // test, replace at top of function if fails
 
   int status;
   if(gpio_watcher_pid > 1) {
