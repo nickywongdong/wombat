@@ -107,6 +107,7 @@ start_accept:
                 // close connection
                 close(client);
                 close(s);
+		exit(0);
                 goto start_accept;
               }
           }
