@@ -66,7 +66,7 @@ start_accept:
               printf("Turning on backup camera...\n");
               if(bhelper_pid == -5) {
               bhelper_pid = fork();
-                if(bhelper_pi == 0) {
+                if(bhelper_pid == 0) {
                   execv("bchelper",args);
                 }
               }
