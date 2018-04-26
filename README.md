@@ -1,5 +1,9 @@
 # Axolotl - Victor's Branch
-__Current Version:__ 0.5.2 beta
+__Current Version:__ 0.5.3 beta
+
+Version 0.5.3 beta:
+- Fully working front dashcam and backup camera
+- Stability fixes
 
 Version 0.5.2 beta:
 - Adding user-changeable "preferences"
