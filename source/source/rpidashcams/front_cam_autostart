@@ -1,0 +1,4 @@
+#!/bin/sh
+/home/pi/wombat/source/rpidashcams/rpi1dcd &
+
+exit 0

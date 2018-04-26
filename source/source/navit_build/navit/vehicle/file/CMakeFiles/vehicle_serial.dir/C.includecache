@@ -1,0 +1,22 @@
+#IncludeRegexLine: ^[ 	]*#[ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/nvidia/axolotl/navit/navit/plugin.h
+plugin_def.h
+/home/nvidia/axolotl/navit/navit/plugin_def.h
+
+/home/nvidia/axolotl/navit/navit/plugin_def.h
+
+/home/nvidia/axolotl/navit/navit/vehicle/file/vehicle_serial.c
+config.h
+/home/nvidia/axolotl/navit/navit/vehicle/file/config.h
+plugin.h
+/home/nvidia/axolotl/navit/navit/vehicle/file/plugin.h
+
+config.h
+

@@ -1,0 +1,13 @@
+<RCC>
+    <qresource prefix="/">
+        <file>qtquickcontrols2.conf</file>
+        <file>main.qml</file>
+        <file>MainMenu.qml</file>
+        <file>MusicPage.qml</file>
+        <file>icons8-america-50.png</file>
+        <file>icons8-go-back-50.png</file>
+        <file>icons8-line-chart-50.png</file>
+        <file>icons8-musical-notes-50.png</file>
+        <file>DataPage.qml</file>
+    </qresource>
+</RCC>
