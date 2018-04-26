@@ -130,7 +130,7 @@ if __name__ == '__main__':
                     time.sleep(.2)
     else:
         print file_path + "/dtc_errors"
-	dtc_error_file = open(file_path + "/dtc_errors",'w+')
+	    dtc_error_file = open(file_path + "/dtc_errors",'w+')
         dtc_error_file.write("Error: No OBD connection detected; DTC fetch failed.")
         dtc_error_file.write(" ")
         dtc_error_file.close()
