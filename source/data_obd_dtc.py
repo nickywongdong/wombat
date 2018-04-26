@@ -15,6 +15,7 @@ import obd
 # grabs all DTCs and outputs them to file
 def fetchDTC(obd_bluetooth_handle, file_path):
     dtc_error_file = open(file_path + "/dtc_errors",'w')
+    dtc_error_file.write("Diagnostic Trouble Codes fetched at: " + time.ctime() + "\n\n")
     dtc_error_file.write(str(obd_bluetooth_handle.query(obd.commands.GET_DTC)))
     dtc_error_file.close()
 
@@ -35,7 +36,7 @@ if __name__ == '__main__':
     #     file_path = '/'.join(new_path)
 
     file_path = "/home/nvidia/axolotl"
-    
+
     if(obd_bluetooth_socket.is_connected()):
         # Logic based on command line arguments
         if(sys.argv[1] == "fetch"):
@@ -44,6 +45,7 @@ if __name__ == '__main__':
             clearDTC(obd_bluetooth_socket)
     else:
         dtc_error_file = open(file_path + "/dtc_errors",'w+')
+        dtc_error_file.write("Diagnostic Trouble Codes fetched at: " + time.ctime() + "\n\n")
         dtc_error_file.write("Error: No OBD connection detected; DTC fetch failed.")
         dtc_error_file.write(" ")
         dtc_error_file.close()

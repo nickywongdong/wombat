@@ -115,6 +115,7 @@ if __name__ == '__main__':
     if(obd_bluetooth_socket.is_connected()):
         # Preemptively cache DTCs
         dtc_error_file = open(file_path + "/dtc_errors",'w+')
+        dtc_error_file.write("Diagnostic Trouble Codes fetched at: " + time.ctime() + "\n\n")
         dtc_error_file.write(str(obd_bluetooth_handle.query(obd.commands.GET_DTC)))
         dtc_error_file.close()
 
@@ -131,6 +132,7 @@ if __name__ == '__main__':
     else:
         print file_path + "/dtc_errors"
 	    dtc_error_file = open(file_path + "/dtc_errors",'w+')
+        dtc_error_file.write("Diagnostic Trouble Codes fetched at: " + time.ctime() + "\n\n")
         dtc_error_file.write("Error: No OBD connection detected; DTC fetch failed.")
         dtc_error_file.write(" ")
         dtc_error_file.close()
