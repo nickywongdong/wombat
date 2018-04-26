@@ -277,6 +277,7 @@ int main(int argc, char **argv) {
   int connection_attempts;
   while (1) {
     if(connection_attempts > 10) {
+      system("echo \"Error: gave up on serial port connections after 10 attempts.\" >> ~/axolotl/debug");
       goto endloop;
     }
     try {
