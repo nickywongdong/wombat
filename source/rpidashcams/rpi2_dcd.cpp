@@ -102,6 +102,7 @@ start_accept:
               }
               if(buf[0] == 'q') {
                 printf("Quit signal received.\n");
+                sleep(5);
 
                 // close connection
                 close(client);
