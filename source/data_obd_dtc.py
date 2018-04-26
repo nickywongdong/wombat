@@ -28,12 +28,14 @@ if __name__ == '__main__':
     # obd_bluetooth_socket = obd.OBD("/dev/tty.OBDII-Port")     # experimental explicit connect command
 
     # Get filepath from arguments, or leave the filepath as pwd if empty
-    file_path = "."
-    if(len(sys.argv) > 2):
-        new_path = sys.argv[1].split('/')
-        new_path = new_path[:-2]
-        file_path = '/'.join(new_path)
+    # file_path = "."
+    # if(len(sys.argv) > 2):
+    #     new_path = sys.argv[1].split('/')
+    #     new_path = new_path[:-2]
+    #     file_path = '/'.join(new_path)
 
+    file_path = "/home/nvidia/axolotl"
+    
     if(obd_bluetooth_socket.is_connected()):
         # Logic based on command line arguments
         if(sys.argv[1] == "fetch"):

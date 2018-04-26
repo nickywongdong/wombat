@@ -78,7 +78,7 @@ if master_obd_log.is_file():
     print show_acceleration_tip
     print show_averagespeed_tip
 
-    tipsOutputFile = open("~/axolotl/festatus",'w+')
+    tipsOutputFile = open("/home/nvidia/axolotl/festatus",'w+')
 
     tipsOutputFile.write("Please obey all speed laws when considering these instructions.\n\n")
 
@@ -98,7 +98,7 @@ if master_obd_log.is_file():
 
     tipsOutputFile.close()
 else:
-    tipsOutputFile = open("~/axolotl/festatus",'w+')
+    tipsOutputFile = open("/home/nvidia/axolotl/festatus",'w+')
     tipsOutputFile.write("Error: no OBD log detected for analysis. Please check your OBD connection.")
     tipsOutputFile.close()
     os.system('echo \"Error: could not analyze fuel data due to missing OBD log.\" >> ~/axolotl/debug')
