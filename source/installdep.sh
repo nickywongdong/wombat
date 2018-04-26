@@ -19,6 +19,7 @@ sudo apt-get install build-essential python -y
 sudo apt-get install build-essential python-pip -y
 sudo pip install --upgrade pip
 sudo pip install obd
+sudo pip install pathlib
 
 sudo apt-get install build-essential libboost-all-dev -y
 sudo apt-get install build-essential libcrypto++ -y
@@ -53,9 +54,5 @@ sudo apt-get install bluez-compat build-essential -y
 echo "Install complete! Rebooting in 5 seconds..."
 
 sleep 5s
-
-sudo cp axolotl_bt_camera /etc/init.d/axolotl_bt_camera
-sudo chmod +x camera_bt_autoconnect.sh
-sudo update-rc.d axolotl_bt_camera defaults
 
 sudo reboot
