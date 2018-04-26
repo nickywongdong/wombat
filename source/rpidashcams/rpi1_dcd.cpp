@@ -64,20 +64,21 @@ start_accept:
           else if ((buf[0] == 'p') || (buf[0] == 'q')) {
               if(camerahelper_pid > 1) {
                 camera_active = false;
-                system("killall raspivid");
                 system("killall gst-launch-1.0");
-                kill(camerahelper_pid,SIGKILL);
+                
+                //system("killall raspivid");
+		kill(camerahelper_pid,SIGKILL);
                 waitpid(camerahelper_pid, &status, -1);
                 camerahelper_pid = -5;
                 system("killall c1helper");
               }
               if(buf[0] == 'q') {
                 printf("Quit signal received.\n");
-                sleep(5);
 
                 // close connection
                 close(client);
                 close(s);
+                sleep(5);
                 goto start_accept;
               }
           }
