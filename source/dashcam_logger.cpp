@@ -330,9 +330,11 @@ void backupCameraToggleHandler(int signumber, siginfo_t *siginfo, void *pointer)
   char *args[] = {(char *)BACKUP_CAMERA_HELPER_NAME, (char *)BACKUP_CAMERA_PORT, (char *)COMMAND_WATCH, (char *)logging_directory.c_str(), NULL};
   sendBluetoothCommand(rear_dashcam_bluetooth_socket,'b');
   if(backup_camera_active) {
-    b_camera_helper_pid = fork();
-    if(b_camera_helper_pid == 0) {
-      execv("backup_cam_helper",args);
+    if(b_camera_helper_pid == -5) {
+      b_camera_helper_pid = fork();
+      if(b_camera_helper_pid == 0) {
+        execv("backup_cam_helper",args);
+      }
     }
   }
   else {
