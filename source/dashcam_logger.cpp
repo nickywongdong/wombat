@@ -427,6 +427,7 @@ int main(int argc, char *argv[]) {
   if (gpio_watcher_pid == 0) {
     #define BU_CAMERA
     #ifdef BU_CAMERA
+    if(rear_cam_bt_active) {
       while(1) {
         f.open("/sys/class/gpio/gpio298/value");
     	  f >> i;
@@ -446,8 +447,12 @@ int main(int argc, char *argv[]) {
     	  }
     	  f.close();
       }
-      #endif
     }
+    #endif
+    while(1) {
+      
+    }
+  }
   else {
     cameraLoop();   // begin our camera loop outside of the gpio watcher
   }
