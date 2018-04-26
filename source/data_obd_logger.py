@@ -105,7 +105,7 @@ if __name__ == '__main__':
 
     file_path = "."
     if(len(sys.argv) > 2):
-        new_path = sys.argv[1].split('/')
+        new_path = sys.argv[2].split('/')
         new_path = new_path[:-2]
         file_path = '/'.join(new_path)
 
@@ -127,15 +127,13 @@ if __name__ == '__main__':
                     obdSnapshot(obd_bluetooth_socket)
                     time.sleep(.2)
     else:
-        dtc_error_file = open(file_path + "/dtc_errors",'w+')
+        print file_path + "/dtc_errors"
+	dtc_error_file = open(file_path + "/dtc_errors",'w+')
         dtc_error_file.write("Error: No OBD connection detected; DTC fetch failed.")
         dtc_error_file.write(" ")
         dtc_error_file.close()
         os.system('echo \"Error: could not establish connection to OBD bluetooth device.\" >> ~/axolotl/debug')
         os.system('echo \"Error: could not fetch DTCs; bluetooth connection not available.\" >> ~/axolotl/debug')
 
-    # Make sure this process doesn't go defunct
-    while(1):
-        time.sleep(1)
 
     obd_bluetooth_socket.close()

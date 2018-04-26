@@ -32,7 +32,9 @@ void startOBDLogger() {
   int s;
   char *args[] = {(char *)DATA_HELPER_ARG0, (char *)logging_directory.c_str(), NULL};
   obd_logger_pid = fork();
+  if (obd_logger_pid != -5) {
   if (obd_logger_pid == 0) {
+    
     execv("datad_pyhelper",args);   // comment out if AHRS breaks; serial port access violation
   }
   else {
@@ -42,9 +44,12 @@ void startOBDLogger() {
         execv("um6/imu",args2);
     }
     else {
-
+	while(1) {
+		sleep(1);
+	}
     }
   }
+}
 }
 
 /*
@@ -93,6 +98,7 @@ void toggleOffHandler(int signumber, siginfo_t *siginfo, void *pointer) {
   }
   waitpid(obd_logger_pid, &status, 0);
 
+  system("pkill -9 -f datad_pyhelper");
   system("pkill -9 -f data_obd_logger.py");
 
   // Kills AHRS process
@@ -150,6 +156,7 @@ void datadSigtermHandler(int signumber, siginfo_t *siginfo, void *pointer) {
   }
   waitpid(obd_logger_pid, &status, 0);
 
+  system("pkill -9 -f datad_pyhelper");
   system("pkill -9 -f data_obd_logger.py");
 
   if(!(ahrs_logger_pid < 0)) {

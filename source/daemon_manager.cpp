@@ -303,6 +303,7 @@ int main() {
 
   // Clear this boot cycle's debug file
   system("rm -f ~/axolotl/debug");
+  system("rm -f ~/axolotl/device_free");
 
   // Test for connected flash drive
   struct stat buffer;
