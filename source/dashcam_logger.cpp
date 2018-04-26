@@ -124,7 +124,9 @@ void cameraLoop() {
       system("echo \"Error: could not connect to front camera controller. Front camera logging disabled.\" >> ~/axolotl/debug");
     }
     if(rear_cam_bt_active) {
+      #ifdef REAR_CAMERA
       sendBluetoothCommand(rear_dashcam_bluetooth_socket,'s');
+      #endif
     }
     else {
       system("echo \"Error: could not connect to rear camera controller. Rear camera logging and backup camera disabled.\" >> ~/axolotl/debug");
@@ -279,7 +281,9 @@ void toggleOnHandler(int signumber, siginfo_t *siginfo, void *pointer) {
     sendBluetoothCommand(front_dashcam_bluetooth_socket,'s');
   }
   if(rear_cam_bt_active) {
+    #ifdef REAR_CAMERA
     sendBluetoothCommand(rear_dashcam_bluetooth_socket,'s');
+    #endif
   }
   while(axolotlFileSystem::getAvailableMemory(logging_directory) < 2048) {   // wait until we have > 2GB storage
     optimizeStorage();    // attempt to optimize storage space if we don't have enough
@@ -417,33 +421,33 @@ int main(int argc, char *argv[]) {
   bool active = false;
 
   // Fork a gpio watcher process if we have a rear camera
-  {
-    gpio_watcher_pid = fork();
-    if (gpio_watcher_pid == 0) {
-        #define BU_CAMERA
-        #ifdef BU_CAMERA
-        if(rear_cam_bt_active) {
-        while(1) {
-          f.open("/sys/class/gpio/gpio298/value");
-      	  f >> i;
-      	  if(i == 1 && not(active)){
+  gpio_watcher_pid = fork();
+  if (gpio_watcher_pid == 0) {
+    #define BU_CAMERA
+    #ifdef BU_CAMERA
+      while(1) {
+        f.open("/sys/class/gpio/gpio298/value");
+    	  f >> i;
+    	  if(i == 1 && not(active)){
+          if(rear_cam_bt_active) {
       		  kill(getppid(),SIGBUS);
-      		  active = true;
-      		  sleep(1);
-      	  }
-      	  else if(i == 0 && active){
+          }
+    		  active = true;
+    		  sleep(1);
+    	  }
+    	  else if(i == 0 && active){
+          if(rear_cam_bt_active) {
       		  kill(getppid(),SIGBUS);
-      		  active = false;
-      	  	  sleep(1);
-      	  }
-      	  f.close();
-        }
-        #endif
+          }
+    		  active = false;
+    	  	  sleep(1);
+    	  }
+    	  f.close();
       }
+      #endif
     }
-    else {
-      cameraLoop();   // begin our camera loop outside of the gpio watcher
-    }
+  else {
+    cameraLoop();   // begin our camera loop outside of the gpio watcher
   }
 
   return 0;
