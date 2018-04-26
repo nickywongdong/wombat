@@ -1,19 +1,23 @@
 /* ------------------------------------
-   Axolotl Data Logging System Tester
+   Axolotl Daemon Manager
    ------------------------------------
-   Process that sets up the environment for data logging and spawns
-   the OBDII data logging and dashcam logging processes.
+   Process that sets up the environment for data logging and starts
+   all processes that execute data logging.
 */
 
 #include "dcomh.hpp"
+#include <sys/stat.h>
 
-//#define LOG_VOLUME_INSTALLED	// uncomment if logging to external storage
-
-#if defined(__linux__) && defined(LOG_VOLUME_INSTALLED)
-#define LOG_VOLUME "/media/nvidia/AXOLOTLDCV"   // external HDD must be named "AXOLOTLDCV"
-#else
-#define LOG_VOLUME axolotlFileSystem::getHomeDir()
-#endif
+// DEPRECATED: system-specific save volume selection
+// uncomment if an external storage device is connected
+// external storage device MUST be named "AXOLOTLDCV"
+// Jetson MUST be logged into the "nvidia" profile
+//#define LOG_VOLUME_INSTALLED
+// #if defined(__linux__) && defined(LOG_VOLUME_INSTALLED)
+// #define LOG_VOLUME "/media/nvidia/AXOLOTLDCV"
+// #else
+// #define LOG_VOLUME axolotlFileSystem::getHomeDir()
+// #endif
 
 #define DCDARG1 "./dashcamd"
 #define DLDARG1 "./datad"
@@ -26,21 +30,36 @@ using namespace std;
 
 pid_t dcdpid = -5, dldpid = -5;
 
-string loggingDirectory, runDirectory;
+string logging_directory, run_directory, log_volume;
+
+/*
+  Checks the supplied password against the stored password.
+*/
+bool checkPasswordCorrect(string password) {
+  string truekey;
+  ifstream truekeyf;
+  string hash_file_path = "~/wombat/source/hashkey"; //normally run_directory + "/hashkey"
+  truekeyf.open(hash_file_path);
+  if(truekeyf.is_open()) {
+    getline(truekeyf,truekey);
+  }
+  truekeyf.close();
+  return (axolotlFileSystem::hash(password) == truekey);
+}
 
 /*
   Creates a logging directory from a path.
 */
 bool buildSaveDirectoryFromPath(string path) {
-  string dirBase = LOG_VOLUME, createDataDir = "mkdir -p " + dirBase + "/axolotl/data";
-  system(createDataDir.c_str());
-  bool buildStatus;
+  string base_directory_str = log_volume, data_dir_create_command = "mkdir -p " + base_directory_str + "/axolotl/data";
+  system(data_dir_create_command.c_str());
+  bool dir_build_status;
   do {
-    buildStatus = mkdir((const char *)path.c_str(), S_IRWXU | S_IRWXG | S_IRWXO);
+    dir_build_status = mkdir((const char *)path.c_str(), S_IRWXU | S_IRWXG | S_IRWXO);
     sleep(1);
   }
-  while (buildStatus == false);
-  return buildStatus;
+  while (dir_build_status == false);
+  return dir_build_status;
 }
 
 /*
@@ -52,53 +71,49 @@ bool buildSaveDirectoryFromPath(string path) {
 */
 bool buildSaveDirectory() {
   // Getting info to build data storage directory
-  int buildStatus = 2;
-  string dirPrefix = "/axolotl/data/axolotl_log_", dirBase = LOG_VOLUME, dirName = dirBase + dirPrefix;
+  int dir_build_status = 2;
+  string dirPrefix = "/axolotl/data/axolotl_log_", base_directory_str = log_volume, create_directory_name = base_directory_str + dirPrefix;
 
   // create the base axolotl data directory if it doesn't exist
-  string createDataDir = "mkdir -p " + dirBase + "/axolotl/data";
-  system(createDataDir.c_str());
+  string data_dir_create_command = "mkdir -p " + base_directory_str + "/axolotl/data";
+  system(data_dir_create_command.c_str());
 
   // Fetch and proces datetime data
-  time_t startTime = time(NULL);
-  struct tm *startTimeAsUTC = gmtime(&startTime);
-  string startYear = to_string(startTimeAsUTC->tm_year+1900);
-  string startMonth = to_string(startTimeAsUTC->tm_mon+1);
-  string startDay = to_string(startTimeAsUTC->tm_mday);
+  time_t raw_time = time(NULL);
+  struct tm *processed_time = localtime(&raw_time);
+  string year_str = to_string(processed_time->tm_year+1900);
+  string month_str = to_string(processed_time->tm_mon+1);
+  string day_str = to_string(processed_time->tm_mday);
 
-  int startSecProcessed = startTimeAsUTC->tm_sec;
-  string startSec = to_string(startSecProcessed);
-  if(startSecProcessed < 10) {
-    startSec = "0" + startSec;    // ensures that seconds are always 2 digits
+  int processed_seconds = processed_time->tm_sec;
+  string seconds_str = to_string(processed_seconds);
+  if(processed_seconds < 10) {
+    seconds_str = "0" + seconds_str;    // ensures that seconds are always 2 digits
   }
 
-  int startMinProcessed = startTimeAsUTC->tm_min;
-  string startMin = to_string(startMinProcessed);
-  if(startMinProcessed < 10) {
-    startMin = "0" + startMin;    // ensures that minutes are always 2 digits
+  int processed_minutes = processed_time->tm_min;
+  string minutes_str = to_string(processed_minutes);
+  if(processed_minutes < 10) {
+    minutes_str = "0" + minutes_str;    // ensures that minutes are always 2 digits
   }
 
-  long startHourProcessed = startTimeAsUTC->tm_hour+PST;
-  if(startHourProcessed < 0) {
-    startHourProcessed += 24;   // adjusts if UTC-8 is earlier than UTC midnight
-    startDay = to_string(startTimeAsUTC->tm_mday-1);    // day rollback if UTC is 1 day ahead of PST
-  }
-  string startHour = "" + to_string(startHourProcessed);
-  if(startHourProcessed < 10) {
-    startHour = "0" + startHour;    // ensures that hours are always 2 digits
+  int processed_hours = processed_time->tm_hour;
+  string hour_str = "" + to_string(processed_hours);
+  if(processed_hours < 10) {
+    hour_str = "0" + hour_str;    // ensures that hours are always 2 digits
   }
 
   // Assemble path
-  dirName = dirName + startYear + "_" + startMonth + "_" + startDay + "_" + startHour + startMin + startSec;
+  create_directory_name = create_directory_name + year_str + "_" + month_str + "_" + day_str + "_" + hour_str + minutes_str + seconds_str;
 
   // Build the directory from path
-  buildStatus = mkdir((const char *)dirName.c_str(), S_IRWXU | S_IRWXG | S_IRWXO);
+  dir_build_status = mkdir((const char *)create_directory_name.c_str(), S_IRWXU | S_IRWXG | S_IRWXO);
 
-  // Set global logging loggingDirectory
-  loggingDirectory = dirName;
+  // Set global logging logging_directory
+  logging_directory = create_directory_name;
 
   // Return success or failure
-  if(buildStatus != 0) {
+  if(dir_build_status != 0) {
     return false;
   }
   return true;
@@ -121,14 +136,14 @@ void dataDeletionHandler() {
   sleep(2);
 
   // delete the data directory
-  string dirBase = LOG_VOLUME, deleteDir = dirBase + "/axolotl/data", deleteCommand = "rm -rf " + deleteDir;
+  string base_directory_str = log_volume, delete_dir = base_directory_str + "/axolotl/data", deleteCommand = "rm -rf " + delete_dir;
   system(deleteCommand.c_str());
 
   // rebuild the data directory using existing path so as to not break our daemons
-  bool buildStatus = buildSaveDirectoryFromPath(loggingDirectory);
-  while(buildStatus == false) {
+  bool dir_build_status = buildSaveDirectoryFromPath(logging_directory);
+  while(dir_build_status == false) {
     sleep(1);
-    buildStatus = buildSaveDirectoryFromPath(loggingDirectory);
+    dir_build_status = buildSaveDirectoryFromPath(logging_directory);
   }
 
   // restart both daemons
@@ -146,13 +161,13 @@ void dataDeletionHandler() {
 */
 void deleteData(string password) {
   // Get true passkey hash from file
-  ifstream hashfile;
+  ifstream hash_file;
   string truekeyHash = NULL;
-  string hashfilePath = runDirectory + "/hashkey";
-  hashfile.open(hashfilePath);
-  if (hashfile.is_open()) {
-    getline(hashfile,truekeyHash);
-    hashfile.close();
+  string hash_file_path = "~/wombat/source/hashkey"; //normally run_directory + "/hashkey"
+  hash_file.open(hash_file_path);
+  if (hash_file.is_open()) {
+    getline(hash_file,truekeyHash);
+    hash_file.close();
   }
 
   // Delete the data only if password hashes match
@@ -166,44 +181,35 @@ void deleteData(string password) {
 
 /*
   Hashes a new password and changes old password hash with the new hash.
+  Only if old password matches!
 */
-void changePassword(string password, string sourceDir) {
-  ofstream hashfile;
-  string newhash = axolotlFileSystem::hash(password);
-  string hashfilePath = sourceDir + "/hashkey";
-  hashfile.open(hashfilePath, std::ofstream::trunc);
-  if(hashfile.is_open()) {
-    hashfile.write((const char *)newhash.c_str(),(long)newhash.length());
+bool changePassword(string checkPassword, string newPassword) {
+  if(checkPasswordCorrect(checkPassword)) {
+    ofstream hash_file;
+    string newhash = axolotlFileSystem::hash(newPassword);
+    string hash_file_path = "~/wombat/source/hashkey";    // normally run_directory + "/hashkey"
+    hash_file.open(hash_file_path, std::ofstream::trunc);
+    if(hash_file.is_open()) {
+      hash_file.write((const char *)newhash.c_str(),(long)newhash.length());
+    }
+    hash_file.close();
+    return true;
   }
-  hashfile.close();
+  return false;
 }
 
 /*
   Resets password back to the original.
 */
-void resetPassword(string sourceDir) {
-  ofstream hashfile;
+void resetPassword() {
+  ofstream hash_file;
   string newhash = axolotlFileSystem::hash("orangemonkeyeagle");
-  string hashfilePath = sourceDir + "/hashkey";
-  hashfile.open(hashfilePath, std::ofstream::trunc);
-  if(hashfile.is_open()) {
-    hashfile.write((const char *)newhash.c_str(),(long)newhash.length());
+  string hash_file_path = "~/wombat/source/hashkey"; // normally run_directory + "/hashkey"
+  hash_file.open(hash_file_path, std::ofstream::trunc);
+  if(hash_file.is_open()) {
+    hash_file.write((const char *)newhash.c_str(),(long)newhash.length());
   }
-  hashfile.close();
-}
-
-/*
-  Checks the supplied password against the stored password.
-*/
-bool checkPasswordCorrect(string inPassword) {
-  string truekey;
-  ifstream truekeyf;
-  truekeyf.open("hashkey");
-  if(truekeyf.is_open()) {
-    getline(truekeyf,truekey);
-  }
-  truekeyf.close();
-  return (axolotlFileSystem::hash(inPassword) == truekey);
+  hash_file.close();
 }
 
 /*
@@ -225,6 +231,11 @@ void managerSigintHandler(int signumber, siginfo_t *siginfo, void *pointer) {
     kill(dldpid,SIGTERM);
   }
   waitpid(dldpid, &status, 0);
+
+  #ifdef RESET_WIFI
+  chdir("wmanager");
+  system("./set_client.sh");
+  #endif
 
   // exit cleanly
   exit(0);
@@ -262,67 +273,103 @@ void registerDeleteHandler() {
   sigaction(SIGUSR1, &dsa, NULL);
 }
 
-int main() {
-  string inputStr;
-  runDirectory = axolotlFileSystem::getPWD();
+/*
+  Pauses data logging, signals the data logger to update files for DTCs
+  as well as fuel ecomnomy data, and restarts data logging.
+*/
+void updateDataHandler(int signumber, siginfo_t *siginfo, void *pointer) {
+  kill(dldpid,SIGUSR1);
+  sleep(1);
+  kill(dldpid,SIGBUS);
+  sleep(5);
+  kill(dldpid,SIGUSR2);
+}
 
+/*
+  Registers the update handler with SIGUSR2.
+*/
+void registerUpdateHandler() {
+  static struct sigaction dsa;
+  memset(&dsa, 0, sizeof(dsa));
+  dsa.sa_sigaction = updateDataHandler;
+  dsa.sa_flags = SA_SIGINFO;
+  sigaction(SIGUSR2, &dsa, NULL);
+}
+
+//int mainOperation() {
+int main() {
+  string input_str;
+  run_directory = axolotlFileSystem::getPWD();
+
+  // Clear this boot cycle's debug file
+  system("rm -f ~/axolotl/debug");
+  system("rm -f ~/axolotl/device_free");
+
+  // Test for connected flash drive
+  struct stat buffer;
+  if ((stat("/media/nvidia/AXOLOTLDCV", &buffer) == 0) && S_ISDIR(buffer.st_mode)) {
+    log_volume = "/media/nvidia/AXOLOTLDCV";
+  }
+  else {
+    log_volume = axolotlFileSystem::getHomeDir();
+    system("echo \"Warning: could not find an external 'AXOLOTLDCV'. Logging to internal storage.\" >> ~/axolotl/debug");
+  }
   // Registering signal handlers
   registerSigintHandler();
   registerDeleteHandler();
-
-  // Testing password check and hashing
-  #ifdef KEYTEST
-  printf("Checking true key: %i\n",checkPasswordCorrect("orangemonkeyeagle"));
-  #endif
+  registerUpdateHandler();
 
   // Data Logging Daemon Test
   #ifdef LOGTEST
-  bool dirStatus = buildSaveDirectory();
-  while(dirStatus == false) {
+  bool dir_status = buildSaveDirectory();
+  while(dir_status == false) {
     sleep(1);
-    dirStatus = buildSaveDirectory();
+    dir_status = buildSaveDirectory();
   }
 
-  char *args[] = {(char *)DLDARG1, (char *)loggingDirectory.c_str(), NULL};
+  char *args[] = {(char *)DLDARG1, (char *)logging_directory.c_str(), NULL};
 
   // forking data logging daemon
   dldpid = fork();
-  if (dldpid == -1) {
-    printf("Error spawning data logging daemon... \n");
-  }
-  else if (dldpid == 0){
+  if (dldpid == 0){
+    #ifdef DEBUG
     printf("Trying to exec datad...\n");
+    #endif
     execv("datad", args);
   }
   else {
+    #ifdef DEBUG
     printf(" ");
-    char *args2[] = {(char *)DCDARG1, (char *)loggingDirectory.c_str(), NULL};
+    #endif
+    char *args2[] = {(char *)DCDARG1, (char *)logging_directory.c_str(), NULL};
 
     // forking dashcam daemon
     dcdpid = fork();
-    if (dcdpid == -1) {
-      printf("Error spawning dashcam daemon... \n");
-    }
-    else if (dcdpid == 0){
+    if (dcdpid == 0){
+      #ifdef DEBUG
       printf("Trying to exec dashcamd...\n");
+      #endif
       execv("dashcamd", args2);
     }
     else {
+      #ifdef DEBUG
       printf(" ");
-    }
-  }
+      #endif
+      while(1) {
 
-  // manager waits on quit
-  while(1) {
-    getline(cin,inputStr);
-    if(inputStr == "q" | inputStr == "Q") {
-      break;
-    }
-    else {
-      inputStr = "";
+      }
     }
   }
   #endif
+
+  // manager waits on quit
+  while(1) {
+    getline(cin,input_str);
+    if(checkPasswordCorrect(input_str)) {
+      dataDeletionHandler();
+    }
+    input_str = "";
+  }
 
   return 0;
 }

@@ -19,12 +19,15 @@ LIBS += /usr/lib/aarch64-linux-gnu/libboost_system.so
 SOURCES += main.cpp\
         mainwindow.cpp \
     musicpage.cpp \
-    data.cpp
+    data.cpp \
+    viewer.cpp
 
 HEADERS  += mainwindow.h \
     musicpage.h \
-    data.h
+    data.h \
+    viewer.h
 
 FORMS    += mainwindow.ui \
     musicpage.ui \
-    data.ui
+    data.ui \
+    viewer.ui

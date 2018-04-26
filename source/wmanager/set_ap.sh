@@ -18,4 +18,7 @@ sudo nmcli radio wifi on
 
 sudo service NetworkManager restart
 
+sudo ifconfig wlan0 192.168.8.1 netmask 255.255.255.0 up
+
+sudo service dnsmasq start
 sudo hostapd -B /etc/hostapd/hostapd.conf 

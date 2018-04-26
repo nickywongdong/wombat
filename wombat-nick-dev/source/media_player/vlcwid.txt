@@ -1,0 +1,2 @@
+ 4270 ?        S      0:00 sh -c ps x | grep 'vlc --playlist' > vlcwid.txt
+ 4272 ?        S      0:00 grep vlc --playlist

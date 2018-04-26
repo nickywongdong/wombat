@@ -1,6 +1,6 @@
 #include "data.h"
 #include "ui_data.h"
-#include "/home/nvidia/Desktop/wombat-victor-dev/source/daemon_manager.cpp"
+#include "/home/nvidia/wombat/source/daemon_manager_src.cpp"
 #include <QString>
 #include<QInputDialog>
 #include<signal.h>
@@ -24,11 +24,21 @@ void Data::on_pushButton_clicked()
     bool yes;
     in = QInputDialog::getText(0, "Challenge","Password:", QLineEdit::Normal,"", &yes);
     std::string pass = in.toUtf8().constData();
-    if(checkPasswordCorrect(pass)){
+
+    string truekey = "";
+    ifstream truekeyf;
+    string hashfilePath = "/home/nvidia/wombat/source/hashkey"; //normally runDirectory + "/hashkey"
+    truekeyf.open(hashfilePath);
+    if(truekeyf.is_open()) {
+      getline(truekeyf,truekey);
+    }
+    truekeyf.close();
+
+    if(axolotlFileSystem::hash(pass) == truekey){
         kill(dmid,SIGUSR1);
     }
     else{
-        std::cout<<pass<<" get good\n";
+        std::cout<<truekey<<" get good\n";
     }
 
 }

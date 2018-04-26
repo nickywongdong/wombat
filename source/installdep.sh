@@ -2,34 +2,60 @@
 
 sudo apt-get update
 
-sudo apt-get install build-essential cmake
-sudo apt-get install build-essential zlib1g-dev
-sudo apt-get install build-essential libpng12-dev
-sudo apt-get install build-essential libgtk2.0-dev
-sudo apt-get install build-essential librsvg2-bin
-sudo apt-get install build-essential g++
-sudo apt-get install build-essential build-essential gpsd
-sudo apt-get install build-essential gpsd-clients
-sudo apt-get install build-essential libgps-dev
-sudo apt-get install build-essential libdbus-glib-1-dev
-sudo apt-get install build-essential libimlib2-dev
-sudo apt-get install build-essential espeak
+sudo apt-get install build-essential cmake -y
+sudo apt-get install build-essential zlib1g-dev -y
+sudo apt-get install build-essential libpng12-dev -y
+sudo apt-get install build-essential libgtk2.0-dev -y
+sudo apt-get install build-essential librsvg2-bin -y
+sudo apt-get install build-essential g++ -y
+sudo apt-get install build-essential build-essential gpsd -y
+sudo apt-get install build-essential gpsd-clients -y
+sudo apt-get install build-essential libgps-dev -y
+sudo apt-get install build-essential libdbus-glib-1-dev -y
+sudo apt-get install build-essential libimlib2-dev -y
+sudo apt-get install build-essential espeak -y
 
-sudo apt-get install build-essential python
-sudo apt-get install build-essential python-pip
-pip install --upgrade pip
-pip install obd
+sudo apt-get install build-essential python -y
+sudo apt-get install build-essential python-pip -y
+sudo pip install --upgrade pip
+sudo pip install obd
 
-sudo apt-get install build-essential libboost-all-dev
-sudo apt-get install build-essential libcrypto++
+sudo apt-get install build-essential libboost-all-dev -y
+sudo apt-get install build-essential libcrypto++ -y
 
-sudo apt-get install build-essential libbluetooth-dev
+sudo apt-get install build-essential libbluetooth-dev -y
 
-sudo apt-get install espeak
+cd acm/
+sudo ./installCDCACM.sh
+cd ..
 
-sudo acm/installCDCACM.sh
+cd um6/serial
+rm -rf build
+mkdir build
+cd build
+cmake ..
+make
+sudo make install
+cd ../..
 
-sudo apt-get install build-essential hostapd
-sudo apt-get install build-essential dnsmasq
+sudo apt-get install build-essential hostapd -y
+sudo apt-get install build-essential dnsmasq -y
+
+sudo apt-get install build-essential pulseaudio -y
+
+sudo apt-get install build-essential gstreamer-0.10 -y
+sudo apt-get install build-essential gstreamer0.10-plugins-good -y
+sudo apt-get install build-essential gstreamer0.10-plugins-bad -y
+sudo apt-get install build-essential gstreamer0.10-plugins-ugly -y
+
+sudo apt-get install bluez-compat build-essential -y
+
+echo "Install complete! Rebooting in 5 seconds..."
+
+sleep 5s
+
+sudo cp axolotl_bt_camera /etc/init.d/axolotl_bt_camera
+sudo chmod +x camera_bt_autoconnect.sh
+sudo update-rc.d axolotl_bt_camera defaults
 
 sudo reboot

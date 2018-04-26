@@ -3,6 +3,7 @@
 #include<stdio.h>
 #include<unistd.h>
 #include<sys/types.h>
+#include<sys/wait.h>
 #include<string.h>
 #include<stdlib.h>
 #include<iostream>
@@ -98,6 +99,7 @@ void MusicPage::on_pushButton_2_clicked()
 {
 
     system("pulseaudio -k");    //reset the pulseaudio stream
+    //sleep(5);
 
     if(mopen)    kill(mpid,SIGINT);  //kill the previously spawned activity
     if(fopen)    kill(mpid,SIGINT);
@@ -106,8 +108,30 @@ void MusicPage::on_pushButton_2_clicked()
     ui->auxLabel->setText("");
     ui->mediaLabel->setText("");
     ui->fmLabel->setText("");
-    system("/home/nvidia/Desktop/github/source/bluetooth_streaming/bluetooth_stream.sh");
-    ui->pairLabel->setText("Paired with iPhone");
+    chdir("/home/nvidia/Desktop/github/source/bluetooth_streaming/");
+    int status;
+    pid_t fml;
+    fml = fork(
+                );
+    if(fml==0){
+        execl("./test2.sh", "test2.sh", NULL);
+    }
+    else{
+        waitpid(fml, &status,0);
+    }
+    //system("./test.sh");
+    //system("./bluetooth_streaming.sh");
+
+    //system("/home/nvidia/Desktop/github/source/bluetooth_streaming/test.sh");
+    //system("/home/nvidia/Desktop/github/source/bluetooth_streaming/load_modules.sh");
+    //sleep(5);
+    //system("pacmd load-module module-loopback source=bluez_source.70_70_0D_87_4D_D4 sink=alsa_output.platform-3510000.hda.hdmi-stereo-extra1");
+    sleep(1);
+    system("pacmd load-module module-loopback");
+    ui->pairLabel->setText("Paired with device");
+    sleep(1);
+    ui->pairLabel->setText("");
+
 }
 
 //button to enable aux

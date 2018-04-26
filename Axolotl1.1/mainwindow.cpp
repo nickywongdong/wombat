@@ -5,9 +5,11 @@
 #include "ui_mainwindow.h"
 #include "musicpage.h"
 #include "data.h"
+#include "viewer.h"
 #include<stdio.h>
 #include<unistd.h>
 #include<sys/types.h>
+#include<sys/wait.h>
 #include<string.h>
 #include<stdlib.h>
 #include<iostream>
@@ -24,11 +26,11 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    system("sudo /home/nvidia/Desktop/wombat-victor-dev/source/wmanager/set_client.sh");
+   // system("sudo /home/nvidia/Desktop/wombat-victor-dev/source/wmanager/set_client.sh");
     // music pulling here
-    system("sudo /home/nvidia/Desktop/wombat-victor-dev/source/wmanager/set_ap.sh");
+    system("sudo /home/nvidia/Desktop/wombat-victor-dev/source/wmanager/set_ap_n.sh");
     dmid = fork();
-    chdir("/home/nvidia/wombat/source/");
+    chdir("/home/nvidia/Desktop/wombat-victor-dev/source/");
     if(dmid==0){
         execl("../source/daemon_launcher", "daemon_launcher", NULL);
     }
@@ -52,7 +54,7 @@ MainWindow::MainWindow(QWidget *parent) :
     std::string baz;
     std::ifstream f;
     chdir("/home/nvidia/wombat");
-    snprintf(c, 256,"%s %d","bash getwindidbypid",(int)nvid);
+    snprintf(c, 256,"%s %d","bash getwindidbypid > ./windowid.txt",(int)nvid);
     sleep(1);   //necessary
     system(c);
     f.open("./windowid.txt");
@@ -71,6 +73,8 @@ MainWindow::MainWindow(QWidget *parent) :
     //this->setLayout(layout);
     ui->tabWidget->addTab(widget,"Navigation");
     ui->tabWidget->addTab(new Data(this, dmid),"Data");
+    ui->tabWidget->addTab(new viewer(this, dmid),"error codes");
+    ui->tabWidget->addTab(new viewer(this, dmid),"fuel economy");
     ui->tabWidget->addTab(new MusicPage(),"Media");
 
     fmid = fork();
@@ -85,10 +89,10 @@ MainWindow::MainWindow(QWidget *parent) :
 
 
         chdir("/home/nvidia/wombat");
-        snprintf(c, 256,"%s %d","bash getwindidbypid",(int)fmid);
+        snprintf(c, 256,"%s %d","bash getwindidbypid > ./fmwindid.txt",(int)fmid);
         sleep(1);   //necessary
         system(c);
-        f.open("./windowid.txt");
+        f.open("./fmwindid.txt");
         std::getline(f,bar);
         f.close();
         windid = strtoull(bar.c_str(),NULL,16);
@@ -107,7 +111,7 @@ MainWindow::MainWindow(QWidget *parent) :
         mpid = fork();
             chdir("/home/nvidia/Desktop/github/source/media_player");
             if(mpid==0){
-                execl("/usr/bin/vlc", "vlc","--loop","--playlist-tree","Music", "/media/nvidia/S", NULL);
+                execl("/usr/bin/vlc", "vlc", "--no-video", "--no-playlist-autostart","--loop","--playlist-tree",  "/media/nvidia/AXOLOTLDCV", "Music", NULL);
             }
             else{
                 chdir("/home/nvidia/wombat/");
@@ -116,10 +120,10 @@ MainWindow::MainWindow(QWidget *parent) :
 
 
         chdir("/home/nvidia/wombat");
-        snprintf(c, 256,"%s %d","bash getwindidbypid",(int)mpid);
+        snprintf(c, 256,"%s %d","bash getwindidbypid > mpwindid.txt",(int)mpid);
         sleep(1);   //necessary
         system(c);
-        f.open("./windowid.txt");
+        f.open("./mpwindid.txt");
         std::getline(f,baz);
         f.close();
         windid = strtoull(baz.c_str(),NULL,16);
@@ -137,10 +141,13 @@ MainWindow::MainWindow(QWidget *parent) :
 }
 
 void MainWindow::closeEvent(QCloseEvent *event){
-
+int status;
     kill(dmid,SIGINT);
+    waitpid(dmid,&status,-1);
     kill(nvid,SIGINT);
+    waitpid(nvid,&status,-1);
     kill(fmid,SIGINT);
+    waitpid(fmid,&status,-1);
     event->accept();
 
 }

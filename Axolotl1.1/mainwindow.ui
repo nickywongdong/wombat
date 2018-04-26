@@ -77,6 +77,11 @@
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
+  <property name="styleSheet">
+   <string notr="true">QTabbar::tab {
+ height: 400px;
+width: 800px;}</string>
+  </property>
   <widget class="QWidget" name="centralWidget">
    <widget class="QTabWidget" name="tabWidget">
     <property name="geometry">
@@ -89,7 +94,8 @@
     </property>
     <property name="styleSheet">
      <string notr="true">QTabBar::tab {
-height: 30px;
+height: 80px;
+width: 120px;
 }</string>
     </property>
     <property name="currentIndex">

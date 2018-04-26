@@ -1,12 +1,9 @@
 ## ------------------------------------
-## Axolotl Data Logging Python Adapter
+## Axolotl Data Logging DTC Fetcher
 ## ------------------------------------
-## Describes methods that interact with pyOBD's IO interface
-## to gather and log data on behalf of the data logging daemon.
+## Describes methods that interact with python-OBD's to fetch DTC data to file.
+## Script is only executed once when commanded by the data logger process.
 ##
-## Dependencies:
-## - python-OBD
-## - Python 2.7
 
 import sys
 import datetime
@@ -15,91 +12,39 @@ import time
 # python OBD (from pyOBD-pi fork)
 import obd
 
-# establish a global command array
-commands = []
-fuelcommands = []
-
-# setting up the command array
-commands.append(obd.commands.ENGINE_LOAD)
-commands.append(obd.commands.RPM)
-commands.append(obd.commands.SPEED)
-commands.append(obd.commands.THROTTLE_POS)
-commands.append(obd.commands.RELATIVE_THROTTLE_POS)
-commands.append(obd.commands.RUN_TIME)
-commands.append(obd.commands.FUEL_LEVEL)
-commands.append(obd.commands.COOLANT_TEMP)
-commands.append(obd.commands.OIL_TEMP)
-commands.append(obd.commands.AMBIANT_AIR_TEMP)
-commands.append(obd.commands.BAROMETRIC_PRESSURE)
-
-fuelcommands.append(obd.commands.FUEL_RATE)
-fuelcommands.append(obd.commands.FUEL_RATE)
-
-# run in async mode?
-runAsync = True
-
-def obdSnapshot(obdConnection):
-    logTime = time.time()
-
-    # snapshot time start (grabs computer time)
-    csvLine = "@" + str(time.ctime()) + ","
-
-    # execute the command array, saving results to csvLine with "," delimitation
-    for i in xrange(0,len(commands)-1):
-            csvLine += str(obdConnection.query(commands[i]).value) + ","
-
-    csvLine += str(obdConnection.query(commands[len(commands)-1]).value) + "\n"
-
-    # write entire csvLine to file in one file operation
-    csvFileHandle = open(sys.argv[2] + "/obd_log.csv",'a')
-    csvFileHandle.write(csvLine)
-    csvFileHandle.close()
-
-    # debug statement; outputs the time taken to complete the query
-    print str(time.time()-logTime)
-
 # grabs all DTCs and outputs them to file
-def fetchDTC(obdConnection):
-    dtcErrorFile = open(sys.argv[2] + "/dtcErrors",'a')
-    dtcErrorFile.write(str(obdConnection.query(obd.commands.GET_DTC)))
-    dtcErrorFile.close()
-    print "Fetched DTC codes to file."
+def fetchDTC(obd_bluetooth_handle, file_path):
+    dtc_error_file = open(file_path + "/dtc_errors",'w')
+    dtc_error_file.write(str(obd_bluetooth_handle.query(obd.commands.GET_DTC)))
+    dtc_error_file.close()
 
 # commands the vehicle to delete all of its stored DTCs
-def clearDTC(obdConnection):
-    obdConnection.query(obd.commands.CLEAR_DTC)
-    print "Cleared DTC codes!"
-
-# set the command array to watch mode, allowing for async non-blocking updates
-def obdAsync(obdConnection):
-    for i in xrange(0, len(commands)):
-        obdConnection.watch(commands[i])
-
-# get the file path to the dtc log
-def getDTCFilePath():
-    return sys.argv[2] + "/dtcErrors"
-
-# starts watching on the OBD connection
-def startAsyncWatch(obdConnection):
-    for i in xrange(0,len(commands)-1):
-        obdConnection.watch(commands[i])
-    obdConnection.start()
-
+def clearDTC(obd_bluetooth_handle):
+    obd_bluetooth_handle.query(obd.commands.CLEAR_DTC)
 
 if __name__ == '__main__':
     ## Set up connection to the OBDLink MX
-    if runAsync:
-        obdBluetoothConnection = obd.Async()
-        startAsyncWatch(obdBluetoothConnection)
+    obd_bluetooth_socket = obd.OBD()
+    # obd_bluetooth_socket = obd.OBD("/dev/tty.OBDII-Port")     # experimental explicit connect command
+
+    # Get filepath from arguments, or leave the filepath as pwd if empty
+    file_path = "."
+    if(len(sys.argv) > 2):
+        new_path = sys.argv[1].split('/')
+        new_path = new_path[:-2]
+        file_path = '/'.join(new_path)
+
+    if(obd_bluetooth_socket.is_connected()):
+        # Logic based on command line arguments
+        if(sys.argv[1] == "fetch"):
+            fetchDTC(obd_bluetooth_socket, file_path)
+        elif(sys.argv[1] == "clear"):
+            clearDTC(obd_bluetooth_socket)
     else:
-        obdBluetoothConnection = obd.OBD()
+        dtc_error_file = open(file_path + "/dtc_errors",'w+')
+        dtc_error_file.write("Error: No OBD connection detected; DTC fetch failed.")
+        dtc_error_file.write(" ")
+        dtc_error_file.close()
+        os.system('echo \"Error: could not fetch DTCs; bluetooth connection not available.\" >> ~/axolotl/debug')
 
-    ## Logic based on command line call
-    if(sys.argv[1] == "snapshot"):
-        obdSnapshot(obdBluetoothConnection)
-    elif(sys.argv[1] == "fetch"):
-        fetchDTC(obdBluetoothConnection)
-    elif(sys.argv[1] == "clear"):
-        clearDTC(obdBluetoothConnection)
-
-    obdBluetoothConnection.close()
+    obd_bluetooth_socket.close()
