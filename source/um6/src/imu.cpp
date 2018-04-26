@@ -274,12 +274,17 @@ int main(int argc, char **argv) {
   serial::Timeout to = serial::Timeout(500, 500, 0, 500, 0);
   ser.setTimeout(to);
 
+  int connection_attempts;
   while (1) {
+    if(connection_attempts > 10) {
+      goto endloop;
+    }
     try {
       ser.open();
     }
     catch(const serial::IOException& e) {
       system("echo \"Error: unable to connect to serial port.\" >> ~/axolotl/debug");
+      connection_attempts++;
     }
     if (ser.isOpen()) {
       //first_failure = true;
@@ -323,5 +328,10 @@ int main(int argc, char **argv) {
   }
 
   ser.close();
+
+endloop:
+  while(1) {
+
+  }
   return 0;
 }
