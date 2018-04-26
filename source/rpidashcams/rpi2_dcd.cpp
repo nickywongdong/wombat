@@ -13,7 +13,7 @@
 #include <bluetooth/bluetooth.h>
 #include <bluetooth/rfcomm.h>
 
-pid_t camerahelper_pid, bhelper_pid;
+pid_t camerahelper_pid = -5, bhelper_pid = -5;
 
 bool backupCameraActive = false;
 
@@ -63,20 +63,25 @@ start_accept:
           else if(buf[0] == 'b') {
             backupCameraActive = !backupCameraActive;
             if(backupCameraActive) {
+              printf("Turning on backup camera...\n");
+              if(bhelper_pid == -5) {
               bhelper_pid = fork();
-              if(bhelper_pid == 0) {
-                execv("bchelper",args);
-              }
-              else {
-                sleep(5); // for FMVSS
-                system("killall bchelper");
-                system("pkill -f port=9003");
-                if(bhelper_pid > 1) {
-                  kill(bhelper_pid,SIGKILL);
-                  waitpid(bhelper_pid, &status, -1);
-                  bhelper_pid = -5;
+                if(bhelper_pi == 0) {
+                  execv("bchelper",args);
                 }
               }
+            }
+            else {
+              printf("Closing backup camera: waiting...\n");
+              sleep(5); // for FMVSS
+              printf("Closing backup camera...\n");
+              if(bhelper_pid > 1) {
+                kill(bhelper_pid,SIGKILL);
+                waitpid(bhelper_pid, &status, -1);
+                bhelper_pid = -5;
+              }
+              system("killall bchelper");
+              system("pkill -f port=9003");
             }
           }
           else if ((buf[0] == 'p') || (buf[0] == 'q')) {
@@ -87,6 +92,13 @@ start_accept:
                 waitpid(camerahelper_pid, &status, -1);
                 camerahelper_pid = -5;
                 system("killall c2helper");
+              }
+              system("killall bchelper");
+              system("pkill -f port=9003");
+              if(bhelper_pid > 1) {
+                kill(bhelper_pid,SIGKILL);
+                waitpid(bhelper_pid, &status, -1);
+                bhelper_pid = -5;
               }
               if(buf[0] == 'q') {
                 printf("Quit signal received.\n");
