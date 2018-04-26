@@ -30,7 +30,7 @@
 #define COMMAND_WATCH "w"
 
 #define AUTO_MEMORY_MANAGEMENT_MODE 0   // set to 1 if auto-delete of old footage desired
-#define REAR_CAMERA
+//#define REAR_CAMERA
 
 using namespace std;
 
@@ -134,7 +134,9 @@ void cameraLoop() {
     while(axolotlFileSystem::getAvailableMemory(logging_directory) < 2048) {   // wait until we have > 2GB storage
         optimizeStorage();    // attempt to optimize storage space if we don't have enough
     }
-    dashcam_helper_0_pid = fork();    // fork the front camera helper
+    if (dashcam_helper_0_pid == -5) {
+	dashcam_helper_0_pid = fork();    // fork the front camera helper
+    }
     if(dashcam_helper_0_pid == 0) {
       if (front_cam_bt_active) {
         char *args[] = {(char *)FRONT_CAMERA_HELPER_NAME, (char *)FRONT_CAMERA_PORT, (char *)COMMAND_RECORD_FRONT, (char *)logging_directory.c_str(), NULL};
@@ -228,7 +230,7 @@ void killCamerasHandler(int signumber, siginfo_t *siginfo, void *pointer) {
 
   int status;
   if(gpio_watcher_pid > 1) {
-    kill(gpio_watcher_pid,SIGTERM);
+    kill(gpio_watcher_pid,SIGKILL);
     waitpid(gpio_watcher_pid,&status,-1);
   }
 
@@ -339,7 +341,7 @@ void backupCameraToggleHandler(int signumber, siginfo_t *siginfo, void *pointer)
   }
   else {
     sleep(5);     // fulfill FMVSS by waiting 5 sec to kill backup camera after shifting out of reverse
-    system("killall backup_cam_helper");
+    //system("killall backup_cam_helper");
     if(b_camera_helper_pid > 1) {
       kill(b_camera_helper_pid,SIGKILL);
       waitpid(b_camera_helper_pid, &status, -1);

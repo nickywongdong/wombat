@@ -24,5 +24,6 @@ pactl load-module module-bluetooth-discover
 bluetoothctl << EOF
 connect $front
 connect $rear
-exit
 EOF
+
+
