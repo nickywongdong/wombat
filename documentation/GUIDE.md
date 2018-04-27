@@ -16,7 +16,9 @@ Whilst logged into the `nvidia` profile of the Jetson (only if using RaspberryPi
 1. Determine the Bluetooth address of each RaspberryPi, and replace the Bluetooth addresses in `bluetooth_addresses` with those addresses. `bluetooth_addresses` should only be comprised of two lines; the first with the Bluetooth address of the front RaspberryPi, the second with the Bluetooth address of the rear RaspberryPi.
 
 ## Backup Camera Integration
-The system's backup camera is designed to turn on when gpio pin 298 (gpio298) is driven high.
+The system's backup camera is designed to turn on when gpio pin 298 (gpio298) is driven high. If gpio298 is driven low, the backup camera will automatically turn off after 5 seconds.
+
+__Note:__ As of the current build, the system does not account for handling the backup camera for quick on-off cycles. For example, turning the backup camera on and off multiple times within 5 seconds may result in undesired behavior. Proceed with caution.
 
 ## Using External Storage
 Axolotl is designed to be able to take advantage of external storage devices, either SD cards or USB drives that are compatible with the Jetson TX2.
