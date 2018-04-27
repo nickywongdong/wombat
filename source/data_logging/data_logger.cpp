@@ -26,21 +26,23 @@ void startOBDLogger() {
   string built_command, curr_pid;
   int s;
   char *args[] = {(char *)DATA_HELPER_ARG0, (char *)logging_directory.c_str(), NULL};
-  obd_logger_pid = fork();
-  if (obd_logger_pid != -5) {
-    if (obd_logger_pid == 0) {
-      execv("datad_pyhelper",args);   // comment out if AHRS breaks; serial port access violation
-    }
-    else {
+  if (obd_logger_pid == -5) {
+    obd_logger_pid = fork();
+  }
+  if (obd_logger_pid == 0) {
+    execv("datad_pyhelper",args);   // comment out if AHRS breaks; serial port access violation
+  }
+  else {
+    if(ahrs_logger_pid == -5) {
       ahrs_logger_pid = fork();
       if(ahrs_logger_pid == 0) {
-          char *args2[] = {(char *)DATA_HELPER_ARG0, (char *)logging_directory.c_str(), NULL};
-          execv("um6/imu",args2);
+        char *args2[] = {(char *)DATA_HELPER_ARG1, (char *)logging_directory.c_str(), NULL};
+        execv("um6/imu",args2);
       }
       else {
-  	while(1) {
-  		sleep(1);
-  	}
+      	while(1) {
+      		sleep(1);
+      	}
       }
     }
   }
