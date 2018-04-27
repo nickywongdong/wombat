@@ -49,7 +49,8 @@ string auto_mem = "0";
 */
 void optimizeStorage() {
   if(auto_mem == "1") {
-    // do things to optimize storage space
+    // deletes the oldest data log within the ~/axolotl/data directory
+    system("rm -rf \"$(ls -t /home/nvidia/axolotl/data | tail -1)\"");
   }
 }
 
