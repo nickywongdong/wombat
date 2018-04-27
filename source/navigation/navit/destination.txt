@@ -1,0 +1,4 @@
+type=former_destination label="Corvallis"
+mg:-0xd12381 0x54a407
+type=former_itinerary label="Corvallis"
+mg:-0xd12381 0x54a407
