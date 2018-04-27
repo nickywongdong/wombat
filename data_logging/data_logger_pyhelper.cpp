@@ -7,9 +7,9 @@
 #include "dcomh.hpp"
 
 #ifdef __linux__
-#define OBD_ADAPTER_PATH "/wombat/source/data_obd_logger.py"
+#define OBD_ADAPTER_PATH "/wombat/source/data_logging/data_obd_logger.py"
 #else
-#define OBD_ADAPTER_PATH "/Gitdir/wombat/source/data_obd_logger.py"
+#define OBD_ADAPTER_PATH "/Gitdir/wombat/data_logging/data_obd_logger.py"
 #endif
 
 using namespace std;
