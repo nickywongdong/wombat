@@ -1,4 +1,4 @@
-# Axolotl - Victor's Branch
+# Axolotl - Beta
 __Current Version:__ 0.5.3 beta
 
 Version 0.5.3 beta:
