@@ -104,7 +104,7 @@ void MusicPage::on_pushButton_2_clicked()
     if(mopen)    kill(mpid,SIGINT);  //kill the previously spawned activity
     if(fopen)    kill(mpid,SIGINT);
 
-    ui->pairLabel->setText("Pairing with iPhone");
+    ui->pairLabel->setText("Pairing with device...");
     ui->auxLabel->setText("");
     ui->mediaLabel->setText("");
     ui->fmLabel->setText("");
