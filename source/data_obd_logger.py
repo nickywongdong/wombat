@@ -114,16 +114,22 @@ if __name__ == '__main__':
     # Logic based on command line arguments
     if(obd_bluetooth_socket.is_connected()):
         # Data log copy for this boot cycle
-        dtc_error_file = open(file_path + "/dtc_errors",'w+')
-        dtc_error_file.write("Diagnostic Trouble Codes fetched at: " + time.ctime() + "\n\n")
-        dtc_error_file.write(str(obd_bluetooth_handle.query(obd.commands.GET_DTC)))
-        dtc_error_file.close()
+        try:
+            dtc_error_file = open(file_path + "/dtc_errors",'w+')
+            dtc_error_file.write("Diagnostic Trouble Codes fetched at: " + time.ctime() + "\n\n")
+            dtc_error_file.write(str(obd_bluetooth_handle.query(obd.commands.GET_DTC)))
+            dtc_error_file.close()
+        except IOError:
+            os.system('echo \"Error: failed to open log dtc_errors file to write DTCs.\" >> ~/axolotl/debug')
 
         # Master copy for system display
-        dtc_error_file = open("/home/nvidia/axolotl/dtc_errors",'w+')
-        dtc_error_file.write("Diagnostic Trouble Codes fetched at: " + time.ctime() + "\n\n")
-        dtc_error_file.write(str(obd_bluetooth_handle.query(obd.commands.GET_DTC)))
-        dtc_error_file.close()
+        try:
+            dtc_error_file = open("/home/nvidia/axolotl/dtc_errors",'w+')
+            dtc_error_file.write("Diagnostic Trouble Codes fetched at: " + time.ctime() + "\n\n")
+            dtc_error_file.write(str(obd_bluetooth_handle.query(obd.commands.GET_DTC)))
+            dtc_error_file.close()
+        except IOError:
+            os.system('echo \"Error: failed to open system dtc_errors file to write DTCs.\" >> ~/axolotl/debug')
 
         # Do some command based on argument
         if(sys.argv[1] == "snapshot"):
@@ -137,21 +143,27 @@ if __name__ == '__main__':
                     time.sleep(.2)
     else:
         # Data log copy for this boot cycle
-        print file_path + "/dtc_errors"
-	    dtc_error_file = open(file_path + "/dtc_errors",'w+')
-        dtc_error_file.write("Diagnostic Trouble Codes fetched at: " + time.ctime() + "\n\n")
-        dtc_error_file.write("Error: No OBD connection detected; DTC fetch failed.")
-        dtc_error_file.write(" ")
-        dtc_error_file.close()
+        try:
+            print file_path + "/dtc_errors"
+    	    dtc_error_file = open(file_path + "/dtc_errors",'w+')
+            dtc_error_file.write("Diagnostic Trouble Codes fetched at: " + time.ctime() + "\n\n")
+            dtc_error_file.write("Error: No OBD connection detected; DTC fetch failed.")
+            dtc_error_file.write(" ")
+            dtc_error_file.close()
+        except IOError:
+            os.system('echo \"Error: failed to open log dtc_errors file to write DTCs.\" >> ~/axolotl/debug')
 
         # Master copy for system display
-        dtc_error_file = open("/home/nvidia/axolotl/dtc_errors",'w+')
-        dtc_error_file.write("Diagnostic Trouble Codes fetched at: " + time.ctime() + "\n\n")
-        dtc_error_file.write("Error: No OBD connection detected; DTC fetch failed.")
-        dtc_error_file.write(" ")
-        dtc_error_file.close()
+        try:
+            dtc_error_file = open("/home/nvidia/axolotl/dtc_errors",'w+')
+            dtc_error_file.write("Diagnostic Trouble Codes fetched at: " + time.ctime() + "\n\n")
+            dtc_error_file.write("Error: No OBD connection detected; DTC fetch failed.")
+            dtc_error_file.write(" ")
+            dtc_error_file.close()
+        except IOError:
+            os.system('echo \"Error: failed to open system dtc_errors file to write DTCs.\" >> ~/axolotl/debug')
+
         os.system('echo \"Error: could not establish connection to OBD bluetooth device.\" >> ~/axolotl/debug')
         os.system('echo \"Error: could not fetch DTCs; bluetooth connection not available.\" >> ~/axolotl/debug')
-
 
     obd_bluetooth_socket.close()
