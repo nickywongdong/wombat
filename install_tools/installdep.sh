@@ -26,11 +26,11 @@ sudo apt-get install build-essential libcrypto++ -y
 
 sudo apt-get install build-essential libbluetooth-dev -y
 
-cd acm/
+cd $PWD/../data_logging/acm/
 sudo ./installCDCACM.sh
 cd ..
 
-cd um6/serial
+cd $PWD/../data_logging/um6/serial
 rm -rf build
 mkdir build
 cd build
