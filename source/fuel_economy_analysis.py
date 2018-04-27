@@ -13,7 +13,7 @@ import os
 import csv
 import string
 from subprocess import call
-from pathlib import Path
+# from pathlib import Path
 
 # Variables to hold fuel economy data and output status
 samples = 0
@@ -37,9 +37,7 @@ if (len(sys.argv) > 1):
     os.chdir(path)      # change path to logging directory
     call(["cp","obd_log.csv","test_obd_log.csv"])   # duplicate the csv
 
-master_obd_log = Path(path + "/" + filename)
-if master_obd_log.is_file():
-
+if os.access(filename, os.W_OK):
     # Read the data from the csv and do some analysis
     with open(filename, 'r') as csvfile:
         fereader = csv.reader(csvfile, delimiter=',', quotechar='|')
@@ -78,28 +76,72 @@ if master_obd_log.is_file():
     print show_acceleration_tip
     print show_averagespeed_tip
 
-    tipsOutputFile = open("/home/nvidia/axolotl/festatus",'w+')
-    tipsOutputFile.write("Fuel Economy Analysis completed at: " + time.ctime() + "\n\n")
-    tipsOutputFile.write("Please obey all speed laws when considering these instructions.\n\n")
+    # Master copy for system display
+    try:
+        tipsOutputFile = open("/home/nvidia/axolotl/festatus",'w+')
+        tipsOutputFile.write("Fuel Economy Analysis completed at: " + time.ctime() + "\n\n")
+        tipsOutputFile.write("Please obey all speed laws when considering these instructions.\n\n")
 
-    if show_stopstart_tip or show_acceleration_tip or show_averagespeed_tip:
-        tipsOutputFile.write("Recommendations:\n");
-        if show_averagespeed_tip:
-            if speed_low:
-                tipsOutputFile.write("- Avoid driving too slowly; slow speeds means your vehicle cannot use higher gearing and results in worse fuel economy.\n")
-            else:
-                tipsOutputFile.write("- Avoid driving too fast; reduced speed reduces drag and increased fuel economy.\n")
-        if show_acceleration_tip:
-            tipsOutputFile.write("- Gently ease onto the accelerator; aggressive acceleration wastes fuel.\n")
-        if show_stopstart_tip:
-            tipsOutputFile.write("- Try to minimize your idling; idling wastes fuel.\n")
-    else:
-        tipsOutputFile.write("No tips to report!\n")
+        if show_stopstart_tip or show_acceleration_tip or show_averagespeed_tip:
+            tipsOutputFile.write("Recommendations:\n");
+            if show_averagespeed_tip:
+                if speed_low:
+                    tipsOutputFile.write("- Avoid driving too slowly; slow speeds means your vehicle cannot use higher gearing and results in worse fuel economy.\n")
+                else:
+                    tipsOutputFile.write("- Avoid driving too fast; reduced speed reduces drag and increased fuel economy.\n")
+            if show_acceleration_tip:
+                tipsOutputFile.write("- Gently ease onto the accelerator; aggressive acceleration wastes fuel.\n")
+            if show_stopstart_tip:
+                tipsOutputFile.write("- Try to minimize your idling; idling wastes fuel.\n")
+        else:
+            tipsOutputFile.write("No tips to report!\n")
 
-    tipsOutputFile.close()
+        tipsOutputFile.close()
+    except IOError:
+        os.system('echo \"Error: could not open file to write fuel economy analysis.\" >> ~/axolotl/debug')
+
+
+    # Data log copy for this boot cycle
+    try:
+        tipsOutputFile = open("festatus",'w+')
+        tipsOutputFile.write("Fuel Economy Analysis completed at: " + time.ctime() + "\n\n")
+        tipsOutputFile.write("Please obey all speed laws when considering these instructions.\n\n")
+
+        if show_stopstart_tip or show_acceleration_tip or show_averagespeed_tip:
+            tipsOutputFile.write("Recommendations:\n");
+            if show_averagespeed_tip:
+                if speed_low:
+                    tipsOutputFile.write("- Avoid driving too slowly; slow speeds means your vehicle cannot use higher gearing and results in worse fuel economy.\n")
+                else:
+                    tipsOutputFile.write("- Avoid driving too fast; reduced speed reduces drag and increased fuel economy.\n")
+            if show_acceleration_tip:
+                tipsOutputFile.write("- Gently ease onto the accelerator; aggressive acceleration wastes fuel.\n")
+            if show_stopstart_tip:
+                tipsOutputFile.write("- Try to minimize your idling; idling wastes fuel.\n")
+        else:
+            tipsOutputFile.write("No tips to report!\n")
+
+        tipsOutputFile.close()
+    except IOError:
+        os.system('echo \"Error: could not open file to write fuel economy analysis.\" >> ~/axolotl/debug')
+
 else:
-    tipsOutputFile = open("/home/nvidia/axolotl/festatus",'w+')
-    tipsOutputFile.write("Fuel Economy Analysis completed at: " + time.ctime() + "\n\n")
-    tipsOutputFile.write("Error: no OBD log detected for analysis. Please check your OBD connection.")
-    tipsOutputFile.close()
+    # Master copy for system display
+    try:
+        tipsOutputFile = open("/home/nvidia/axolotl/festatus",'w+')
+        tipsOutputFile.write("Fuel Economy Analysis completed at: " + time.ctime() + "\n\n")
+        tipsOutputFile.write("Error: no OBD log detected for analysis. Please check your OBD connection.")
+        tipsOutputFile.close()
+    except IOError:
+        os.system('echo \"Error: could not open file to write fuel economy analysis.\" >> ~/axolotl/debug')
+
+    # Data log copy for this boot cycle
+    try:
+        tipsOutputFile = open("festatus",'w+')
+        tipsOutputFile.write("Fuel Economy Analysis completed at: " + time.ctime() + "\n\n")
+        tipsOutputFile.write("Error: no OBD log detected for analysis. Please check your OBD connection.")
+        tipsOutputFile.close()
+    except IOError:
+        os.system('echo \"Error: could not open file to write fuel economy analysis.\" >> ~/axolotl/debug')
+
     os.system('echo \"Error: could not analyze fuel data due to missing OBD log.\" >> ~/axolotl/debug')

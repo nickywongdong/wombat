@@ -103,18 +103,24 @@ if __name__ == '__main__':
     else:
         obd_bluetooth_socket = obd.OBD()
 
-    # file_path = "."
-    # if(len(sys.argv) > 2):
-    #     new_path = sys.argv[2].split('/')
-    #     new_path = new_path[:-2]
-    #     file_path = '/'.join(new_path)
+    file_path = "."
+    if(len(sys.argv) > 2):
+        new_path = sys.argv[2].split('/')
+        new_path = new_path[:-2]
+        file_path = '/'.join(new_path)
 
-    file_path = "/home/nvidia/axolotl"
+    # file_path = "/home/nvidia/axolotl"
 
     # Logic based on command line arguments
     if(obd_bluetooth_socket.is_connected()):
-        # Preemptively cache DTCs
+        # Data log copy for this boot cycle
         dtc_error_file = open(file_path + "/dtc_errors",'w+')
+        dtc_error_file.write("Diagnostic Trouble Codes fetched at: " + time.ctime() + "\n\n")
+        dtc_error_file.write(str(obd_bluetooth_handle.query(obd.commands.GET_DTC)))
+        dtc_error_file.close()
+
+        # Master copy for system display
+        dtc_error_file = open("/home/nvidia/axolotl/dtc_errors",'w+')
         dtc_error_file.write("Diagnostic Trouble Codes fetched at: " + time.ctime() + "\n\n")
         dtc_error_file.write(str(obd_bluetooth_handle.query(obd.commands.GET_DTC)))
         dtc_error_file.close()
@@ -130,8 +136,16 @@ if __name__ == '__main__':
                     obdSnapshot(obd_bluetooth_socket)
                     time.sleep(.2)
     else:
+        # Data log copy for this boot cycle
         print file_path + "/dtc_errors"
 	    dtc_error_file = open(file_path + "/dtc_errors",'w+')
+        dtc_error_file.write("Diagnostic Trouble Codes fetched at: " + time.ctime() + "\n\n")
+        dtc_error_file.write("Error: No OBD connection detected; DTC fetch failed.")
+        dtc_error_file.write(" ")
+        dtc_error_file.close()
+
+        # Master copy for system display
+        dtc_error_file = open("/home/nvidia/axolotl/dtc_errors",'w+')
         dtc_error_file.write("Diagnostic Trouble Codes fetched at: " + time.ctime() + "\n\n")
         dtc_error_file.write("Error: No OBD connection detected; DTC fetch failed.")
         dtc_error_file.write(" ")
