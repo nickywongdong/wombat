@@ -30,6 +30,7 @@
 #define COMMAND_WATCH "w"
 
 #define AUTO_MEMORY_MANAGEMENT_MODE 0   // set to 1 if auto-delete of old footage desired
+#define CONTINUOUS_OPTIMIZATION
 //#define REAR_CAMERA
 
 using namespace std;
@@ -139,7 +140,7 @@ void cameraLoop() {
         optimizeStorage();    // attempt to optimize storage space if we don't have enough
     }
     if (dashcam_helper_0_pid == -5) {
-	dashcam_helper_0_pid = fork();    // fork the front camera helper
+	     dashcam_helper_0_pid = fork();    // fork the front camera helper
     }
     if(dashcam_helper_0_pid == 0) {
       if (front_cam_bt_active) {
@@ -148,6 +149,7 @@ void cameraLoop() {
       }
     }
     else {
+      // rear camera logging disabled for now
       #ifdef REAR_CAMERA
       dashcam_helper_1_pid = fork();
       if (dashcam_helper_1_pid == 0) {
@@ -162,14 +164,22 @@ void cameraLoop() {
         }
       }
       #endif
+
       while(1) {
-        // another wait just in case...
+        #ifdef CONTINUOUS_OPTIMIZATION
+        while(axolotlFileSystem::getAvailableMemory(logging_directory) < 2048) {
+            optimizeStorage();
+        }
+        #endif
       }
     }
   }
-
   while(1) {
-    // another wait just in case...
+    #ifdef CONTINUOUS_OPTIMIZATION
+    while(axolotlFileSystem::getAvailableMemory(logging_directory) < 2048) {
+        optimizeStorage();
+    }
+    #endif
   }
 }
 
