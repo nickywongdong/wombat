@@ -1,0 +1,2 @@
+/usr/bin/ar qc libsupport_shapefile.a  CMakeFiles/support_shapefile.dir/dbfopen.c.o CMakeFiles/support_shapefile.dir/shpopen.c.o CMakeFiles/support_shapefile.dir/shptree.c.o
+/usr/bin/ranlib libsupport_shapefile.a
