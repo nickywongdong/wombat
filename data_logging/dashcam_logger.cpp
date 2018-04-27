@@ -42,11 +42,13 @@ pid_t dashcam_helper_0_pid = -5, dashcam_helper_1_pid = -5, b_camera_helper_pid 
 
 int front_dashcam_bluetooth_socket, rear_dashcam_bluetooth_socket;   // bluetooth file descriptors for front and rear dashcams
 
+string auto_mem = "0";
+
 /*
   Optimize storage by deleting all past days' data.
 */
 void optimizeStorage() {
-  if(AUTO_MEMORY_MANAGEMENT_MODE) {
+  if(auto_mem == "1") {
     // do things to optimize storage space
   }
 }
@@ -368,6 +370,8 @@ int main(int argc, char *argv[]) {
   logging_directory = argv[1];
   string ahrs_filepath = logging_directory + "/ahrs_log.csv";
 
+  auto_mem = argv[2];
+
   // Wait on AHRS to complete connection
   struct stat buffer;
   while(stat(ahrs_filepath.c_str(), &buffer) != 0) {
@@ -452,7 +456,7 @@ int main(int argc, char *argv[]) {
     }
     #endif
     while(1) {
-      
+
     }
   }
   else {

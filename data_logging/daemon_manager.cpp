@@ -307,12 +307,14 @@ int main() {
 
   // Test for connected flash drive
   struct stat buffer;
+  string auto_delete = "0";
   if ((stat("/media/nvidia/AXOLOTLDCV", &buffer) == 0) && S_ISDIR(buffer.st_mode)) {
     log_volume = "/media/nvidia/AXOLOTLDCV";
   }
   else {
     log_volume = axolotlFileSystem::getHomeDir();
     system("echo \"Warning: could not find an external 'AXOLOTLDCV'. Logging to internal storage.\" >> ~/axolotl/debug");
+    auto_delete = "1";
   }
   // Registering signal handlers
   registerSigintHandler();
@@ -341,7 +343,7 @@ int main() {
     #ifdef DEBUG
     printf(" ");
     #endif
-    char *args2[] = {(char *)DCDARG1, (char *)logging_directory.c_str(), NULL};
+    char *args2[] = {(char *)DCDARG1, (char *)logging_directory.c_str(), (char *)auto_delete.c_str(), NULL};
 
     // forking dashcam daemon
     dcdpid = fork();
