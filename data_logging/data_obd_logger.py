@@ -105,9 +105,7 @@ if __name__ == '__main__':
 
     file_path = "."
     if(len(sys.argv) > 2):
-        new_path = sys.argv[2].split('/')
-        new_path = new_path[:-2]
-        file_path = '/'.join(new_path)
+        new_path = sys.argv[2]
 
     # file_path = "/home/nvidia/axolotl"
 

@@ -43,15 +43,13 @@ if __name__ == '__main__':
     # Get filepath from arguments, or leave the filepath as pwd if empty
     file_path = "."
     if(len(sys.argv) > 2):
-        new_path = sys.argv[1].split('/')
-        new_path = new_path[:-2]
-        file_path = '/'.join(new_path)
+        new_path = sys.argv[1]
 
     if(obd_bluetooth_socket.is_connected()):
         # Logic based on command line arguments
-        if(sys.argv[1] == "fetch"):
+        if(sys.argv[2] == "fetch"):
             fetchDTC(obd_bluetooth_socket, file_path)
-        elif(sys.argv[1] == "clear"):
+        elif(sys.argv[2] == "clear"):
             clearDTC(obd_bluetooth_socket)
     else:
         try:

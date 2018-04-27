@@ -181,7 +181,7 @@ void registerSigtermHandler() {
 void updateDataFiles(int signumber, siginfo_t *siginfo, void *pointer) {
   string python_command = "python fuel_economy_analysis.py " + logging_directory;
   system(python_command.c_str());
-  python_command = "python data_obd_dtc.py fetchDTC " + logging_directory;
+  python_command = "python data_obd_dtc.py " + logging_directory + " fetch";
   system(python_command.c_str());
 }
 
