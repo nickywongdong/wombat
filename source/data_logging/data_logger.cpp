@@ -11,12 +11,6 @@
 #define DEBUG
 #define DATA_HELPER_ARG0 "./datad_pyhelper"
 
-#ifdef __linux__
-#define OBD_ADAPTER_PATH "/wombat/source/data_obd_logger.py"
-#else
-#define OBD_ADAPTER_PATH "/Gitdir/wombat/source/data_obd_logger.py"
-#endif
-
 using namespace std;
 
 string logging_directory;
@@ -34,7 +28,7 @@ void startOBDLogger() {
   obd_logger_pid = fork();
   if (obd_logger_pid != -5) {
   if (obd_logger_pid == 0) {
-    
+
     execv("datad_pyhelper",args);   // comment out if AHRS breaks; serial port access violation
   }
   else {
@@ -187,7 +181,7 @@ void registerSigtermHandler() {
 void updateDataFiles(int signumber, siginfo_t *siginfo, void *pointer) {
   string python_command = "python fuel_economy_analysis.py " + logging_directory;
   system(python_command.c_str());
-  python_command = "python data_obd_dtc.py fetchDTC " + logging_directory;
+  python_command = "python data_obd_dtc.py " + logging_directory + " fetch";
   system(python_command.c_str());
 }
 

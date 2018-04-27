@@ -30,6 +30,7 @@
 #define COMMAND_WATCH "w"
 
 #define AUTO_MEMORY_MANAGEMENT_MODE 0   // set to 1 if auto-delete of old footage desired
+#define CONTINUOUS_OPTIMIZATION
 //#define REAR_CAMERA
 
 using namespace std;
@@ -42,12 +43,16 @@ pid_t dashcam_helper_0_pid = -5, dashcam_helper_1_pid = -5, b_camera_helper_pid 
 
 int front_dashcam_bluetooth_socket, rear_dashcam_bluetooth_socket;   // bluetooth file descriptors for front and rear dashcams
 
+string auto_mem = "0";
+
 /*
   Optimize storage by deleting all past days' data.
 */
 void optimizeStorage() {
-  if(AUTO_MEMORY_MANAGEMENT_MODE) {
-    // do things to optimize storage space
+  if(auto_mem == "1") {
+    // deletes the oldest data log within the ~/axolotl/data directory
+    system("rm -rf \"$(ls -t /home/nvidia/axolotl/data | tail -1)\"");
+    system("echo \"Warning: not enough storage space for dashcam footage. Deleting oldest log.\" >> ~/axolotl/debug");
   }
 }
 
@@ -135,7 +140,7 @@ void cameraLoop() {
         optimizeStorage();    // attempt to optimize storage space if we don't have enough
     }
     if (dashcam_helper_0_pid == -5) {
-	dashcam_helper_0_pid = fork();    // fork the front camera helper
+	     dashcam_helper_0_pid = fork();    // fork the front camera helper
     }
     if(dashcam_helper_0_pid == 0) {
       if (front_cam_bt_active) {
@@ -144,6 +149,7 @@ void cameraLoop() {
       }
     }
     else {
+      // rear camera logging disabled for now
       #ifdef REAR_CAMERA
       dashcam_helper_1_pid = fork();
       if (dashcam_helper_1_pid == 0) {
@@ -158,14 +164,22 @@ void cameraLoop() {
         }
       }
       #endif
+
       while(1) {
-        // another wait just in case...
+        #ifdef CONTINUOUS_OPTIMIZATION
+        while(axolotlFileSystem::getAvailableMemory(logging_directory) < 2048) {
+            optimizeStorage();
+        }
+        #endif
       }
     }
   }
-
   while(1) {
-    // another wait just in case...
+    #ifdef CONTINUOUS_OPTIMIZATION
+    while(axolotlFileSystem::getAvailableMemory(logging_directory) < 2048) {
+        optimizeStorage();
+    }
+    #endif
   }
 }
 
@@ -368,6 +382,8 @@ int main(int argc, char *argv[]) {
   logging_directory = argv[1];
   string ahrs_filepath = logging_directory + "/ahrs_log.csv";
 
+  auto_mem = argv[2];
+
   // Wait on AHRS to complete connection
   struct stat buffer;
   while(stat(ahrs_filepath.c_str(), &buffer) != 0) {
@@ -452,7 +468,7 @@ int main(int argc, char *argv[]) {
     }
     #endif
     while(1) {
-      
+
     }
   }
   else {
