@@ -25,5 +25,3 @@ bluetoothctl << EOF
 connect $front
 connect $rear
 EOF
-
-
