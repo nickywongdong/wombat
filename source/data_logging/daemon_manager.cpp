@@ -293,7 +293,7 @@ void registerUpdateHandler() {
   memset(&dsa, 0, sizeof(dsa));
   dsa.sa_sigaction = updateDataHandler;
   dsa.sa_flags = SA_SIGINFO;
-  sigaction(SIGUSR2, &dsa, NULL);
+  sigaction(SIGBUS, &dsa, NULL);
 }
 
 //int mainOperation() {
