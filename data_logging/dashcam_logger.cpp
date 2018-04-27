@@ -51,6 +51,7 @@ void optimizeStorage() {
   if(auto_mem == "1") {
     // deletes the oldest data log within the ~/axolotl/data directory
     system("rm -rf \"$(ls -t /home/nvidia/axolotl/data | tail -1)\"");
+    system("echo \"Warning: not enough storage space for dashcam footage. Deleting oldest log.\" >> ~/axolotl/debug");
   }
 }
 
