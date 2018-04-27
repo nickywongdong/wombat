@@ -1,1 +1,0 @@
-/usr/bin/cc  -fPIC  -Wall -Wundef -Wcast-align -Wpointer-arith -Wno-unused-parameter -Wno-sign-compare -Wno-missing-field-initializers  -Wextra  -Wmissing-prototypes  -Wstrict-prototypes  -Wformat-security  -O2 -g -DNDEBUG  -shared  -o .libs/libvehicle_gpsd.so CMakeFiles/vehicle_gpsd.dir/vehicle_gpsd.c.o -lgps 

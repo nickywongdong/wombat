@@ -27,7 +27,7 @@ void Data::on_pushButton_clicked()
 
     string truekey = "";
     ifstream truekeyf;
-    string hashfilePath = "/home/nvidia/wombat/source/hashkey"; //normally runDirectory + "/hashkey"
+    string hashfilePath = "/home/nvidia/wombat/source/data_logging/hashkey"; //normally runDirectory + "/hashkey"
     truekeyf.open(hashfilePath);
     if(truekeyf.is_open()) {
       getline(truekeyf,truekey);

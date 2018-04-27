@@ -26,11 +26,11 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-   // system("sudo /home/nvidia/Desktop/wombat-victor-dev/source/wmanager/set_client.sh");
+    // system("sudo /home/nvidia/Desktop/wombat-victor-dev/source/wmanager/set_client.sh");
     // music pulling here
-    system("sudo /home/nvidia/Desktop/wombat-victor-dev/source/wmanager/set_ap_n.sh");
+    system("sudo /home/nvidia/source/data_logging/wmanager/set_ap_n.sh");
     dmid = fork();
-    chdir("/home/nvidia/Desktop/wombat-victor-dev/source/");
+    chdir("/home/nvidia/wombat/source/data_logging/");
     if(dmid==0){
         execl("../source/daemon_launcher", "daemon_launcher", NULL);
     }
@@ -39,7 +39,7 @@ MainWindow::MainWindow(QWidget *parent) :
     }
 
     nvid = fork();
-    chdir("/home/nvidia/wombat/source/navit_build/navit/");
+    chdir("/home/nvidia/wombat/source/navigation/navit/");
 
     if(nvid==0){
         execl("./navit", "navit", NULL);
@@ -85,8 +85,6 @@ MainWindow::MainWindow(QWidget *parent) :
             else{
                 chdir("/home/nvidia/wombat/");
             }
-
-
 
         chdir("/home/nvidia/wombat");
         snprintf(c, 256,"%s %d","bash getwindidbypid > ./fmwindid.txt",(int)fmid);
@@ -149,12 +147,9 @@ int status;
     kill(fmid,SIGINT);
     waitpid(fmid,&status,-1);
     event->accept();
-
 }
 
 MainWindow::~MainWindow()
 {
     delete ui;
 }
-
-
