@@ -95,7 +95,6 @@ MainWindow::MainWindow(QWidget *parent) :
         f.close();
         windid = strtoull(bar.c_str(),NULL,16);
 
-
         QWindow *window1 = QWindow::fromWinId(windid);
         window1->setFlags(Qt::FramelessWindowHint);
         QWidget *widget1 = QWidget::createWindowContainer(window1);
@@ -105,9 +104,9 @@ MainWindow::MainWindow(QWidget *parent) :
         //this->setLayout(layout);
         ui->tabWidget->addTab(widget1, "FM");
 
-
         mpid = fork();
-            chdir("/home/nvidia/Desktop/github/source/media_player");
+            //chdir("/home/nvidia/Desktop/github/source/media_player");
+            chdir("/home/nvidia/wombat/source/media_system/media_player");
             if(mpid==0){
                 execl("/usr/bin/vlc", "vlc", "--no-video", "--no-playlist-autostart","--loop","--playlist-tree",  "/media/nvidia/AXOLOTLDCV", "Music", NULL);
             }

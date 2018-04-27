@@ -108,7 +108,9 @@ void MusicPage::on_pushButton_2_clicked()
     ui->auxLabel->setText("");
     ui->mediaLabel->setText("");
     ui->fmLabel->setText("");
-    chdir("/home/nvidia/Desktop/github/source/bluetooth_streaming/");
+
+    //chdir("/home/nvidia/Desktop/github/source/bluetooth_streaming/");
+    chdir("/home/nvidia/wombat/source/media_system/bluetooth_streaming/");
     int status;
     pid_t fml;
     fml = fork(
@@ -146,8 +148,6 @@ void MusicPage::on_pushButton_3_clicked()
 
     system("pacmd load-module module-loopback source=alsa_output.usb-0d8c_C-Media_USB_Audio_Device-00.analog-stereo sink=alsa_output.platform-3510000.hda.hdmi-stereo-extra1.monitor");
     system("pactl load-module module-loopback");
-
-
 
     ui->mediaLabel->setText("");
     ui->pairLabel->setText("");
