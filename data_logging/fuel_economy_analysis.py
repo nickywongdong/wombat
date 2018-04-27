@@ -78,7 +78,7 @@ if os.access(filename, os.W_OK):
 
     # Master copy for system display
     try:
-        tipsOutputFile = open("/home/nvidia/axolotl/festatus",'w+')
+        tipsOutputFile = open("/home/nvidia/axolotl/fedata",'w+')
         tipsOutputFile.write("Fuel Economy Analysis completed at: " + time.ctime() + "\n\n")
         tipsOutputFile.write("Please obey all speed laws when considering these instructions.\n\n")
 
@@ -103,7 +103,7 @@ if os.access(filename, os.W_OK):
 
     # Data log copy for this boot cycle
     try:
-        tipsOutputFile = open("festatus",'w+')
+        tipsOutputFile = open("fedata",'w+')
         tipsOutputFile.write("Fuel Economy Analysis completed at: " + time.ctime() + "\n\n")
         tipsOutputFile.write("Please obey all speed laws when considering these instructions.\n\n")
 
@@ -128,7 +128,7 @@ if os.access(filename, os.W_OK):
 else:
     # Master copy for system display
     try:
-        tipsOutputFile = open("/home/nvidia/axolotl/festatus",'w+')
+        tipsOutputFile = open("/home/nvidia/axolotl/fedata",'w+')
         tipsOutputFile.write("Fuel Economy Analysis completed at: " + time.ctime() + "\n\n")
         tipsOutputFile.write("Error: no OBD log detected for analysis. Please check your OBD connection.")
         tipsOutputFile.close()
@@ -137,7 +137,7 @@ else:
 
     # Data log copy for this boot cycle
     try:
-        tipsOutputFile = open("festatus",'w+')
+        tipsOutputFile = open("fedata",'w+')
         tipsOutputFile.write("Fuel Economy Analysis completed at: " + time.ctime() + "\n\n")
         tipsOutputFile.write("Error: no OBD log detected for analysis. Please check your OBD connection.")
         tipsOutputFile.close()
