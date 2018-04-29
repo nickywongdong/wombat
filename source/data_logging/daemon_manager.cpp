@@ -278,11 +278,10 @@ void registerDeleteHandler() {
   as well as fuel ecomnomy data, and restarts data logging.
 */
 void updateDataHandler(int signumber, siginfo_t *siginfo, void *pointer) {
-  kill(dldpid,SIGUSR1);
-  sleep(1);
-  kill(dldpid,SIGBUS);
+  if(dldpid > 1) {
+    kill(dldpid,SIGBUS);
+  }
   sleep(5);
-  kill(dldpid,SIGUSR2);
 }
 
 /*
@@ -316,13 +315,13 @@ int main() {
     system("echo \"Warning: could not find an external 'AXOLOTLDCV'. Logging to internal storage.\" >> ~/axolotl/debug");
     auto_delete = "1";
   }
+
   // Registering signal handlers
   registerSigintHandler();
   registerDeleteHandler();
   registerUpdateHandler();
 
-  // Data Logging Daemon Test
-  #ifdef LOGTEST
+  // Build logging directory
   bool dir_status = buildSaveDirectory();
   while(dir_status == false) {
     sleep(1);
@@ -331,7 +330,7 @@ int main() {
 
   char *args[] = {(char *)DLDARG1, (char *)logging_directory.c_str(), NULL};
 
-  // forking data logging daemon
+  // Fork OBD/AHRS logger and dashcam logger
   dldpid = fork();
   if (dldpid == 0){
     #ifdef DEBUG
@@ -362,7 +361,6 @@ int main() {
       }
     }
   }
-  #endif
 
   // manager waits on quit
   while(1) {

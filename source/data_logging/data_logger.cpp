@@ -181,10 +181,34 @@ void registerSigtermHandler() {
   Calls the fuel economy analysis script and the DTC fetch script.
 */
 void updateDataFiles(int signumber, siginfo_t *siginfo, void *pointer) {
+  int status = 0;
+
+  // Stop the OBD logger so we can avoid conflicts with connection
+  // Kills OBD process
+  if(!(obd_logger_pid < 0)) {
+    kill(obd_logger_pid, SIGTERM);
+  }
+  waitpid(obd_logger_pid, &status, 0);
+
+  system("pkill -9 -f datad_pyhelper");
+  system("pkill -9 -f data_obd_logger.py");
+
+  // Resets globals
+  obd_logger_pid = -5;
+
+  // Retrieve DTCs and FE data
   string python_command = "python fuel_economy_analysis.py " + logging_directory;
   system(python_command.c_str());
   python_command = "python data_obd_dtc.py " + logging_directory + " fetch";
   system(python_command.c_str());
+
+  // Restart OBD logger
+  if (obd_logger_pid == -5) {
+    obd_logger_pid = fork();
+  }
+  if (obd_logger_pid == 0) {
+    execv("datad_pyhelper",args);   // comment out if AHRS breaks; serial port access violation
+  }
 }
 
 /*
