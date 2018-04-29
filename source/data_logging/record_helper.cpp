@@ -22,10 +22,10 @@ int main(int argc, char *argv[]) {
   string run_type = argv[2], logging_directory = argv[3], stream_open_command;
 
   if(run_type == "f") {
-    stream_open_command = "gst-launch-1.0 -e -v udpsrc port=" + to_string(camera_port) + " ! application/x-rtp, clock-rate=90000, encoding-name=H264, payload=96 ! rtph264depay ! h264parse ! splitmuxsink location='" + logging_directory + "/front_dashcam%03d.mp4'";
+    stream_open_command = "gst-launch-1.0 -e -v udpsrc port=" + to_string(camera_port) + " ! application/x-rtp, clock-rate=90000, encoding-name=H264, payload=96 ! rtph264depay ! h264parse ! splitmuxsink max-size-time=300000000000 location='" + logging_directory + "/front_dashcam%03d.mp4'";
   }
   else if (run_type == "r") {
-    stream_open_command = "gst-launch-1.0 -e -v udpsrc port=" + to_string(camera_port) + " ! application/x-rtp, clock-rate=90000, encoding-name=H264, payload=96 ! rtph264depay ! h264parse ! splitmuxsink location='" + logging_directory + "/rear_dashcam%03d.mp4'";
+    stream_open_command = "gst-launch-1.0 -e -v udpsrc port=" + to_string(camera_port) + " ! application/x-rtp, clock-rate=90000, encoding-name=H264, payload=96 ! rtph264depay ! h264parse ! splitmuxsink max-size-time=300000000000 location='" + logging_directory + "/rear_dashcam%03d.mp4'";
   }
 
   system(stream_open_command.c_str());
