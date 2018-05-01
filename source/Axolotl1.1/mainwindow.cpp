@@ -37,7 +37,7 @@ MainWindow::MainWindow(QWidget *parent) :
     dmid = fork();
     chdir("/home/nvidia/wombat/source/data_logging/");
     if(dmid==0){
-        execl("../source/daemon_launcher", "daemon_launcher", NULL);
+        execl("daemon_manager", "daemon_manager", NULL);
     }
     else{
         chdir("/home/nvidia/wombat/");
@@ -78,8 +78,8 @@ MainWindow::MainWindow(QWidget *parent) :
     //this->setLayout(layout);
     ui->tabWidget->addTab(widget,"Navigation");
     ui->tabWidget->addTab(new Data(this, dmid),"Data");
-    ui->tabWidget->addTab(new viewer(this, dmid),"error codes");
-    ui->tabWidget->addTab(new viewer(this, dmid),"fuel economy");
+    ui->tabWidget->addTab(new viewer(this, dmid),"DTCs");
+    ui->tabWidget->addTab(new viewer(this, dmid),"Fuel Economy Analysis");
     ui->tabWidget->addTab(new MusicPage(),"Media");
 
     fmid = fork();
@@ -118,8 +118,6 @@ MainWindow::MainWindow(QWidget *parent) :
             else{
                 chdir("/home/nvidia/wombat/");
             }
-
-
 
         chdir("/home/nvidia/wombat");
         snprintf(c, 256,"%s %d","bash getwindidbypid > mpwindid.txt",(int)mpid);

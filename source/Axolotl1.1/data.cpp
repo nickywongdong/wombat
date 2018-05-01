@@ -1,6 +1,6 @@
 #include "data.h"
 #include "ui_data.h"
-#include "/home/nvidia/wombat/source/daemon_manager_src.cpp"
+#include "/home/nvidia/wombat/source/data_logging/daemon_manager_src.cpp"
 #include <QString>
 #include<QInputDialog>
 #include<signal.h>
@@ -22,12 +22,13 @@ void Data::on_pushButton_clicked()
 {
     QString in;
     bool yes;
-    in = QInputDialog::getText(0, "Challenge","Password:", QLineEdit::Normal,"", &yes);
+    in = QInputDialog::getText(0, "Clear Data","Enter Password:", QLineEdit::Normal,"", &yes);
     std::string pass = in.toUtf8().constData();
 
     string truekey = "";
     ifstream truekeyf;
-    string hashfilePath = "/home/nvidia/wombat/source/data_logging/hashkey"; //normally runDirectory + "/hashkey"
+    //string hashfilePath = "/home/nvidia/wombat/source/data_logging/hashkey"; //normally runDirectory + "/hashkey"
+    string hashfilePath = "/home/nvidia/axolotl/hashkey"; //normally runDirectory + "/hashkey"
     truekeyf.open(hashfilePath);
     if(truekeyf.is_open()) {
       getline(truekeyf,truekey);
@@ -38,7 +39,7 @@ void Data::on_pushButton_clicked()
         kill(dmid,SIGUSR1);
     }
     else{
-        std::cout<<truekey<<" get good\n";
+        std::cout << "Password Incorrect: " << truekey << std::endl;
     }
 
 }
@@ -47,9 +48,9 @@ void Data::on_pushButton_2_clicked()
 {
     QString in;
     bool yes;
-    in = QInputDialog::getText(0, "Challenge"," Old Password:", QLineEdit::Normal,"", &yes);
+    in = QInputDialog::getText(0, "Change Password","Current Password:", QLineEdit::Normal,"", &yes);
     std::string oldpass = in.toUtf8().constData();
-    in = QInputDialog::getText(0, "Challenge"," New Password:", QLineEdit::Normal,"", &yes);
+    in = QInputDialog::getText(0, "Change Password","New Password:", QLineEdit::Normal,"", &yes);
 
     std::string newpass = in.toUtf8().constData();
     changePassword(oldpass,newpass);

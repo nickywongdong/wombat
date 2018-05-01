@@ -1,4 +1,5 @@
 all: dashcamd datad datad_pyhelper daemon_manager record_helper backup_cam_helper
+	cp hashkey ~/axolotl/hashkey
 
 daemon_launcher: daemon_manager daemon_launcher.cpp
 	g++ daemon_launcher.cpp -o daemon_launcher
