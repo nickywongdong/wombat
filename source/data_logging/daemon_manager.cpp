@@ -8,17 +8,6 @@
 #include "dcomh.hpp"
 #include <sys/stat.h>
 
-// DEPRECATED: system-specific save volume selection
-// uncomment if an external storage device is connected
-// external storage device MUST be named "AXOLOTLDCV"
-// Jetson MUST be logged into the "nvidia" profile
-//#define LOG_VOLUME_INSTALLED
-// #if defined(__linux__) && defined(LOG_VOLUME_INSTALLED)
-// #define LOG_VOLUME "/media/nvidia/AXOLOTLDCV"
-// #else
-// #define LOG_VOLUME axolotlFileSystem::getHomeDir()
-// #endif
-
 #define DCDARG1 "./dashcamd"
 #define DLDARG1 "./datad"
 #define PST -8
