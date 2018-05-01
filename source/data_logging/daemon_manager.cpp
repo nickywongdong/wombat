@@ -30,7 +30,7 @@ using namespace std;
 
 pid_t dcdpid = -5, dldpid = -5;
 
-string logging_directory, run_directory, log_volume;
+string logging_directory, run_directory, log_volume, auto_delete;
 
 /*
   Checks the supplied password against the stored password.
@@ -125,6 +125,8 @@ bool buildSaveDirectory() {
 void dataDeletionHandler() {
   int status = 0;
 
+  // #define DELETION_METHOD_1
+  #ifdef DELETION_METHOD_1
   // pause both daemons
   if(!(dcdpid < 0)) {
     kill(dcdpid,SIGUSR1);
@@ -145,7 +147,21 @@ void dataDeletionHandler() {
     sleep(1);
     dir_build_status = buildSaveDirectoryFromPath(logging_directory);
   }
+  #endif
 
+  #ifndef DELETION_METHOD_1
+  // new data deletion method
+  // deletes everything but the currently active logging directory
+  string current_dir = getcwd();
+  string base_dir = log_volume + "/axolotl/data";
+  string delete_command = "rm -rf !(" + logging_directory + ")";
+
+  chdir(base_dir.c_str());
+  system("shopt -s extglob");
+  system(delete_command.c_str());
+  #endif
+
+  #ifdef DELETION_METHOD_1
   // restart both daemons
   if(!(dcdpid < 0)) {
     kill(dcdpid,SIGUSR2);
@@ -153,6 +169,7 @@ void dataDeletionHandler() {
   if(!(dldpid < 0)) {
     kill(dldpid,SIGUSR2);
   }
+  #endif
 }
 
 /*
@@ -306,7 +323,7 @@ int main() {
 
   // Test for connected flash drive
   struct stat buffer;
-  string auto_delete = "0";
+  auto_delete = "0";
   if ((stat("/media/nvidia/AXOLOTLDCV", &buffer) == 0) && S_ISDIR(buffer.st_mode)) {
     log_volume = "/media/nvidia/AXOLOTLDCV";
   }
