@@ -163,7 +163,7 @@ void deleteData(string password) {
   // Get true passkey hash from file
   ifstream hash_file;
   string truekeyHash = NULL;
-  string hash_file_path = string(getenv("HOME")) + "/wombat/source/data_logging/hashkey"; //normally run_directory + "/hashkey"
+  string hash_file_path = string(getenv("HOME")) + "/axolotl/hashkey"; //normally run_directory + "/hashkey"
   hash_file.open(hash_file_path);
   if (hash_file.is_open()) {
     getline(hash_file,truekeyHash);
@@ -187,7 +187,7 @@ bool changePassword(string checkPassword, string newPassword) {
   if(checkPasswordCorrect(checkPassword)) {
     ofstream hash_file;
     string newhash = axolotlFileSystem::hash(newPassword);
-    string hash_file_path = string(getenv("HOME")) + "/wombat/source/data_logging/hashkey";    // normally run_directory + "/hashkey"
+    string hash_file_path = string(getenv("HOME")) + "/axolotl/hashkey";    // normally run_directory + "/hashkey"
     hash_file.open(hash_file_path, std::ofstream::trunc);
     if(hash_file.is_open()) {
       hash_file.write((const char *)newhash.c_str(),(long)newhash.length());
@@ -295,8 +295,8 @@ void registerUpdateHandler() {
   sigaction(SIGBUS, &dsa, NULL);
 }
 
-int mainOperation() {
-//int main() {
+//int mainOperation() {
+int main() {
   string input_str;
   run_directory = axolotlFileSystem::getPWD();
 
