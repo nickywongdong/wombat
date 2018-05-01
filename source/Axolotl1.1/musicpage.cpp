@@ -1,18 +1,18 @@
 #include "musicpage.h"
 #include "ui_musicpage.h"
-#include<stdio.h>
-#include<unistd.h>
-#include<sys/types.h>
-#include<sys/wait.h>
-#include<string.h>
-#include<stdlib.h>
-#include<iostream>
-#include<fstream>
-#include<signal.h>
-#include<string>
-#include<QCloseEvent>
-#include<QTabWidget>
-#include<QStackedWidget>
+#include <stdio.h>
+#include <unistd.h>
+#include <sys/types.h>
+#include <sys/wait.h>
+#include <string.h>
+#include <stdlib.h>
+#include <iostream>
+#include <fstream>
+#include <signal.h>
+#include <string>
+#include <QCloseEvent>
+#include <QTabWidget>
+#include <QStackedWidget>
 #include <QWindow>
 #include <QVBoxLayout>
 

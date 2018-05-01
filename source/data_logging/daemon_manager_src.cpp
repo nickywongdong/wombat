@@ -295,8 +295,8 @@ void registerUpdateHandler() {
   sigaction(SIGBUS, &dsa, NULL);
 }
 
-//int mainOperation() {
-int main() {
+int mainOperation() {
+//int main() {
   string input_str;
   run_directory = axolotlFileSystem::getPWD();
 
