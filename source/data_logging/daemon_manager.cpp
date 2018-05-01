@@ -22,21 +22,6 @@ pid_t dcdpid = -5, dldpid = -5;
 string logging_directory, run_directory, log_volume, auto_delete;
 
 /*
-  Checks the supplied password against the stored password.
-*/
-bool checkPasswordCorrect(string password) {
-  string truekey;
-  ifstream truekeyf;
-  string hash_file_path = string(getenv("HOME")) + "/wombat/source/data_logging/hashkey"; //normally run_directory + "/hashkey"
-  truekeyf.open(hash_file_path);
-  if(truekeyf.is_open()) {
-    getline(truekeyf,truekey);
-  }
-  truekeyf.close();
-  return (axolotlFileSystem::hash(password) == truekey);
-}
-
-/*
   Creates a logging directory from a path.
 */
 bool buildSaveDirectoryFromPath(string path) {
@@ -109,120 +94,9 @@ bool buildSaveDirectory() {
 }
 
 /*
-  Handles all data deletion.
-*/
-void dataDeletionHandler() {
-  int status = 0;
-
-  // #define DELETION_METHOD_1
-  #ifdef DELETION_METHOD_1
-  // pause both daemons
-  if(!(dcdpid < 0)) {
-    kill(dcdpid,SIGUSR1);
-  }
-  if(!(dldpid < 0)) {
-    kill(dldpid,SIGUSR1);
-  }
-
-  sleep(2);
-
-  // delete the data directory
-  string base_directory_str = log_volume, delete_dir = base_directory_str + "/axolotl/data", deleteCommand = "rm -rf " + delete_dir;
-  system(deleteCommand.c_str());
-
-  // rebuild the data directory using existing path so as to not break our daemons
-  bool dir_build_status = buildSaveDirectoryFromPath(logging_directory);
-  while(dir_build_status == false) {
-    sleep(1);
-    dir_build_status = buildSaveDirectoryFromPath(logging_directory);
-  }
-  #endif
-
-  #ifndef DELETION_METHOD_1
-  // new data deletion method
-  // deletes everything but the currently active logging directory
-  string current_dir = getcwd();
-  string base_dir = log_volume + "/axolotl/data";
-  string delete_command = "rm -rf !(" + logging_directory + ")";
-
-  chdir(base_dir.c_str());
-  system("shopt -s extglob");
-  system(delete_command.c_str());
-  #endif
-
-  #ifdef DELETION_METHOD_1
-  // restart both daemons
-  if(!(dcdpid < 0)) {
-    kill(dcdpid,SIGUSR2);
-  }
-  if(!(dldpid < 0)) {
-    kill(dldpid,SIGUSR2);
-  }
-  #endif
-}
-
-/*
-  Wipes all data from the data logging system.
-  Will only destroy data if password matches.
-*/
-void deleteData(string password) {
-  // Get true passkey hash from file
-  ifstream hash_file;
-  string truekeyHash = NULL;
-  string hash_file_path = string(getenv("HOME")) + "/wombat/source/data_logging/hashkey"; //normally run_directory + "/hashkey"
-  hash_file.open(hash_file_path);
-  if (hash_file.is_open()) {
-    getline(hash_file,truekeyHash);
-    hash_file.close();
-  }
-
-  // Delete the data only if password hashes match
-  if(axolotlFileSystem::hash(password) == truekeyHash) {
-    dataDeletionHandler();
-  }
-  #ifdef DEBUG
-  printf("Data deleted.\n");
-  #endif
-}
-
-/*
-  Hashes a new password and changes old password hash with the new hash.
-  Only if old password matches!
-*/
-bool changePassword(string checkPassword, string newPassword) {
-  if(checkPasswordCorrect(checkPassword)) {
-    ofstream hash_file;
-    string newhash = axolotlFileSystem::hash(newPassword);
-    string hash_file_path = string(getenv("HOME")) + "/wombat/source/data_logging/hashkey";    // normally run_directory + "/hashkey"
-    hash_file.open(hash_file_path, std::ofstream::trunc);
-    if(hash_file.is_open()) {
-      hash_file.write((const char *)newhash.c_str(),(long)newhash.length());
-    }
-    hash_file.close();
-    return true;
-  }
-  return false;
-}
-
-/*
-  Resets password back to the original.
-*/
-void resetPassword() {
-  ofstream hash_file;
-  string newhash = axolotlFileSystem::hash("orangemonkeyeagle");
-  string hash_file_path = string(getenv("HOME")) + "/wombat/source/data_logging/hashkey"; // normally run_directory + "/hashkey"
-  hash_file.open(hash_file_path, std::ofstream::trunc);
-  if(hash_file.is_open()) {
-    hash_file.write((const char *)newhash.c_str(),(long)newhash.length());
-  }
-  hash_file.close();
-}
-
-/*
   Handles exit of daemon launcher; kills daemons and frees their resources.
   UI: signal SIGINT to this process on system exit.
 */
-
 void managerSigintHandler(int signumber, siginfo_t *siginfo, void *pointer) {
   int status = 0;
 
@@ -263,8 +137,58 @@ void registerSigintHandler() {
   FOR DEBUG ONLY: remove this and its signal registerer for final build.
 */
 
-void managerDeleteHandler(int signumber, siginfo_t *siginfo, void *pointer) {
-  dataDeletionHandler();
+void deleteHandler(int signumber, siginfo_t *siginfo, void *pointer) {
+  int status = 0;
+
+  // #define DELETION_METHOD_1
+
+  #ifdef DELETION_METHOD_1
+  // pause both daemons
+  if(!(dcdpid < 0)) {
+    kill(dcdpid,SIGUSR1);
+  }
+  if(!(dldpid < 0)) {
+    kill(dldpid,SIGUSR1);
+  }
+
+  sleep(2);
+
+  // delete the data directory
+  string base_directory_str = log_volume, delete_dir = base_directory_str + "/axolotl/data", deleteCommand = "rm -rf " + delete_dir;
+  system(deleteCommand.c_str());
+
+  // rebuild the data directory using existing path so as to not break our daemons
+  bool dir_build_status = buildSaveDirectoryFromPath(logging_directory);
+  while(dir_build_status == false) {
+    sleep(1);
+    dir_build_status = buildSaveDirectoryFromPath(logging_directory);
+  }
+  #endif
+
+  #ifndef DELETION_METHOD_1
+  // new data deletion method
+  // deletes everything but the currently active logging directory
+  char cwd_raw[10000];
+  getcwd(cwd_raw, sizeof(cwd_raw));
+  string current_dir = string(cwd_raw);
+  string base_dir = log_volume + "/axolotl/data";
+  string delete_command = "rm -rf !(" + logging_directory + ")";
+
+  chdir(base_dir.c_str());
+  system("shopt -s extglob");
+  system(delete_command.c_str());
+  chdir(current_dir.c_str());
+  #endif
+
+  #ifdef DELETION_METHOD_1
+  // restart both daemons
+  if(!(dcdpid < 0)) {
+    kill(dcdpid,SIGUSR2);
+  }
+  if(!(dldpid < 0)) {
+    kill(dldpid,SIGUSR2);
+  }
+  #endif
 }
 
 /*
@@ -274,7 +198,7 @@ void managerDeleteHandler(int signumber, siginfo_t *siginfo, void *pointer) {
 void registerDeleteHandler() {
   static struct sigaction dsa;
   memset(&dsa, 0, sizeof(dsa));
-  dsa.sa_sigaction = managerDeleteHandler;
+  dsa.sa_sigaction = deleteHandler;
   dsa.sa_flags = SA_SIGINFO;
   sigaction(SIGUSR1, &dsa, NULL);
 }
@@ -371,10 +295,7 @@ int main() {
   // manager waits on quit
   while(1) {
     getline(cin,input_str);
-    if(checkPasswordCorrect(input_str)) {
-      dataDeletionHandler();
-    }
-    input_str = "";
+    pause();
   }
 
   return 0;
