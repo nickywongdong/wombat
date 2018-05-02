@@ -35,7 +35,7 @@ MainWindow::MainWindow(QWidget *parent) :
         execl("../source/daemon_launcher", "daemon_launcher", NULL);
     }
     else{
-        chdir("/home/nvidia/wombat/");
+        chdir("/home/nvidia/wombat/source/");
     }
 
     nvid = fork();
@@ -45,7 +45,7 @@ MainWindow::MainWindow(QWidget *parent) :
         execl("./navit", "navit", NULL);
     }
     else{
-        chdir("/home/nvidia/wombat/");
+        chdir("/home/nvidia/wombat/source/");
     }
 
     char c[256];
@@ -83,7 +83,7 @@ MainWindow::MainWindow(QWidget *parent) :
                 execl("/usr/bin/gqrx", "gqrx", NULL);
             }
             else{
-                chdir("/home/nvidia/wombat/");
+                chdir("/home/nvidia/wombat/source/");
             }
 
 
@@ -114,7 +114,7 @@ MainWindow::MainWindow(QWidget *parent) :
                 execl("/usr/bin/vlc", "vlc", "--no-video", "--no-playlist-autostart","--loop","--playlist-tree",  "/media/nvidia/AXOLOTLDCV", "Music", NULL);
             }
             else{
-                chdir("/home/nvidia/wombat/");
+                chdir("/home/nvidia/wombat/source/");
             }
 
 
