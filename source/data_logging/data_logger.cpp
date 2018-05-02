@@ -92,7 +92,7 @@ void toggleOffHandler(int signumber, siginfo_t *siginfo, void *pointer) {
   if(!(obd_logger_pid < 0)) {
     kill(obd_logger_pid, SIGTERM);
   }
-  waitpid(obd_logger_pid, &status, 0);
+  waitpid(obd_logger_pid, &status, -1);
 
   system("pkill -9 -f datad_pyhelper");
   system("pkill -9 -f data_obd_logger.py");
@@ -101,7 +101,7 @@ void toggleOffHandler(int signumber, siginfo_t *siginfo, void *pointer) {
   if(!(ahrs_logger_pid < 0)) {
     kill(ahrs_logger_pid, SIGTERM);
   }
-  waitpid(ahrs_logger_pid, &status, 0);
+  waitpid(ahrs_logger_pid, &status, -1);
 
   // Resets globals
   logging_active = false;
@@ -150,7 +150,7 @@ void datadSigtermHandler(int signumber, siginfo_t *siginfo, void *pointer) {
   if(!(obd_logger_pid < 0)) {
     kill(obd_logger_pid, SIGKILL);
   }
-  waitpid(obd_logger_pid, &status, 0);
+  waitpid(obd_logger_pid, &status, -1);
 
   system("pkill -9 -f datad_pyhelper");
   system("pkill -9 -f data_obd_logger.py");
@@ -158,7 +158,7 @@ void datadSigtermHandler(int signumber, siginfo_t *siginfo, void *pointer) {
   if(!(ahrs_logger_pid < 0)) {
     kill(ahrs_logger_pid, SIGKILL);
   }
-  waitpid(ahrs_logger_pid, &status, 0);
+  waitpid(ahrs_logger_pid, &status, -1);
   logging_active = false;
   obd_logger_pid = -5;
   ahrs_logger_pid = -5;
@@ -188,7 +188,7 @@ void updateDataFiles(int signumber, siginfo_t *siginfo, void *pointer) {
   if(!(obd_logger_pid < 0)) {
     kill(obd_logger_pid, SIGTERM);
   }
-  waitpid(obd_logger_pid, &status, 0);
+  waitpid(obd_logger_pid, &status, -1);
 
   system("pkill -9 -f datad_pyhelper");
   system("pkill -9 -f data_obd_logger.py");
