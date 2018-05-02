@@ -53,7 +53,7 @@ MainWindow::MainWindow(QWidget *parent) :
     std::string bar;
     std::string baz;
     std::ifstream f;
-    chdir("/home/nvidia/wombat");
+    chdir("/home/nvidia/wombat/source");
     snprintf(c, 256,"%s %d","bash getwindidbypid > ./windowid.txt",(int)nvid);
     sleep(1);   //necessary
     system(c);
@@ -88,7 +88,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
 
 
-        chdir("/home/nvidia/wombat");
+        chdir("/home/nvidia/wombat/source");
         snprintf(c, 256,"%s %d","bash getwindidbypid > ./fmwindid.txt",(int)fmid);
         sleep(1);   //necessary
         system(c);
@@ -119,7 +119,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
 
 
-        chdir("/home/nvidia/wombat");
+        chdir("/home/nvidia/wombat/source");
         snprintf(c, 256,"%s %d","bash getwindidbypid > mpwindid.txt",(int)mpid);
         sleep(1);   //necessary
         system(c);
@@ -156,5 +156,3 @@ MainWindow::~MainWindow()
 {
     delete ui;
 }
-
-
