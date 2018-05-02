@@ -297,8 +297,8 @@ int main(int argc, char **argv) {
         um6::Registers registers;
         handleResetService(&sensor);
 
-        string token;
-        string c_angle;
+        std::string token;
+        std::string c_angle;
         int t = 0;
         while (1) {
             if(t>20) {
@@ -316,7 +316,7 @@ int main(int argc, char **argv) {
                 angles_in.close();
               }
 
-              std::string pre_write_string = std::to_string((IMU_EULER_X*360/6.28318530718)-calibrated_angle[0])+","+std::to_string((IMU_EULER_Y*360/6.28318530718)-calibrated_angle[1])+","+std::to_string((IMU_EULER_Z*360/6.28318530718)-calibrated_angle[2])
+              std::string pre_write_string = std::to_string((IMU_EULER_X*360/6.28318530718)-calibrated_angle[0])+","+std::to_string((IMU_EULER_Y*360/6.28318530718)-calibrated_angle[1])+","+std::to_string((IMU_EULER_Z*360/6.28318530718)-calibrated_angle[2]);
               std::string timestamp_prefix = createTimestamp();
               std::string write_string = "@" + timestamp_prefix + "," + pre_write_string;
               ahrs_csv.open(filepath.c_str(), std::ofstream::out | std::ofstream::app);
