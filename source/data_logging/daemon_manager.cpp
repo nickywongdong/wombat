@@ -182,6 +182,8 @@ void deleteHandler(int signumber, siginfo_t *siginfo, void *pointer) {
   system("shopt -s extglob");
   system(delete_command.c_str());
   chdir(current_dir.c_str());
+
+  cout << delete_command << endl;
   #endif
 
   #ifdef DELETION_METHOD_1
