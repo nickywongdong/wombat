@@ -1,5 +1,11 @@
 # Axolotl - Beta
-__Current Version:__ 0.5.3 beta
+__Current Version:__ 0.5.4 beta
+
+Version 0.5.4 beta:
+- Revised IMU to allow for user calibration
+- Added more test skeletons
+- Auto-export GPIO pins
+- Revised UI for DTCs and fuel economy
 
 Version 0.5.3 beta:
 - Fully working front dashcam and backup camera

@@ -52,7 +52,7 @@ def obdSnapshot(obd_connection_handle):
     csv_line += str(obd_connection_handle.query(commands[len(commands)-1]).value) + "\n"
 
     # write entire csv_line to file in one file operation
-    csv_file_handle = open(sys.argv[2] + "/obd_log.csv",'w+')
+    csv_file_handle = open(sys.argv[2] + "/obd_log.csv",'a')
     csv_file_handle.write(csv_line)
     csv_file_handle.close()
 

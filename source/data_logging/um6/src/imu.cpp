@@ -318,7 +318,7 @@ int main(int argc, char **argv) {
 
               std::string pre_write_string = std::to_string((IMU_EULER_X*360/6.28318530718)-calibrated_angle[0])+","+std::to_string((IMU_EULER_Y*360/6.28318530718)-calibrated_angle[1])+","+std::to_string((IMU_EULER_Z*360/6.28318530718)-calibrated_angle[2])
               std::string timestamp_prefix = createTimestamp();
-              std::string write_string = timestamp_prefix + "," + pre_write_string;
+              std::string write_string = "@" + timestamp_prefix + "," + pre_write_string;
               ahrs_csv.open(filepath.c_str(), std::ofstream::out | std::ofstream::app);
               if(ahrs_csv.is_open()) {
                 ahrs_csv << write_string;

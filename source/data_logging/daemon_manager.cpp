@@ -117,6 +117,10 @@ void managerSigintHandler(int signumber, siginfo_t *siginfo, void *pointer) {
   system("./set_client.sh");
   #endif
 
+  // collate the logs into a master log
+  string collate_csv_command = "python data_collator.py " + logging_directory;
+  system(collate_csv_command.c_str());
+
   // exit cleanly
   exit(0);
 }
