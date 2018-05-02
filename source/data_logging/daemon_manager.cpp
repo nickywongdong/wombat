@@ -177,7 +177,7 @@ void deleteHandler(int signumber, siginfo_t *siginfo, void *pointer) {
   getcwd(cwd_raw, sizeof(cwd_raw));
   string current_dir = string(cwd_raw);
   string base_dir = log_volume + "/axolotl/data";
-  string delete_command = "exec rm -rf !(" + logging_directory_name + ")";
+  string delete_command = "bash rm -rf !(" + logging_directory_name + ")";
 
   chdir(base_dir.c_str());
   //system("shopt -s extglob");
