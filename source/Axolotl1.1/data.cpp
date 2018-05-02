@@ -1,6 +1,6 @@
 #include "data.h"
 #include "ui_data.h"
-#include "/home/nvidia/wombat/source/daemon_manager_src.cpp"
+#include "/home/nvidia/wombat/source/source/daemon_manager_src.cpp"
 #include <QString>
 #include<QInputDialog>
 #include<signal.h>
