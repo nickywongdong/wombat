@@ -79,7 +79,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->tabWidget->addTab(widget,"Navigation");
     ui->tabWidget->addTab(new Data(this, dmid),"Data");
     ui->tabWidget->addTab(new viewer(this, dmid),"DTCs");
-    ui->tabWidget->addTab(new viewer(this, dmid),"Fuel Economy Analysis");
+    ui->tabWidget->addTab(new viewer(this, dmid),"Fuel\nEconomy\nAnalysis");
     ui->tabWidget->addTab(new MusicPage(),"Media");
 
     fmid = fork();
