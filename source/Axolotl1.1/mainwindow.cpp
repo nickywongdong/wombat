@@ -28,7 +28,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
     // system("sudo /home/nvidia/Desktop/wombat-victor-dev/source/wmanager/set_client.sh");
     // music pulling here
-    system("sudo /home/nvidia/source/data_logging/wmanager/set_ap_n.sh");
+    // system("sudo /home/nvidia/source/data_logging/wmanager/set_ap_n.sh");
     sleep(1);
     chdir("/home/nvidia/wombat/source/data_logging/");
     system("./camera_bt_autoconnect.sh");

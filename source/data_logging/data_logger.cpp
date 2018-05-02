@@ -207,6 +207,7 @@ void updateDataFiles(int signumber, siginfo_t *siginfo, void *pointer) {
     obd_logger_pid = fork();
   }
   if (obd_logger_pid == 0) {
+    char *args[] = {(char *)DATA_HELPER_ARG0, (char *)logging_directory.c_str(), NULL};
     execv("datad_pyhelper",args);   // comment out if AHRS breaks; serial port access violation
   }
 }
