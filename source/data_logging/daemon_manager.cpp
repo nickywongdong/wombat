@@ -19,7 +19,7 @@ using namespace std;
 
 pid_t dcdpid = -5, dldpid = -5;
 
-string logging_directory, run_directory, log_volume, auto_delete;
+string logging_directory, run_directory, log_volume, auto_delete, logging_directory_name;
 
 /*
   Creates a logging directory from a path.
@@ -79,6 +79,7 @@ bool buildSaveDirectory() {
 
   // Assemble path
   create_directory_name = create_directory_name + year_str + "_" + month_str + "_" + day_str + "_" + hour_str + minutes_str + seconds_str;
+  logging_directory_name = "axolotl_log_" + year_str + "_" + month_str + "_" + day_str + "_" + hour_str + minutes_str + seconds_str;
 
   // Build the directory from path
   dir_build_status = mkdir((const char *)create_directory_name.c_str(), S_IRWXU | S_IRWXG | S_IRWXO);
@@ -176,10 +177,11 @@ void deleteHandler(int signumber, siginfo_t *siginfo, void *pointer) {
   getcwd(cwd_raw, sizeof(cwd_raw));
   string current_dir = string(cwd_raw);
   string base_dir = log_volume + "/axolotl/data";
-  string delete_command = "rm -rf !(" + logging_directory + ")";
+  string delete_command = "rm -rf !(" + logging_directory_name + ")";
 
   chdir(base_dir.c_str());
-  system("shopt -s extglob");
+  //system("shopt -s extglob");
+  system("./delete.sh");
   system(delete_command.c_str());
   chdir(current_dir.c_str());
 
