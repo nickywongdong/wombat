@@ -192,6 +192,8 @@ void killAllHelpers() {
   // kill all of our gst-launch processes and helpers
   system("killall -SIGINT gst-launch-1.0");
   system("killall record_helper");
+  system("pkill -SIGINT gst-launch-1.0");
+  system("pkill record_helper");
   if(backup_camera_active) {
     system("killall backup_cam_helper");
   }
@@ -271,7 +273,7 @@ void toggleOffHandler(int signumber, siginfo_t *siginfo, void *pointer) {
     sendBluetoothCommand(front_dashcam_bluetooth_socket,'p');
   }
   if(rear_cam_bt_active) {
-    sendBluetoothCommand(front_dashcam_bluetooth_socket,'p');
+    sendBluetoothCommand(rear_dashcam_bluetooth_socket,'p');
   }
   killAllHelpers();
 }
