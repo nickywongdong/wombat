@@ -303,8 +303,8 @@ int main(int argc, char **argv) {
         while (1) {
             if(t>20) {
               double calibrated_angle[3] = {0.0, 0.0, 0.0};
-              ifstream angles_in;
-              std::string angle_file = string(getenv("HOME")) + "/axolotl/zero_angles";
+              std::ifstream angles_in;
+              std::string angle_file = std::string(getenv("HOME")) + "/axolotl/zero_angles";
               angles_in.open(angle_file.c_str());
               if(angles_in.is_open()) {
                 getline(angles_in,c_angle);
