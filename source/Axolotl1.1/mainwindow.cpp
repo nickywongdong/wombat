@@ -34,6 +34,10 @@ MainWindow::MainWindow(QWidget *parent) :
     system("./camera_bt_autoconnect.sh");
     sleep(1);
 
+    // Export GPIO
+    system("sudo sh -c \"echo 298 > /sys/class/gpio/export/\"");
+    sleep(1);
+
     dmid = fork();
     chdir("/home/nvidia/wombat/source/data_logging/");
     if(dmid==0){
