@@ -181,7 +181,7 @@ void deleteHandler(int signumber, siginfo_t *siginfo, void *pointer) {
 
   chdir(base_dir.c_str());
   //system("shopt -s extglob");
-  system("./delete.sh");
+  system("delete.sh");
   system(delete_command.c_str());
   chdir(current_dir.c_str());
 
