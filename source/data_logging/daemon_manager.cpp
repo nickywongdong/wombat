@@ -105,13 +105,13 @@ void managerSigintHandler(int signumber, siginfo_t *siginfo, void *pointer) {
   if(!(dcdpid < 0)) {
     kill(dcdpid,SIGTERM);
   }
-  waitpid(dcdpid, &status, 0);
+  waitpid(dcdpid, &status, -1);
 
   // kill and wait on termination of data logging daemon
   if(!(dldpid < 0)) {
     kill(dldpid,SIGTERM);
   }
-  waitpid(dldpid, &status, 0);
+  waitpid(dldpid, &status, -1);
 
   #ifdef RESET_WIFI
   chdir("wmanager");
