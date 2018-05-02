@@ -152,6 +152,7 @@ int status;
     waitpid(nvid,&status,-1);
     kill(fmid,SIGINT);
     waitpid(fmid,&status,-1);
+    system("pkill -9 gqrx");
     event->accept();
 }
 
