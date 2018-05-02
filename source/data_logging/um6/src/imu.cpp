@@ -325,7 +325,7 @@ int main(int argc, char **argv) {
                 ahrs_csv.close();
               }
               std::istringstream ss_echo(pre_write_string);
-              std::vector<string> output_angles;
+              std::vector<std::string> output_angles;
               while(std::getline(ss_echo, token, ',')) {
                 std::cout << token << '\n';
                 output_angles.push_back(token);
