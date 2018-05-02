@@ -427,12 +427,6 @@ int main(int argc, char *argv[]) {
     system("echo \"Error: could not connect to rear camera.\" >> ~/axolotl/debug");
   }
 
-  // Register all signal handlers
-  registerToggleOffHandler();
-  registerToggleOnHandler();
-  registerKillCamerasHandler();
-  registerBackupCameraHandler();
-
   // Write a lock file so we know when we can start the nav system
   system("echo \"0\" > ~/axolotl/device_free");
 
@@ -474,6 +468,12 @@ int main(int argc, char *argv[]) {
     }
   }
   else {
+    // Register all signal handlers
+    registerToggleOffHandler();
+    registerToggleOnHandler();
+    registerKillCamerasHandler();
+    registerBackupCameraHandler();
+    
     cameraLoop();   // begin our camera loop outside of the gpio watcher
   }
 
