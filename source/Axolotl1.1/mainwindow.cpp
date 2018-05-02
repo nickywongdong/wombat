@@ -30,9 +30,9 @@ MainWindow::MainWindow(QWidget *parent) :
     // music pulling here
     system("sudo /home/nvidia/Desktop/wombat-victor-dev/source/wmanager/set_ap_n.sh");
     dmid = fork();
-    chdir("/home/nvidia/Desktop/wombat-victor-dev/source/");
+    chdir("/home/nvidia/Desktop/wombat-victor-dev/source/source");
     if(dmid==0){
-        execl("../source/daemon_launcher", "daemon_launcher", NULL);
+        execl("daemon_launcher", "daemon_launcher", NULL);
     }
     else{
         chdir("/home/nvidia/wombat/source/");
