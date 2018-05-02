@@ -1,0 +1,9 @@
+/Users/VictorLi/Gitdir/wombat/source/data_logging/um6/CMakeFiles/install/local.dir
+/Users/VictorLi/Gitdir/wombat/source/data_logging/um6/CMakeFiles/install/strip.dir
+/Users/VictorLi/Gitdir/wombat/source/data_logging/um6/CMakeFiles/install.dir
+/Users/VictorLi/Gitdir/wombat/source/data_logging/um6/CMakeFiles/list_install_components.dir
+/Users/VictorLi/Gitdir/wombat/source/data_logging/um6/CMakeFiles/comms.dir
+/Users/VictorLi/Gitdir/wombat/source/data_logging/um6/CMakeFiles/imu.dir
+/Users/VictorLi/Gitdir/wombat/source/data_logging/um6/CMakeFiles/rebuild_cache.dir
+/Users/VictorLi/Gitdir/wombat/source/data_logging/um6/CMakeFiles/edit_cache.dir
+/Users/VictorLi/Gitdir/wombat/source/data_logging/um6/CMakeFiles/registers.dir

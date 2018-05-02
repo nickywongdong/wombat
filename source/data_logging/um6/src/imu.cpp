@@ -81,6 +81,8 @@ sudo make install
 #include <comms.h>
 #include <registers.h>
 
+#include <sstream>
+
 // Global variables for logging
 std::string logging_directory, filepath;
 bool logging_directory_set = false;
@@ -295,17 +297,41 @@ int main(int argc, char **argv) {
         um6::Registers registers;
         handleResetService(&sensor);
 
+        string token;
+        string c_angle;
         int t = 0;
         while (1) {
             if(t>20) {
-              std::string pre_write_string = ","+std::to_string(IMU_EULER_X*360/6.28318530718)+","+std::to_string(IMU_EULER_Y*360/6.28318530718)+","+std::to_string(IMU_EULER_Z*360/6.28318530718)+"\n";
+              double calibrated_angle[3] = {0.0, 0.0, 0.0};
+              ifstream angles_in;
+              std::string angle_file = string(getenv("HOME")) + "/axolotl/zero_angles";
+              angles_in.open(angle_file.c_str());
+              if(angles_in.is_open()) {
+                getline(angles_in,c_angle);
+                calibrated_angle[0] = atof(c_angle.c_str());
+                getline(angles_in,c_angle);
+                calibrated_angle[1] = atof(c_angle.c_str());
+                getline(angles_in,c_angle);
+                calibrated_angle[2] = atof(c_angle.c_str());
+                angles_in.close();
+              }
+
+              std::string pre_write_string = std::to_string((IMU_EULER_X*360/6.28318530718)-calibrated_angle[0])+","+std::to_string((IMU_EULER_Y*360/6.28318530718)-calibrated_angle[1])+","+std::to_string((IMU_EULER_Z*360/6.28318530718)-calibrated_angle[2])
               std::string timestamp_prefix = createTimestamp();
-              std::string write_string = timestamp_prefix + pre_write_string;
+              std::string write_string = timestamp_prefix + "," + pre_write_string;
               ahrs_csv.open(filepath.c_str(), std::ofstream::out | std::ofstream::app);
               if(ahrs_csv.is_open()) {
                 ahrs_csv << write_string;
                 ahrs_csv.close();
               }
+              std::istringstream ss_echo(pre_write_string);
+              std::vector<string> output_angles;
+              while(std::getline(ss_echo, token, ',')) {
+                std::cout << token << '\n';
+                output_angles.push_back(token);
+              }
+              std::string echo_string = "echo \"" + output_angles[0] + "\n" + output_angles[1] + "\n" + output_angles[2] + "\" > ~/axolotl/angles";
+              system(echo_string.c_str());
               t = 0;
             }
             t++;

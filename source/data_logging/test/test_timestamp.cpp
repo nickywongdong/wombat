@@ -2,7 +2,7 @@
 #include <string>
 #include <time.h>
 
-#include "dcomh.hpp"
+#include "../dcomh.hpp"
 
 #if defined(__linux__) && defined(LOG_VOLUME_INSTALLED)
 #define LOG_VOLUME "/media/nvidia/AXOLOTLDCV"
@@ -57,6 +57,26 @@ int main() {
   struct stat buffer;
   bool is_dir = ((stat("/Users/VictorLi/axolotl/", &buffer) == 0) && S_ISDIR(buffer.st_mode));
   std::cout << is_dir << std::endl;
+
+  std::string echo_string = "echo \"" + to_string(1) + "\n" + to_string(2) + "\n" + to_string(3) + "\" > ~/axolotl/angles";
+  std::cout << echo_string << std::endl;
+  system(echo_string.c_str());
+
+  double calibrated_angle[3] = {0.0, 0.0, 0.0};
+  std::string angle_file = string(getenv("HOME")) + "/axolotl/angles", c_angle;
+  std::ifstream angles_in;
+  angles_in.open(angle_file.c_str());
+  if(angles_in.is_open()) {
+    getline(angles_in,c_angle);
+    calibrated_angle[0] = atof(c_angle.c_str());
+    getline(angles_in,c_angle);
+    calibrated_angle[1] = atof(c_angle.c_str());
+    getline(angles_in,c_angle);
+    calibrated_angle[2] = atof(c_angle.c_str());
+    angles_in.close();
+  }
+
+  std::cout << calibrated_angle[2] << std::endl;
 
   return 0;
 

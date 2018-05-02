@@ -1,0 +1,1 @@
+/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  -dynamiclib -Wl,-headerpad_max_install_names  -o libcomms.dylib -install_name /Users/VictorLi/Gitdir/wombat/source/data_logging/um6/libcomms.dylib CMakeFiles/comms.dir/src/comms.o 
