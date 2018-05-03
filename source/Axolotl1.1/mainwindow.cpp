@@ -26,6 +26,8 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+
+    system("python /home/nvidia/wombat/source/remove_config.py");
     // system("sudo /home/nvidia/Desktop/wombat-victor-dev/source/wmanager/set_client.sh");
     // music pulling here
     // system("sudo /home/nvidia/source/data_logging/wmanager/set_ap_n.sh");
@@ -37,6 +39,11 @@ MainWindow::MainWindow(QWidget *parent) :
     // Export GPIO
     system("sudo sh -c \"echo 298 > /sys/class/gpio/export/\"");
     sleep(1);
+
+    //exec this plz
+    //chdir("/home/nvidia/wombat/source");
+    //system("sudo ./switchToggle");
+    //sleep(1);
 
     dmid = fork();
     chdir("/home/nvidia/wombat/source/data_logging/");
@@ -57,16 +64,47 @@ MainWindow::MainWindow(QWidget *parent) :
         chdir("/home/nvidia/wombat/");
     }
 
+    fmid = fork();
+            //chdir("/home/nvidia/Desktop/github/source/");
+            if(fmid==0){
+                execl("/usr/bin/gqrx", "gqrx", NULL);
+            }
+            else{
+                chdir("/home/nvidia/wombat/");
+            }
+
+            mpid = fork();
+                //chdir("/home/nvidia/Desktop/github/source/media_player");
+                chdir("/home/nvidia/wombat/source/media_system/media_player");
+                if(mpid==0){
+                    execl("/usr/bin/vlc", "vlc", "--no-video", "--no-playlist-autostart","--loop","--playlist-tree",  "/media/nvidia/AXOLOTLDCV", "Music", NULL);
+                }
+                else{
+                    chdir("/home/nvidia/wombat/");
+                }
+
+
+    char a[256];
+    char b[256];
     char c[256];
     std::string foo;
     std::string bar;
     std::string baz;
     std::ifstream f;
     chdir("/home/nvidia/wombat/source");
-    snprintf(c, 256,"%s %d","bash getwindidbypid > ./windowid.txt",(int)nvid);
-    sleep(1);   //necessary
+
+    sleep(2);
+
+    snprintf(a, 256,"%s %d","bash getwindidbypid > ./windowid.txt",(int)nvid);
+    snprintf(b, 256,"%s %d","bash getwindidbypid > ./fmwindid.txt",(int)fmid);
+    snprintf(c, 256,"%s %d","bash getwindidbypid > ./mpwindid.txt",(int)mpid);
+
+    system(a);
+    system(b);
     system(c);
-    f.open("./windowid.txt");
+
+
+    f.open("./windowid.txt",std::fstream::in);
     std::getline(f,foo);
     f.close();
     unsigned long long int windid;
@@ -82,23 +120,12 @@ MainWindow::MainWindow(QWidget *parent) :
     //this->setLayout(layout);
     ui->tabWidget->addTab(widget,"Navigation");
     ui->tabWidget->addTab(new Data(this, dmid),"Data");
-    ui->tabWidget->addTab(new viewer(this, dmid),"DTCs");
-    ui->tabWidget->addTab(new viewer(this, dmid),"Fuel\nEconomy\nAnalysis");
-    ui->tabWidget->addTab(new MusicPage(),"Media");
+    ui->tabWidget->addTab(new viewer(this, dmid, "/home/nvidia/axolotl/dtc_errors"),"DTCs");
+    ui->tabWidget->addTab(new viewer(this, dmid, "/home/nvidia/axolotl/fedata"),"Fuel\nEconomy\nAnalysis");
+    ui->tabWidget->addTab(new MusicPage(this, mpid),"Media");
 
-    fmid = fork();
-            //chdir("/home/nvidia/Desktop/github/source/");
-            if(fmid==0){
-                execl("/usr/bin/gqrx", "gqrx", NULL);
-            }
-            else{
-                chdir("/home/nvidia/wombat/");
-            }
 
-        chdir("/home/nvidia/wombat/source");
-        snprintf(c, 256,"%s %d","bash getwindidbypid > ./fmwindid.txt",(int)fmid);
-        sleep(1);   //necessary
-        system(c);
+
         f.open("./fmwindid.txt");
         std::getline(f,bar);
         f.close();
@@ -113,20 +140,7 @@ MainWindow::MainWindow(QWidget *parent) :
         //this->setLayout(layout);
         ui->tabWidget->addTab(widget1, "FM");
 
-        mpid = fork();
-            //chdir("/home/nvidia/Desktop/github/source/media_player");
-            chdir("/home/nvidia/wombat/source/media_system/media_player");
-            if(mpid==0){
-                execl("/usr/bin/vlc", "vlc", "--no-video", "--no-playlist-autostart","--loop","--playlist-tree",  "/media/nvidia/AXOLOTLDCV", "Music", NULL);
-            }
-            else{
-                chdir("/home/nvidia/wombat/");
-            }
 
-        chdir("/home/nvidia/wombat/source");
-        snprintf(c, 256,"%s %d","bash getwindidbypid > mpwindid.txt",(int)mpid);
-        sleep(1);   //necessary
-        system(c);
         f.open("./mpwindid.txt");
         std::getline(f,baz);
         f.close();

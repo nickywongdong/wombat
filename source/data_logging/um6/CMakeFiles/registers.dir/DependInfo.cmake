@@ -4,14 +4,13 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
-  "/Users/VictorLi/Gitdir/wombat/source/data_logging/um6/src/registers.cpp" "/Users/VictorLi/Gitdir/wombat/source/data_logging/um6/CMakeFiles/registers.dir/src/registers.o"
+  "/home/nvidia/wombat/source/data_logging/um6/src/registers.cpp" "/home/nvidia/wombat/source/data_logging/um6/CMakeFiles/registers.dir/src/registers.o"
   )
-set(CMAKE_CXX_COMPILER_ID "Clang")
+set(CMAKE_CXX_COMPILER_ID "GNU")
 
 # The include file search paths:
 set(CMAKE_CXX_TARGET_INCLUDE_PATH
   "include"
-  "/usr/local/include"
   "./include/um6"
   "./serial/include"
   )

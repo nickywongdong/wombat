@@ -1,7 +1,7 @@
 file(REMOVE_RECURSE
   "CMakeFiles/registers.dir/src/registers.o"
   "libregisters.pdb"
-  "libregisters.dylib"
+  "libregisters.so"
 )
 
 # Per-language clean rules from dependency scanning.

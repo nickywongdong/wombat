@@ -4,22 +4,21 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
-  "/Users/VictorLi/Gitdir/wombat/source/data_logging/um6/src/imu.cpp" "/Users/VictorLi/Gitdir/wombat/source/data_logging/um6/CMakeFiles/imu.dir/src/imu.o"
+  "/home/nvidia/wombat/source/data_logging/um6/src/imu.cpp" "/home/nvidia/wombat/source/data_logging/um6/CMakeFiles/imu.dir/src/imu.o"
   )
-set(CMAKE_CXX_COMPILER_ID "Clang")
+set(CMAKE_CXX_COMPILER_ID "GNU")
 
 # The include file search paths:
 set(CMAKE_CXX_TARGET_INCLUDE_PATH
   "include"
-  "/usr/local/include"
   "./include/um6"
   "./serial/include"
   )
 
 # Targets to which this target links.
 set(CMAKE_TARGET_LINKED_INFO_FILES
-  "/Users/VictorLi/Gitdir/wombat/source/data_logging/um6/CMakeFiles/comms.dir/DependInfo.cmake"
-  "/Users/VictorLi/Gitdir/wombat/source/data_logging/um6/CMakeFiles/registers.dir/DependInfo.cmake"
+  "/home/nvidia/wombat/source/data_logging/um6/CMakeFiles/comms.dir/DependInfo.cmake"
+  "/home/nvidia/wombat/source/data_logging/um6/CMakeFiles/registers.dir/DependInfo.cmake"
   )
 
 # Fortran module output directory.

@@ -16,14 +16,14 @@
 #include <QWindow>
 #include <QVBoxLayout>
 
-MusicPage::MusicPage(QWidget *parent) :
+MusicPage::MusicPage(QWidget *parent, pid_t m) :
     QDialog(parent),
     ui(new Ui::MusicPage)
 {
     ui->setupUi(this);
     fopen = false;
     mopen = false;
-
+    mpid = m;
 
 }
 
@@ -97,8 +97,10 @@ void MusicPage::on_pushButton_clicked()
 //button to pair with phone
 void MusicPage::on_pushButton_2_clicked()
 {
+    std::string stop_command = "echo stop > /proc/" + std::to_string(mpid) + "/fd/0";
+    system(stop_command.c_str());
 
-    system("pulseaudio -k");    //reset the pulseaudio stream
+    //system("pulseaudio -k");    //reset the pulseaudio stream
     //sleep(5);
 
     if(mopen)    kill(mpid,SIGINT);  //kill the previously spawned activity
@@ -130,6 +132,8 @@ void MusicPage::on_pushButton_2_clicked()
     //system("pacmd load-module module-loopback source=bluez_source.70_70_0D_87_4D_D4 sink=alsa_output.platform-3510000.hda.hdmi-stereo-extra1");
     sleep(1);
     system("pacmd load-module module-loopback");
+    //system("pacmd load-module module-switch-on-connect");
+    sleep(1);
     ui->pairLabel->setText("Paired with device");
     sleep(1);
     ui->pairLabel->setText("");
@@ -221,4 +225,25 @@ void MusicPage::closeEvent(QCloseEvent *event){
     kill(fmid,SIGTERM);
     event->accept();
 
+}
+
+void MusicPage::on_pushButton_pressed()
+{
+    system("pactl -- set-sink-volume 0 0%");
+}
+
+void MusicPage::on_pushButton_4_pressed()
+{
+    system("pactl -- set-sink-volume 0 +10%");
+
+}
+
+void MusicPage::on_pushButton_5_pressed()
+{
+    system("pactl -- set-sink-volume 0 -10%");
+}
+
+void MusicPage::on_pushButton_6_pressed()
+{
+    system("pactl -- set-sink-volume 0 +10%");
 }
