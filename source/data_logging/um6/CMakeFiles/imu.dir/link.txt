@@ -1,1 +1,1 @@
-/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++   -Wl,-search_paths_first -Wl,-headerpad_max_install_names  CMakeFiles/imu.dir/src/imu.o  -o imu  -L/Users/VictorLi/Gitdir/wombat/source/data_logging/um6 -lserial libcomms.dylib libregisters.dylib -lrt -lpthread 
+/usr/bin/c++      CMakeFiles/imu.dir/src/imu.o  -o imu  -L/home/nvidia/wombat/source/data_logging/um6 -rdynamic -lserial libcomms.so libregisters.so -lrt -lpthread -Wl,-rpath,/home/nvidia/wombat/source/data_logging/um6: 

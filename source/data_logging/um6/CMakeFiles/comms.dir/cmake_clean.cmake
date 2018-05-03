@@ -1,7 +1,7 @@
 file(REMOVE_RECURSE
   "CMakeFiles/comms.dir/src/comms.o"
   "libcomms.pdb"
-  "libcomms.dylib"
+  "libcomms.so"
 )
 
 # Per-language clean rules from dependency scanning.

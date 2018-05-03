@@ -130,6 +130,19 @@
       <string>Aux</string>
      </property>
     </widget>
+    <widget class="QLabel" name="mediaLabel">
+     <property name="geometry">
+      <rect>
+       <x>30</x>
+       <y>440</y>
+       <width>121</width>
+       <height>51</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+    </widget>
    </widget>
   </widget>
   <widget class="QLabel" name="fmLabel">
@@ -158,17 +171,43 @@
     <string/>
    </property>
   </widget>
-  <widget class="QLabel" name="mediaLabel">
+  <widget class="QPushButton" name="pushButton">
    <property name="geometry">
     <rect>
-     <x>216</x>
-     <y>336</y>
-     <width>121</width>
-     <height>51</height>
+     <x>80</x>
+     <y>340</y>
+     <width>201</width>
+     <height>91</height>
     </rect>
    </property>
    <property name="text">
-    <string/>
+    <string>Mute</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="pushButton_5">
+   <property name="geometry">
+    <rect>
+     <x>310</x>
+     <y>390</y>
+     <width>71</width>
+     <height>61</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Down</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="pushButton_6">
+   <property name="geometry">
+    <rect>
+     <x>310</x>
+     <y>310</y>
+     <width>71</width>
+     <height>61</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Up</string>
    </property>
   </widget>
  </widget>
