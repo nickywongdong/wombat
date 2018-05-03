@@ -6,6 +6,7 @@
 #include "musicpage.h"
 #include "data.h"
 #include "viewer.h"
+#include "ahrs.h"
 #include<stdio.h>
 #include<unistd.h>
 #include<sys/types.h>
@@ -122,6 +123,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->tabWidget->addTab(new Data(this, dmid),"Data");
     ui->tabWidget->addTab(new viewer(this, dmid, "/home/nvidia/axolotl/dtc_errors"),"DTCs");
     ui->tabWidget->addTab(new viewer(this, dmid, "/home/nvidia/axolotl/fedata"),"Fuel\nEconomy\nAnalysis");
+    ui->tabWidget->addTab(new AHRS(this, dmid),"AHRS");
     ui->tabWidget->addTab(new MusicPage(this, mpid),"Media");
 
 

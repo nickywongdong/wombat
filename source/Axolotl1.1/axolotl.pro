@@ -22,14 +22,17 @@ SOURCES += main.cpp\
         mainwindow.cpp \
     musicpage.cpp \
     data.cpp \
-    viewer.cpp
+    viewer.cpp \
+    ahrs.cpp
 
 HEADERS  += mainwindow.h \
     musicpage.h \
     data.h \
-    viewer.h
+    viewer.h \
+    ahrs.h
 
 FORMS    += mainwindow.ui \
     musicpage.ui \
     data.ui \
-    viewer.ui
+    viewer.ui \
+    ahrs.ui

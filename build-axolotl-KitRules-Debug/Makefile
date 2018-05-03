@@ -52,19 +52,23 @@ SOURCES       = ../source/Axolotl1.1/main.cpp \
 		../source/Axolotl1.1/mainwindow.cpp \
 		../source/Axolotl1.1/musicpage.cpp \
 		../source/Axolotl1.1/data.cpp \
-		../source/Axolotl1.1/viewer.cpp moc_mainwindow.cpp \
+		../source/Axolotl1.1/viewer.cpp \
+		../source/Axolotl1.1/ahrs.cpp moc_mainwindow.cpp \
 		moc_musicpage.cpp \
 		moc_data.cpp \
-		moc_viewer.cpp
+		moc_viewer.cpp \
+		moc_ahrs.cpp
 OBJECTS       = main.o \
 		mainwindow.o \
 		musicpage.o \
 		data.o \
 		viewer.o \
+		ahrs.o \
 		moc_mainwindow.o \
 		moc_musicpage.o \
 		moc_data.o \
-		moc_viewer.o
+		moc_viewer.o \
+		moc_ahrs.o
 DIST          = /usr/lib/aarch64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib/aarch64-linux-gnu/qt5/mkspecs/common/unix.conf \
 		/usr/lib/aarch64-linux-gnu/qt5/mkspecs/common/linux.conf \
@@ -125,11 +129,13 @@ DIST          = /usr/lib/aarch64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		../source/source/Axolotl1.1/axolotl.pro ../source/Axolotl1.1/mainwindow.h \
 		../source/Axolotl1.1/musicpage.h \
 		../source/Axolotl1.1/data.h \
-		../source/Axolotl1.1/viewer.h ../source/Axolotl1.1/main.cpp \
+		../source/Axolotl1.1/viewer.h \
+		../source/Axolotl1.1/ahrs.h ../source/Axolotl1.1/main.cpp \
 		../source/Axolotl1.1/mainwindow.cpp \
 		../source/Axolotl1.1/musicpage.cpp \
 		../source/Axolotl1.1/data.cpp \
-		../source/Axolotl1.1/viewer.cpp
+		../source/Axolotl1.1/viewer.cpp \
+		../source/Axolotl1.1/ahrs.cpp
 QMAKE_TARGET  = Axolotl
 DESTDIR       = #avoid trailing-slash linebreak
 TARGET        = Axolotl
@@ -157,7 +163,7 @@ first: all
 
 ####### Build rules
 
-$(TARGET): ui_mainwindow.h ui_musicpage.h ui_data.h ui_viewer.h $(OBJECTS)  
+$(TARGET): ui_mainwindow.h ui_musicpage.h ui_data.h ui_viewer.h ui_ahrs.h $(OBJECTS)  
 	$(LINK) $(LFLAGS) -o $(TARGET) $(OBJECTS) $(OBJCOMP) $(LIBS)
 
 Makefile: ../source/Axolotl1.1/axolotl.pro /usr/lib/aarch64-linux-gnu/qt5/mkspecs/linux-g++/qmake.conf /usr/lib/aarch64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
@@ -297,9 +303,9 @@ dist: distdir FORCE
 distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
-	$(COPY_FILE) --parents ../source/Axolotl1.1/mainwindow.h ../source/Axolotl1.1/musicpage.h ../source/Axolotl1.1/data.h ../source/Axolotl1.1/viewer.h $(DISTDIR)/
-	$(COPY_FILE) --parents ../source/Axolotl1.1/main.cpp ../source/Axolotl1.1/mainwindow.cpp ../source/Axolotl1.1/musicpage.cpp ../source/Axolotl1.1/data.cpp ../source/Axolotl1.1/viewer.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents ../source/Axolotl1.1/mainwindow.ui ../source/Axolotl1.1/musicpage.ui ../source/Axolotl1.1/data.ui ../source/Axolotl1.1/viewer.ui $(DISTDIR)/
+	$(COPY_FILE) --parents ../source/Axolotl1.1/mainwindow.h ../source/Axolotl1.1/musicpage.h ../source/Axolotl1.1/data.h ../source/Axolotl1.1/viewer.h ../source/Axolotl1.1/ahrs.h $(DISTDIR)/
+	$(COPY_FILE) --parents ../source/Axolotl1.1/main.cpp ../source/Axolotl1.1/mainwindow.cpp ../source/Axolotl1.1/musicpage.cpp ../source/Axolotl1.1/data.cpp ../source/Axolotl1.1/viewer.cpp ../source/Axolotl1.1/ahrs.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents ../source/Axolotl1.1/mainwindow.ui ../source/Axolotl1.1/musicpage.ui ../source/Axolotl1.1/data.ui ../source/Axolotl1.1/viewer.ui ../source/Axolotl1.1/ahrs.ui $(DISTDIR)/
 
 
 clean: compiler_clean 
@@ -322,9 +328,9 @@ check: first
 
 compiler_rcc_make_all:
 compiler_rcc_clean:
-compiler_moc_header_make_all: moc_mainwindow.cpp moc_musicpage.cpp moc_data.cpp moc_viewer.cpp
+compiler_moc_header_make_all: moc_mainwindow.cpp moc_musicpage.cpp moc_data.cpp moc_viewer.cpp moc_ahrs.cpp
 compiler_moc_header_clean:
-	-$(DEL_FILE) moc_mainwindow.cpp moc_musicpage.cpp moc_data.cpp moc_viewer.cpp
+	-$(DEL_FILE) moc_mainwindow.cpp moc_musicpage.cpp moc_data.cpp moc_viewer.cpp moc_ahrs.cpp
 moc_mainwindow.cpp: ../source/Axolotl1.1/mainwindow.h
 	/usr/lib/aarch64-linux-gnu/qt5/bin/moc $(DEFINES) -I/usr/lib/aarch64-linux-gnu/qt5/mkspecs/linux-g++ -I/home/nvidia/wombat/source/Axolotl1.1 -I/usr/include/aarch64-linux-gnu/qt5 -I/usr/include/aarch64-linux-gnu/qt5/QtWidgets -I/usr/include/aarch64-linux-gnu/qt5/QtGui -I/usr/include/aarch64-linux-gnu/qt5/QtCore -I. -I/usr/include/c++/5 -I/usr/include/aarch64-linux-gnu/c++/5 -I/usr/include/c++/5/backward -I/usr/lib/gcc/aarch64-linux-gnu/5/include -I/usr/local/include -I/usr/lib/gcc/aarch64-linux-gnu/5/include-fixed -I/usr/include/aarch64-linux-gnu -I/usr/include ../source/Axolotl1.1/mainwindow.h -o moc_mainwindow.cpp
 
@@ -337,11 +343,14 @@ moc_data.cpp: ../source/Axolotl1.1/data.h
 moc_viewer.cpp: ../source/Axolotl1.1/viewer.h
 	/usr/lib/aarch64-linux-gnu/qt5/bin/moc $(DEFINES) -I/usr/lib/aarch64-linux-gnu/qt5/mkspecs/linux-g++ -I/home/nvidia/wombat/source/Axolotl1.1 -I/usr/include/aarch64-linux-gnu/qt5 -I/usr/include/aarch64-linux-gnu/qt5/QtWidgets -I/usr/include/aarch64-linux-gnu/qt5/QtGui -I/usr/include/aarch64-linux-gnu/qt5/QtCore -I. -I/usr/include/c++/5 -I/usr/include/aarch64-linux-gnu/c++/5 -I/usr/include/c++/5/backward -I/usr/lib/gcc/aarch64-linux-gnu/5/include -I/usr/local/include -I/usr/lib/gcc/aarch64-linux-gnu/5/include-fixed -I/usr/include/aarch64-linux-gnu -I/usr/include ../source/Axolotl1.1/viewer.h -o moc_viewer.cpp
 
+moc_ahrs.cpp: ../source/Axolotl1.1/ahrs.h
+	/usr/lib/aarch64-linux-gnu/qt5/bin/moc $(DEFINES) -I/usr/lib/aarch64-linux-gnu/qt5/mkspecs/linux-g++ -I/home/nvidia/wombat/source/Axolotl1.1 -I/usr/include/aarch64-linux-gnu/qt5 -I/usr/include/aarch64-linux-gnu/qt5/QtWidgets -I/usr/include/aarch64-linux-gnu/qt5/QtGui -I/usr/include/aarch64-linux-gnu/qt5/QtCore -I. -I/usr/include/c++/5 -I/usr/include/aarch64-linux-gnu/c++/5 -I/usr/include/c++/5/backward -I/usr/lib/gcc/aarch64-linux-gnu/5/include -I/usr/local/include -I/usr/lib/gcc/aarch64-linux-gnu/5/include-fixed -I/usr/include/aarch64-linux-gnu -I/usr/include ../source/Axolotl1.1/ahrs.h -o moc_ahrs.cpp
+
 compiler_moc_source_make_all:
 compiler_moc_source_clean:
-compiler_uic_make_all: ui_mainwindow.h ui_musicpage.h ui_data.h ui_viewer.h
+compiler_uic_make_all: ui_mainwindow.h ui_musicpage.h ui_data.h ui_viewer.h ui_ahrs.h
 compiler_uic_clean:
-	-$(DEL_FILE) ui_mainwindow.h ui_musicpage.h ui_data.h ui_viewer.h
+	-$(DEL_FILE) ui_mainwindow.h ui_musicpage.h ui_data.h ui_viewer.h ui_ahrs.h
 ui_mainwindow.h: ../source/Axolotl1.1/mainwindow.ui
 	/usr/lib/aarch64-linux-gnu/qt5/bin/uic ../source/Axolotl1.1/mainwindow.ui -o ui_mainwindow.h
 
@@ -353,6 +362,9 @@ ui_data.h: ../source/Axolotl1.1/data.ui
 
 ui_viewer.h: ../source/Axolotl1.1/viewer.ui
 	/usr/lib/aarch64-linux-gnu/qt5/bin/uic ../source/Axolotl1.1/viewer.ui -o ui_viewer.h
+
+ui_ahrs.h: ../source/Axolotl1.1/ahrs.ui
+	/usr/lib/aarch64-linux-gnu/qt5/bin/uic ../source/Axolotl1.1/ahrs.ui -o ui_ahrs.h
 
 compiler_yacc_decl_make_all:
 compiler_yacc_decl_clean:
@@ -388,6 +400,10 @@ viewer.o: ../source/Axolotl1.1/viewer.cpp ../source/Axolotl1.1/viewer.h \
 		ui_viewer.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o viewer.o ../source/Axolotl1.1/viewer.cpp
 
+ahrs.o: ../source/Axolotl1.1/ahrs.cpp ../source/Axolotl1.1/ahrs.h \
+		ui_ahrs.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o ahrs.o ../source/Axolotl1.1/ahrs.cpp
+
 moc_mainwindow.o: moc_mainwindow.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_mainwindow.o moc_mainwindow.cpp
 
@@ -399,6 +415,9 @@ moc_data.o: moc_data.cpp
 
 moc_viewer.o: moc_viewer.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_viewer.o moc_viewer.cpp
+
+moc_ahrs.o: moc_ahrs.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_ahrs.o moc_ahrs.cpp
 
 ####### Install
 
