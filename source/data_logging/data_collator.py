@@ -38,7 +38,6 @@ for i in xrange(0,len(obd_read)):
         # print "B--" + str("".join(ahrs_read[index][0].split(ahrs_read[index][0][4]))) + "--"
         print str(obd_read[i][0] == ahrs_read[index][0])
         if (obd_read[i][0] == ahrs_read[index][0]):
-            print ":O"
             seen = True;
             break;
         else:
