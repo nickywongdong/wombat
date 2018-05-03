@@ -247,3 +247,9 @@ void MusicPage::on_pushButton_6_pressed()
 {
     system("pactl -- set-sink-volume 0 +10%");
 }
+
+void MusicPage::on_horizontalSlider_sliderMoved(int position)
+{
+    std::string vol_command = "pactl -- set-sink-volume 0 " + std::to_string(position) + "%";
+    system(vol_command.c_str());
+}

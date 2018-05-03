@@ -34,6 +34,8 @@ private slots:
 
     void on_pushButton_6_pressed();
 
+    void on_horizontalSlider_sliderMoved(int position);
+
 private:
     Ui::MusicPage *ui;
     void closeEvent(QCloseEvent *);

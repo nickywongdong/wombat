@@ -17,6 +17,7 @@
 #include <QtWidgets/QHeaderView>
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QPushButton>
+#include <QtWidgets/QSlider>
 #include <QtWidgets/QStackedWidget>
 #include <QtWidgets/QWidget>
 
@@ -37,6 +38,7 @@ public:
     QPushButton *pushButton;
     QPushButton *pushButton_5;
     QPushButton *pushButton_6;
+    QSlider *horizontalSlider;
 
     void setupUi(QDialog *MusicPage)
     {
@@ -91,6 +93,10 @@ public:
         pushButton_6 = new QPushButton(MusicPage);
         pushButton_6->setObjectName(QStringLiteral("pushButton_6"));
         pushButton_6->setGeometry(QRect(310, 310, 71, 61));
+        horizontalSlider = new QSlider(MusicPage);
+        horizontalSlider->setObjectName(QStringLiteral("horizontalSlider"));
+        horizontalSlider->setGeometry(QRect(100, 470, 160, 29));
+        horizontalSlider->setOrientation(Qt::Horizontal);
 
         retranslateUi(MusicPage);
 

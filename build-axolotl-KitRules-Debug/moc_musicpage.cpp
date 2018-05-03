@@ -19,8 +19,8 @@
 
 QT_BEGIN_MOC_NAMESPACE
 struct qt_meta_stringdata_MusicPage_t {
-    QByteArrayData data[10];
-    char stringdata0[199];
+    QByteArrayData data[12];
+    char stringdata0[240];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -38,14 +38,18 @@ QT_MOC_LITERAL(5, 81, 23), // "on_pushButton_4_clicked"
 QT_MOC_LITERAL(6, 105, 21), // "on_pushButton_pressed"
 QT_MOC_LITERAL(7, 127, 23), // "on_pushButton_4_pressed"
 QT_MOC_LITERAL(8, 151, 23), // "on_pushButton_5_pressed"
-QT_MOC_LITERAL(9, 175, 23) // "on_pushButton_6_pressed"
+QT_MOC_LITERAL(9, 175, 23), // "on_pushButton_6_pressed"
+QT_MOC_LITERAL(10, 199, 31), // "on_horizontalSlider_sliderMoved"
+QT_MOC_LITERAL(11, 231, 8) // "position"
 
     },
     "MusicPage\0on_pushButton_clicked\0\0"
     "on_pushButton_2_clicked\0on_pushButton_3_clicked\0"
     "on_pushButton_4_clicked\0on_pushButton_pressed\0"
     "on_pushButton_4_pressed\0on_pushButton_5_pressed\0"
-    "on_pushButton_6_pressed"
+    "on_pushButton_6_pressed\0"
+    "on_horizontalSlider_sliderMoved\0"
+    "position"
 };
 #undef QT_MOC_LITERAL
 
@@ -55,7 +59,7 @@ static const uint qt_meta_data_MusicPage[] = {
        7,       // revision
        0,       // classname
        0,    0, // classinfo
-       8,   14, // methods
+       9,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -63,14 +67,15 @@ static const uint qt_meta_data_MusicPage[] = {
        0,       // signalCount
 
  // slots: name, argc, parameters, tag, flags
-       1,    0,   54,    2, 0x08 /* Private */,
-       3,    0,   55,    2, 0x08 /* Private */,
-       4,    0,   56,    2, 0x08 /* Private */,
-       5,    0,   57,    2, 0x08 /* Private */,
-       6,    0,   58,    2, 0x08 /* Private */,
-       7,    0,   59,    2, 0x08 /* Private */,
-       8,    0,   60,    2, 0x08 /* Private */,
-       9,    0,   61,    2, 0x08 /* Private */,
+       1,    0,   59,    2, 0x08 /* Private */,
+       3,    0,   60,    2, 0x08 /* Private */,
+       4,    0,   61,    2, 0x08 /* Private */,
+       5,    0,   62,    2, 0x08 /* Private */,
+       6,    0,   63,    2, 0x08 /* Private */,
+       7,    0,   64,    2, 0x08 /* Private */,
+       8,    0,   65,    2, 0x08 /* Private */,
+       9,    0,   66,    2, 0x08 /* Private */,
+      10,    1,   67,    2, 0x08 /* Private */,
 
  // slots: parameters
     QMetaType::Void,
@@ -81,6 +86,7 @@ static const uint qt_meta_data_MusicPage[] = {
     QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void,
+    QMetaType::Void, QMetaType::Int,   11,
 
        0        // eod
 };
@@ -99,10 +105,10 @@ void MusicPage::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, v
         case 5: _t->on_pushButton_4_pressed(); break;
         case 6: _t->on_pushButton_5_pressed(); break;
         case 7: _t->on_pushButton_6_pressed(); break;
+        case 8: _t->on_horizontalSlider_sliderMoved((*reinterpret_cast< int(*)>(_a[1]))); break;
         default: ;
         }
     }
-    Q_UNUSED(_a);
 }
 
 const QMetaObject MusicPage::staticMetaObject = {
@@ -130,13 +136,13 @@ int MusicPage::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 8)
+        if (_id < 9)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 8;
+        _id -= 9;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 8)
+        if (_id < 9)
             *reinterpret_cast<int*>(_a[0]) = -1;
-        _id -= 8;
+        _id -= 9;
     }
     return _id;
 }
