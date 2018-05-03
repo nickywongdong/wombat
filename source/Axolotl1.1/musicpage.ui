@@ -90,61 +90,6 @@
     <string>Pair</string>
    </property>
   </widget>
-  <widget class="QStackedWidget" name="stackedWidget">
-   <property name="geometry">
-    <rect>
-     <x>360</x>
-     <y>10</y>
-     <width>841</width>
-     <height>641</height>
-    </rect>
-   </property>
-   <property name="currentIndex">
-    <number>1</number>
-   </property>
-   <widget class="QWidget" name="page"/>
-   <widget class="QWidget" name="page_2">
-    <widget class="QLabel" name="pairLabel">
-     <property name="geometry">
-      <rect>
-       <x>-20</x>
-       <y>150</y>
-       <width>181</width>
-       <height>71</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string/>
-     </property>
-    </widget>
-    <widget class="QPushButton" name="pushButton_3">
-     <property name="geometry">
-      <rect>
-       <x>210</x>
-       <y>160</y>
-       <width>201</width>
-       <height>91</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Aux</string>
-     </property>
-    </widget>
-    <widget class="QLabel" name="mediaLabel">
-     <property name="geometry">
-      <rect>
-       <x>30</x>
-       <y>440</y>
-       <width>121</width>
-       <height>51</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string/>
-     </property>
-    </widget>
-   </widget>
-  </widget>
   <widget class="QLabel" name="fmLabel">
    <property name="geometry">
     <rect>
@@ -184,32 +129,6 @@
     <string>Mute</string>
    </property>
   </widget>
-  <widget class="QPushButton" name="pushButton_5">
-   <property name="geometry">
-    <rect>
-     <x>310</x>
-     <y>390</y>
-     <width>71</width>
-     <height>61</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Down</string>
-   </property>
-  </widget>
-  <widget class="QPushButton" name="pushButton_6">
-   <property name="geometry">
-    <rect>
-     <x>310</x>
-     <y>310</y>
-     <width>71</width>
-     <height>61</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Up</string>
-   </property>
-  </widget>
   <widget class="QSlider" name="horizontalSlider">
    <property name="geometry">
     <rect>
@@ -221,6 +140,19 @@
    </property>
    <property name="orientation">
     <enum>Qt::Horizontal</enum>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="pushButton_3">
+   <property name="geometry">
+    <rect>
+     <x>470</x>
+     <y>170</y>
+     <width>201</width>
+     <height>91</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Aux</string>
    </property>
   </widget>
  </widget>
