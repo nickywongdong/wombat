@@ -78,7 +78,7 @@ class axolotlFileSystem {
       std::string hashedPass, passSalt = "thequickbrownfoxjumpsoverthelazydog";
       CryptoPP::SHA256 passwordHash;
       BYTE passwordDigest[CryptoPP::SHA256::DIGESTSIZE];
-      passwordHash.CalculateDigest(passwordDigest,(const BYTE *)passSalt.c_str(),passSalt.size());
+      passwordHash.CalculateDigest(passwordDigest,(const BYTE *)s.c_str(),s.size());
 
       // Encode into human-readable string via hex
       CryptoPP::HexEncoder hashEncoder;

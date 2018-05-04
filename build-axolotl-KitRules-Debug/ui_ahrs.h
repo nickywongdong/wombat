@@ -23,8 +23,6 @@ QT_BEGIN_NAMESPACE
 class Ui_AHRS
 {
 public:
-    QTextBrowser *textBrowser;
-    QTextBrowser *textBrowser_2;
     QTextBrowser *textBrowser_3;
     QPushButton *pushButton;
     QPushButton *pushButton_2;
@@ -46,21 +44,15 @@ public:
         palette.setBrush(QPalette::Disabled, QPalette::Base, brush1);
         palette.setBrush(QPalette::Disabled, QPalette::Window, brush1);
         AHRS->setPalette(palette);
-        textBrowser = new QTextBrowser(AHRS);
-        textBrowser->setObjectName(QStringLiteral("textBrowser"));
-        textBrowser->setGeometry(QRect(10, 50, 330, 231));
-        textBrowser_2 = new QTextBrowser(AHRS);
-        textBrowser_2->setObjectName(QStringLiteral("textBrowser_2"));
-        textBrowser_2->setGeometry(QRect(350, 50, 330, 231));
         textBrowser_3 = new QTextBrowser(AHRS);
         textBrowser_3->setObjectName(QStringLiteral("textBrowser_3"));
-        textBrowser_3->setGeometry(QRect(690, 50, 330, 231));
+        textBrowser_3->setGeometry(QRect(70, 20, 401, 291));
         pushButton = new QPushButton(AHRS);
         pushButton->setObjectName(QStringLiteral("pushButton"));
-        pushButton->setGeometry(QRect(300, 310, 99, 27));
+        pushButton->setGeometry(QRect(60, 350, 99, 27));
         pushButton_2 = new QPushButton(AHRS);
         pushButton_2->setObjectName(QStringLiteral("pushButton_2"));
-        pushButton_2->setGeometry(QRect(640, 310, 99, 27));
+        pushButton_2->setGeometry(QRect(400, 350, 99, 27));
 
         retranslateUi(AHRS);
 

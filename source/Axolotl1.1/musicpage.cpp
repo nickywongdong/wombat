@@ -66,6 +66,7 @@ void MusicPage::on_pushButton_2_clicked()
     //system("pacmd load-module module-loopback source=bluez_source.70_70_0D_87_4D_D4 sink=alsa_output.platform-3510000.hda.hdmi-stereo-extra1");
     sleep(1);
     system("pacmd load-module module-loopback");
+    sleep(1);
     //system("pacmd load-module module-switch-on-connect");
 
 }

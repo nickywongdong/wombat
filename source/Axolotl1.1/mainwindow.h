@@ -25,6 +25,7 @@ private:
     pid_t nvid;
     pid_t fmid;
     pid_t mpid;
+    pid_t swid;
 };
 
 #endif // MAINWINDOW_H

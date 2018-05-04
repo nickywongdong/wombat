@@ -180,8 +180,7 @@ void deleteHandler(int signumber, siginfo_t *siginfo, void *pointer) {
   string delete_command = "/bin/bash -O extglob -c 'rm -rf !(" + logging_directory_name + ")'";
 
   chdir(base_dir.c_str());
-  cout << base_dir << endl;  
-//system("shopt -s extglob");
+  //system("shopt -s extglob");
   system("delete.sh");
   system(delete_command.c_str());
   chdir(current_dir.c_str());

@@ -77,41 +77,21 @@
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <widget class="QTextBrowser" name="textBrowser">
-   <property name="geometry">
-    <rect>
-     <x>10</x>
-     <y>50</y>
-     <width>330</width>
-     <height>231</height>
-    </rect>
-   </property>
-  </widget>
-  <widget class="QTextBrowser" name="textBrowser_2">
-   <property name="geometry">
-    <rect>
-     <x>350</x>
-     <y>50</y>
-     <width>330</width>
-     <height>231</height>
-    </rect>
-   </property>
-  </widget>
   <widget class="QTextBrowser" name="textBrowser_3">
    <property name="geometry">
     <rect>
-     <x>690</x>
-     <y>50</y>
-     <width>330</width>
-     <height>231</height>
+     <x>70</x>
+     <y>20</y>
+     <width>401</width>
+     <height>291</height>
     </rect>
    </property>
   </widget>
   <widget class="QPushButton" name="pushButton">
    <property name="geometry">
     <rect>
-     <x>300</x>
-     <y>310</y>
+     <x>60</x>
+     <y>350</y>
      <width>99</width>
      <height>27</height>
     </rect>
@@ -123,8 +103,8 @@
   <widget class="QPushButton" name="pushButton_2">
    <property name="geometry">
     <rect>
-     <x>640</x>
-     <y>310</y>
+     <x>400</x>
+     <y>350</y>
      <width>99</width>
      <height>27</height>
     </rect>

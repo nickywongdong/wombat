@@ -15,7 +15,7 @@ class AHRS : public QWidget
     Q_OBJECT
 
 public:
-    explicit AHRS(QWidget *parent = 0, pid_t a=0);
+    explicit AHRS(QWidget *parent = 0);
     ~AHRS();
 
 private slots:
@@ -25,10 +25,8 @@ private slots:
 
 private:
     Ui::AHRS *ui;
-    pid_t dmid;
-    QString filepath0;
-    QString filepath1;
-    QString filepath2;
+    QString filepath;
+
 };
 
 #endif // AHRS_H

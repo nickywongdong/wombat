@@ -27,8 +27,10 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-
-    system("python /home/nvidia/wombat/source/remove_config.py");
+    system("onboard -s 1280x350 &");
+    sleep(1);
+    system("dbus-send --type=method_call --dest=org.onboard.Onboard /org/onboard/Onboard/Keyboard org.onboard.Onboard.Keyboard.Hide");
+    system("sudo python /home/nvidia/wombat/source/remove_config.py");
     // system("sudo /home/nvidia/Desktop/wombat-victor-dev/source/wmanager/set_client.sh");
     // music pulling here
     // system("sudo /home/nvidia/source/data_logging/wmanager/set_ap_n.sh");
@@ -38,13 +40,10 @@ MainWindow::MainWindow(QWidget *parent) :
     sleep(1);
 
     // Export GPIO
-    system("sudo sh -c \"echo 298 > /sys/class/gpio/export/\"");
+    system("sudo sh -c \"echo 298 > /sys/class/gpio/export\"");
     sleep(1);
-
-    //exec this plz
-    //chdir("/home/nvidia/wombat/source");
-    //system("sudo ./switchToggle");
-    //sleep(1);
+    system("sudo sh -c \"echo 481 > /sys/class/gpio/export\"");
+    sleep(1);
 
     dmid = fork();
     chdir("/home/nvidia/wombat/source/data_logging/");
@@ -123,7 +122,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->tabWidget->addTab(new Data(this, dmid),"Data");
     ui->tabWidget->addTab(new viewer(this, dmid, "/home/nvidia/axolotl/dtc_errors"),"DTCs");
     ui->tabWidget->addTab(new viewer(this, dmid, "/home/nvidia/axolotl/fedata"),"Fuel\nEconomy\nAnalysis");
-    ui->tabWidget->addTab(new AHRS(this, dmid),"AHRS");
+    ui->tabWidget->addTab(new AHRS(this),"AHRS");
     ui->tabWidget->addTab(new MusicPage(this, mpid),"Media");
 
 
@@ -157,6 +156,14 @@ MainWindow::MainWindow(QWidget *parent) :
         //layout->addWidget(widget);
         //this->setLayout(layout);
         ui->tabWidget->addTab(widget2, "Media Player");
+        swid = fork();
+        chdir("/home/nvidia/wombat/source");
+        if(swid==0){
+            execl("./switchToggle", "switchToggle", NULL);
+        }
+        else{
+            chdir("/home/nvidia/wombat/");
+        }
 
 }
 
@@ -164,6 +171,8 @@ void MainWindow::closeEvent(QCloseEvent *event){
 int status;
     kill(dmid,SIGINT);
     waitpid(dmid,&status,-1);
+    kill(swid,SIGINT);
+    waitpid(swid,&status,-1);
     kill(nvid,SIGINT);
     waitpid(nvid,&status,-1);
     kill(fmid,SIGINT);

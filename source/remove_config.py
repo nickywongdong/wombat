@@ -1,5 +1,6 @@
 import os
 import sys
+import time
 
 config_file = open("/home/nvidia/.config/gqrx/default.conf",'r')
 file_lines = config_file.readlines()
