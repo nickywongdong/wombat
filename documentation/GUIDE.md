@@ -30,3 +30,8 @@ The storage device must be named `AXOLOTLDCV` (case-sensitive) and the user must
 If an external drive is not detected, the system will resort to logging data onto internal storage.
 
 __Note:__ as of the current build, Axolotl does not distinguish between multiple external storage drives with the name `AXOLOTLDCV`. For the most consistent logging performance, please only connect one external drive with the name `AXOLOTLDCV`.
+
+## FAQ
+### Screen Turns Grey When Pairing with Bluetooth
+This is perfectly normal behavior. The infotainment system will block and wait for you to connect your smartphone before any normal operations continue.
+The infotainment system blocks for 10 seconds max before returning to normal.
