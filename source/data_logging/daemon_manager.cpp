@@ -180,7 +180,7 @@ void deleteHandler(int signumber, siginfo_t *siginfo, void *pointer) {
   string delete_command = "/bin/bash -O extglob -c 'rm -rf !(" + logging_directory_name + ")'";
 
   chdir(base_dir.c_str());
-  cout << base_dir << endl;  
+  cout << base_dir << endl;
 //system("shopt -s extglob");
   system("delete.sh");
   system(delete_command.c_str());
@@ -242,6 +242,7 @@ int main() {
   // Clear this boot cycle's debug file
   system("rm -f ~/axolotl/debug");
   system("rm -f ~/axolotl/device_free");
+  system("echo \"0\" > ~/axolotl/vspeed");
 
   // Test for connected flash drive
   struct stat buffer;

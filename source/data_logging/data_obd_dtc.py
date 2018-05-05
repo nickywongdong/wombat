@@ -8,6 +8,7 @@
 import sys
 import datetime
 import time
+import os
 
 # python OBD (from pyOBD-pi fork)
 import obd

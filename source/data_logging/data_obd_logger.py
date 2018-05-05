@@ -47,7 +47,10 @@ def obdSnapshot(obd_connection_handle):
 
     # execute the command array, saving results to csv_line with "," delimitation
     for i in xrange(0,len(commands)-1):
-            csv_line += str(obd_connection_handle.query(commands[i]).value) + ","
+            response_val = obd_connection_handle.query(commands[i]).value
+            csv_line += str(response_val) + ","
+            if (i == 2):
+                os.system("echo \"" + str(response_val.magnitude) + "\" > ~/axolotl/vspeed")
 
     csv_line += str(obd_connection_handle.query(commands[len(commands)-1]).value) + "\n"
 
@@ -56,21 +59,25 @@ def obdSnapshot(obd_connection_handle):
     csv_file_handle.write(csv_line)
     csv_file_handle.close()
 
-    ########################################
-    # same operations for diagnostics...
-    csv_line = "@" + str(time.ctime()) + ","
-
-    # execute the command array, saving results to csv_line with "," delimitation
-    for i in xrange(0,len(diag)-1):
-            csv_line += str(obd_connection_handle.query(diag[i]).value) + ","
-
-    csv_line += str(obd_connection_handle.query(diag[len(diag)-1]).value) + "\n"
-
-    # write entire csv_line to file in one file operation
-    csv_file_handle = open(sys.argv[2] + "/diag.csv",'a')
-    csv_file_handle.write(csv_line)
-    csv_file_handle.close()
-    ########################################
+    # DEPRECATED DIAGNOSTICS
+    # ########################################
+    # # same operations for diagnostics...
+    # csv_line = "@" + str(time.ctime()) + ","
+    #
+    # # execute the command array, saving results to csv_line with "," delimitation
+    # for i in xrange(0,len(diag)-1):
+    #         response_val = obd_connection_handle.query(diag[i]).value
+    #         csv_line += str(response_val) + ","
+    #         if (i == 2):
+    #             os.system("echo \"" + str(response_val.magnitude) + "\" > ~/axolotl/vspeed")
+    #
+    # csv_line += str(obd_connection_handle.query(diag[len(diag)-1]).value) + "\n"
+    #
+    # # write entire csv_line to file in one file operation
+    # csv_file_handle = open(sys.argv[2] + "/diag.csv",'a')
+    # csv_file_handle.write(csv_line)
+    # csv_file_handle.close()
+    # ########################################
 
     # debug statement; outputs the time taken to complete the query
     # print str(time.time()-log_time)

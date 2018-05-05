@@ -37,7 +37,7 @@ clean:
 	rm -f backup_cam_helper
 
 fresh: clean all
-	#rm -f um6/imu
-	cd um6
+	rm -f $PWD/um6/imu
+	cd $PWD/um6
 	make
 	cd ..
