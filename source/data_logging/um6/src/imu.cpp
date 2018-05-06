@@ -330,7 +330,7 @@ int main(int argc, char **argv) {
                 std::cout << token << '\n';
                 output_angles.push_back(token);
               }
-              std::string echo_string = "echo \"" + output_angles[0] + "\n" + output_angles[1] + "\n" + output_angles[2] + "\" > ~/axolotl/angles";
+              std::string echo_string = "echo \"" + std::to_string((IMU_EULER_X*360/6.28318530718) + "\n" + std::to_string((IMU_EULER_Y*360/6.28318530718) + "\n" + std::to_string((IMU_EULER_Z*360/6.28318530718) + "\" > ~/axolotl/angles";
               system(echo_string.c_str());
               t = 0;
             }
