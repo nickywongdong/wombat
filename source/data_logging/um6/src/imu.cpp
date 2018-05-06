@@ -327,10 +327,15 @@ int main(int argc, char **argv) {
               std::istringstream ss_echo(pre_write_string);
               std::vector<std::string> output_angles;
               while(std::getline(ss_echo, token, ',')) {
-                std::cout << token << '\n';
+              //  std::cout << token << '\n';
                 output_angles.push_back(token);
               }
-              std::string echo_string = "echo \"" + std::to_string((IMU_EULER_X*360/6.28318530718) + "\n" + std::to_string((IMU_EULER_Y*360/6.28318530718) + "\n" + std::to_string((IMU_EULER_Z*360/6.28318530718) + "\" > ~/axolotl/angles";
+              std::string echo_string = "echo \"" + std::to_string((IMU_EULER_X*360/6.28318530718)) + "\n" + std::to_string((IMU_EULER_Y*360/6.28318530718)) + "\n" + std::to_string((IMU_EULER_Z*360/6.28318530718)) + "\" > ~/axolotl/calibrated_angles";
+              system(echo_string.c_str());
+
+              echo_string = "";
+              if(((IMU_EULER_X*360/6.28
+"echo \"" + std::to_string((IMU_EULER_X*360/6.28318530718)-calibrated_angle[0]) + "\n" + std::to_string((IMU_EULER_Y*360/6.28318530718)-calibrated_angle[1]) + "\n" + std::to_string((IMU_EULER_Z*360/6.28318530718)-calibrated_angle[2]) + "\" > ~/axolotl/angles";
               system(echo_string.c_str());
               t = 0;
             }

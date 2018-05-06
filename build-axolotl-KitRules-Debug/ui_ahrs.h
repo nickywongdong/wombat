@@ -46,13 +46,18 @@ public:
         AHRS->setPalette(palette);
         textBrowser_3 = new QTextBrowser(AHRS);
         textBrowser_3->setObjectName(QStringLiteral("textBrowser_3"));
-        textBrowser_3->setGeometry(QRect(70, 20, 401, 291));
+        textBrowser_3->setGeometry(QRect(336, 30, 400, 300));
+        QFont font;
+        font.setPointSize(36);
+        textBrowser_3->setFont(font);
         pushButton = new QPushButton(AHRS);
         pushButton->setObjectName(QStringLiteral("pushButton"));
-        pushButton->setGeometry(QRect(60, 350, 99, 27));
+        pushButton->setGeometry(QRect(63, 360, 450, 150));
+        pushButton->setFont(font);
         pushButton_2 = new QPushButton(AHRS);
         pushButton_2->setObjectName(QStringLiteral("pushButton_2"));
-        pushButton_2->setGeometry(QRect(400, 350, 99, 27));
+        pushButton_2->setGeometry(QRect(559, 360, 450, 150));
+        pushButton_2->setFont(font);
 
         retranslateUi(AHRS);
 

@@ -80,21 +80,31 @@
   <widget class="QTextBrowser" name="textBrowser_3">
    <property name="geometry">
     <rect>
-     <x>70</x>
-     <y>20</y>
-     <width>401</width>
-     <height>291</height>
+     <x>336</x>
+     <y>30</y>
+     <width>400</width>
+     <height>300</height>
     </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>36</pointsize>
+    </font>
    </property>
   </widget>
   <widget class="QPushButton" name="pushButton">
    <property name="geometry">
     <rect>
-     <x>60</x>
-     <y>350</y>
-     <width>99</width>
-     <height>27</height>
+     <x>63</x>
+     <y>360</y>
+     <width>450</width>
+     <height>150</height>
     </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>36</pointsize>
+    </font>
    </property>
    <property name="text">
     <string>Refresh</string>
@@ -103,11 +113,16 @@
   <widget class="QPushButton" name="pushButton_2">
    <property name="geometry">
     <rect>
-     <x>400</x>
-     <y>350</y>
-     <width>99</width>
-     <height>27</height>
+     <x>559</x>
+     <y>360</y>
+     <width>450</width>
+     <height>150</height>
     </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>36</pointsize>
+    </font>
    </property>
    <property name="text">
     <string>Zero</string>

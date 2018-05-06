@@ -80,11 +80,16 @@
   <widget class="QPushButton" name="pushButton">
    <property name="geometry">
     <rect>
-     <x>70</x>
-     <y>90</y>
-     <width>161</width>
-     <height>71</height>
+     <x>311</x>
+     <y>30</y>
+     <width>450</width>
+     <height>150</height>
     </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>36</pointsize>
+    </font>
    </property>
    <property name="text">
     <string>Clear Logs</string>
@@ -93,11 +98,16 @@
   <widget class="QPushButton" name="pushButton_2">
    <property name="geometry">
     <rect>
-     <x>80</x>
-     <y>230</y>
-     <width>151</width>
-     <height>71</height>
+     <x>311</x>
+     <y>200</y>
+     <width>450</width>
+     <height>150</height>
     </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>36</pointsize>
+    </font>
    </property>
    <property name="text">
     <string>Change Password</string>
@@ -106,11 +116,16 @@
   <widget class="QPushButton" name="pushButton_3">
    <property name="geometry">
     <rect>
-     <x>90</x>
-     <y>400</y>
-     <width>141</width>
-     <height>61</height>
+     <x>311</x>
+     <y>370</y>
+     <width>450</width>
+     <height>150</height>
     </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>36</pointsize>
+    </font>
    </property>
    <property name="text">
     <string>Reset Password</string>

@@ -4,6 +4,8 @@
 #include <QString>
 #include<QInputDialog>
 #include<signal.h>
+#include <fstream>
+#include <iostream>
 
 Data::Data(QWidget *parent, pid_t a) :
     QWidget(parent),
@@ -24,11 +26,13 @@ void Data::on_pushButton_clicked()
     bool yes;
 
     // Check if the vehicle is moving, and prevent options from appearing if it is
-    ifstream s_file = open("/home/nvidia/axolotl/vspeed");
+    ifstream s_file;
+    s_file.open("/home/nvidia/axolotl/vspeed");
     int vspeed = 0;
     if(s_file.is_open()) {
-      std::string vspeed_str << s_file;
-      s_file.close()
+      std::string vspeed_str;
+      s_file >> vspeed_str;
+      s_file.close();
       vspeed = atoi(vspeed_str.c_str());
     }
 

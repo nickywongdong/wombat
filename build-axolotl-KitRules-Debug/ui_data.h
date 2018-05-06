@@ -45,13 +45,18 @@ public:
         Data->setPalette(palette);
         pushButton = new QPushButton(Data);
         pushButton->setObjectName(QStringLiteral("pushButton"));
-        pushButton->setGeometry(QRect(70, 90, 161, 71));
+        pushButton->setGeometry(QRect(311, 30, 450, 150));
+        QFont font;
+        font.setPointSize(36);
+        pushButton->setFont(font);
         pushButton_2 = new QPushButton(Data);
         pushButton_2->setObjectName(QStringLiteral("pushButton_2"));
-        pushButton_2->setGeometry(QRect(80, 230, 151, 71));
+        pushButton_2->setGeometry(QRect(311, 200, 450, 150));
+        pushButton_2->setFont(font);
         pushButton_3 = new QPushButton(Data);
         pushButton_3->setObjectName(QStringLiteral("pushButton_3"));
-        pushButton_3->setGeometry(QRect(90, 400, 141, 61));
+        pushButton_3->setGeometry(QRect(311, 370, 450, 150));
+        pushButton_3->setFont(font);
 
         retranslateUi(Data);
 

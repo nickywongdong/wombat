@@ -48,7 +48,7 @@ public:
         centralWidget->setObjectName(QStringLiteral("centralWidget"));
         tabWidget = new QTabWidget(centralWidget);
         tabWidget->setObjectName(QStringLiteral("tabWidget"));
-        tabWidget->setGeometry(QRect(20, 50, 1071, 641));
+        tabWidget->setGeometry(QRect(20, 50, 1072, 642));
         tabWidget->setStyleSheet(QLatin1String("QTabBar::tab {\n"
 "height: 80px;\n"
 "width: 120px;\n"
