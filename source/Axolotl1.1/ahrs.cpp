@@ -100,5 +100,4 @@ void AHRS::on_pushButton_2_pressed()
   front_image_label->setPixmap(temp_pixmap_f);
 
   system("cp /home/nvidia/axolotl/angles /home/nvidia/axolotl/zero_angles");
-  
 }
