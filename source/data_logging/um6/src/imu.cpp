@@ -335,7 +335,7 @@ int main(int argc, char **argv) {
 
               echo_string = "echo \"";
               double val = (IMU_EULER_X*360/6.28318530718)-calibrated_angle[0];
-              if (val < 0) {
+              if (val > 0) {
                 echo_string = echo_string + std::to_string(std::abs(val)) + " below horizon.\n";
               }
               else {
@@ -343,7 +343,7 @@ int main(int argc, char **argv) {
               }
 
               val = (IMU_EULER_Y*360/6.28318530718)-calibrated_angle[1];
-              if (val < 0) {
+              if (val > 0) {
                 echo_string = echo_string + std::to_string(std::abs(val)) + " to the left.\n";
               }
               else {
