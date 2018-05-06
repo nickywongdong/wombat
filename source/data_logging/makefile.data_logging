@@ -1,4 +1,5 @@
 all: dashcamd datad datad_pyhelper daemon_manager record_helper backup_cam_helper
+	cp hashkey ~/axolotl/hashkey
 
 daemon_launcher: daemon_manager daemon_launcher.cpp
 	g++ daemon_launcher.cpp -o daemon_launcher
@@ -37,7 +38,7 @@ clean:
 	rm -f backup_cam_helper
 
 fresh: clean all
-	rm -f $PWD/um6/imu
-	cd $PWD/um6
+	rm -f um6/imu
+	cd um6
 	make
 	cd ..
