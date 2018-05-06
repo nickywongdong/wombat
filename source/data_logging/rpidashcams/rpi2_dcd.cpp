@@ -18,6 +18,7 @@ pid_t camerahelper_pid = -5, bhelper_pid = -5;
 bool backupCameraActive = false;
 
 int main(int argc, char **argv) {
+start_accept:
   struct sockaddr_rc loc_addr = { 0 }, rem_addr = { 0 };
   bdaddr_t ANY_RC_ADDR = {0, 0, 0, 0, 0, 0};
   char buf[1024] = { 0 };
@@ -37,7 +38,7 @@ int main(int argc, char **argv) {
   // put socket into listening mode
   listen(s, 1);
 
-start_accept:
+
   // accept one connection
   client = accept(s, (struct sockaddr *)&rem_addr, &opt);
 
@@ -56,7 +57,7 @@ start_accept:
             if (camerahelper_pid < 1) {
               camerahelper_pid = fork();
               if(camerahelper_pid == 0) {
-                execv("c1helper",args);
+                execv("/home/pi/wombat/source/data_logging/rpidashcams/c2helper",args);
               }
             }
           }
@@ -67,7 +68,7 @@ start_accept:
               if(bhelper_pid == -5) {
               bhelper_pid = fork();
                 if(bhelper_pid == 0) {
-                  execv("bchelper",args);
+                  execv("/home/pi/wombat/source/data_logging/rpidashcams/bchelper",args);
                 }
               }
             }
@@ -107,7 +108,7 @@ start_accept:
                 // close connection
                 close(client);
                 close(s);
-		exit(0);
+		            exit(0);
                 goto start_accept;
               }
           }

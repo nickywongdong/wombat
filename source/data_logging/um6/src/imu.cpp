@@ -276,7 +276,7 @@ int main(int argc, char **argv) {
   serial::Timeout to = serial::Timeout(500, 500, 0, 500, 0);
   ser.setTimeout(to);
 
-  int connection_attempts;
+  int connection_attempts = 0;
   while (1) {
     if(connection_attempts > 10) {
       system("echo \"Error: gave up on serial port connections after 10 attempts.\" >> ~/axolotl/debug");
