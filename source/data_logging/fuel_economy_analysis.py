@@ -82,8 +82,8 @@ if os.access(filename, os.W_OK):
         tipsOutputFile.write("Fuel Economy Analysis completed at: " + time.ctime() + "\n\n")
 
         tipsOutputFile.write("You've been idling for " + str(100.0*float(stopsamples)/float(samples)) + "% of the current driving cycle.\n")
-        tipsOutputFile.write("Your average speed is " + str(float(totalspeed/samples)) + "% of the current driving cycle.\n")
-        tipsOutputFile.write("Your average use of the throttle pedal is " + str(float(throttlearr/samples)) + "%.\n\n")
+        tipsOutputFile.write("Your average speed is " + str(float(totalspeed/samples)) + "kph.\n")
+        tipsOutputFile.write("Your average use of the throttle pedal is " + str(float(accelsamples/samples)) + "%.\n\n")
 
         tipsOutputFile.write("Please obey all speed laws when considering these suggestions.\n\n")
 
@@ -110,7 +110,12 @@ if os.access(filename, os.W_OK):
     try:
         tipsOutputFile = open("fedata",'w+')
         tipsOutputFile.write("Fuel Economy Analysis completed at: " + time.ctime() + "\n\n")
-        tipsOutputFile.write("Please obey all speed laws when considering these instructions.\n\n")
+
+        tipsOutputFile.write("You've been idling for " + str(100.0*float(stopsamples)/float(samples)) + "% of the current driving cycle.\n")
+        tipsOutputFile.write("Your average speed is " + str(float(totalspeed/samples)) + "kph.\n")
+        tipsOutputFile.write("Your average use of the throttle pedal is " + str(float(accelsamples/samples)) + "%.\n\n")
+
+        tipsOutputFile.write("Please obey all speed laws when considering these suggestions.\n\n")
 
         if show_stopstart_tip or show_acceleration_tip or show_averagespeed_tip:
             tipsOutputFile.write("Recommendations:\n");
