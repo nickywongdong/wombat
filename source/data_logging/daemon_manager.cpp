@@ -242,7 +242,10 @@ int main() {
   // Clear this boot cycle's debug file
   system("rm -f ~/axolotl/debug");
   system("rm -f ~/axolotl/device_free");
+
+  // Zero out speed and angle files
   system("echo \"0\" > ~/axolotl/vspeed");
+  system("echo \"0\n0\n0\n\" > ~/axolotl/zero_angles");
 
   // Test for connected flash drive
   struct stat buffer;
