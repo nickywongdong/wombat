@@ -13,7 +13,9 @@ Whilst logged into the `nvidia` profile of the Jetson:
 3.  Download the maps binary [here](https://drive.google.com/open?id=1UpHisYQQdKC_r3oSZfjjtk_R77760Z-u), and move the maps binary to the `~/axolotl/maps` folder on the Jetson (create any necessary directories that don't exist).
 5.  In the `source` directory, run `make fresh`.
 
-### Installing Raspberry Pi Software
+### Installing Raspberry Pi Software (optional)
+Only do the following if using Raspberry Pis that were not delivered with the project.
+
 Whilst logged into the `pi` profile of Raspberry Pi:
 
 1. Clone the repository in the home directory. The repository path should be: `/home/pi/wombat/`.
@@ -31,7 +33,8 @@ Whilst logged into the `pi` profile of Raspberry Pi:
     ```
   - If the current Raspberry Pi is meant to be the front dashcam, change `rpiZdcd` in the exec line to: `rpi1dcd`.
   - If the current Raspberry Pi is meant to be the backup camera, change `rpiZdcd` in the exec line to: `rpi2dcd`.
-4. Open `/etc/wpa_supplicant/wpa_supplicant.conf`. Below `update_config=1`, ensure that the only network settings are:
+4. Make the boot file executable using `chmod a+r /home/pi/.config/autostart/axolotl_startup.desktop`.
+5. Open `/etc/wpa_supplicant/wpa_supplicant.conf`. Below `update_config=1`, ensure that the only network settings are:
   ```
   network={
   	ssid="AxolotlWLAN"
@@ -39,13 +42,11 @@ Whilst logged into the `pi` profile of Raspberry Pi:
   	key_mgmt=WPA-PSK
   }
   ````
-5. Run `sudo reboot` on the Raspberry Pi.
+6. Run `sudo reboot` on the Raspberry Pi.
 
-Whilst logged into the `nvidia` profile of the Jetson (only if using Raspberry Pis that were not shipped):
+Whilst logged into the `nvidia` profile of the Jetson:
 1. Determine the Bluetooth address of each Raspberry Pi, and replace the Bluetooth addresses in `bluetooth_addresses` with those addresses.
 `bluetooth_addresses` should only be comprised of two lines; the first with the Bluetooth address of the front Raspberry Pi, the second with the Bluetooth address of the rear Raspberry Pi.
-
-__Note:__ No more interaction is needed with the Raspberry Pi. The Raspberry Pi, on bootup, should be ready
 
 ## Backup Camera Integration
 The system's backup camera is designed to turn on when gpio pin 298 (gpio298) is driven high. If gpio298 is driven low, the backup camera will automatically turn off after 5 seconds.
