@@ -86,7 +86,7 @@ void AHRS::on_pushButton_pressed()
 void AHRS::on_pushButton_2_pressed()
 {
   side_current_rot = front_current_rot = 0.0;
-  
+
   QPixmap temp_pixmap(*side_profile_label->pixmap());
   QMatrix rotation_matrix;
   rotation_matrix.rotate(side_current_rot);
@@ -100,4 +100,5 @@ void AHRS::on_pushButton_2_pressed()
   front_image_label->setPixmap(temp_pixmap_f);
 
   system("cp /home/nvidia/axolotl/angles /home/nvidia/axolotl/zero_angles");
+  
 }
