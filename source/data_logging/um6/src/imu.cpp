@@ -333,9 +333,24 @@ int main(int argc, char **argv) {
               std::string echo_string = "echo \"" + std::to_string((IMU_EULER_X*360/6.28318530718)) + "\n" + std::to_string((IMU_EULER_Y*360/6.28318530718)) + "\n" + std::to_string((IMU_EULER_Z*360/6.28318530718)) + "\" > ~/axolotl/calibrated_angles";
               system(echo_string.c_str());
 
-              echo_string = "";
-              if(((IMU_EULER_X*360/6.28
-"echo \"" + std::to_string((IMU_EULER_X*360/6.28318530718)-calibrated_angle[0]) + "\n" + std::to_string((IMU_EULER_Y*360/6.28318530718)-calibrated_angle[1]) + "\n" + std::to_string((IMU_EULER_Z*360/6.28318530718)-calibrated_angle[2]) + "\" > ~/axolotl/angles";
+              echo_string = "echo \"";
+              double val = (IMU_EULER_X*360/6.28318530718)-calibrated_angle[0];
+              if (val < 0) {
+                echo_string = echo_string + std::abs(val) + " below horizon.\n";
+              }
+              else {
+                echo_string = echo_string + std::abs(val) + " above the horizon.\n";
+              }
+
+              val = (IMU_EULER_Y*360/6.28318530718)-calibrated_angle[1];
+              if (val < 0) {
+                echo_string = echo_string + std::abs(val) + " to the left.\n";
+              }
+              else {
+                echo_string = echo_string + std::abs(val) + " to the right.\n";
+              }
+
+              echo_string = echo_string + "\" > ~/axolotl/angles";
               system(echo_string.c_str());
               t = 0;
             }
