@@ -336,18 +336,18 @@ int main(int argc, char **argv) {
               echo_string = "echo \"";
               double val = (IMU_EULER_X*360/6.28318530718)-calibrated_angle[0];
               if (val > 0) {
-                echo_string = echo_string + std::to_string(std::abs(val)) + " below horizon.\n";
+                echo_string = echo_string + std::to_string(std::abs((int)val)) + " below horizon.\n";
               }
               else {
-                echo_string = echo_string + std::to_string(val) + " above the horizon.\n";
+                echo_string = echo_string + std::to_string((int)val) + " above the horizon.\n";
               }
 
               val = (IMU_EULER_Y*360/6.28318530718)-calibrated_angle[1];
               if (val > 0) {
-                echo_string = echo_string + std::to_string(std::abs(val)) + " to the left.\n";
+                echo_string = echo_string + std::to_string(std::abs((int)val)) + " to the left.\n";
               }
               else {
-                echo_string = echo_string + std::to_string(val) + " to the right.\n";
+                echo_string = echo_string + std::to_string((int)val) + " to the right.\n";
               }
 
               echo_string = echo_string + "\" > ~/axolotl/angles";
