@@ -39,20 +39,18 @@ void MusicPage::on_pushButton_2_clicked()
     std::string stop_command = "echo stop > /proc/" + std::to_string(mpid) + "/fd/0";
     system(stop_command.c_str());
 
-    //system("pulseaudio -k");    //reset the pulseaudio stream
-    //sleep(5);
 
     if(mopen)    kill(mpid,SIGINT);  //kill the previously spawned activity
     if(fopen)    kill(mpid,SIGINT);
 
-    //chdir("/home/nvidia/Desktop/github/source/bluetooth_streaming/");
     chdir("/home/nvidia/wombat/source/media_system/bluetooth_streaming/");
     int status;
     pid_t fml;
     fml = fork(
                 );
+    //execute script to pair with bluetooth device
     if(fml==0){
-        execl("./test2.sh", "test2.sh", NULL);
+        execl("./bluetooth_pair.sh", "bluetooth_pair.sh", NULL);
     }
     else{
         waitpid(fml, &status,0);

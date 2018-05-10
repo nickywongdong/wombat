@@ -155,9 +155,11 @@ MainWindow::MainWindow(QWidget *parent) :
         //QVBoxLayout *layout = new QVBoxLayout();
         //layout->addWidget(widget);
         //this->setLayout(layout);
-        ui->tabWidget->addTab(widget2, "Media Player");
+       	ui->tabWidget->addTab(widget2, "Media Player");
         swid = fork();
-        chdir("/home/nvidia/wombat/source");
+        
+	//start gpio pin monitoring for sleep/wake functionality
+	chdir("/home/nvidia/wombat/source");
         if(swid==0){
             execl("./switchToggle", "switchToggle", NULL);
         }
