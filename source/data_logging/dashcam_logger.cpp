@@ -166,6 +166,7 @@ void cameraLoop() {
       #endif
 
       while(1) {
+        // continuously clear memory on storage volume
         #ifdef CONTINUOUS_OPTIMIZATION
         while(axolotlFileSystem::getAvailableMemory(logging_directory) < 2048) {
             optimizeStorage();
@@ -174,12 +175,10 @@ void cameraLoop() {
       }
     }
   }
+
+  // infinite loop to keep this process from going defunct
   while(1) {
-    #ifdef CONTINUOUS_OPTIMIZATION
-    while(axolotlFileSystem::getAvailableMemory(logging_directory) < 2048) {
-        optimizeStorage();
-    }
-    #endif
+
   }
 }
 
@@ -231,6 +230,7 @@ void killAllHelpers() {
   Closes file descriptors to bluetooth sockets and exits cleanly.
 */
 void killCamerasHandler(int signumber, siginfo_t *siginfo, void *pointer) {
+  // signal cameras to quit
   if(front_cam_bt_active) {
     sendBluetoothCommand(front_dashcam_bluetooth_socket,'q');
     system("echo \"Debug: attempting to kill front camera.\" >> ~/axolotl/debug");
@@ -239,17 +239,22 @@ void killCamerasHandler(int signumber, siginfo_t *siginfo, void *pointer) {
     sendBluetoothCommand(rear_dashcam_bluetooth_socket,'q');
     system("echo \"Debug: attempting to kill rear camera.\" >> ~/axolotl/debug");
   }
+
+  // close bluetooth sockets
   close(front_dashcam_bluetooth_socket);
   close(rear_dashcam_bluetooth_socket);
 
-  killAllHelpers();     // test, replace at top of function if fails
+  // kill all camera helper processes
+  killAllHelpers();
 
+  // kill gpio watcher process if there's one active
   int status;
   if(gpio_watcher_pid > 1) {
     kill(gpio_watcher_pid,SIGKILL);
     waitpid(gpio_watcher_pid,&status,-1);
   }
 
+  // exit cleanly
   exit(0);
 }
 
@@ -269,6 +274,8 @@ void registerKillCamerasHandler() {
 */
 void toggleOffHandler(int signumber, siginfo_t *siginfo, void *pointer) {
   logging_active = false;
+
+  // pause cameras if they are connected via bluetooth
   if(front_cam_bt_active) {
     sendBluetoothCommand(front_dashcam_bluetooth_socket,'p');
   }
@@ -295,6 +302,8 @@ void registerToggleOffHandler() {
 void toggleOnHandler(int signumber, siginfo_t *siginfo, void *pointer) {
   char *args[] = {(char *)FRONT_CAMERA_HELPER_NAME, (char *)FRONT_CAMERA_PORT, (char *)COMMAND_RECORD_FRONT, (char *)logging_directory.c_str(), NULL};
   logging_active = true;
+
+  // signal cameras to start
   if(front_cam_bt_active) {
     sendBluetoothCommand(front_dashcam_bluetooth_socket,'s');
   }
@@ -303,22 +312,24 @@ void toggleOnHandler(int signumber, siginfo_t *siginfo, void *pointer) {
     sendBluetoothCommand(rear_dashcam_bluetooth_socket,'s');
     #endif
   }
-  while(axolotlFileSystem::getAvailableMemory(logging_directory) < 2048) {   // wait until we have > 2GB storage
+
+  // clear out some memory if we don't have enough
+  if(axolotlFileSystem::getAvailableMemory(logging_directory) < 2048) {   // wait until we have > 2GB storage
     optimizeStorage();    // attempt to optimize storage space if we don't have enough
   }
   dashcam_helper_0_pid = fork();    // fork the front camera helper
   if(dashcam_helper_0_pid == 0) {
-    if (front_cam_bt_active) {   // execv
+    if (front_cam_bt_active) {   // exec the record helper
       execv("record_helper",args);
     }
   }
   else {
     #ifdef REAR_CAMERA
-    dashcam_helper_1_pid = fork();
+    dashcam_helper_1_pid = fork();    // fork the rear camera helper
     if (dashcam_helper_1_pid == 0) {
       if (rear_cam_bt_active) {
         char *args2[] = {(char *)REAR_CAMERA_HELPER_NAME, (char *)REAR_CAMERA_PORT, (char *)COMMAND_RECORD_REAR, (char *)logging_directory.c_str(), NULL};
-        execv("record_helper",args2);
+        execv("record_helper",args2);   // exec the record helper
       }
     }
     else {
@@ -346,7 +357,11 @@ void backupCameraToggleHandler(int signumber, siginfo_t *siginfo, void *pointer)
   int status;
   backup_camera_active = !backup_camera_active;
   char *args[] = {(char *)BACKUP_CAMERA_HELPER_NAME, (char *)BACKUP_CAMERA_PORT, (char *)COMMAND_WATCH, (char *)logging_directory.c_str(), NULL};
+
+  // send a bluetooth signal to toggle the camera
   sendBluetoothCommand(rear_dashcam_bluetooth_socket,'b');
+
+  // turn camera on or off based on its current state
   if(backup_camera_active) {
     if(b_camera_helper_pid == -5) {
       b_camera_helper_pid = fork();
@@ -356,14 +371,17 @@ void backupCameraToggleHandler(int signumber, siginfo_t *siginfo, void *pointer)
     }
   }
   else {
-    sleep(5);     // fulfill FMVSS by waiting 5 sec to kill backup camera after shifting out of reverse
-    //system("killall backup_cam_helper");
+    // fulfill FMVSS by waiting 5 sec to kill backup camera after shifting out of reverse
+    sleep(5);
+
+    // kill the camera if the pid is active
     if(b_camera_helper_pid > 1) {
       kill(b_camera_helper_pid,SIGKILL);
       waitpid(b_camera_helper_pid, &status, -1);
     }
     b_camera_helper_pid = -5;
-    //system("killall -SIGINT gst-launch-1.0");
+
+    // kill the gstreamer process associated with the stream
     system("pkill -SIGINT -f port=9003");
   }
 }
@@ -384,6 +402,7 @@ int main(int argc, char *argv[]) {
   logging_directory = argv[1];
   string ahrs_filepath = logging_directory + "/ahrs_log.csv";
 
+  // get memory management type from args
   auto_mem = argv[2];
 
   // Wait on AHRS to complete connection
@@ -442,9 +461,12 @@ int main(int argc, char *argv[]) {
     #define BU_CAMERA
     #ifdef BU_CAMERA
     if(rear_cam_bt_active) {
+      // continuously read from gpio value
       while(1) {
         f.open("/sys/class/gpio/gpio298/value");
     	  f >> i;
+
+        // if state change on gpio pin, signal parent dashcam process
     	  if(i == 1 && not(active)){
           if(rear_cam_bt_active) {
       		  kill(getppid(),SIGBUS);
@@ -468,13 +490,14 @@ int main(int argc, char *argv[]) {
     }
   }
   else {
-    // Register all signal handlers
+    // Register all signal handlers for only the parent dashcam process
     registerToggleOffHandler();
     registerToggleOnHandler();
     registerKillCamerasHandler();
     registerBackupCameraHandler();
-    
-    cameraLoop();   // begin our camera loop outside of the gpio watcher
+
+    // begin our camera loop outside of the gpio watcher
+    cameraLoop();
   }
 
   return 0;

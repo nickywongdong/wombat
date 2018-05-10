@@ -14,16 +14,14 @@ using namespace std;
   Port 9003: backup camera
 */
 int main(int argc, char *argv[]) {
-  /*if(argc != 3) {
-    exit(0);
-  }*/
-
   int cameraPort = atoi(argv[1]);
   string runType = argv[2], loggingDirectory = argv[3], sysCmd;
 
+  // Create command based on port passed and execute it
   sysCmd = "gst-launch-1.0 -v udpsrc port=" + to_string(cameraPort) + " ! gdpdepay ! rtph264depay ! avdec_h264 ! autovideosink sync=false";
-
   system(sysCmd.c_str());
+
+  // Loop forever to allow process kill by camera system
   while(1) {
 
   }

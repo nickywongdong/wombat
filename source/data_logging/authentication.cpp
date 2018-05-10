@@ -56,28 +56,3 @@ void resetPassword() {
   }
   hash_file.close();
 }
-
-// DEPRECATED
-// /*
-//   Wipes all data from the data logging system.
-//   Will only destroy data if password matches.
-// */
-// void deleteData(string password) {
-//   // Get true passkey hash from file
-//   ifstream hash_file;
-//   string truekeyHash = NULL;
-//   string hash_file_path = string(getenv("HOME")) + "/axolotl/hashkey"; //normally run_directory + "/hashkey"
-//   hash_file.open(hash_file_path);
-//   if (hash_file.is_open()) {
-//     getline(hash_file,truekeyHash);
-//     hash_file.close();
-//   }
-//
-//   // Delete the data only if password hashes match
-//   if(axolotlFileSystem::hash(password) == truekeyHash) {
-//     dataDeletionHandler();
-//   }
-//   #ifdef DEBUG
-//   printf("Data deleted.\n");
-//   #endif
-// }

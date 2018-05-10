@@ -170,26 +170,31 @@ void deleteHandler(int signumber, siginfo_t *siginfo, void *pointer) {
   }
   #endif
 
-  #ifndef DELETION_METHOD_1
   // new data deletion method
   // deletes everything but the currently active logging directory
+  // bypasses data logging system stop, so we don't stop recording data
+  #ifndef DELETION_METHOD_1
+
   char cwd_raw[10000];
   getcwd(cwd_raw, sizeof(cwd_raw));
+
+  // get current directory and the base logging directory path
   string current_dir = string(cwd_raw);
   string base_dir = log_volume + "/axolotl/data";
+
+  // create delete command
   string delete_command = "/bin/bash -O extglob -c 'rm -rf !(" + logging_directory_name + ")'";
 
+  // enter base logging directory and delete all but current data log
   chdir(base_dir.c_str());
   cout << base_dir << endl;
-//system("shopt -s extglob");
   system("delete.sh");
   system(delete_command.c_str());
   chdir(current_dir.c_str());
-
-  cout << delete_command << endl;
   #endif
 
   #ifdef DELETION_METHOD_1
+
   // restart both daemons
   if(!(dcdpid < 0)) {
     kill(dcdpid,SIGUSR2);
@@ -213,8 +218,8 @@ void registerDeleteHandler() {
 }
 
 /*
-  Pauses data logging, signals the data logger to update files for DTCs
-  as well as fuel ecomnomy data, and restarts data logging.
+  Signals the data logger to update files for DTCs
+  as well as fuel economy data, and restarts data logging.
 */
 void updateDataHandler(int signumber, siginfo_t *siginfo, void *pointer) {
   if(dldpid > 1) {
