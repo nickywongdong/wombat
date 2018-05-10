@@ -74,7 +74,7 @@ MainWindow::MainWindow(QWidget *parent) :
             }
 
             mpid = fork();
-            //Open VLC media player, and scan for media in designated volumes:    
+            //Open VLC media player, and scan for media in designated volumes:
 	    chdir("/home/nvidia/wombat/source/media_system/media_player");
                 if(mpid==0){
                     execl("/usr/bin/vlc", "vlc", "--no-video", "--no-playlist-autostart","--loop","--playlist-tree",  "/media/nvidia/AXOLOTLDCV", "Music", NULL);
@@ -157,9 +157,9 @@ MainWindow::MainWindow(QWidget *parent) :
         //this->setLayout(layout);
        	ui->tabWidget->addTab(widget2, "Media Player");
         swid = fork();
-        
+
 	//start gpio pin monitoring for sleep/wake functionality
-	chdir("/home/nvidia/wombat/source");
+	chdir("/home/nvidia/wombat/source/media_system/sleep_mode/");
         if(swid==0){
             execl("./switchToggle", "switchToggle", NULL);
         }
