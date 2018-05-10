@@ -13,7 +13,6 @@ import os
 import csv
 import string
 from subprocess import call
-# from pathlib import Path
 
 # Variables to hold fuel economy data and output status
 samples = 0
