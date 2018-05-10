@@ -36,6 +36,8 @@ MusicPage::~MusicPage()
 //button to pair with phone
 void MusicPage::on_pushButton_2_clicked()
 {
+
+    //command to stop media player
     std::string stop_command = "echo stop > /proc/" + std::to_string(mpid) + "/fd/0";
     system(stop_command.c_str());
 
@@ -55,17 +57,11 @@ void MusicPage::on_pushButton_2_clicked()
     else{
         waitpid(fml, &status,0);
     }
-    //system("./test.sh");
-    //system("./bluetooth_streaming.sh");
-
-    //system("/home/nvidia/Desktop/github/source/bluetooth_streaming/test.sh");
-    //system("/home/nvidia/Desktop/github/source/bluetooth_streaming/load_modules.sh");
-    //sleep(5);
-    //system("pacmd load-module module-loopback source=bluez_source.70_70_0D_87_4D_D4 sink=alsa_output.platform-3510000.hda.hdmi-stereo-extra1");
+    
     sleep(1);
+    //allow system to playback media from bluetooth source
     system("pacmd load-module module-loopback");
     sleep(1);
-    //system("pacmd load-module module-switch-on-connect");
 
 }
 
@@ -73,18 +69,18 @@ void MusicPage::on_pushButton_2_clicked()
 void MusicPage::on_pushButton_3_clicked()
 {
 
-    system("pulseaudio -k");    //reset the pulseaudio stream
-
     if(mopen)    kill(mpid,SIGINT);  //kill the previously spawned activity
     if(fopen)    kill(mpid,SIGINT);
     ui->auxLabel->setText("Enabling Aux");
 
+    //pacmd module to set source to USB mic adapter, and sink (speaker)
     system("pacmd load-module module-loopback source=alsa_output.usb-0d8c_C-Media_USB_Audio_Device-00.analog-stereo sink=alsa_output.platform-3510000.hda.hdmi-stereo-extra1.monitor");
-    system("pactl load-module module-loopback");
+  //  system("pactl load-module module-loopback");
 
 
 }
 
+//Upon closing page
 void MusicPage::closeEvent(QCloseEvent *event){
 
     system("pulseaudio -k");    //close the stream upon exiting gui
@@ -94,13 +90,13 @@ void MusicPage::closeEvent(QCloseEvent *event){
     event->accept();
 
 }
-
+//Mute button
 void MusicPage::on_pushButton_pressed()
 {
     system("pactl -- set-sink-volume 0 0%");
 }
 
-
+//Volume Slider
 void MusicPage::on_horizontalSlider_sliderMoved(int position)
 {
     std::string vol_command = "pactl -- set-sink-volume 0 " + std::to_string(position) + "%";
