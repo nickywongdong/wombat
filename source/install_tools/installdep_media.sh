@@ -1,5 +1,7 @@
 #!/bin/bash
 
+cd ../media_system/
+
 #first install vlc media player:
 sudo apt-repository ppa:videolan/stable-daily
 sudo apt-get update
