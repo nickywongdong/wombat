@@ -1,0 +1,1 @@
+/usr/bin/c++      CMakeFiles/imu.dir/src/imu.o  -o imu  -L/home/nvidia/wombat/source/data_logging/um6 -rdynamic -lserial libcomms.so libregisters.so -lrt -lpthread -Wl,-rpath,/home/nvidia/wombat/source/data_logging/um6: 

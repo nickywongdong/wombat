@@ -1,0 +1,32 @@
+#IncludeRegexLine: ^[ 	]*#[ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/nvidia/wombat/source/data_logging/um6/src/registers.cpp
+um6/registers.h
+/home/nvidia/wombat/source/data_logging/um6/src/um6/registers.h
+
+include/um6/firmware_registers.h
+
+include/um6/registers.h
+machine/endian.h
+-
+endian.h
+-
+math.h
+-
+stdint.h
+-
+string.h
+-
+stdexcept
+-
+string
+-
+um6/firmware_registers.h
+include/um6/um6/firmware_registers.h
+

@@ -16,21 +16,26 @@
   <widget class="QTextBrowser" name="textBrowser">
    <property name="geometry">
     <rect>
-     <x>20</x>
-     <y>40</y>
-     <width>891</width>
-     <height>591</height>
+     <x>236</x>
+     <y>30</y>
+     <width>600</width>
+     <height>300</height>
     </rect>
    </property>
   </widget>
   <widget class="QPushButton" name="pushButton">
    <property name="geometry">
     <rect>
-     <x>10</x>
-     <y>10</y>
-     <width>99</width>
-     <height>27</height>
+     <x>311</x>
+     <y>370</y>
+     <width>450</width>
+     <height>150</height>
     </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>36</pointsize>
+    </font>
    </property>
    <property name="text">
     <string>Refresh</string>

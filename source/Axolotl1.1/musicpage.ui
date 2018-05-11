@@ -80,63 +80,26 @@
   <widget class="QPushButton" name="pushButton_2">
    <property name="geometry">
     <rect>
-     <x>80</x>
-     <y>170</y>
-     <width>201</width>
-     <height>91</height>
+     <x>559</x>
+     <y>70</y>
+     <width>450</width>
+     <height>150</height>
     </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>36</pointsize>
+    </font>
    </property>
    <property name="text">
     <string>Pair</string>
    </property>
   </widget>
-  <widget class="QStackedWidget" name="stackedWidget">
-   <property name="geometry">
-    <rect>
-     <x>360</x>
-     <y>10</y>
-     <width>841</width>
-     <height>641</height>
-    </rect>
-   </property>
-   <property name="currentIndex">
-    <number>1</number>
-   </property>
-   <widget class="QWidget" name="page"/>
-   <widget class="QWidget" name="page_2">
-    <widget class="QLabel" name="pairLabel">
-     <property name="geometry">
-      <rect>
-       <x>-20</x>
-       <y>150</y>
-       <width>181</width>
-       <height>71</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string/>
-     </property>
-    </widget>
-    <widget class="QPushButton" name="pushButton_3">
-     <property name="geometry">
-      <rect>
-       <x>210</x>
-       <y>160</y>
-       <width>201</width>
-       <height>91</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Aux</string>
-     </property>
-    </widget>
-   </widget>
-  </widget>
   <widget class="QLabel" name="fmLabel">
    <property name="geometry">
     <rect>
-     <x>216</x>
-     <y>96</y>
+     <x>366</x>
+     <y>66</y>
      <width>161</width>
      <height>51</height>
     </rect>
@@ -148,8 +111,8 @@
   <widget class="QLabel" name="auxLabel">
    <property name="geometry">
     <rect>
-     <x>216</x>
-     <y>256</y>
+     <x>366</x>
+     <y>226</y>
      <width>161</width>
      <height>51</height>
     </rect>
@@ -158,17 +121,76 @@
     <string/>
    </property>
   </widget>
-  <widget class="QLabel" name="mediaLabel">
+  <widget class="QPushButton" name="pushButton">
    <property name="geometry">
     <rect>
-     <x>216</x>
-     <y>336</y>
-     <width>121</width>
-     <height>51</height>
+     <x>311</x>
+     <y>260</y>
+     <width>450</width>
+     <height>150</height>
     </rect>
    </property>
+   <property name="font">
+    <font>
+     <pointsize>36</pointsize>
+    </font>
+   </property>
    <property name="text">
-    <string/>
+    <string>Audio Off</string>
+   </property>
+  </widget>
+  <widget class="QSlider" name="horizontalSlider">
+   <property name="geometry">
+    <rect>
+     <x>240</x>
+     <y>440</y>
+     <width>750</width>
+     <height>61</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>30</pointsize>
+    </font>
+   </property>
+   <property name="orientation">
+    <enum>Qt::Horizontal</enum>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="pushButton_3">
+   <property name="geometry">
+    <rect>
+     <x>63</x>
+     <y>70</y>
+     <width>450</width>
+     <height>150</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>36</pointsize>
+    </font>
+   </property>
+   <property name="text">
+    <string>Aux</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label">
+   <property name="geometry">
+    <rect>
+     <x>91</x>
+     <y>440</y>
+     <width>120</width>
+     <height>60</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>24</pointsize>
+    </font>
+   </property>
+   <property name="text">
+    <string>Volume</string>
    </property>
   </widget>
  </widget>
