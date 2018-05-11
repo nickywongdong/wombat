@@ -1,0 +1,171 @@
+
+\documentclass[onecolumn, draftclsnofoot,10pt, compsoc]{IEEEtran}
+\usepackage{graphicx}
+\usepackage{url}
+\usepackage{setspace}
+\usepackage{tipa}
+
+\usepackage{geometry}
+\geometry{textheight=9.5in, textwidth=7in}
+
+\usepackage{graphicx}
+\graphicspath{{images/}}
+
+% 1. Fill in these details
+\def \CapstoneTeamName{		Team Wombat}
+\def \CapstoneTeamNumber{		15}
+\def \GroupMemberOne{			Victor Li}
+\def \GroupMemberTwo{			Ryan Crane}
+\def \GroupMemberThree{			Nicholas Wong}
+\def \CapstoneProjectName{		Axolotl}
+\def \CapstoneSponsorCompany{	}
+\def \CapstoneSponsorPerson{		Kevin McGrath}
+
+% 2. Uncomment the appropriate line below so that the document type works
+\def \DocType{		%Problem Statement
+				%Requirements Document
+				%Design Document
+				Progress Report
+				}
+			
+\newcommand{\NameSigPair}[1]{\par
+\makebox[2.75in][r]{#1} \hfil 	\makebox[3.25in]{\makebox[2.25in]{\hrulefill} \hfill		\makebox[.75in]{\hrulefill}}
+\par\vspace{-12pt} \textit{\tiny\noindent
+\makebox[2.75in]{} \hfil		\makebox[3.25in]{\makebox[2.25in][r]{Signature} \hfill	\makebox[.75in][r]{Date}}}}
+% 3. If the document is not to be signed, uncomment the RENEWcommand below
+%\renewcommand{\NameSigPair}[1]{#1}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}
+\begin{titlepage}
+    \pagenumbering{gobble}
+    \begin{singlespace}
+    	\includegraphics[height=4cm]{coe_v_spot1}
+        \hfill 
+        % 4. If you have a logo, use this includegraphics command to put it on the coversheet.
+        %\includegraphics[height=4cm]{CompanyLogo}   
+        \par\vspace{.2in}
+        \centering
+        \scshape{
+            \huge CS Capstone \DocType \par
+            {\large\today}\par
+            \vspace{.5in}
+            \textbf{\Huge\CapstoneProjectName}\par
+            \vfill
+            {\large Prepared for}\par
+            \Huge \CapstoneSponsorCompany\par
+            \vspace{5pt}
+            {\Large\NameSigPair{\CapstoneSponsorPerson}\par}
+            {\large Prepared by }\par
+            Group\CapstoneTeamNumber\par
+            % 5. comment out the line below this one if you do not wish to name your team
+            \CapstoneTeamName\par 
+            \vspace{5pt}
+            {\Large
+                \NameSigPair{\GroupMemberOne}\par
+                \NameSigPair{\GroupMemberTwo}\par
+                \NameSigPair{\GroupMemberThree}\par
+            }
+            \vspace{20pt}
+        }
+        \begin{abstract}
+        %6. Fill in your abstract   
+       		This document is a term progress report that examines the progress of the Axolotl infotainment project during the Fall 2017 term. The progress report will review the Axolotl project and its goals, offer a detailed account of our current progress in accomplishing project goals and implementing project components, as well as provide an overview of the work done over the course of the term. Project components discussed include the navigation system, media system, camera system, data logging system, and system UI. A final retrospective is offered, reflecting on the positive aspects of our progress as well as any changes that need to be implemented and the course of action to be taken in order to realize those changes.
+	\end{abstract}
+\end{singlespace}
+\end{titlepage}
+\newpage
+\pagenumbering{arabic}
+\tableofcontents
+% 7. uncomment this (if applicable). Consider adding a page break.
+%\listoffigures
+%\listoftables
+\clearpage
+
+% 8. now you write!
+\section{Project Overview}
+The Axolotl is a car infotainment system with a built in black box that logs data from various sensors in a car. The system should support the standard media playback and navigation functionalities of infotainment systems. The black box will log data captured from vehicle sensors over OBDll, footage from a connected dashcam, and data from a connected attitude heading and reference system.
+
+\subsection{Navigation}
+The purpose of the Axolotl navigation system is to provide users a level of navigation functionality similar to that offered by factory navigation systems installed in modern automobiles. The system should allow users to interact with a map, plan a route, as well as enter an address and navigate to the destination aided by turn-by-turn directions. The navigation system should be able to function without data service and without a GPS signal, allowing it to operate in remote locations where access to mobile data service and GPS may be disrupted.
+The navigation system is not designed to operate on a global scale. Instead, the system is intended to only support U.S. addresses. The navigation system should function as a subprogram of the Axolotl graphical user interface, and continue to issue route commands even if a different task is being conducted on the Axolotl system, such as management of media playback.
+
+\subsection{Media}
+The purpose of the media system is to give users the ability to manage and play media over their car?s audio system. The Axolotl will allow users to play media from many different sources; sources that users may select from include a smartphone or media device connected through USB, Bluetooth, or Auxiliary, FM radio, media from an external USB drive, and/or internal storage. The Axolotl also allows users to set up an network connection with a remote computer and download media from that computer directly into internal storage.
+The media system is not intended to support all media sources; rather, it is designed to accept widespread modern media sources, inline with that offered in modern vehicles. For example, the system is not intended to support compact disc, AM radio, or tape media sources.
+
+\subsection{Data Logging}
+The purpose of the data logging system is to provide a level of user-friendly data logging functionality similar to that of a black box or event data recorder. The system is intended to take snapshots of vehicle information as well as data from any connected dashcams and collate that data in an easy-to-understand data log that can be easily read and interpreted from a computer. The data logging system is not intended to log the value of every variable associated with the running of a vehicle. The data fields chosen for logging are pertinent to the act of driving as well as driver well-being, however technical data fields such as those intended for mechanics are considered irrelevant and are omitted from the data log.
+
+\subsection{Video Streaming}
+The purpose of the video streaming or camera system is to give users the ability to utilize a dashcam in order to log vehicle data as well as provide access to live footage from a backup camera in order to improve user safety while reversing a vehicle. Thus, the video streaming system will support one dashboard camera and one backup camera. The feed from a backup camera will be streamed wirelessly to the main unit for display on the screen; this will be done so that installation will not require running long wires through the car. The backup camera will be connected to a secondary controller which will activate the camera and transmit data when the time is appropriate.
+
+\subsection{UI}
+The Axolotl will be connected to a touchscreen and must have a graphical user interface. The reason why Axolotl must offer a user interface is because the system needs a way to encapsulate each of its functions and allow users to manage subsystems. The user interface will enable users to interact with the system to control media playback, navigation, and access to the data log. We will be using open source Qt to develop our user interface. 
+
+\section{Progress Summary}
+\subsection{Navigation}
+Navigation software has been selected; open-source NavIt with the GPLv2 license will be used. The NavIt source code has been downloaded to a macOS computer and is currently in the process of being built and tested for proper stock functionality before we make any modifications or attempt integration with the Axolotl user interface.
+
+\subsection{Media}
+The media player to be used along with the network protocol for the remote access functionality has been selected. Kodi media player will be used as the main media player application; TCP will be used to download media from a remote source. TCP will be used to implement a client-server remote access application that will run on both a remote computer being used as the music library (server side) and the Axolotl (client side).
+
+\subsection{Data Logging}
+Data logging hardware and software have been selected; an OBDII connector will be used, paired with pyOBD software to read vehicle data as well as diagnostic trouble codes. Currently in the process of researching and understanding the functionality of the obd\_io library provided by pyOBD in order to develop a data logger for the Axolotl, as pyOBD only provides reading functionality for OBDII data and not logging. Data format has been selected (.csv), and the OBDII data fields to be logged have also been chosen. Research is being done into AHRS libraries and the Adafruit IMU, GPS receiver unit will be relied on for AHRS data in the meantime, if available.
+
+\subsection{Video Streaming}
+Tools for implementation selected. A Raspberry Pi will be used to stream video from connected cameras to the Axolotl, eliminating the need to run wires through the vehicle and into the Axolotl, improving packaging and optimizing mounting.
+
+\subsection{UI}
+UI framework has been chosen; Qt has been selected as the framework for user interface development. The open source variant of Qt will be used, licensing terms work out as both the Axolotl and Qt use a GPL open source software license.
+
+\subsection{Supplemental}
+Method of connecting supplemental turn signals has been selected. A Raspberry Pi will be connected to supplemental/external turn signals, and will be controlled by the Axolotl.
+
+\section{Group Activities by Week}
+
+\subsection{Week 1}
+N/A; group not formed yet.
+
+\subsection{Week 2}
+Group formed. Established a meeting time with our TA and met with our client to gain an understanding of the concept of our project. Started work on the problem statement.
+
+\subsection{Week 3}
+Met as a group and discussed the problem statement. Completed and submitted individual rough drafts of the problem statement document. The project described in the problem statement was relatively inline with what we expected from the project.
+
+\subsection{Week 4}
+Completed a final draft of the problem statement. Revisions were made based on what each person wrote on their individual problem statements. Sent finalized problem statement to our client and met with our client over WebEx on Friday to discuss and better understand their vision regarding the project.
+
+\subsection{Week 5}
+Completed rough draft of requirements document and submitted it for grading. Started exploring technologies for project. Chose the name \textit{Axolotl} for our system in order to shorten its original designation of the \textit{NVIDIA Jetson TX2 Infotainment and Black Box} project.
+
+\subsection{Week 6}
+Completed requirements document final draft; submitted it and sent it to client for verification. Met with client and discussed requirements, made some revisions before submitting a finalized draft for grading.
+
+\subsection{Week 7}
+Decided topics for each individual tech review and started tech review research. 
+
+\subsection{Week 8}
+Completed rough draft of individual tech reviews and submitted them. Started the revision process on individual tech reviews. At this point, most of the technologies to be used for the Axolotl system have been chosen.
+
+\subsection{Week 9}
+Completed final draft of individual tech reviews and submitted them. Added additional technologies to tech reviews and updated client for feedback regarding some of the chosen technologies.
+
+\subsection{Week 10}
+Completed and turned in design document, which mostly adheres to the expected IEEE standard. Downloaded NavIt source and started work on building a usable version for testing and integration.
+
+\section{Retrospectives}
+\vspace{20pt}
+\begin{center}
+    \begin{tabular}{ | p{5cm} | p{5cm} | p{5cm} |}
+    \hline
+    \textbf{Positives} & \textbf{Deltas} & \textbf{Actions} \\ \hline
+    Found pyOBD OBDII software that can read both OBDII PIDs as well as diagnostic trouble codes (DTCs). & Need to adapt pyOBD interface for data logging. & Write a data logging system for pyOBD, possibly using OBD GPS Logger as a base. \\ \hline
+    Found navigation software that provides 100\% of the capabilities we want. & & \\ \hline
+    Found a media player that has been used in developing similar projects with documentation.  & Need to find a skin for the media player to eventually match the overall UI. & Look into the online library to select a theme, or develop one from scratch. \\ \hline
+    Found GPS module with built in logging and dead reckoning. & & Implement navigation services. \\ \hline
+    Found examples of Raspberry Pi backup cameras. & Need to determine what cameras will work with streaming libraries. & Look into camera formats. \\ \hline
+    \end{tabular}
+\end{center}
+
+\end{document}
