@@ -159,7 +159,7 @@ MainWindow::MainWindow(QWidget *parent) :
         swid = fork();
 
 	//start gpio pin monitoring for sleep/wake functionality
-	chdir("/home/nvidia/wombat/source/media_system/sleep_mode/");
+	chdir("/home/nvidia/wombat/source/sleep_mode/");
         if(swid==0){
             execl("./switchToggle", "switchToggle", NULL);
         }
