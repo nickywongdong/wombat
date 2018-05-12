@@ -66,31 +66,34 @@ MainWindow::MainWindow(QWidget *parent) :
     }
 
     fmid = fork();
-            //chdir("/home/nvidia/Desktop/github/source/");
-            if(fmid==0){
-                execl("/usr/bin/gqrx", "gqrx", NULL);
-            }
-            else{
-                chdir("/home/nvidia/wombat/");
-            }
+    //chdir("/home/nvidia/Desktop/github/source/");
+    if(fmid==0){
+        execl("/usr/bin/gqrx", "gqrx", NULL);
+    }
+    else{
+        chdir("/home/nvidia/wombat/");
+    }
     sleep(1);
-            mpid = fork();
-            //Open VLC media player, and scan for media in designated volumes:
-	    chdir("/home/nvidia/wombat/source/media_system/media_player");
-                if(mpid==0){
-		struct stat buffer;
-		if ((stat("/media/nvidia/AXOLOTLDCV", &buffer) == 0) && S_ISDIR(buffer.st_mode)) {
-execl("/usr/bin/vlc", "vlc", "--no-video", "--no-playlist-autostart","--loop","--playlist-tree", "/home/nvidia/Music",  NULL);
+
+    mpid = fork();
+
+    //Open VLC media player, and scan for media in designated volumes:
+    chdir("/home/nvidia/wombat/source/media_system/media_player");
+
+    if(mpid==0){
+  		struct stat buffer;
+  		if ((stat("/media/nvidia/AXOLOTLDCV", &buffer) == 0) && S_ISDIR(buffer.st_mode)) {
+        // only attempt to reference the flash drive if it's connected
+        execl("/usr/bin/vlc", "vlc", "--no-video", "--no-playlist-autostart","--loop","--playlist-tree", "/home/nvidia/Music", "/media/nvidia/AXOLOTLDCV",  NULL);
 		  }
 		  else {
-			execl("/usr/bin/vlc", "vlc", "--no-video", "--no-playlist-autostart","--loop","--playlist-tree", "/home/nvidia/Music",  NULL);
+        // otherwise, open vlc with only the music folder as the argument to avoid config errors
+			  execl("/usr/bin/vlc", "vlc", "--no-video", "--no-playlist-autostart","--loop","--playlist-tree", "/home/nvidia/Music",  NULL);
 		  }
-
-                  
-                }
-                else{
-                    chdir("/home/nvidia/wombat/");
-                }
+    }
+    else {
+      chdir("/home/nvidia/wombat/");
+    }
 
     sleep(1);
     char a[256];
