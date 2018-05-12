@@ -17,8 +17,7 @@
 #include <QtWidgets/QHeaderView>
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QPushButton>
-#include <QtWidgets/QStackedWidget>
-#include <QtWidgets/QWidget>
+#include <QtWidgets/QSlider>
 
 QT_BEGIN_NAMESPACE
 
@@ -26,14 +25,12 @@ class Ui_MusicPage
 {
 public:
     QPushButton *pushButton_2;
-    QStackedWidget *stackedWidget;
-    QWidget *page;
-    QWidget *page_2;
-    QLabel *pairLabel;
-    QPushButton *pushButton_3;
     QLabel *fmLabel;
     QLabel *auxLabel;
-    QLabel *mediaLabel;
+    QPushButton *pushButton;
+    QSlider *horizontalSlider;
+    QPushButton *pushButton_3;
+    QLabel *label;
 
     void setupUi(QDialog *MusicPage)
     {
@@ -54,36 +51,39 @@ public:
         MusicPage->setPalette(palette);
         pushButton_2 = new QPushButton(MusicPage);
         pushButton_2->setObjectName(QStringLiteral("pushButton_2"));
-        pushButton_2->setGeometry(QRect(80, 170, 201, 91));
-        stackedWidget = new QStackedWidget(MusicPage);
-        stackedWidget->setObjectName(QStringLiteral("stackedWidget"));
-        stackedWidget->setGeometry(QRect(360, 10, 841, 641));
-        page = new QWidget();
-        page->setObjectName(QStringLiteral("page"));
-        stackedWidget->addWidget(page);
-        page_2 = new QWidget();
-        page_2->setObjectName(QStringLiteral("page_2"));
-        pairLabel = new QLabel(page_2);
-        pairLabel->setObjectName(QStringLiteral("pairLabel"));
-        pairLabel->setGeometry(QRect(-20, 150, 181, 71));
-        pushButton_3 = new QPushButton(page_2);
-        pushButton_3->setObjectName(QStringLiteral("pushButton_3"));
-        pushButton_3->setGeometry(QRect(210, 160, 201, 91));
-        stackedWidget->addWidget(page_2);
+        pushButton_2->setGeometry(QRect(559, 70, 450, 150));
+        QFont font;
+        font.setPointSize(36);
+        pushButton_2->setFont(font);
         fmLabel = new QLabel(MusicPage);
         fmLabel->setObjectName(QStringLiteral("fmLabel"));
-        fmLabel->setGeometry(QRect(216, 96, 161, 51));
+        fmLabel->setGeometry(QRect(366, 66, 161, 51));
         auxLabel = new QLabel(MusicPage);
         auxLabel->setObjectName(QStringLiteral("auxLabel"));
-        auxLabel->setGeometry(QRect(216, 256, 161, 51));
-        mediaLabel = new QLabel(MusicPage);
-        mediaLabel->setObjectName(QStringLiteral("mediaLabel"));
-        mediaLabel->setGeometry(QRect(216, 336, 121, 51));
+        auxLabel->setGeometry(QRect(366, 226, 161, 51));
+        pushButton = new QPushButton(MusicPage);
+        pushButton->setObjectName(QStringLiteral("pushButton"));
+        pushButton->setGeometry(QRect(311, 260, 450, 150));
+        pushButton->setFont(font);
+        horizontalSlider = new QSlider(MusicPage);
+        horizontalSlider->setObjectName(QStringLiteral("horizontalSlider"));
+        horizontalSlider->setGeometry(QRect(240, 440, 750, 61));
+        QFont font1;
+        font1.setPointSize(30);
+        horizontalSlider->setFont(font1);
+        horizontalSlider->setOrientation(Qt::Horizontal);
+        pushButton_3 = new QPushButton(MusicPage);
+        pushButton_3->setObjectName(QStringLiteral("pushButton_3"));
+        pushButton_3->setGeometry(QRect(63, 70, 450, 150));
+        pushButton_3->setFont(font);
+        label = new QLabel(MusicPage);
+        label->setObjectName(QStringLiteral("label"));
+        label->setGeometry(QRect(91, 440, 120, 60));
+        QFont font2;
+        font2.setPointSize(24);
+        label->setFont(font2);
 
         retranslateUi(MusicPage);
-
-        stackedWidget->setCurrentIndex(1);
-
 
         QMetaObject::connectSlotsByName(MusicPage);
     } // setupUi
@@ -92,11 +92,11 @@ public:
     {
         MusicPage->setWindowTitle(QApplication::translate("MusicPage", "Dialog", 0));
         pushButton_2->setText(QApplication::translate("MusicPage", "Pair", 0));
-        pairLabel->setText(QString());
-        pushButton_3->setText(QApplication::translate("MusicPage", "Aux", 0));
         fmLabel->setText(QString());
         auxLabel->setText(QString());
-        mediaLabel->setText(QString());
+        pushButton->setText(QApplication::translate("MusicPage", "Audio Off", 0));
+        pushButton_3->setText(QApplication::translate("MusicPage", "Aux", 0));
+        label->setText(QApplication::translate("MusicPage", "Volume", 0));
     } // retranslateUi
 
 };

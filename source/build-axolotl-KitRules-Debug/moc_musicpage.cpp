@@ -19,8 +19,8 @@
 
 QT_BEGIN_MOC_NAMESPACE
 struct qt_meta_stringdata_MusicPage_t {
-    QByteArrayData data[6];
-    char stringdata0[105];
+    QByteArrayData data[7];
+    char stringdata0[122];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -30,16 +30,18 @@ struct qt_meta_stringdata_MusicPage_t {
 static const qt_meta_stringdata_MusicPage_t qt_meta_stringdata_MusicPage = {
     {
 QT_MOC_LITERAL(0, 0, 9), // "MusicPage"
-QT_MOC_LITERAL(1, 10, 21), // "on_pushButton_clicked"
-QT_MOC_LITERAL(2, 32, 0), // ""
-QT_MOC_LITERAL(3, 33, 23), // "on_pushButton_2_clicked"
-QT_MOC_LITERAL(4, 57, 23), // "on_pushButton_3_clicked"
-QT_MOC_LITERAL(5, 81, 23) // "on_pushButton_4_clicked"
+QT_MOC_LITERAL(1, 10, 23), // "on_pushButton_2_clicked"
+QT_MOC_LITERAL(2, 34, 0), // ""
+QT_MOC_LITERAL(3, 35, 23), // "on_pushButton_3_clicked"
+QT_MOC_LITERAL(4, 59, 21), // "on_pushButton_pressed"
+QT_MOC_LITERAL(5, 81, 31), // "on_horizontalSlider_sliderMoved"
+QT_MOC_LITERAL(6, 113, 8) // "position"
 
     },
-    "MusicPage\0on_pushButton_clicked\0\0"
-    "on_pushButton_2_clicked\0on_pushButton_3_clicked\0"
-    "on_pushButton_4_clicked"
+    "MusicPage\0on_pushButton_2_clicked\0\0"
+    "on_pushButton_3_clicked\0on_pushButton_pressed\0"
+    "on_horizontalSlider_sliderMoved\0"
+    "position"
 };
 #undef QT_MOC_LITERAL
 
@@ -60,13 +62,13 @@ static const uint qt_meta_data_MusicPage[] = {
        1,    0,   34,    2, 0x08 /* Private */,
        3,    0,   35,    2, 0x08 /* Private */,
        4,    0,   36,    2, 0x08 /* Private */,
-       5,    0,   37,    2, 0x08 /* Private */,
+       5,    1,   37,    2, 0x08 /* Private */,
 
  // slots: parameters
     QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void,
-    QMetaType::Void,
+    QMetaType::Void, QMetaType::Int,    6,
 
        0        // eod
 };
@@ -77,14 +79,13 @@ void MusicPage::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, v
         MusicPage *_t = static_cast<MusicPage *>(_o);
         Q_UNUSED(_t)
         switch (_id) {
-        case 0: _t->on_pushButton_clicked(); break;
-        case 1: _t->on_pushButton_2_clicked(); break;
-        case 2: _t->on_pushButton_3_clicked(); break;
-        case 3: _t->on_pushButton_4_clicked(); break;
+        case 0: _t->on_pushButton_2_clicked(); break;
+        case 1: _t->on_pushButton_3_clicked(); break;
+        case 2: _t->on_pushButton_pressed(); break;
+        case 3: _t->on_horizontalSlider_sliderMoved((*reinterpret_cast< int(*)>(_a[1]))); break;
         default: ;
         }
     }
-    Q_UNUSED(_a);
 }
 
 const QMetaObject MusicPage::staticMetaObject = {

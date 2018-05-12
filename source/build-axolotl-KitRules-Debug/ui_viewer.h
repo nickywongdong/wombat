@@ -33,10 +33,13 @@ public:
         viewer->resize(1280, 800);
         textBrowser = new QTextBrowser(viewer);
         textBrowser->setObjectName(QStringLiteral("textBrowser"));
-        textBrowser->setGeometry(QRect(20, 40, 891, 591));
+        textBrowser->setGeometry(QRect(236, 30, 600, 300));
         pushButton = new QPushButton(viewer);
         pushButton->setObjectName(QStringLiteral("pushButton"));
-        pushButton->setGeometry(QRect(10, 10, 99, 27));
+        pushButton->setGeometry(QRect(311, 370, 450, 150));
+        QFont font;
+        font.setPointSize(36);
+        pushButton->setFont(font);
 
         retranslateUi(viewer);
 

@@ -72,18 +72,18 @@ MainWindow::MainWindow(QWidget *parent) :
             else{
                 chdir("/home/nvidia/wombat/");
             }
-
+sleep(1);
             mpid = fork();
             //Open VLC media player, and scan for media in designated volumes:
 	    chdir("/home/nvidia/wombat/source/media_system/media_player");
                 if(mpid==0){
-                    execl("/usr/bin/vlc", "vlc", "--no-video", "--no-playlist-autostart","--loop","--playlist-tree",  "/media/nvidia/AXOLOTLDCV", "sample_music", NULL);
+                    execl("/usr/bin/vlc", "vlc", "--no-video", "--no-playlist-autostart","--loop","--playlist-tree", "/home/nvidia/Music",  NULL);
                 }
                 else{
                     chdir("/home/nvidia/wombat/");
                 }
 
-
+    sleep(1);
     char a[256];
     char b[256];
     char c[256];
