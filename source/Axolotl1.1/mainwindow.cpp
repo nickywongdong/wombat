@@ -7,19 +7,20 @@
 #include "data.h"
 #include "viewer.h"
 #include "ahrs.h"
-#include<stdio.h>
-#include<unistd.h>
-#include<sys/types.h>
-#include<sys/wait.h>
-#include<string.h>
-#include<stdlib.h>
-#include<iostream>
-#include<fstream>
-#include<signal.h>
-#include<string>
-#include<QCloseEvent>
-#include<QTabWidget>
-#include<QStackedWidget>
+#include <stdio.h>
+#include <unistd.h>
+#include <sys/types.h>
+#include <sys/wait.h>
+#include <sys/stat.h>
+#include <string.h>
+#include <stdlib.h>
+#include <iostream>
+#include <fstream>
+#include <signal.h>
+#include <string>
+#include <QCloseEvent>
+#include <QTabWidget>
+#include <QStackedWidget>
 
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -72,12 +73,20 @@ MainWindow::MainWindow(QWidget *parent) :
             else{
                 chdir("/home/nvidia/wombat/");
             }
-sleep(1);
+    sleep(1);
             mpid = fork();
             //Open VLC media player, and scan for media in designated volumes:
 	    chdir("/home/nvidia/wombat/source/media_system/media_player");
                 if(mpid==0){
-                    execl("/usr/bin/vlc", "vlc", "--no-video", "--no-playlist-autostart","--loop","--playlist-tree", "/home/nvidia/Music",  NULL);
+		struct stat buffer;
+		if ((stat("/media/nvidia/AXOLOTLDCV", &buffer) == 0) && S_ISDIR(buffer.st_mode)) {
+execl("/usr/bin/vlc", "vlc", "--no-video", "--no-playlist-autostart","--loop","--playlist-tree", "/home/nvidia/Music",  NULL);
+		  }
+		  else {
+			execl("/usr/bin/vlc", "vlc", "--no-video", "--no-playlist-autostart","--loop","--playlist-tree", "/home/nvidia/Music",  NULL);
+		  }
+
+                  
                 }
                 else{
                     chdir("/home/nvidia/wombat/");
