@@ -75,11 +75,11 @@ __Note:__ as of the current build, Axolotl does not distinguish between multiple
 This is perfectly normal behavior. The infotainment system will block and wait for you to connect your smartphone before any normal operations continue.
 The infotainment system will become responsive again after 10 seconds, regardless of whether a Bluetooth device is connected or not.
 
-### Why are some segments of dashcam footage corrupt?
-The current segment of dashcam footage may be corrupted if Axolotl is running and the system enters standby mode. This will be addressed in future patches.
+### Why are some segments of dashcam footage corrupt on system shutoff?
+The current segment of dashcam footage may be corrupted if Axolotl is running and the system enters standby mode (negotiation with the dashcam logger does not occur on deep sleep). This will be addressed in future patches.
 
 ### Why am I unable to get a fix with the GPS chip?
 You're likely running on L4T R28.1, which requires the use of an experimental driver to enumerate the GPS chip. Upgrading to L4T R28.2 should solve this problem. Otherwise, check your GPS chip's connection.
 
-### Why do I keep getting corrupt non-playable dashcam footage?
-This is largely due to the fact that the Raspberry Pis controlling the cameras boot at different times with respect to the Jetson, and fail to connect to the Jetson's AP network. This will be addressed in future patches. In the meantime, cycling the power of the Raspberry Pis while the Jetson is on should alleviate the problem.
+### Why does my data log contain dashcam footage with no playable streams?
+This is largely due to the fact that the Raspberry Pis controlling the cameras boot at different times with respect to the Jetson, and fail to connect to the Jetson's AP network to broadcast their stream. This will be addressed in future patches. In the meantime, cycling the power of the Raspberry Pis while the Jetson is on should alleviate the problem.
