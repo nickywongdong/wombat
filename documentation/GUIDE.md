@@ -40,7 +40,6 @@ Whilst logged into the `pi` profile of Raspberry Pi:
   	key_mgmt=WPA-PSK
   }
   ````
-
   Make sure that no other network configurations exist save for this one.
 6. Run `sudo reboot` on the Raspberry Pi.
 
