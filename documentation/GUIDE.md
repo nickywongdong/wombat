@@ -32,7 +32,7 @@ Whilst logged into the `pi` profile of Raspberry Pi:
   - If the current Raspberry Pi is meant to be the front dashcam, change `rpiZdcd` in the exec line to: `rpi1dcd`.
   - If the current Raspberry Pi is meant to be the backup camera, change `rpiZdcd` in the exec line to: `rpi2dcd`.
 4. Make the boot file executable using `chmod a+r /home/pi/.config/autostart/axolotl_startup.desktop`.
-5. Open `/etc/wpa_supplicant/wpa_supplicant.conf`. Below `update_config=1`, add the following network configuration:
+5. Open `/etc/wpa_supplicant/wpa_supplicant.conf`. Below `update_config=1`, remove any existing network configurations and add the following network configuration:
   ```
   network={
   	ssid="AxolotlWLAN"
@@ -40,7 +40,6 @@ Whilst logged into the `pi` profile of Raspberry Pi:
   	key_mgmt=WPA-PSK
   }
   ````
-  Make sure that no other network configurations exist save for this one.
 6. Run `sudo reboot` on the Raspberry Pi.
 
 Whilst logged into the `nvidia` profile of the Jetson:
