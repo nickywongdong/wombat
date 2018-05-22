@@ -1,7 +1,6 @@
-# User Guide
+# Installation Guide
 
-## Installation
-### Installing Jetson TX2 Software
+## Installing Jetson TX2 Software
 Ensure that the Jetson TX2 has been flashed with all options checked. L4T R28.1 is required at minimum.
 
 Whilst logged into the `nvidia` profile of the Jetson:
@@ -10,7 +9,9 @@ Whilst logged into the `nvidia` profile of the Jetson:
 3.  Download the maps binary [here](https://drive.google.com/open?id=1UpHisYQQdKC_r3oSZfjjtk_R77760Z-u), and move the maps binary to the `~/axolotl/maps` folder on the Jetson (create any necessary directories that don't exist).
 5.  In the `source` directory, run `make fresh`.
 
-### Installing Raspberry Pi Software (optional)
+In Ubuntu system settings, set the `nvidia` profile to auto-login on boot. Additionally, add the `nvidia` user to the `sudoers` file, and ensure that `nvidia` gets no-password access to `sudo`.
+
+## Installing Raspberry Pi Software
 Only do the following if using Raspberry Pis that were not delivered with the project.
 
 Whilst logged into the `pi` profile of Raspberry Pi:
@@ -54,13 +55,16 @@ The system will automatically enter deep sleep when the gpio481 pin is driven hi
 
 __Note:__ Some unexpected behavior may occur during system sleep.
 
-## First Run
-Before running Axolotl on the Jetson for the first time, navigate to the `/home/nvidia/wombat/source/data_logging/wmanager` directory and execute `./set_ap_n`.
+## For Fresh Installs
+Before running a fresh installation of Axolotl, navigate to the `/home/nvidia/wombat/source/data_logging/wmanager` directory on the Jetson and execute `./set_ap_n`.
 
 This only needs to be executed once; the Jetson will remember the settings for future boots.
 
+## Camera Mounting
+Each RaspberryPi should be connected to a USB power source that provides at least 5V and 1.2A. A 12V car adapter supplying 2.4A of current is recommended at minimum.
+
 ## Using External Storage
-Axolotl is designed to be able to take advantage of external storage devices, either SD cards or USB drives that are compatible with the Jetson TX2.
+Axolotl is designed to be able to take advantage of external storage. A USB stick or SD card is recommended for this purpose.
 
 When connecting an external storage device to the system, make sure the storage device is formatted in a format compatible with Ubuntu 16.04.
 
@@ -69,17 +73,3 @@ The storage device must be named `AXOLOTLDCV` (case-sensitive) and the user must
 If an external drive is not detected, the system will resort to logging data onto internal storage.
 
 __Note:__ as of the current build, Axolotl does not distinguish between multiple external storage drives with the name `AXOLOTLDCV`. For the most consistent logging performance, please only connect one external drive with the name `AXOLOTLDCV`.
-
-## FAQ
-### Why does my screen turn grey when attempting to pair a Bluetooth device?
-This is perfectly normal behavior. The infotainment system will block and wait for you to connect your smartphone before any normal operations continue.
-The infotainment system will become responsive again after 10 seconds, regardless of whether a Bluetooth device is connected or not.
-
-### Why are some segments of dashcam footage corrupt on system shutoff?
-The current segment of dashcam footage may be corrupted if Axolotl is running and the system enters standby mode (negotiation with the dashcam logger does not occur on deep sleep). This will be addressed in future patches.
-
-### Why am I unable to get a fix with the GPS chip?
-You're likely running on L4T R28.1, which requires the use of an experimental driver to enumerate the GPS chip. Upgrading to L4T R28.2 should solve this problem. Otherwise, check your GPS chip's connection.
-
-### Why does my data log contain dashcam footage with no playable streams?
-This is largely due to the fact that the Raspberry Pis controlling the cameras boot at different times with respect to the Jetson, and fail to connect to the Jetson's AP network to broadcast their stream. This will be addressed in future patches. In the meantime, cycling the power of the Raspberry Pis while the Jetson is on should alleviate the problem.
