@@ -26,9 +26,7 @@ __Refresh__ will grab new readings from the sensor and display those.
 __Zero__ calibrates the sensor; subsequent readings will be made with respect to the sensor's current orientation. Note that this does not affect the readings stored in the data log.
 
 ### Fuel Economy Analysis
-asdfasdf
-asdfasdfasdf
-asdfasdf
+To be added!
 
 ## FAQ
 ### Why does my screen turn grey when attempting to pair a Bluetooth device?
