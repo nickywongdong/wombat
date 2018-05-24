@@ -1,3 +1,9 @@
+## ------------------------------------
+## Data Collator
+## ------------------------------------
+## Assembles a master data log from the obd and ahrs logs after Axolotl quits.
+##
+
 import os
 import csv
 import sys

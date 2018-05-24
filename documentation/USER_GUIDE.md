@@ -28,6 +28,9 @@ __Zero__ calibrates the sensor; subsequent readings will be made with respect to
 ### Fuel Economy Analysis
 To be added!
 
+### Data Log Generation
+A master data log with all AHRS data associated with the appropriate OBD time slots will only be assembled on Axolotl quit. Be sure to exit Axolotl using the X button.
+
 ## FAQ
 ### Why does my screen turn grey when attempting to pair a Bluetooth device?
 This is perfectly normal behavior. The infotainment system will block and wait for you to connect your smartphone before any normal operations continue.
