@@ -135,7 +135,6 @@ void registerSigintHandler() {
 /*
   Handles SIGUSR1 and initiates data deletion.
 */
-
 void deleteHandler(int signumber, siginfo_t *siginfo, void *pointer) {
   int status = 0;
 
@@ -295,8 +294,30 @@ int main() {
       #ifdef DEBUG
       printf(" ");
       #endif
-      while(1) {
 
+      bool active = false;
+
+      // Handle shutdown
+      while(1) {
+        // f.open("/sys/class/gpio/gpio481/value");
+    	  // f >> i;
+        //
+        // // if state change on gpio pin, signal parent dashcam process
+    	  // if(i == 1 && not(active)){
+        //   if(rear_cam_bt_active) {
+      	// 	  kill(getppid(),SIGBUS);
+        //   }
+    		//   active = true;
+    		//   sleep(1);
+    	  // }
+    	  // else if(i == 0 && active){
+        //   if(rear_cam_bt_active) {
+      	// 	  kill(getppid(),SIGBUS);
+        //   }
+    		//   active = false;
+    	  // 	  sleep(1);
+    	  // }
+    	  // f.close();
       }
     }
   }
