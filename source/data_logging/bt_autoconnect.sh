@@ -33,14 +33,14 @@ sleep 1s
 # Also pair and trust
 bluetoothctl << EOF
 pair $front
-connect $front
 trust $front
+connect $front
 pair $rear
-connect $rear
 trust $rear
+connect $rear
 pair $obd
-connect $obd
 trust $obd
+connect $obd
 EOF
 
 # Special OBDII adapter Bluetooth connection witchcraft
