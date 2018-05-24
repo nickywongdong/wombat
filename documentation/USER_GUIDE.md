@@ -5,7 +5,13 @@ The navigation tab simply contains the Navit navigation system. This system func
 
 By default, the map is displayed. Here, your route info as well as next turn instruction, GPS satellite strength, and true distance to destination is displayed. Pressing the + or - buttons will zoom the map in and out, respectively.
 
-Pressing on the screen without moving will open the main menu. Selecting __Go To__ will allow for address entry, previous destination entry, and the like. Selecting __View Map__ will return you to the map interface. Selecting __Settings__ will open a preferences menu that allows you to change navigation settings.
+Pressing on the screen without moving will open the main menu.
+
+Selecting __Go To__ will allow for address entry, previous destination entry, and the like.
+
+Selecting __View Map__ will return you to the map interface.
+
+Selecting __Settings__ will open a preferences menu that allows you to change navigation settings.
 
 ## Data
 Data functionality is encapsulated within the "Data Logging", "AHRS", and "Fuel Economy Analysis" tabs.
@@ -23,6 +29,7 @@ __Reset password__ resets the password to default. In future patches, this will 
 This tab displays data from the AHRS sensor in an easily human-understandable format.
 
 __Refresh__ will grab new readings from the sensor and display those.
+
 __Zero__ calibrates the sensor; subsequent readings will be made with respect to the sensor's current orientation. Note that this does not affect the readings stored in the data log.
 
 ### Fuel Economy Analysis
