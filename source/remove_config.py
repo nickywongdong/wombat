@@ -1,3 +1,9 @@
+## ------------------------------------
+## GQRX Configuration Remover
+## ------------------------------------
+## Modifies the GQRX config file so we always get a successful boot.
+##
+
 import os
 import sys
 import time
