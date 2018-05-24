@@ -19,7 +19,7 @@ int main(int argc, char *argv[]) {
 
   // Create command based on port passed and execute it
   // sysCmd = "gst-launch-1.0 -v udpsrc port=" + to_string(cameraPort) + " ! gdpdepay ! rtph264depay ! avdec_h264 ! autovideosink sync=false";
-  sysCmd = "gst-launch-1.0 -v udpsrc port=" + to_string(cameraPort) + " ! gdpdepay ! rtph264depay ! avdec_h264 ! textoverlay text=\"Please check your surroundings before reversing.\" valignment=bottom halignment=center font-desc=\"Sans, 36\" ! autovideosink sync=false";
+  sysCmd = "gst-launch-1.0 -v udpsrc port=" + to_string(cameraPort) + " ! gdpdepay ! rtph264depay ! avdec_h264 ! textoverlay text=\"Please check your surroundings before reversing.\" valignment=bottom halignment=center font-desc=\"Sans, 12\" ! autovideosink sync=false";
   system(sysCmd.c_str());
 
   // Loop forever to allow process kill by camera system

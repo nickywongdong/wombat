@@ -1,8 +1,7 @@
 /* ------------------------------------
-   Axolotl Dashcam Daemon
+   Dashcam Daemon
    ------------------------------------
-   Background process managed by Axolotl;
-   logs camera data from dashcam and backup camera.
+   Background process that logs dashcam data and manages the backup camera.
 */
 
 #include "dcomh.hpp"

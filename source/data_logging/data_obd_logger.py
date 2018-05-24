@@ -1,8 +1,8 @@
 ## ------------------------------------
-## Axolotl Data Logging Python Logger
+## Data Logging Python Logger
 ## ------------------------------------
-## Describes methods that interact with python-OBD's to log OBDII data to file.
-## This script will automatically quit if the parent datad_pyhelper process is killed.
+## Uses python-OBD to log OBDII data to file.
+## This script will loop and automatically quit if the parent helper process is killed.
 ##
 
 import os

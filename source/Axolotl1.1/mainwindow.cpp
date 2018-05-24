@@ -37,7 +37,7 @@ MainWindow::MainWindow(QWidget *parent) :
     // system("sudo /home/nvidia/source/data_logging/wmanager/set_ap_n.sh");
     sleep(1);
     chdir("/home/nvidia/wombat/source/data_logging/");
-    system("./camera_bt_autoconnect.sh");
+    system("./bt_autoconnect.sh");
     sleep(1);
 
     // Export GPIO

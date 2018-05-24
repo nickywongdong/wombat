@@ -1,9 +1,8 @@
 /* ------------------------------------
-   Axolotl Dashcam Record Helper
+   Dashcam Record Helper
    ------------------------------------
    Helper process that opens the pipeline for the RaspberryPis.
-   May seem redundant, but encapsulating this within its own program allows us
-   to pause and restart data logging so that data deletion doesn't mess up further logging.
+   Seems redundant, but encapsulating this within its own program allows for logging stop/restart.
 */
 
 #include <iostream>

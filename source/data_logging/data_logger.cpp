@@ -1,16 +1,16 @@
 /* ------------------------------------
-   Axolotl Data Logging Daemon
+   Data Logging Daemon
    ------------------------------------
-   Background process managed by Axolotl;
-   logs all OBDII data with the help of a Python adapter.
+   Starts OBDII logger process and AHRS logger process.
 */
 
 #include "dcomh.hpp"
 #include <python2.7/Python.h>
 
-#define DEBUG
 #define DATA_HELPER_ARG0 "./datad_pyhelper"
 #define DATA_HELPER_ARG1 "./imu_helper"
+
+#define DEBUG
 
 using namespace std;
 
@@ -20,7 +20,7 @@ pid_t obd_logger_pid = -5, ahrs_logger_pid = -5;
 
 /*
   Starts OBD and AHRS logging processes.
-  Used on program start and signalled logging restarts.
+  Used on program start and signaled logging restarts.
 */
 void startOBDLogger() {
   string built_command, curr_pid;

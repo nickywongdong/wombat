@@ -1,8 +1,8 @@
 ## ------------------------------------
-## Axolotl Data Logging DTC Fetcher
+## Data Logging DTC Fetcher
 ## ------------------------------------
-## Describes methods that interact with python-OBD's to fetch DTC data to file.
-## Script is only executed once when commanded by the data logger process.
+## Uses python-OBD to fetch DTC data to file.
+## Only executed once when commanded by the data logging daemon.
 ##
 
 import sys

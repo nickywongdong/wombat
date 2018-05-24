@@ -1,6 +1,7 @@
 #!/bin/bash
 front=""
 rear=""
+obd=""
 pos=0
 
 # Read each line from file and save it to variable
@@ -13,6 +14,9 @@ while IFS='' read -r line || [[ -n "$line" ]]; do
 	elif  [[ "$rear" == "" ]]
 	then
 		rear=$line
+	elif  [[ "$obd" == "" ]]
+	then
+		obd=$line
 	fi
 	pos+=1
 done < "bluetooth_addresses"
@@ -23,9 +27,20 @@ echo $rear
 
 # Load bluetooth module
 pactl load-module module-bluetooth-discover
+sleep 1s
 
 # Connect to cameras using bluetoothctl
+# Also pair and trust
 bluetoothctl << EOF
+pair $front
 connect $front
+trust $front
+pair $rear
 connect $rear
+trust $rear
+pair $obd
+connect $obd
+trust $obd
 EOF
+
+# Special OBDII adapter Bluetooth connection witchcraft

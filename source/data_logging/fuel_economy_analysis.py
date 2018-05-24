@@ -1,10 +1,8 @@
 ## ------------------------------------
-## Axolotl Fuel Economy Analysis Script
+## Fuel Economy Analysis Script
 ## ------------------------------------
-##
-## A script called by the data logging daemon after being signaled by
-## the daemon manager. Makes a duplicate of the current obd_log and then
-## runs some fuel economy analysis on the data.
+## Called by the data logging daemon.
+## Makes a duplicate of the current obd_log and then runs some fuel economy analysis on the data.
 ##
 
 import time

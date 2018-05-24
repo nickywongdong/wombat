@@ -1,8 +1,8 @@
 /* ------------------------------------
-   Axolotl Daemon Manager
+   Daemon Manager
    ------------------------------------
-   Process that sets up the environment for data logging and starts
-   all processes that execute data logging.
+   Entry point for black box system.
+   Sets up the black box environment and manages all data logging processes.
 */
 
 #include "dcomh.hpp"
@@ -10,10 +10,8 @@
 
 #define DCDARG1 "./dashcamd"
 #define DLDARG1 "./datad"
-#define PST -8
 
 #define DEBUG
-#define LOGTEST
 
 using namespace std;
 
@@ -22,7 +20,7 @@ pid_t dcdpid = -5, dldpid = -5;
 string logging_directory, run_directory, log_volume, auto_delete, logging_directory_name;
 
 /*
-  Creates a logging directory from a path.
+  Builds a logging directory from a path.
 */
 bool buildSaveDirectoryFromPath(string path) {
   string base_directory_str = log_volume, data_dir_create_command = "mkdir -p " + base_directory_str + "/axolotl/data";
@@ -37,11 +35,8 @@ bool buildSaveDirectoryFromPath(string path) {
 }
 
 /*
-  Builds the save directory for both daemons.
-  Returns the path to the directory that was created.
-  /axolotl/data must exist in the user's home directory or this won't work.
-
-  From here to final: instead of axolotlFileSystem::getHomeDir(), hardcode the mounted volume.
+  Builds a logging directory for this boot cycle and returns success/failure.
+  /axolotl/data must exist in the current log volume or this won't work.
 */
 bool buildSaveDirectory() {
   // Getting info to build data storage directory
@@ -95,8 +90,8 @@ bool buildSaveDirectory() {
 }
 
 /*
-  Handles exit of daemon launcher; kills daemons and frees their resources.
-  UI: signal SIGINT to this process on system exit.
+  Handles exit; kills daemons and frees their resources.
+  QT: signal SIGINT to this process on system exit.
 */
 void managerSigintHandler(int signumber, siginfo_t *siginfo, void *pointer) {
   int status = 0;
@@ -127,7 +122,7 @@ void managerSigintHandler(int signumber, siginfo_t *siginfo, void *pointer) {
 }
 
 /*
-  Registers the signal handler with SIGINT.
+  Registers the kill signal handler with SIGINT.
 */
 void registerSigintHandler() {
   static struct sigaction dsa;
@@ -139,7 +134,6 @@ void registerSigintHandler() {
 
 /*
   Handles SIGUSR1 and initiates data deletion.
-  FOR DEBUG ONLY: remove this and its signal registerer for final build.
 */
 
 void deleteHandler(int signumber, siginfo_t *siginfo, void *pointer) {
@@ -207,7 +201,6 @@ void deleteHandler(int signumber, siginfo_t *siginfo, void *pointer) {
 
 /*
   Registers the delete handler with SIGUSR1.
-  FOR TESTING ONLY: remove this function on final build.
 */
 void registerDeleteHandler() {
   static struct sigaction dsa;
@@ -218,8 +211,7 @@ void registerDeleteHandler() {
 }
 
 /*
-  Signals the data logger to update files for DTCs
-  as well as fuel economy data, and restarts data logging.
+  Signals the data logger DTC update/fuel economy analysis.
 */
 void updateDataHandler(int signumber, siginfo_t *siginfo, void *pointer) {
   if(dldpid > 1) {
@@ -239,7 +231,6 @@ void registerUpdateHandler() {
   sigaction(SIGBUS, &dsa, NULL);
 }
 
-//int mainOperation() {
 int main() {
   string input_str;
   run_directory = axolotlFileSystem::getPWD();

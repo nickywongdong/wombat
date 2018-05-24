@@ -1,7 +1,7 @@
 /* ------------------------------------
-   Axolotl Data Logging Authentication Functions
+   Data Logging Authentication Functions
    ------------------------------------
-   Defines functions that authenticate the user for data log clearing.
+   Defines functions that authenticate the user for black box clearing.
 */
 
 #include "dcomh.hpp"

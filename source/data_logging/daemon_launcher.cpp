@@ -1,8 +1,7 @@
 /* ------------------------------------
-   Axolotl Daemon Launcher
+   Daemon Launcher
    ------------------------------------
    Debugging apparatus.
-   Entry point for data logging system.
    Sets up AP wifi with 802.11n protocol and then launches daemon manager.
 */
 
