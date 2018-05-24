@@ -1,5 +1,8 @@
 # User Guide
 
+## Forewarning
+Distracted driving may lead to accidents. Please do not operate the system if system operation will affect your driving safety or the safety of other road users.
+
 ## Navigation
 The navigation tab simply contains the Navit navigation system. This system functions similar to how Garmin navigation systems do.
 
@@ -14,7 +17,7 @@ Selecting __View Map__ will return you to the map interface.
 Selecting __Settings__ will open a preferences menu that allows you to change navigation settings.
 
 ## Data
-Data functionality is encapsulated within the "Data Logging", "AHRS", and "Fuel Economy Analysis" tabs.
+Data functionality is encapsulated within the "Data", "DTCS", AHRS", and "Fuel Economy Analysis" tabs.
 
 ### Data Logging
 This tab allows the user to manage the data logging system.
@@ -25,15 +28,22 @@ __Change password__ allows the user to change the password used to clear the dat
 
 __Reset password__ resets the password to default. In future patches, this will require a reset code shipped with the system.
 
+### DTCs
+This tab displays diagnostic trouble codes as well as the date/time of when the current diagnostic trouble codes were fetched. Diagnostic trouble codes are displayed as tuples that include the diagnostic trouble code itself as well as any information on that code found by python-OBD.
+
+Selecting __Refresh__ will request new diagnostic trouble codes from the vehicle and update the display.
+
+### Fuel Economy Analysis
+This tab displays fuel economy data with respect to the current boot cycle (this may not encapsulate the entire driving cycle if Axolotl isn't started soon after vehicle start-up or shut-off).
+
+Selecting __Refresh__ will re-run fuel economy analysis on the current boot cycle's OBD log and update the display.
+
 ### AHRS
 This tab displays data from the AHRS sensor in an easily human-understandable format.
 
 __Refresh__ will grab new readings from the sensor and display those.
 
 __Zero__ calibrates the sensor; subsequent readings will be made with respect to the sensor's current orientation. Note that this does not affect the readings stored in the data log.
-
-### Fuel Economy Analysis
-To be added!
 
 ### Data Log Generation
 A master data log with all AHRS data associated with the appropriate OBD time slots will only be assembled on Axolotl quit. Be sure to exit Axolotl using the X button.
