@@ -44,3 +44,11 @@ connect $obd
 EOF
 
 # Special OBDII adapter Bluetooth connection witchcraft
+sudo hciconfig hci0 up
+hciconfig
+sudo l2ping $obd
+sudo hcitool cc --role=m $obd
+sudo rfcomm bind rfcomm0
+ll /dev/rfcomm0
+sudo minicom -s /dev/rfcomm0
+minicom /dev/rfcomm0
