@@ -1,7 +1,7 @@
 # User Guide
 
 ## Forewarning
-Distracted driving may lead to accidents. Please do not operate the system if system operation will affect your driving safety or the safety of other road users.
+Distracted driving may lead to accidents. Please obey all traffic laws and do not operate the system if system operation will affect your driving safety or the safety of other road users.
 
 ## Navigation
 The navigation tab simply contains the Navit navigation system. This system functions similar to how Garmin navigation systems do.

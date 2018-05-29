@@ -4,10 +4,11 @@
 Ensure that the Jetson TX2 has been flashed with all options checked. L4T R28.1 is required at minimum.
 
 Whilst logged into the `nvidia` profile of the Jetson:
-1.  Run the install script with sudo privileges: `sudo ./installdep.sh`. The Jetson will now reboot.
-2.  In the `/acm` directory, and run: `sudo ./installCDCACM.sh`. Manually reboot the Jetson with `sudo reboot`.
-3.  Download the maps binary [here](https://drive.google.com/open?id=1UpHisYQQdKC_r3oSZfjjtk_R77760Z-u), and move the maps binary to the `~/axolotl/maps` folder on the Jetson (create any necessary directories that don't exist).
-5.  In the `source` directory, run `make fresh`.
+1.  Run the following install scripts with sudo privileges:
+    - In the `source/navigation/acm` directory, run: `sudo ./installCDCACM.sh`.
+    - In the `source/install_tools` directory, run: `script`.
+    - `sudo ./installdep.sh`. The Jetson will now reboot after this script has completed.
+2.  Acquire the maps binary for your region [here](http://maps3.navit-project.org), and move the maps binary to the `~/axolotl/maps` folder on the Jetson (create any necessary directories that don't exist).
 
 In Ubuntu system settings, set the `nvidia` profile to auto-login on boot. Additionally, add the `nvidia` user to the `sudoers` file, and ensure that `nvidia` gets no-password access to `sudo`.
 
