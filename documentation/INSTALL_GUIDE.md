@@ -49,7 +49,7 @@ Whilst logged into the `nvidia` profile of the Jetson:
 `bluetooth_addresses` should only be comprised of two lines; the first with the Bluetooth address of the front Raspberry Pi, the second with the Bluetooth address of the rear Raspberry Pi.
 
 ## Backup Camera Integration
-The system's backup camera is designed to turn on when gpio pin 298 (gpio298) is driven high (ideally, this uses a low-current and low-voltage line to reverse lights). If gpio298 is driven low, the backup camera will automatically turn off after 5 seconds.
+The system's backup camera is designed to turn on when gpio298 is driven high (ideally, this uses a low-current and low-voltage line to reverse lights). If gpio298 is driven low, the backup camera will automatically turn off after 5 seconds.
 
 ## Deep Sleep / Auto Wake Integration
 The system will automatically enter deep sleep when the gpio481 pin is driven high. To wake the system, simply touch the touchscreen.
@@ -65,12 +65,12 @@ This only needs to be executed once; the Jetson will remember the settings for f
 Each RaspberryPi should be connected to a USB power source that provides at least 5V and 1.2A. A 12V car adapter supplying 2.4A of current is recommended at minimum.
 
 ## Using External Storage
-Axolotl is designed to be able to take advantage of external storage. A USB stick or SD card is recommended for this purpose.
+USB drives or SD cards are recommended for external storage. When connecting an external storage device to the system, make sure the storage device is formatted in a format compatible with Ubuntu 16.04.
 
-When connecting an external storage device to the system, make sure the storage device is formatted in a format compatible with Ubuntu 16.04.
-
-The storage device must be named `AXOLOTLDCV` (case-sensitive) and the user must be logged into the `nvidia` profile of the Jetson (the system will automatically scan for `/media/nvidia/AXOLOTLDCV`).
+The storage device must be named `AXOLOTLDCV` (case-sensitive) and the user must be logged into the `nvidia` profile of the Jetson. The system will automatically scan for the flash drive and use it for data logging if connected.
 
 If an external drive is not detected, the system will resort to logging data onto internal storage.
 
-__Note:__ as of the current build, Axolotl does not distinguish between multiple external storage drives with the name `AXOLOTLDCV`. For the most consistent logging performance, please only connect one external drive with the name `AXOLOTLDCV`.
+__Warning:__ The system will automatically delete older logs to make space for newer logs if storage space is low on the internal storage volume (this does not apply if using external storage).
+
+__Note:__ For the most consistent logging performance, please only connect one external drive with the name `AXOLOTLDCV`.
