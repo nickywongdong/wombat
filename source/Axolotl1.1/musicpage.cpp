@@ -1,3 +1,27 @@
+/*******************************************************************************
+*   Axolotl -- Open-Source Infotainment and Black Box for NVIDIA Jetson TX2
+*   Copyright (C) 2018 by Team Wombat
+*   Victor Li <livic@oregonstate.edu>
+*   Nick Wong <wongnich@oregonstate.edu>
+*   Ryan Crane <cranery@oregonstate.edu>
+*
+*   This file is part of Axolotl.
+*
+*   Axolotl is free software: you can redistribute it and/or modify
+*   it under the terms of the GNU General Public License as published by
+*   the Free Software Foundation, either version 3 of the License, or
+*   (at your option) any later version.
+*
+*   Axolotl is distributed in the hope that it will be useful,
+*   but WITHOUT ANY WARRANTY; without even the implied warranty of
+*   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+*   GNU General Public License for more details.
+*
+*   You should have received a copy of the GNU General Public License
+*   along with Axolotl.  If not, see <http://www.gnu.org/licenses/>.
+*   @license GPL-3.0+ <http://spdx.org/licenses/GPL-3.0+>
+*******************************************************************************/
+
 #include "musicpage.h"
 #include "ui_musicpage.h"
 #include <stdio.h>
@@ -57,7 +81,7 @@ void MusicPage::on_pushButton_2_clicked()
     else{
         waitpid(fml, &status,0);
     }
-    
+
     sleep(1);
     //allow system to playback media from bluetooth source
     system("pacmd load-module module-loopback");
