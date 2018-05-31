@@ -71,6 +71,12 @@ cd ..
 cd sleep_mode
 make -f Makefile
 
+# Create axolotl directory on Jetson
+mkdir $HOME/axolotl
+cd $HOME/axolotl
+mkdir maps
+mkdir data
+
 echo "Axolotl has been built. Rebooting in 5 seconds..."
 sleep 5s
 sudo reboot
