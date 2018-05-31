@@ -35,7 +35,7 @@ public:
         QBrush brush(QColor(255, 255, 255, 255));
         brush.setStyle(Qt::SolidPattern);
         palette.setBrush(QPalette::Active, QPalette::Base, brush);
-        QBrush brush1(QColor(0, 0, 0, 255));
+        QBrush brush1(QColor(255, 158, 2, 255));
         brush1.setStyle(Qt::SolidPattern);
         palette.setBrush(QPalette::Active, QPalette::Window, brush1);
         palette.setBrush(QPalette::Inactive, QPalette::Base, brush);

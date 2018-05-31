@@ -67,39 +67,10 @@ public:
         pushButton->setFont(font);
         horizontalSlider = new QSlider(MusicPage);
         horizontalSlider->setObjectName(QStringLiteral("horizontalSlider"));
-        horizontalSlider->setGeometry(QRect(240, 440, 750, 50));
-        QSizePolicy sizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-        sizePolicy.setHorizontalStretch(1);
-        sizePolicy.setVerticalStretch(5);
-        sizePolicy.setHeightForWidth(horizontalSlider->sizePolicy().hasHeightForWidth());
-        horizontalSlider->setSizePolicy(sizePolicy);
-        QPalette palette1;
-        palette1.setBrush(QPalette::Active, QPalette::Base, brush);
-        QBrush brush2(QColor(0, 0, 0, 255));
-        brush2.setStyle(Qt::SolidPattern);
-        palette1.setBrush(QPalette::Active, QPalette::Window, brush2);
-        palette1.setBrush(QPalette::Inactive, QPalette::Base, brush);
-        palette1.setBrush(QPalette::Inactive, QPalette::Window, brush2);
-        palette1.setBrush(QPalette::Disabled, QPalette::Base, brush2);
-        palette1.setBrush(QPalette::Disabled, QPalette::Window, brush2);
-        horizontalSlider->setPalette(palette1);
+        horizontalSlider->setGeometry(QRect(240, 440, 750, 61));
         QFont font1;
         font1.setPointSize(30);
         horizontalSlider->setFont(font1);
-        horizontalSlider->setStyleSheet(QLatin1String("QSlider::groove:horizontal {\n"
-"    border: 1px solid;\n"
-"    height: 20px;\n"
-"    margin: 0px;\n"
-"background-color: grey;\n"
-"    }\n"
-"QSlider::handle:horizontal {\n"
-"    background-color: white;\n"
-"    border: 1px solid black;\n"
-"	border-radius: 18px;\n"
-"    height: 40px;\n"
-"    width: 40px;\n"
-"    margin: -15px 0px;\n"
-"    }"));
         horizontalSlider->setOrientation(Qt::Horizontal);
         pushButton_3 = new QPushButton(MusicPage);
         pushButton_3->setObjectName(QStringLiteral("pushButton_3"));
