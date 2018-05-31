@@ -1,5 +1,10 @@
 # Installation Guide
 
+## Forewarning
+Distracted driving may lead to accidents. Please obey all traffic laws and do not operate the system if system operation will affect your driving safety or the safety of other road users.
+
+By continuing with installation, you agree to these terms.
+
 ## Jetson TX2
 Ensure that the Jetson TX2 has been flashed with all options checked. L4T R28.1 is required at minimum.
 

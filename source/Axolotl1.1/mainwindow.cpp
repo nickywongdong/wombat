@@ -108,7 +108,7 @@ MainWindow::MainWindow(QWidget *parent) :
   		struct stat buffer;
   		if ((stat("/media/nvidia/AXOLOTLDCV", &buffer) == 0) && S_ISDIR(buffer.st_mode)) {
         // only attempt to reference the flash drive if it's connected
-        execl("/usr/bin/vlc", "vlc", "--no-video", "--no-playlist-autostart","--loop","--playlist-tree", "/home/nvidia/Music", "/media/nvidia/AXOLOTLDCV",  NULL);
+        execl("/usr/bin/vlc", "vlc", "--no-video", "--no-playlist-autostart","--loop","--playlist-tree", "/home/nvidia/Music", "/media/nvidia/AXOLOTLDCV/Music",  NULL);
 		  }
 		  else {
         // otherwise, open vlc with only the music folder as the argument to avoid config errors

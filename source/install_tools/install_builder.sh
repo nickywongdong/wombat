@@ -4,7 +4,7 @@
 
 # Build AHRS logger
 echo "Building AHRS logger..."
-cd $PWD/../data_logging/um6
+cd $HOME/wombat/source/data_logging/um6
 sleep 1s
 cmake CMakeLists.txt
 sleep 1s
@@ -17,7 +17,7 @@ else
 
 # Build the rest of the data logging system
 TOTAL=0
-cd $PWD/../data_logging
+cd $HOME/wombat/source/data_logging
 sleep 1s
 make -f makefile.data_logging
 
@@ -54,24 +54,23 @@ cd ..
 
 # Build QT
 # Run Qmake
-cd $PWD/..
+cd $HOME/wombat/source
 mkdir axolotl_build
 cd axolotl_build
-qmake $PWD/../Axolotl1.1/axolotl.pro
+qmake $HOME/wombat/source/Axolotl1.1/axolotl.pro
 
 # Make UI executable
 make -f Makefile
 
-# Symlink executable with desktop file
-touch $HOME/Desktop/Axolotl
-ln -s $HOME/Desktop/Axolotl Axolotl
+# Create a symlink on desktop for launch
+ln -s Axolotl $HOME/Desktop/Axolotl
 
 # Build switch toggle
 cd ..
 cd sleep_mode
 make -f Makefile
 
-# Create axolotl directory on Jetson
+# Create axolotl directory and subdirectories on Jetson
 mkdir $HOME/axolotl
 cd $HOME/axolotl
 mkdir maps
