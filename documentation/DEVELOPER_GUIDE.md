@@ -8,14 +8,12 @@ __set_ap_n.sh__ puts the Jetson in AP WiFi host mode, __set_client.sh__ puts the
 
 It may be easier to use a wired Ethernet connection and/or USB to SSH into the Jetson TX2 Development Kit for development.
 
-
 ## Camera System Design
-
 ### Implemented
-Camera RPi (client)    <--- 802.11n WiFi --->    Jetson TX2 (host)
+Camera RPi (client)\t\t<--- 802.11n WiFi --->\t\tJetson TX2 (host)
 
 ### Theoretical, Type 1
-Camera RPi    <--- P2P WiFi --->    Jetson TX2    <--- 2.4GHz or 5.0GHz Access Point (Smartphone/Router/Modem) --->    Internet
+Camera RPi\t\t<--- P2P WiFi --->\t\tJetson TX2\t\t<--- 2.4GHz or 5.0GHz Access Point (Smartphone/Router/Modem) --->\t\tInternet
 
 ### Theoretical, Type 2
-Camera RPi (client)    <--- 802.11n WiFi --->    Jetson TX2 (host)    <--- LTE modem --->   Internet
+Camera RPi (client)\t\t<--- 802.11n WiFi --->\t\tJetson TX2 (host)\t\t<--- LTE modem --->\t\tInternet
