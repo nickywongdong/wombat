@@ -12,7 +12,7 @@ By default, the map is displayed. Here, your route info as well as next turn ins
 
 Pressing on the screen without moving will open the main menu.
 
-Selecting __Go To__ will allow for address entry, previous destination entry, and the like.
+Selecting __Go To__ will allow for address entry, previous destination entry, and the like. When entering a destination, tapping on the auto-completed suggestion will bring that selection up as a possible destination; tapping the checkbox to the right of the entry field will allow for further addresses to be entered.
 
 Selecting __View Map__ will return you to the map interface.
 
@@ -25,7 +25,9 @@ __Clear logs__ enables the user to clear the data logs on the current logging vo
 
 __Change password__ allows the user to change the password used to clear the data logs. The default password is `orangemonkeyeagle`; we strongly suggest changing this password to a more secure and personal password upon receipt of your system.
 
-__Reset password__ resets the password to default. In future patches, this will require a reset code shipped with the system.
+__Reset password__ resets the password to default.
+
+__Note:__ Password entry for clear logs and change password is unavailable while the vehicle is moving.
 
 ## DTCs
 This tab displays diagnostic trouble codes as well as the date/time of when the current diagnostic trouble codes were fetched. Diagnostic trouble codes are displayed as tuples that include the diagnostic trouble code itself as well as any information on that code found by python-OBD.
@@ -84,7 +86,7 @@ This is perfectly normal behavior. The infotainment system will block and wait f
 The infotainment system will become responsive again after 10 seconds, regardless of whether a Bluetooth device is connected or not.
 
 ### Why are some segments of dashcam footage corrupt on system sleep/shutoff?
-The current segment of dashcam footage may be corrupted if Axolotl is running and the system enters standby mode (negotiation with the dashcam logger does not occur on deep sleep). This will be addressed in future patches.
+The current segment of dashcam footage may be corrupted if Axolotl is running and the system enters standby mode (negotiation with the dashcam logger does not occur on deep sleep).
 
 ### Why am I unable to get a fix with the GPS chip?
 You're likely running on L4T R28.1, which requires the use of an experimental driver to enumerate the GPS chip. Upgrading to L4T R28.2 should solve this problem. Otherwise, check your GPS chip's connection.
@@ -93,10 +95,10 @@ You're likely running on L4T R28.1, which requires the use of an experimental dr
 The Raspberry Pi camera controllers may have booted before the Jetson and were unable to connect to the Jetson's AP network to broadcast their stream. Cycling the power of the Raspberry Pis while the Jetson is on should alleviate the problem.
 
 ### Where is my master_log.csv?
-A master data log with all AHRS data associated with the appropriate OBD time slots will only be assembled upon exiting Axolotl. Please Axolotl using the X button and not attempting process kill from the command line by the `kill` command or otherwise.
+A master data log with all AHRS data associated with the appropriate OBD time slots will only be assembled upon exiting Axolotl. Please close Axolotl using the X button and not attempting process kill from the command line by the `kill` command or otherwise.
 
 ### Why are OBD logs not being produced even with a Bluetooth dongle connected?
-The OBD2 dongle may not be paired and connected correctly. Please try the connection using third-party OBD2 software ([OBD Auto Doctor](https://www.obdautodoctor.com/download?) is a good one). If the problem persists, please contact or submit a support ticket.
+The OBD2 dongle may not be paired and connected correctly. Please try the connection using third-party OBD2 software ([OBD Auto Doctor](https://www.obdautodoctor.com/download?) is a good one). If the problem persists, please contact or submit an issue.
 
 ### Why do I not have an RDS option on the FM menu?
-You may not have configured GQRX correctly. You can reconfigure GQRX from scratch by deleting the GQRX configuration file by executing `rm -f /home/nvidia/.config/gqrx/default.conf` from the terminal. Then, run GQRX on its own from the Ubuntu applications drawer. Once the antenna has been configured, navigate to the View menu and check RDS; the RDS tab should now be displayed in GQRX.
+You may not have configured GQRX correctly. You can reconfigure GQRX from scratch by deleting the GQRX configuration file by executing `rm -f /home/nvidia/.config/gqrx/default.conf` from the terminal. Then, run GQRX on its own from the Ubuntu applications drawer. Once the antenna has been configured, navigate to the View menu and check RDS. Quit GQRX; settings should be saved for GQRX in Axolotl.

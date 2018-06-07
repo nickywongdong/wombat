@@ -1,7 +1,9 @@
 # Axolotl
 ## Open-Source Infotainment and Black Box for NVIDIA Jetson TX2
 
-This repository contains the source and documentation for the NVIDIA Jetson TX2 Infotainment project for Oregon State University's 2017-2018 CS senior capstone. This system carries development codename of "Axolotl", and is capable of media playback, navigation, black box data logging, and numerous other features.
+NVIDIA Jetson TX2 Infotainment project for Oregon State University's 2017-2018 CS senior capstone.
+
+Please read the install guide and user guide in the `documentation` folder (or on the Wiki) before using this system.
 
 __Group 15 aka Team Wombat:__ Nick Wong, Ryan Crane, Victor Li
 
