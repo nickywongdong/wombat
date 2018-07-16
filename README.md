@@ -1,6 +1,11 @@
 # Axolotl
 ## Open-Source Infotainment and Black Box for NVIDIA Jetson TX2
 
+---
+__NOTE__: This distribution of Axolotl is no longer supported. Development has shifted to derivatives of this project: [Blue Axolotl](https://github.com/VictorLi08/BlueAxolotl) and [Raspberry Axolotl](https://github.com/VictorLi08/RaspberryAxolotl).
+
+---
+
 NVIDIA Jetson TX2 Infotainment project for Oregon State University's 2017-2018 CS senior capstone.
 
 Please read the install guide and user guide in the `documentation` folder (or on the Wiki) before using this system.
